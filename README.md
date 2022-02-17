@@ -13,6 +13,7 @@ Add your own name (do not add the names for others!) to the section below.
 | ![](https://gitlab.ewi.tudelft.nl/uploads/-/system/user/avatar/4517/avatar.png?width=400) | Stanisław Howard | S.M.Howard@student.tudelft.nl |
 | ![](https://gitlab.ewi.tudelft.nl/uploads/-/system/user/avatar/4773/avatar.png?width=400) | Toma Volentir | T.Volentir@student.tudelft.nl |
 | ![](https://cdn.discordapp.com/attachments/943585524654936145/943585743555661886/avatar.png) | Zofia Rogacka-Trojak | z.rogacka-trojak@student.tudelft.nl |
+| ![](https://gitlab.ewi.tudelft.nl/uploads/-/system/user/avatar/4948/avatar.png?width=400) | Zhenya Yancheva | Z.Y.Yancheva-1@student.tudelft.nl |
 
 
 <!-- Instructions (remove once assignment has been completed -->
