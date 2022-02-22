@@ -6,8 +6,21 @@
 <module name = "Checker">
     <module name="TreeWalker">
         <module name="UnusedImports" />
+        <module name="StringLiteralEquality"/>
+        <module name="AvoidStarImport"/>
+        <module name="CommentsIndentation"/>
+        <module name="CyclomaticComplexity"/>
+        <module name="EqualsAvoidNull"/>
+        <module name="Indentation"/>
+        <module name="UnnecessaryParentheses"/>
+        <module name="TypeName"/>
+        <module name="MissingJavadocType"/>
+        <module name="UnusedLocalVariable"/>
+        <module name="SimplifyBooleanExpression"/>
+        <module name="SimplifyBooleanReturn"/>
     </module>
-
+    
+    <module name="NewlineAtEndOfFile"/>
     <!-- TODO: decide in your team with other checkers to add! -->
 
 </module>
