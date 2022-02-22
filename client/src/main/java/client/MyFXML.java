@@ -29,6 +29,9 @@ import javafx.util.BuilderFactory;
 import javafx.util.Callback;
 import javafx.util.Pair;
 
+/**
+ * FXML implementation
+ */
 public class MyFXML {
 
     private Injector injector;

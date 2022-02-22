@@ -20,6 +20,10 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
+/**
+ * Controller for app
+ * Used to switch between 2 scenes
+ */
 public class MainCtrl {
 
     private Stage primaryStage;

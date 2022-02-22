@@ -27,6 +27,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Modality;
 
+/**
+ * Add quote scene
+ */
 public class AddQuoteCtrl {
 
     private final ServerUtils server;
@@ -83,14 +86,14 @@ public class AddQuoteCtrl {
 
     public void keyPressed(KeyEvent e) {
         switch (e.getCode()) {
-        case ENTER:
-            ok();
-            break;
-        case ESCAPE:
-            cancel();
-            break;
-        default:
-            break;
+            case ENTER:
+                ok();
+                break;
+            case ESCAPE:
+                cancel();
+                break;
+            default:
+                break;
         }
     }
 }

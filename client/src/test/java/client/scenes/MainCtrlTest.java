@@ -18,6 +18,9 @@ package client.scenes;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+/**
+ * Test for the main controller
+ */
 public class MainCtrlTest {
 
     private MainCtrl sut;

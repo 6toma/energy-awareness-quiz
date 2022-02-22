@@ -29,6 +29,9 @@ import org.springframework.web.bind.annotation.RestController;
 import commons.Quote;
 import server.database.QuoteRepository;
 
+/**
+ * Quote controller
+ */
 @RestController
 @RequestMapping("/api/quotes")
 public class QuoteController {

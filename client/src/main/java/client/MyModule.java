@@ -23,6 +23,9 @@ import client.scenes.AddQuoteCtrl;
 import client.scenes.MainCtrl;
 import client.scenes.QuoteOverviewCtrl;
 
+/**
+ * Module implementation
+ */
 public class MyModule implements Module {
 
     @Override
