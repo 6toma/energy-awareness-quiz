@@ -22,9 +22,6 @@ import java.net.URISyntaxException;
 
 import com.google.inject.Injector;
 
-import client.scenes.AddQuoteCtrl;
-import client.scenes.MainCtrl;
-import client.scenes.QuoteOverviewCtrl;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -49,10 +46,12 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws IOException {
 
         // loading the overview and add quote scenes
+        /*
         var overview = FXML.load(QuoteOverviewCtrl.class, "client", "scenes", "QuoteOverview.fxml");
         var add = FXML.load(AddQuoteCtrl.class, "client", "scenes", "AddQuote.fxml");
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
         mainCtrl.initialize(primaryStage, overview, add); //main controller gets 2 scenes it can switch between
+         */
     }
 }
