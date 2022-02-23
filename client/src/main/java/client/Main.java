@@ -28,22 +28,31 @@ import client.scenes.QuoteOverviewCtrl;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
+/**
+ * Main class for client application
+ */
 public class Main extends Application {
 
-    private static final Injector INJECTOR = createInjector(new MyModule());
+    private static final Injector INJECTOR = createInjector(new MyModule()); // dependency injection stuff
     private static final MyFXML FXML = new MyFXML(INJECTOR);
 
     public static void main(String[] args) throws URISyntaxException, IOException {
-        launch();
+        launch(); //runs start()
     }
 
+    /**
+     * Starts the stage (window)
+     * @param primaryStage
+     * @throws IOException
+     */
     @Override
     public void start(Stage primaryStage) throws IOException {
 
+        // loading the overview and add quote scenes
         var overview = FXML.load(QuoteOverviewCtrl.class, "client", "scenes", "QuoteOverview.fxml");
         var add = FXML.load(AddQuoteCtrl.class, "client", "scenes", "AddQuote.fxml");
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
-        mainCtrl.initialize(primaryStage, overview, add);
+        mainCtrl.initialize(primaryStage, overview, add); //main controller gets 2 scenes it can switch between
     }
 }

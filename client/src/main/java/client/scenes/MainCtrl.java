@@ -20,6 +20,10 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
+/**
+ * Controller for app
+ * Used to switch between 2 scenes
+ */
 public class MainCtrl {
 
     private Stage primaryStage;
@@ -30,6 +34,7 @@ public class MainCtrl {
     private AddQuoteCtrl addCtrl;
     private Scene add;
 
+    // default initializing code
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
             Pair<AddQuoteCtrl, Parent> add) {
         this.primaryStage = primaryStage;

@@ -26,12 +26,16 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-@Entity
+/**
+ * Person class
+ * Can be stored in a database ( implemented with the @Tags and Spring magic )
+ */
+@Entity // makes the person a database entity
 public class Person {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    public long id;
+    public long id; // @Tag-s tell that this is the id for person, and it should be generated with the AUTO strategy
 
     public String firstName;
     public String lastName;

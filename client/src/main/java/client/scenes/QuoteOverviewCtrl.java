@@ -30,6 +30,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
+/**
+ * Controller for the quote overview scene
+ */
 public class QuoteOverviewCtrl implements Initializable {
 
     private final ServerUtils server;
