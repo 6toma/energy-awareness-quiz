@@ -36,27 +36,32 @@ import server.database.QuoteRepository;
 @RequestMapping("/api/quotes")
 public class QuoteController {
 
-    private final Random random;
+    private final Random random; // Random function from Config file
     private final QuoteRepository repo;
 
+    // Where is @Autowired tag??
+    // Something to do with a different kind of dependency injection which doesn't need them?
     public QuoteController(Random random, QuoteRepository repo) {
         this.random = random;
         this.repo = repo;
     }
 
+    // URL/api/quotes returns all quotes
     @GetMapping(path = { "", "/" })
     public List<Quote> getAll() {
         return repo.findAll();
     }
 
+    // URL/api/quotes/{id} returns quote with id
     @GetMapping("/{id}")
     public ResponseEntity<Quote> getById(@PathVariable("id") long id) {
         if (id < 0 || !repo.existsById(id)) {
             return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.ok(repo.getById(id));
+        return ResponseEntity.ok(repo.getById(id)); // what is a response entity?
     }
 
+    // Posting to URL/api/quotes adds the quote in the POST body to the database
     @PostMapping(path = { "", "/" })
     public ResponseEntity<Quote> add(@RequestBody Quote quote) {
 
@@ -73,6 +78,7 @@ public class QuoteController {
         return s == null || s.isEmpty();
     }
 
+    // URL/api/quotes/rnd returns a random quote
     @GetMapping("rnd")
     public ResponseEntity<Quote> getRandom() {
         var idx = random.nextInt((int) repo.count());

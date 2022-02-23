@@ -48,17 +48,26 @@ public class ServerUtils {
         }
     }
 
+    /**
+     * Gets the quotes from the server
+     * @return a list of quotes
+     */
     public List<Quote> getQuotes() {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/quotes") //
+                .target(SERVER).path("api/quotes") // the URL path which we poll (HTTP GET) for quotes
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<List<Quote>>() {});
     }
 
+    /**
+     * Sends a quote to the server
+     * @param quote
+     * @return the quote
+     */
     public Quote addQuote(Quote quote) {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/quotes") //
+                .target(SERVER).path("api/quotes") // the URL path where we send (HTTP POST) the quote
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .post(Entity.entity(quote, APPLICATION_JSON), Quote.class);

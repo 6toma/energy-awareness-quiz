@@ -30,13 +30,14 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
  * Quote
+ * Can be stored in a database ( implemented with the @Tags and Spring magic )
  */
 @Entity
 public class Quote {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    public long id;
+    public long id; // @Tag-s tell that this is the id for person, and it should be generated with the AUTO strategy
 
     @OneToOne(cascade = CascadeType.PERSIST)
     public Person person;

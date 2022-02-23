@@ -14,15 +14,8 @@
         <module name="Indentation"/>
         <module name="UnnecessaryParentheses"/>
         <module name="TypeName"/>
-        <!--module name="MissingJavadocType"/-->
-        <!--module name="UnusedLocalVariable"/>
-            For some reason this one is broken
-        -->
         <module name="SimplifyBooleanExpression"/>
         <module name="SimplifyBooleanReturn"/>
     </module>
-    
-    <!--module name="NewlineAtEndOfFile"/-->
-    <!-- TODO: decide in your team with other checkers to add! -->
 
 </module>

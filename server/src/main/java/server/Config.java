@@ -21,7 +21,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * Config
+ * Configuration file
+ * Beans get executed (?) when the program starts
+ * Whatever the beans return are saved for later use :)
  */
 @Configuration
 public class Config {

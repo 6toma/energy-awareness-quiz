@@ -35,7 +35,7 @@ public class AddQuoteCtrl {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
-    @FXML
+    @FXML // These are imported from the fxml file
     private TextField firstName;
 
     @FXML
