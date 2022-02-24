@@ -6,6 +6,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.util.Objects;
 
+/**
+ * Activity class that is stored in the database
+ *
+ * Stores an activities
+ */
 @Entity
 public class Activity {
 
@@ -14,13 +19,37 @@ public class Activity {
     private Long id;
 
     private String title;
-    private Integer consumption;
-    //private String source;
+    private Integer consumption_in_wh;
+    private String source;
 
+    public Activity(){ } // needed for creating object from JSON
 
-    public Activity(String title, Integer consumption) {
+    public Activity(String title, Integer consumption_in_wh, String source) {
         this.title = title;
-        this.consumption = consumption;
+        this.consumption_in_wh = consumption_in_wh;
+    }
+
+    @Override
+    public String toString() {
+        return "Activity{" +
+            "id=" + id +
+            ", title='" + title + '\'' +
+            ", consumption_in_wh=" + consumption_in_wh +
+            ", source='" + source + '\'' +
+            '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Activity activity = (Activity) o;
+        return Objects.equals(id, activity.id) && Objects.equals(title, activity.title) && Objects.equals(consumption_in_wh, activity.consumption_in_wh) && Objects.equals(source, activity.source);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, title, consumption_in_wh, source);
     }
 
     public Long getId() {
@@ -39,33 +68,19 @@ public class Activity {
         this.title = title;
     }
 
-    public Integer getConsumption() {
-        return consumption;
+    public Integer getConsumption_in_wh() {
+        return consumption_in_wh;
     }
 
-    public void setConsumption(Integer consumption) {
-        this.consumption = consumption;
+    public void setConsumption_in_wh(Integer consumption_in_wh) {
+        this.consumption_in_wh = consumption_in_wh;
     }
 
-    @Override
-    public String toString() {
-        return "Activity{" +
-            "id=" + id +
-            ", title='" + title + '\'' +
-            ", consumption=" + consumption +
-            '}';
+    public String getSource() {
+        return source;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Activity activity = (Activity) o;
-        return Objects.equals(id, activity.id) && Objects.equals(title, activity.title) && Objects.equals(consumption, activity.consumption);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, title, consumption);
+    public void setSource(String source) {
+        this.source = source;
     }
 }
