@@ -10,4 +10,3 @@ dependencies {
 	runtimeOnly 'com.h2database:h2'
 	implementation project(":commons")
 }
-targetCompatibility = JavaVersion.VERSION_17
