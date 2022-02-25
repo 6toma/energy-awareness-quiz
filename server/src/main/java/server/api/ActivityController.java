@@ -55,12 +55,29 @@ public class ActivityController {
         return false;
     }
 
-    @GetMapping("/random")
-    public Activity getRandomActivity(){
-        if (repo.count()==0){ // checks if the repository is empty
-            return null;
+
+    /* This snippet of code is based on the random nextInt(n) implementation
+    It does  the same but for Longs and for this part of code specifically
+    There is no function to get random next Long with an upperbound
+    should later create a sepereate function for this
+     */
+    private static Long randomLongBounded(Random random, Long upperBound){
+        Long randomLong = random.nextLong();;
+        Long randomBoundedLong = randomLong % upperBound;
+        while (randomLong-randomBoundedLong+(upperBound-1) < 0L){
+            randomLong = (random.nextLong() << 1) >>> 1;
+            randomBoundedLong = randomLong % upperBound;
         }
-        return repo.getById((long)random.nextInt((int)repo.count())); // Selects a random question by id between 0 and size of repo exclusive
+        return randomBoundedLong;
+    }
+
+    @GetMapping("/random")
+    public ResponseEntity<Activity> getRandomActivity(){
+        if (repo.count()==0){ // checks if the repository is empty
+            return ResponseEntity.badRequest().build();
+        }
+        Activity act = repo.findById(randomLongBounded(random, repo.count())+1).get();  // +1 because the random long generates a long from 0 to
+        return ResponseEntity.ok(act);                                                  // to repo size exclusive
     }
 
 }
