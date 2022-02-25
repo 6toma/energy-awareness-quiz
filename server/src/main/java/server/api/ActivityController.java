@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.GetMapping;
 import server.database.ActivityRepository;
 
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -29,6 +30,11 @@ public class ActivityController {
     public ActivityController(Random random, ActivityRepository repo) {
         this.random = random;
         this.repo = repo;
+    }
+
+    @GetMapping(path = {"", "/"})
+    public List<Activity> getAll() {
+        return repo.findAll();
     }
 
     @GetMapping("/{id}")
