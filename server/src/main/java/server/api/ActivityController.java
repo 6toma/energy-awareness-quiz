@@ -3,6 +3,8 @@ package server.api;
 import commons.Activity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,13 +31,21 @@ public class ActivityController {
         this.repo = repo;
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Activity> getActivityById(@PathVariable("id") long id) {
+        if (id < 0 || !repo.existsById(id)) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(repo.findById(id).get());
+    }
+
     @PostMapping("/")
-    public ResponseEntity<Activity> addActivity(@RequestBody Activity activity){
+    public ResponseEntity<Activity> addActivity(@RequestBody Activity activity) {
 
         // checks if the json is of a proper activity
-        if(activity == null || isNullOrEmpty(activity.getTitle())
-                || isNullOrEmpty(activity.getConsumption_in_wh())
-                || isNullOrEmpty(activity.getSource())){
+        if (activity == null || isNullOrEmpty(activity.getTitle())
+            || isNullOrEmpty(activity.getConsumption_in_wh())
+            || isNullOrEmpty(activity.getSource())) {
 
             return ResponseEntity.badRequest().build();
         }
@@ -45,14 +55,35 @@ public class ActivityController {
     }
 
     private static boolean isNullOrEmpty(Object o) { // checks if an object is null or empty
-        if(o == null){
+        if (o == null) {
             return true;
         }
-        if(o instanceof String){
+        if (o instanceof String) {
             String s = (String) o;
             return s.isEmpty();
         }
         return false;
+    }
+    /**
+    Api endpoint for updating an Activity in the database by specifying an id in the path
+     */
+    @PostMapping("/update/{id}")
+    public ResponseEntity<Activity> updateActivity(@RequestBody Activity activity, @PathVariable("id") long id) {
+        // check if a id exists in database
+        if (id < 0 || !repo.existsById(id)) {
+            return ResponseEntity.badRequest().build();
+        }
+        // checks if the json is of a proper activity
+        if(activity == null || isNullOrEmpty(activity.getTitle())
+                || isNullOrEmpty(activity.getConsumption_in_wh())
+                || isNullOrEmpty(activity.getSource())){
+
+            return ResponseEntity.badRequest().build();
+        }
+
+        activity.setId(id);  // set the id of the record to be changed
+        repo.save(activity); // update the activity
+        return ResponseEntity.ok(activity);
     }
 
 
