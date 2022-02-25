@@ -3,7 +3,11 @@ package server.api;
 import commons.Activity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import server.database.ActivityRepository;
 
 import java.util.Random;
@@ -35,7 +39,6 @@ public class ActivityController {
 
             return ResponseEntity.badRequest().build();
         }
-        repo.save(activity);
         // activity.save() or something like that should be here when we connect it to the database
         return ResponseEntity.ok(activity); // returns the same object if everything ok
     }
