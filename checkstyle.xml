@@ -7,7 +7,6 @@
     <module name="TreeWalker">
         <module name="UnusedImports" />
         <module name="StringLiteralEquality"/>
-        <module name="AvoidStarImport"/>
         <module name="CommentsIndentation"/>
         <module name="CyclomaticComplexity"/>
         <module name="EqualsAvoidNull"/>
