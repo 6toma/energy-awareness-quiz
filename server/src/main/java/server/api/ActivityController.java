@@ -3,13 +3,7 @@ package server.api;
 import commons.Activity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.*;
 import server.database.ActivityRepository;
 
 import java.util.List;
@@ -116,5 +110,28 @@ public class ActivityController {
         Activity act = repo.findById(randomLongBounded(random, repo.count())+1).get();  // +1 because the random long generates a long from 0 to
         return ResponseEntity.ok(act);                                                  // to repo size exclusive
     }
+
+    /**
+     * API DELETE ENDPOINT
+     * @param id identifier of the activity to be deleted
+     * @return  returns a response entity with either a
+     *          200 OK status when deletion is successful
+     *          or a bad request output when it fails
+     */
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Activity> deleteActivity(@PathVariable("id") long id) {
+        // check if the activity with this id exists in the database
+        if(id < 0 || !repo.existsById(id)) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        // if it exists, first save it, so it can be
+        // returned through the response body after a successful deletion
+        Activity deleted = repo.findById(id).get();
+
+        repo.deleteById(id);    // delete it
+        return ResponseEntity.ok(deleted);
+    }
+
 
 }
