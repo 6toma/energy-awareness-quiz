@@ -3,12 +3,14 @@ package server.api;
 import commons.Activity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import server.database.ActivityRepository;
 
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -27,6 +29,12 @@ public class ActivityController {
         this.random = random;
         this.repo = repo;
     }
+
+    @GetMapping(path = {"", "/"})
+    public List<Activity> getAll() {
+        return repo.findAll();
+    }
+
 
     @PostMapping("/")
     public ResponseEntity<Activity> addActivity(@RequestBody Activity activity){
