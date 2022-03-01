@@ -7,6 +7,13 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+
+/**
+ * Controller used as an intermediate between controllers for all
+ * scenes/windows
+ *
+ * CURRENTLY, USED FOR HOME SCREEN/SCENE ONLY
+ */
 public class MainController {
 
     @FXML
