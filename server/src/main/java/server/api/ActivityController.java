@@ -39,7 +39,7 @@ public class ActivityController {
         return ResponseEntity.ok(repo.findById(id).get());
     }
 
-    @PostMapping("/")
+    @PostMapping(path = {"", "/"})
     public ResponseEntity<Activity> addActivity(@RequestBody Activity activity) {
 
         // checks if the json is of a proper activity

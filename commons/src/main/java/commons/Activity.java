@@ -27,6 +27,14 @@ public class Activity {
     public Activity(String title, Integer consumption_in_wh, String source) {
         this.title = title;
         this.consumption_in_wh = consumption_in_wh;
+        this.source = source;
+    }
+
+    public Activity(Long id, String title, Integer consumption_in_wh, String source) {
+        this.id = id;
+        this.title = title;
+        this.consumption_in_wh = consumption_in_wh;
+        this.source = source;
     }
 
     @Override
