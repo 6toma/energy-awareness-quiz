@@ -29,9 +29,10 @@ public class MainController {
     private Button exitButton;
 
     @FXML
-    void changeTitleClicked(ActionEvent event) {
+    void changeTitleButtonClicked(ActionEvent event) {
         String newUser = inputTitleField.getText();
-        titleField.setText("Hello, " + newUser + "!");
+        if(newUser.length() > 0)
+            titleField.setText("Hello, " + newUser + "!");
     }
 
     @FXML
