@@ -5,11 +5,11 @@
 ## Before submitting an issue, check the following checklist:
 
 - [ ] Pull the repository for an up-to-date version
-- [ ] Another To-Do.
+- [ ] Make sure there does not exist an issue for this bug already
 
 ## The problem
 
-> Ask the contributor to describe the issue he is facing or the feature he wants to see included to the project.
+> What is happening?
 
 ### What are the steps to reproduce this issue?
 
@@ -21,11 +21,11 @@
 
 ### Expected Results
 
-> A text asking the contributor what should be the correct behaviour.
+> What should be the correct behaviour.
 
 ### Actual Results
 
-> A text asking the contributor what is the actual behaviour.
+> What is the actual behaviour.
 
 ## Environment
 
