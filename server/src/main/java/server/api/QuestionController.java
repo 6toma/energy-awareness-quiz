@@ -37,7 +37,8 @@ public class QuestionController {
         }
 
         List<Activity> activities = repo.getRandomActivities(limit).get(); // gets 3 random activities
-        boolean isMost = random.nextInt() % 2 == 0; // gets a random true or false
+        int n = (int) random.nextLong();
+        boolean isMost = n % 2 == 0; // gets a random true or false
         ComparativeQuestion q = new ComparativeQuestion(activities, isMost);
         return ResponseEntity.ok(q);
     }

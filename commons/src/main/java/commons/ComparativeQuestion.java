@@ -23,7 +23,7 @@ public class ComparativeQuestion {
     }
 
     public int generateCorrectAnswer() {
-        if(activities.size() <= 0){
+        if(activities == null || activities.size() <= 0){
             return -1;
         }
         int min = 0; // index of minimum
