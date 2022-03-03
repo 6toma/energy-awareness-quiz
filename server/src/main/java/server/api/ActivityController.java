@@ -39,7 +39,32 @@ public class ActivityController {
         return ResponseEntity.ok(repo.findById(id).get());
     }
 
-    @PostMapping(path = {"", "/"})
+    /**
+     * Adds a list of activities to the database
+     * @param activities
+     * @return number of activities added
+     */
+    @PostMapping(path = {"/add", "/add/"})
+    public ResponseEntity<Long> addManyActivities(@RequestBody List<Activity> activities) {
+        if (activities == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        long count = 0L;
+        for(Activity a : activities){
+            if(!addActivity(a).equals(ResponseEntity.badRequest().build())){ // tries to add the activity and checks if it succeeded
+                count++; // adds to count only if object was successfully added
+            }
+        }
+        return ResponseEntity.ok(count);
+    }
+
+    /**
+     * adds an activity to the database
+     * @param activity
+     * @return the activity which was added
+     */
+    @PostMapping(path = {"/add-one", "/add-one/"})
     public ResponseEntity<Activity> addActivity(@RequestBody Activity activity) {
 
         // checks if the json is of a proper activity
