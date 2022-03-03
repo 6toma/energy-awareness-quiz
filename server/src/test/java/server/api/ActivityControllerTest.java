@@ -27,9 +27,8 @@ class ActivityControllerTest {
      */
     @BeforeEach
     public void setup(){
-        random = new TestRandom();
         repo = new TestActivityRepository();
-        act = new ActivityController(random, repo);
+        act = new ActivityController(repo);
 
         activities = List.of(
                 new Activity(1L,"a", 1, "a"),

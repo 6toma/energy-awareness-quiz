@@ -20,6 +20,7 @@ import java.util.function.Function;
 public class TestActivityRepository implements ActivityRepository {
 
     public List<Activity> activities = new ArrayList<>();
+    TestRandom random = new TestRandom();
 
     @Override
     public List<Activity> findAll() {
@@ -175,6 +176,10 @@ public class TestActivityRepository implements ActivityRepository {
 
     @Override
     public Optional<List<Activity>> getRandomActivities(int limit) {
-        return null;
+        List<Activity> result = new ArrayList<>();
+        for(int i = 0; i < limit; i++){
+            result.add(findById( (random.nextLong() % activities.size()) + 1 ).get());
+        }
+        return Optional.of(result);
     }
 }

@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import server.database.ActivityRepository;
 
 import java.util.List;
-import java.util.Random;
 
 /**
  * Activity endpoints go in this controller
@@ -17,12 +16,10 @@ import java.util.Random;
 @RequestMapping("/api/activities")
 public class ActivityController {
 
-    private final Random random; // Random function from Config file
     private final ActivityRepository repo;
 
     @Autowired
-    public ActivityController(Random random, ActivityRepository repo) {
-        this.random = random;
+    public ActivityController(ActivityRepository repo) {
         this.repo = repo;
     }
 
@@ -110,22 +107,6 @@ public class ActivityController {
         activity.setId(id);  // set the id of the record to be changed
         repo.save(activity); // update the activity
         return ResponseEntity.ok(activity);
-    }
-
-
-    /* This snippet of code is based on the random nextInt(n) implementation
-    It does  the same but for Longs and for this part of code specifically
-    There is no function to get random next Long with an upperbound
-    should later create a sepereate function for this
-     */
-    private static Long randomLongBounded(Random random, Long upperBound){
-        Long randomLong = random.nextLong();;
-        Long randomBoundedLong = randomLong % upperBound;
-        while (randomLong-randomBoundedLong+(upperBound-1) < 0L){
-            randomLong = (random.nextLong() << 1) >>> 1;
-            randomBoundedLong = randomLong % upperBound;
-        }
-        return randomBoundedLong;
     }
 
     @GetMapping("/random")
