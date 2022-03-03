@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<StackPane
+        maxHeight="-Infinity"
+        maxWidth="-Infinity" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+        fx:controller="client.scenes.HomeScreenCtrl">
+    <StackPane styleClass="padding, margin">
+        <Button
+                fx:id="back"
+                styleClass="border, rounded"
+                StackPane.alignment="TOP_LEFT"
+                onAction="#exitApp"
+                text="Exit"
+        />
+    </StackPane>
+    <VBox StackPane.alignment="CENTER" alignment="CENTER" maxWidth="640">
+        <Label alignment="CENTER" prefHeight="91.0" prefWidth="386.0" text="Quizzzz!"/>
+        <Label styleClass="rounded" fx:id="titleField" alignment="CENTER" prefHeight="39.0"
+               prefWidth="576.0">
+            <font>
+                <Font size="31.0"/>
+            </font>
+        </Label>
+        <TextField styleClass="rounded" fx:id="inputTitleField" prefHeight="25.0" prefWidth="416.0"
+                   promptText="Input username">
+            <font>
+                <Font size="21.0"/>
+            </font>
+        </TextField>
+        <Region styleClass="margin" VBox.vgrow="ALWAYS" maxHeight="20" minHeight="20"/>
+        <Button styleClass="rounded" fx:id="changeTitleButton" mnemonicParsing="false"
+                onAction="#changeTitleButtonClicked" text="Set username"/>
+        <Region styleClass="margin" VBox.vgrow="ALWAYS" maxHeight="20" minHeight="20"/>
+        <Button styleClass="rounded" mnemonicParsing="false" prefHeight="84.0" prefWidth="290.0"
+                style="-fx-border-radius: 1000px;" text="Singleplayer">
+            <font>
+                <Font size="40.0"/>
+            </font>
+        </Button>
+        <Region styleClass="margin" VBox.vgrow="ALWAYS" maxHeight="20" minHeight="20"/>
+        <Button styleClass="rounded" onAction="#showWaitingRoom" mnemonicParsing="false"
+                prefHeight="84.0" prefWidth="290.0"
+                style="-fx-border-radius: 1000px;" text="Multiplayer">
+            <font>
+                <Font size="40.0"/>
+            </font>
+        </Button>
+        <Region styleClass="margin" VBox.vgrow="ALWAYS" maxHeight="20" minHeight="20"/>
+        <TextField styleClass="rounded" prefHeight="25.0" prefWidth="416.0"
+                   promptText="Room URL"/>
+    </VBox>
+
+</StackPane>
