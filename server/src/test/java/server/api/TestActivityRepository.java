@@ -172,4 +172,9 @@ public class TestActivityRepository implements ActivityRepository {
     public <S extends Activity, R> R findBy(Example<S> example, Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
         return null;
     }
+
+    @Override
+    public Optional<List<Activity>> getRandomActivities(int limit) {
+        return null;
+    }
 }

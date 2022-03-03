@@ -73,6 +73,7 @@ public class ActivityController {
         if (id < 0 || !repo.existsById(id)) {
             return ResponseEntity.badRequest().build();
         }
+
         // checks if the json is of a proper activity
         if(activity == null || isNullOrEmpty(activity.getTitle())
                 || isNullOrEmpty(activity.getConsumption_in_wh())
@@ -107,8 +108,8 @@ public class ActivityController {
         if (repo.count()==0){ // checks if the repository is empty
             return ResponseEntity.badRequest().build();
         }
-        Activity act = repo.findById(randomLongBounded(random, repo.count())+1).get();  // +1 because the random long generates a long from 0 to
-        return ResponseEntity.ok(act);                                                  // to repo size exclusive
+        List<Activity> act = repo.getRandomActivities(1).get();
+        return ResponseEntity.ok(act.get(0));
     }
 
     /**
