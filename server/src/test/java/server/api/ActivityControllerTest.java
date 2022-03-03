@@ -27,9 +27,8 @@ class ActivityControllerTest {
      */
     @BeforeEach
     public void setup(){
-        random = new TestRandom();
         repo = new TestActivityRepository();
-        act = new ActivityController(random, repo);
+        act = new ActivityController(repo);
 
         activities = List.of(
                 new Activity(1L,"a", 1, "a"),
@@ -69,6 +68,15 @@ class ActivityControllerTest {
         Activity expected = new Activity(1L,"a", 1, "a");
         assertEquals(expected, act.addActivity(added).getBody());
         assertEquals(expected, repo.activities.get(0));
+    }
+
+    @Test
+    public void addManyActivitiesTest(){
+
+        List<Activity> added = new ArrayList<>(activities);
+
+        assertEquals(activities.size(), act.addManyActivities(added).getBody());
+        assertEquals(activities, repo.activities);
     }
 
     @Test
