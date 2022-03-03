@@ -72,6 +72,15 @@ class ActivityControllerTest {
     }
 
     @Test
+    public void addManyActivitiesTest(){
+
+        List<Activity> added = new ArrayList<>(activities);
+
+        assertEquals(activities.size(), act.addManyActivities(added).getBody());
+        assertEquals(activities, repo.activities);
+    }
+
+    @Test
     public void addActivityTestNull(){
         assertEquals(ResponseEntity.badRequest().build(), act.addActivity(null));
     }
