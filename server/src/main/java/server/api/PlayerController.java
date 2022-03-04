@@ -43,6 +43,11 @@ public class PlayerController {
                 || isNullOrEmpty(player.getScore())) {
             return ResponseEntity.badRequest().build();
         }
+        for (Player p: repo.findAll()){
+            if (p.getName().equals(player.getName())){
+                return ResponseEntity.badRequest().build();
+            }
+        }
 
         Player savedPlayer = repo.save(player);
         return ResponseEntity.ok(savedPlayer);
