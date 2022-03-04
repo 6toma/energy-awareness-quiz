@@ -7,9 +7,8 @@ import javax.persistence.Id;
 import java.util.Objects;
 
 /**
- * Activity class that is stored in the database
- *
- * Stores an activities
+ * Activity class
+ * Activities are stored in the database
  */
 @Entity
 public class Activity {
