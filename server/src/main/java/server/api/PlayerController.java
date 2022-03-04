@@ -5,9 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.database.PlayerRepository;
-
 import java.util.List;
-import java.util.Random;
+
 
 /**
  * Activity endpoints go in this controller
