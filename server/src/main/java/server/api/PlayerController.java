@@ -5,9 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.database.PlayerRepository;
-
 import java.util.List;
-import java.util.Random;
+
 
 /**
  * Activity endpoints go in this controller
@@ -29,12 +28,12 @@ public class PlayerController {
         return repo.findAll();
     }
 
-    @GetMapping("/{name}")
-    public ResponseEntity<Player> getPlayerByName(@PathVariable("name") String name) {
-        if (!repo.existsById(name)) {
+    @GetMapping("/{id}")
+    public ResponseEntity<Player> getPlayerByName(@PathVariable("id") Long id) {
+        if (!repo.existsById(id)) {
             return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.ok(repo.findById(name).get());
+        return ResponseEntity.ok(repo.findById(id).get());
     }
 
     @PostMapping(path = {"", "/"})
@@ -63,12 +62,10 @@ public class PlayerController {
         }
         return false;
     }
-    /**
-     Api endpoint for updating an Activity in the database by specifying an id in the path
-     */
-    @PostMapping("/update/{name}")
-    public ResponseEntity<Player> updateActivity(@RequestBody Player player, @PathVariable("name") String name) {
-        if (!repo.existsById(name)) {
+
+    @PostMapping("/update/{id}")
+    public ResponseEntity<Player> updateActivity(@RequestBody Player player, @PathVariable("id") Long id) {
+        if (!repo.existsById(id)) {
             return ResponseEntity.badRequest().build();
         }
         if (player == null || isNullOrEmpty(player.getName())
@@ -76,18 +73,18 @@ public class PlayerController {
             return ResponseEntity.badRequest().build();
         }
 
-        player.setName(name);  // set the id of the record to be changed
+        player.setId(id);  // set the id of the record to be changed
         repo.save(player); // update the activity
         return ResponseEntity.ok(player);
     }
 
-    @DeleteMapping("/delete/{name}")
-    public ResponseEntity<Player> deleteActivity(@PathVariable("name") String name) {
-        if(!repo.existsById(name)) {
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Player> deleteActivity(@PathVariable("id") Long id) {
+        if(!repo.existsById(id)) {
             return ResponseEntity.badRequest().build();
         }
-        Player deleted = repo.findById(name).get();
-        repo.deleteById(name);
+        Player deleted = repo.findById(id).get();
+        repo.deleteById(id);
         return ResponseEntity.ok(deleted);
     }
 
