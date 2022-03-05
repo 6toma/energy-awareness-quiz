@@ -16,6 +16,7 @@
 package client;
 
 import client.scenes.HomeScreenCtrl;
+import client.scenes.LoadingScreenCtrl;
 import client.scenes.MainCtrl;
 import client.scenes.WaitingRoomCtrl;
 import com.google.inject.Injector;
@@ -67,9 +68,14 @@ public class Main extends Application {
                 "scenes/WaitingRoom.fxml",
                 "css/WaitingRoom.css"
         );
+        var loadingScreen = FXML.load(
+                LoadingScreenCtrl.class,
+                "scenes/LoadingScreen.fxml",
+                "css/main.css"
+        );
         // add more scenes the same way
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
-        mainCtrl.initialize(primaryStage, homeScreen, waitingRoom);
+        mainCtrl.initialize(primaryStage, homeScreen, waitingRoom, loadingScreen);
     }
 }

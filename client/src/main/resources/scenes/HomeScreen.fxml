@@ -34,7 +34,7 @@
         <Button styleClass="rounded" fx:id="changeTitleButton" mnemonicParsing="false"
                 onAction="#changeTitleButtonClicked" text="Set username"/>
         <Region styleClass="margin" VBox.vgrow="ALWAYS" maxHeight="20" minHeight="20"/>
-        <Button styleClass="rounded" mnemonicParsing="false" prefHeight="84.0" prefWidth="290.0"
+        <Button styleClass="rounded" onAction="#showLoadingScreen" mnemonicParsing="false" prefHeight="84.0" prefWidth="290.0"
                 style="-fx-border-radius: 1000px;" text="Singleplayer">
             <font>
                 <Font size="40.0"/>
