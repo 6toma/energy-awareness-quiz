@@ -2,6 +2,7 @@ package client.scenes;
 
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.effect.BlendMode;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
@@ -36,16 +37,26 @@ public class MainCtrl {
         primaryStage.setScene(new Scene(homeScreenParent));
         primaryStage.show();
         primaryStage.setFullScreen(true);
+        checkDarkMode();
     }
 
     public void showHomeScreen() {
         primaryStage.getScene().setRoot(homeScreenParent);
+        checkDarkMode();
     }
 
     public void showWaitingRoom() {
         primaryStage.getScene().setRoot(waitingRoomParent);
+        checkDarkMode();
     }
 
-
+    public void checkDarkMode() {
+        if(!homeScreenCtrl.getDarkMode()) {
+            primaryStage.getScene().getRoot().setBlendMode(BlendMode.DIFFERENCE);
+        }
+        else {
+            primaryStage.getScene().getRoot().setBlendMode(null);
+        }
+    }
 }
 
