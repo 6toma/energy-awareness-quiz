@@ -15,10 +15,7 @@
  */
 package client;
 
-import client.scenes.HomeScreenCtrl;
-import client.scenes.LoadingScreenCtrl;
-import client.scenes.MainCtrl;
-import client.scenes.WaitingRoomCtrl;
+import client.scenes.*;
 import com.google.inject.Injector;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -73,9 +70,14 @@ public class Main extends Application {
                 "scenes/LoadingScreen.fxml",
                 "css/main.css"
         );
+        var questionScreen = FXML.load(
+                QuestionScreenCtrl.class,
+                "scenes/QuestionScreen.fxml",
+                "css/main.css"
+        );
         // add more scenes the same way
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
-        mainCtrl.initialize(primaryStage, homeScreen, waitingRoom, loadingScreen);
+        mainCtrl.initialize(primaryStage, homeScreen, waitingRoom, loadingScreen, questionScreen);
     }
 }

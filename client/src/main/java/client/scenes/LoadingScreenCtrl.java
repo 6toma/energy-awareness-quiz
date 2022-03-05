@@ -55,7 +55,7 @@ public class LoadingScreenCtrl {
 
                 if(second == 0) {
                     cancel();
-                    mainCtrl.showWaitingRoom();
+                    mainCtrl.showQuestionScreen();
                     counter.setText("3");
                 }
             }
