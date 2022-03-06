@@ -1,5 +1,6 @@
-package commons;
-
+import client.SinglePlayerGame;
+import commons.Player;
+import commons.Question;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -43,20 +44,20 @@ public class SinglePlayerGameTest {
     public void TestAddPointsRegularQuestion() {
         singlePlayerGame.setStreak(3); // once the question is answered the streak is incremented and the score calculated (actual streak will be 4)
         singlePlayerGame.addPoints(5, 1.0);
-        assertEquals(1066, singlePlayerGame.getPlayerScore());
+        assertEquals(1066, singlePlayerGame.getPlayer().getScore());
     }
 
     @Test
     public void TestAddPointsWrongAnswer() {
-        int scoreBefore = singlePlayerGame.getPlayerScore();
-        singlePlayerGame.addPoints(2137, 1.0);
-        assertEquals(scoreBefore, singlePlayerGame.getPlayerScore());
+        int scoreBefore = singlePlayerGame.getPlayer().getScore();
+        singlePlayerGame.addPoints(-1, 1.0);
+        assertEquals(scoreBefore, singlePlayerGame.getPlayer().getScore());
     }
     @Test
     public void TestAddPointsGuessQuestion() {
         singlePlayerGame.setStreak(3); // once the question is answered the streak is incremented and the score calculated (actual streak will be 4)
         singlePlayerGame.addPoints(7, 0.49);
-        assertEquals(517, singlePlayerGame.getPlayerScore());
+        assertEquals(517, singlePlayerGame.getPlayer().getScore());
     }
 
     @Test
@@ -79,23 +80,17 @@ public class SinglePlayerGameTest {
         }
         assertEquals(6, singlePlayerGame.getStreak());
     }
-
+    
+    @Test
+    public void TestStreakAfterWrongAnswer() {
+        singlePlayerGame.addPoints(-1, 1.0);
+        assertEquals(0, singlePlayerGame.getStreak());
+    }
     @Test
     public void TestPlayerGetter() {
         Player p = new Player("a", 420);
-        singlePlayerGame.setPlayerScore(420);
+        singlePlayerGame.getPlayer().setScore(420);
         assertEquals(p, singlePlayerGame.getPlayer());
-    }
-
-    @Test
-    public void TestPlayerScoreGetter() {
-        singlePlayerGame.setPlayerScore(420);
-        assertEquals(420, singlePlayerGame.getPlayerScore());
-    }
-
-    @Test
-    public void TestPlayerNameGetter() {
-        assertEquals("a", singlePlayerGame.getPlayerName());
     }
 
     @Test

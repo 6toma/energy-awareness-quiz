@@ -1,5 +1,8 @@
-package commons;
+package client;
 
+
+import commons.Player;
+import commons.Question;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,36 +31,31 @@ public class SinglePlayerGame {
         this.questions = questions;
     }
 
-    public void setPlayerScore(int score) {
-        player.setScore(score);
+    public boolean addQuestion(Question question){
+        boolean isInQuestionList = false;
+        for(int i = 0; i < questions.size(); i++) {
+            if (question.equals(questions.get(i))) return false;
+        }
+        questions.add(question);
+        return true;
     }
-
-    public int getPlayerScore() {
-        return player.getScore();
-    }
-
-    public String getPlayerName() {
-        return player.getName();
-    }
-
-    public void addQuestion(Question question){ questions.add(question); }
 
     /**
      * This method adds points to a score of a player
      * A particular formula for the points has been developed.
-     * parsing an int equal to 2137 will be qualified as answering the question wrongly
+     * parsing an int equal to -1 will be qualified as answering the question wrongly
      * @param timeWhenAnswered time in seconds how long it took a user to answer a question
      * @param guessQuestionRate for every other question than a guess question this will be set to 1.0
      *                          for the guess question this will be set to a percentage how good the guess was
      */
     public void addPoints(int timeWhenAnswered, double guessQuestionRate){
-        if(timeWhenAnswered == 2137){
+        if(timeWhenAnswered == -1){
             resetStreak();
             nextQuestion();
             return;
         }
         incrementStreak();
-        int currentScore = getPlayerScore();
+        int currentScore = getPlayer().getScore();
         int pointsToBeAdded = (int)Math.round(guessQuestionRate * getPointsToBeAdded(timeWhenAnswered));
         player.setScore( currentScore + pointsToBeAdded );
         nextQuestion();
