@@ -22,13 +22,17 @@ public class MainCtrl {
     private QuestionScreenCtrl questionScreenCtrl;
     private Parent questionScreenParent;
 
+    private UsernameScreenCtrl usernameScreenCtrl;
+    private Parent usernameScreenParent;
+
     // default initializing code
     public void initialize(
             Stage primaryStage,
             Pair<HomeScreenCtrl, Parent> homeScreen,
             Pair<WaitingRoomCtrl, Parent> waitingRoom,
             Pair<LoadingScreenCtrl, Parent> loadingScreen,
-            Pair<QuestionScreenCtrl, Parent> questionScreen
+            Pair<QuestionScreenCtrl, Parent> questionScreen,
+            Pair<UsernameScreenCtrl, Parent> usernameScreen
     ) {
         this.primaryStage = primaryStage;
 
@@ -43,6 +47,9 @@ public class MainCtrl {
 
         this.questionScreenCtrl = questionScreen.getKey();
         this.questionScreenParent = questionScreen.getValue();
+
+        this.usernameScreenCtrl = usernameScreen.getKey();
+        this.usernameScreenParent = usernameScreen.getValue();
 
         // TODO: uncomment to disable the fullscreen popup
         //primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
@@ -70,6 +77,11 @@ public class MainCtrl {
         loadingScreenCtrl.countdown();
     }
 
+    public void showUsernameScreen() {
+        primaryStage.getScene().setRoot(usernameScreenParent);
+        checkDarkMode();
+    }
+
     public void showQuestionScreen() {
         primaryStage.getScene().setRoot(questionScreenParent);
         checkDarkMode();
@@ -83,6 +95,18 @@ public class MainCtrl {
         else {
             primaryStage.getScene().getRoot().setBlendMode(null);
         }
+    }
+
+    public int getUsernameOriginScreen() {
+        return homeScreenCtrl.getUsernameOriginScreen();
+    }
+
+    public void setUsernameOriginScreen(int usernameOriginScreen) {
+        homeScreenCtrl.setUsernameOriginScreen(usernameOriginScreen);
+    }
+
+    public void resetUserText() {
+        usernameScreenCtrl.resetUserText();
     }
 
 }
