@@ -36,17 +36,14 @@ public class PlayerController {
         return ResponseEntity.ok(repo.findById(id).get());
     }
 
-    @PostMapping(path = {"", "/"})
+    @PostMapping(path = {"/add", "/add/"})
     public ResponseEntity<Player> addPlayer(@RequestBody Player player) {
-        // checks if the json is of a proper player
+
+        // checks if the object is not null and that it has a name and score specified
+        // as this gets sent straight to the database this should always have those properties specified
         if (player == null || isNullOrEmpty(player.getName())
                 || isNullOrEmpty(player.getScore())) {
             return ResponseEntity.badRequest().build();
-        }
-        for (Player p: repo.findAll()){
-            if (p.getName().equals(player.getName())){
-                return ResponseEntity.badRequest().build();
-            }
         }
 
         Player savedPlayer = repo.save(player);
