@@ -2,6 +2,7 @@ package client.scenes;
 
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.effect.BlendMode;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
@@ -15,11 +16,19 @@ public class MainCtrl {
     private WaitingRoomCtrl waitingRoomCtrl;
     private Parent waitingRoomParent;
 
+    private LoadingScreenCtrl loadingScreenCtrl;
+    private Parent loadingScreenParent;
+
+    private QuestionScreenCtrl questionScreenCtrl;
+    private Parent questionScreenParent;
+
     // default initializing code
     public void initialize(
             Stage primaryStage,
             Pair<HomeScreenCtrl, Parent> homeScreen,
-            Pair<WaitingRoomCtrl, Parent> waitingRoom
+            Pair<WaitingRoomCtrl, Parent> waitingRoom,
+            Pair<LoadingScreenCtrl, Parent> loadingScreen,
+            Pair<QuestionScreenCtrl, Parent> questionScreen
     ) {
         this.primaryStage = primaryStage;
 
@@ -29,6 +38,12 @@ public class MainCtrl {
         this.waitingRoomCtrl = waitingRoom.getKey();
         this.waitingRoomParent = waitingRoom.getValue();
 
+        this.loadingScreenCtrl = loadingScreen.getKey();
+        this.loadingScreenParent = loadingScreen.getValue();
+
+        this.questionScreenCtrl = questionScreen.getKey();
+        this.questionScreenParent = questionScreen.getValue();
+
         // TODO: uncomment to disable the fullscreen popup
         //primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
 
@@ -36,16 +51,39 @@ public class MainCtrl {
         primaryStage.setScene(new Scene(homeScreenParent));
         primaryStage.show();
         primaryStage.setFullScreen(true);
+        checkDarkMode();
     }
 
     public void showHomeScreen() {
         primaryStage.getScene().setRoot(homeScreenParent);
+        checkDarkMode();
     }
 
     public void showWaitingRoom() {
         primaryStage.getScene().setRoot(waitingRoomParent);
+        checkDarkMode();
     }
 
+    public void showLoadingScreen() {
+        primaryStage.getScene().setRoot(loadingScreenParent);
+        checkDarkMode();
+        loadingScreenCtrl.countdown();
+    }
+
+    public void showQuestionScreen() {
+        primaryStage.getScene().setRoot(questionScreenParent);
+        checkDarkMode();
+        questionScreenCtrl.countdown();
+    }
+
+    public void checkDarkMode() {
+        if(!homeScreenCtrl.getDarkMode()) {
+            primaryStage.getScene().getRoot().setBlendMode(BlendMode.DIFFERENCE);
+        }
+        else {
+            primaryStage.getScene().getRoot().setBlendMode(null);
+        }
+    }
 
 }
 

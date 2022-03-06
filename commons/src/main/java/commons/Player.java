@@ -21,6 +21,7 @@ public class Player {
     private String name;
     private Integer score;
 
+
     public Player(){ } // needed for creating object from JSON
 
     public Player(String name) {

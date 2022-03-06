@@ -7,7 +7,7 @@
 <StackPane maxHeight="Infinity" maxWidth="Infinity" xmlns="http://javafx.com/javafx/16"
            xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.WaitingRoomCtrl">
     <StackPane styleClass="padding">
-        <Button fx:id="back" onAction="#back" styleClass="border, rounded" text="Back" StackPane.alignment="TOP_LEFT"/>
+        <Button fx:id="back" onAction="#back" styleClass="border, exit, rounded" text="Back" StackPane.alignment="TOP_LEFT"/>
     </StackPane>
 
     <VBox alignment="CENTER" maxWidth="900.0" prefHeight="1080.0" prefWidth="1000.0" StackPane.alignment="CENTER">
@@ -20,7 +20,7 @@
             </VBox>
         </ScrollPane>
         <Region maxHeight="20" minHeight="20" VBox.vgrow="ALWAYS"/>
-        <Button styleClass="border, rounded" text="Start"/>
+        <Button styleClass="mainButton, border, rounded" text="Start"/>
         <Region maxHeight="20" minHeight="20" styleClass="margin" VBox.vgrow="ALWAYS"/>
     </VBox>
 </StackPane>

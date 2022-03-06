@@ -74,9 +74,23 @@
 
 .button {
   -fx-background-color: #1A759F;
+  -fx-effect: innershadow(gaussian, black, 10, 0.3, 1, 1);
   -fx-font-size: 30px;
   -fx-padding: 10px 50px;
   -fx-cursor: hand;
+}
+
+.exit:hover {
+  -fx-background-color: radial-gradient(focus-angle 45deg, focus-distance 5%, radius 99%, reflect, darkred, yellow);
+}
+
+.mainButton:hover {
+  -fx-background-color: radial-gradient(focus-angle 45deg, focus-distance 5%, radius 99%, reflect, cornflowerblue, greenyellow);
+}
+
+.dark:hover {
+  -fx-background-color: black;
+  -fx-text-fill: white;
 }
 
 .padding {
