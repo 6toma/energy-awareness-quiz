@@ -36,7 +36,7 @@ public class PlayerController {
         return ResponseEntity.ok(repo.findById(id).get());
     }
 
-    @PostMapping(path = {"", "/"})
+    @PostMapping(path = {"/add", "/add/", "/add-one", "/add-one/"})
     public ResponseEntity<Player> addPlayer(@RequestBody Player player) {
         // checks if the json is of a proper player
         if (player == null || isNullOrEmpty(player.getName())
