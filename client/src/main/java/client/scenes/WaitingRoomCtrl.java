@@ -24,6 +24,7 @@ public class WaitingRoomCtrl {
     }
 
     public void back() {
+        mainCtrl.resetUserText();
         mainCtrl.showHomeScreen();
     }
 

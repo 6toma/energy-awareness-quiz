@@ -32,6 +32,7 @@ public class LoadingScreenCtrl {
 
     @FXML
     void back(ActionEvent event) {
+        mainCtrl.resetUserText();
         mainCtrl.showHomeScreen();
         timer.cancel();
         timer = new Timer();

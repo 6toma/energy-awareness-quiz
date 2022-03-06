@@ -6,8 +6,6 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 
 
 /**
@@ -23,20 +21,26 @@ public class HomeScreenCtrl {
 
     public boolean isLightMode;
 
-    @FXML
-    private TextField inputTitleField;
+    //0 - still on home screen
+    //1 - reached username screen by pressing SINGLEPLAYER
+    //2 - reached username screen by pressing MULTIPLAYER
+    public int usernameOriginScreen;
 
-    @FXML
-    private Label titleField;
+    // @FXML
+    // private Text titleText;
+    // could be used to style the title
 
     @FXML
     private Button darkMode;
+
+
 
     @Inject
     public HomeScreenCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
         this.isLightMode = true;
+        this.usernameOriginScreen = 0; //still on home screen
     }
 
     @FXML
@@ -54,11 +58,15 @@ public class HomeScreenCtrl {
         return isLightMode;
     }
 
-    @FXML
-    void changeTitleButtonClicked(ActionEvent event) {
-        String newUser = inputTitleField.getText();
-        if (newUser.length() > 0)
-            titleField.setText("Hello, " + newUser + "!");
+    public int getUsernameOriginScreen() {
+        return usernameOriginScreen;
+    }
+
+    public void setUsernameOriginScreen(int usernameOriginScreen) {
+        if(usernameOriginScreen == 0 ||
+            usernameOriginScreen == 1 ||
+            usernameOriginScreen == 2)
+            this.usernameOriginScreen = usernameOriginScreen;
     }
 
     @FXML
@@ -68,11 +76,27 @@ public class HomeScreenCtrl {
         System.exit(0);
     }
 
+    /*
+    @FXML
     public void showWaitingRoom() {
         mainCtrl.showWaitingRoom();
     }
 
+    @FXML
     public void showLoadingScreen() {
         mainCtrl.showLoadingScreen();
+    }
+    */
+
+    @FXML
+    public void showUsernameScreenSingle() {
+        mainCtrl.setUsernameOriginScreen(1);
+        mainCtrl.showUsernameScreen();
+    }
+
+    @FXML
+    public void showUsernameScreenMulti() {
+        mainCtrl.setUsernameOriginScreen(2);
+        mainCtrl.showUsernameScreen();
     }
 }
