@@ -31,10 +31,12 @@
                 <Font size="21.0" />
             </font>
         </TextField>
+
         <Region maxHeight="20" minHeight="20" styleClass="margin" VBox.vgrow="ALWAYS" />
         <Button fx:id="changeTitleButton" mnemonicParsing="false" onAction="#changeTitleButtonClicked" styleClass="mainButton, rounded" text="Set username" />
         <Region maxHeight="20" minHeight="20" styleClass="margin" VBox.vgrow="ALWAYS" />
-        <Button fx:id="singleplayerButton" mnemonicParsing="false" prefHeight="84.0" prefWidth="290.0" style="-fx-border-radius: 1000px;" styleClass="mainButton, rounded" text="Singleplayer">
+        <Button fx:id="singleplayerButton" onAction="#showLoadingScreen" mnemonicParsing="false" prefHeight="84.0" prefWidth="290.0" style="-fx-border-radius: 1000px;" styleClass="mainButton, rounded" text="Singleplayer">
+
             <font>
                 <Font size="40.0" />
             </font>

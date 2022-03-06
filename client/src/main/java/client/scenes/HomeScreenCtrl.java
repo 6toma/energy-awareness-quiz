@@ -71,4 +71,8 @@ public class HomeScreenCtrl {
     public void showWaitingRoom() {
         mainCtrl.showWaitingRoom();
     }
+
+    public void showLoadingScreen() {
+        mainCtrl.showLoadingScreen();
+    }
 }
