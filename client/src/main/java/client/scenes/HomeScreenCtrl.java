@@ -21,9 +21,7 @@ public class HomeScreenCtrl {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
-
-    @FXML
-    private Button changeTitleButton;
+    public boolean isLightMode;
 
     @FXML
     private TextField inputTitleField;
@@ -32,13 +30,28 @@ public class HomeScreenCtrl {
     private Label titleField;
 
     @FXML
-    private Button exitButton;
+    private Button darkMode;
 
     @Inject
     public HomeScreenCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
+        this.isLightMode = true;
+    }
 
+    @FXML
+    void toggleDarkMode() {
+        isLightMode = !isLightMode;
+        if(!isLightMode)
+            darkMode.setText("Light Mode");
+        else {
+            darkMode.setText("Dark Mode");
+        }
+        mainCtrl.checkDarkMode();
+    }
+
+    public boolean getDarkMode() {
+        return isLightMode;
     }
 
     @FXML
@@ -50,9 +63,6 @@ public class HomeScreenCtrl {
 
     @FXML
     void exitApp(ActionEvent event) {
-        //Stage stage = (Stage) exitButton.getScene().getWindow();
-        //stage.close();
-
         // to fully terminate the client process
         Platform.exit();
         System.exit(0);
