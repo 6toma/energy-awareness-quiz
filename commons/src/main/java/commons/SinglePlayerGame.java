@@ -1,6 +1,8 @@
 package commons;
 
+import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -9,28 +11,29 @@ import java.util.Objects;
  */
 public class SinglePlayerGame {
 
-    private ArrayList<Question> questions;
+    private List<Question> questions;
     private Player player;
     private int streak = 0; // streak field for getting more points when you answer questions correctly in a row
     private int questionNumber = 1;
 
-    public SinglePlayerGame() {};
+    public SinglePlayerGame() {}
 
-    public SinglePlayerGame(Player player, ArrayList<Question> questions) {
+    public SinglePlayerGame(Player player) {
+        this.player = player;
+        this.questions = new ArrayList<>();
+    }
+
+    public SinglePlayerGame(Player player, List<Question> questions) {
         this.player = player;
         this.questions = questions;
     }
 
-    /**
-     * Not necessarily a good thing
-     * Constructor which generates a set of questions for a game
-     * @param player
-     */
-    public SinglePlayerGame(Player player) {
-        this.player = player;
-        for(int i = 0 ; i < 20; i++){
-        // this.questions.addRandomQuestion();
-        }
+    public int getPlayerScore() {
+        return player.getScore();
+    }
+
+    public String getPlayerName() {
+        return player.getName();
     }
 
     public void addQuestion(Question question){ questions.add(question); }
@@ -50,8 +53,9 @@ public class SinglePlayerGame {
             return;
         }
         incrementStreak();
-        int currentScore = player.getScore();
-        player.setScore( currentScore + (int)guessQuestionRate * getPointsToBeAdded(timeWhenAnswered) );
+        int currentScore = getPlayerScore();
+        int pointsToBeAdded = (int)Math.round(guessQuestionRate * getPointsToBeAdded(timeWhenAnswered));
+        player.setScore( currentScore + pointsToBeAdded );
         nextQuestion();
     }
 
@@ -64,8 +68,8 @@ public class SinglePlayerGame {
      * @return
      */
     public int getPointsToBeAdded(int time) {
-        double streakFactor = (100 + streak) / 100;
-        var points = streakFactor * (1050 - 5 * time);
+        double streakFactor = (100.0 + streak) / 100.0;
+        var points = Math.round(streakFactor * (1050 - 5 * time));
         return (int)points;
     }
 
@@ -100,7 +104,7 @@ public class SinglePlayerGame {
         return streak;
     }
 
-    public ArrayList<Question> getQuestions() {
+    public List<Question> getQuestions() {
         return questions;
     }
 
