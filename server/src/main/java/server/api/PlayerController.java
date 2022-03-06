@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.database.PlayerRepository;
 import java.util.List;
+import java.util.Optional;
 
 
 /**
@@ -68,11 +69,13 @@ public class PlayerController {
     @PostMapping("/update/{id}")
     public ResponseEntity<Player> updateActivity(@RequestBody Player player, @PathVariable("id") Long id) {
 
-        if (!repo.existsById(id) || player == null // bad request if editable id doesn't exist or no new values given
+        Optional<Player> dbPlayerOpt = repo.findById(id); // get the player from the database
+
+        if (dbPlayerOpt.isEmpty() || player == null // bad request if editable id doesn't exist or no new values given
                 || isNullOrEmpty(player.getName()) && isNullOrEmpty(player.getScore())) {
             return ResponseEntity.badRequest().build();
         }
-        Player dbPlayer = repo.getById(id); // get the player from the database
+        Player dbPlayer = dbPlayerOpt.get();
 
         if (!isNullOrEmpty(player.getName())) { // check if a new name is specified
             dbPlayer.setName(player.getName());
