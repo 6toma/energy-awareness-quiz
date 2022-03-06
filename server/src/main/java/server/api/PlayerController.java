@@ -29,14 +29,14 @@ public class PlayerController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Player> getPlayerByName(@PathVariable("id") Long id) {
+    public ResponseEntity<Player> getPlayerById(@PathVariable("id") Long id) {
         if (!repo.existsById(id)) {
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok(repo.findById(id).get());
     }
 
-    @PostMapping(path = {"/add", "/add/"})
+    @PostMapping(path = {"/add-one", "/add-one/"})
     public ResponseEntity<Player> addPlayer(@RequestBody Player player) {
 
         // checks if the object is not null and that it has a name and score specified
@@ -67,17 +67,22 @@ public class PlayerController {
 
     @PostMapping("/update/{id}")
     public ResponseEntity<Player> updateActivity(@RequestBody Player player, @PathVariable("id") Long id) {
-        if (!repo.existsById(id)) {
+
+        if (!repo.existsById(id) || player == null // bad request if editable id doesn't exist or no new values given
+                || isNullOrEmpty(player.getName()) && isNullOrEmpty(player.getScore())) {
             return ResponseEntity.badRequest().build();
         }
-        if (player == null || isNullOrEmpty(player.getName())
-                || isNullOrEmpty(player.getScore())) {
-            return ResponseEntity.badRequest().build();
+        Player dbPlayer = repo.getById(id); // get the player from the database
+
+        if (!isNullOrEmpty(player.getName())) { // check if a new name is specified
+            dbPlayer.setName(player.getName());
+        }
+        if (!isNullOrEmpty(player.getScore())) { // check if a new score is specified
+            dbPlayer.setScore(player.getScore());
         }
 
-        player.setId(id);  // set the id of the record to be changed
-        repo.save(player); // update the activity
-        return ResponseEntity.ok(player);
+        Player saved = repo.save(dbPlayer); // update the player
+        return ResponseEntity.ok(saved); // for some reason I can't return dbPlayer, it throws an internal server error
     }
 
     @DeleteMapping("/delete/{id}")
