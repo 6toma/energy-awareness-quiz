@@ -66,11 +66,13 @@ public class MainCtrl {
 
     public void showLoadingScreen() {
         primaryStage.getScene().setRoot(loadingScreenParent);
+        checkDarkMode();
         loadingScreenCtrl.countdown();
     }
 
     public void showQuestionScreen() {
         primaryStage.getScene().setRoot(questionScreenParent);
+        checkDarkMode();
         questionScreenCtrl.countdown();
     }
 
