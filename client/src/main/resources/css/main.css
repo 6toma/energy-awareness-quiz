@@ -125,14 +125,3 @@
   -fx-font-size: 20;
   -fx-padding: 10px 20px;
 }
-
-
-.progress-bar.track {
-   -fx-background-color: transparent;
-   -fx-background-radius: 5;
-}
-
-.progress-bar .bar {
-  -fx-background-color: #1A759F;
-  -fx-background-radius: 5;
-}

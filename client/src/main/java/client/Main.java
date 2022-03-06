@@ -68,12 +68,12 @@ public class Main extends Application {
         var loadingScreen = FXML.load(
                 LoadingScreenCtrl.class,
                 "scenes/LoadingScreen.fxml",
-                "css/main.css"
+                "css/LoadingScreen.css"
         );
         var questionScreen = FXML.load(
                 QuestionScreenCtrl.class,
                 "scenes/QuestionScreen.fxml",
-                "css/main.css"
+                "css/QuestionScreen.css"
         );
         // add more scenes the same way
 
