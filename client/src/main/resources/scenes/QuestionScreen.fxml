@@ -10,10 +10,10 @@
 
 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.QuestionScreenCtrl">
 <StackPane styleClass="padding, margin">
-    <Button fx:id="exit" onAction="#exit" styleClass="border, rounded" text="Exit" StackPane.alignment="TOP_LEFT" />
+    <Button fx:id="exit" onAction="#exit" styleClass="border, rounded" text="Exit" StackPane.alignment="BOTTOM_LEFT" />
 </StackPane>
 <VBox alignment="CENTER" maxWidth="640" StackPane.alignment="CENTER">
-      <ProgressBar maxWidth="1.7976931348623157E308" progress="0.0" />
+      <ProgressBar fx:id="progressBar" maxWidth="1.7976931348623157E308" prefHeight="26.0" prefWidth="386.0" progress="0.0" />
       <Region layoutX="10.0" layoutY="120.0" maxHeight="20" minHeight="20" styleClass="margin" />
     <Label alignment="CENTER" prefHeight="91.0" prefWidth="386.0" text="Question" />
     <Region maxHeight="20" minHeight="20" styleClass="margin" VBox.vgrow="ALWAYS" />

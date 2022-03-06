@@ -67,6 +67,7 @@ public class MainCtrl {
 
     public void showQuestionScreen() {
         primaryStage.getScene().setRoot(questionScreenParent);
+        questionScreenCtrl.countdown();
     }
 
 }
