@@ -1,6 +1,5 @@
 package server.api;
 
-import commons.Activity;
 import commons.Player;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
