@@ -28,6 +28,10 @@ public class SinglePlayerGame {
         this.questions = questions;
     }
 
+    public void setPlayerScore(int score) {
+        player.setScore(score);
+    }
+
     public int getPlayerScore() {
         return player.getScore();
     }
@@ -108,7 +112,7 @@ public class SinglePlayerGame {
         return questions;
     }
 
-    public void setQuestions(ArrayList<Question> questions) {
+    public void setQuestions(List<Question> questions) {
         this.questions = questions;
     }
 

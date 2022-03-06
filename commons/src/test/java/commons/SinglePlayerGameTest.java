@@ -80,10 +80,78 @@ public class SinglePlayerGameTest {
         assertEquals(6, singlePlayerGame.getStreak());
     }
 
+    @Test
+    public void TestPlayerGetter() {
+        Player p = new Player("a", 420);
+        singlePlayerGame.setPlayerScore(420);
+        assertEquals(p, singlePlayerGame.getPlayer());
+    }
 
+    @Test
+    public void TestPlayerScoreGetter() {
+        singlePlayerGame.setPlayerScore(420);
+        assertEquals(420, singlePlayerGame.getPlayerScore());
+    }
 
+    @Test
+    public void TestPlayerNameGetter() {
+        assertEquals("a", singlePlayerGame.getPlayerName());
+    }
 
+    @Test
+    public void TestStreakGetter() {
+        assertEquals(0, singlePlayerGame.getStreak());
+        singlePlayerGame.setStreak(3);
+        assertEquals(3, singlePlayerGame.getStreak());
+    }
 
+    @Test
+    public void TestQuestionGetter() {
+        singlePlayerGame.addQuestion(new Question());
+        singlePlayerGame.addQuestion(new Question());
+        assertEquals(2, singlePlayerGame.getQuestions().size());
+    }
 
+    @Test
+    public void TestQuestionGetterNotNull() {
+        singlePlayerGame.addQuestion(new Question());
+        singlePlayerGame.addQuestion(new Question());
+        assertNotNull(singlePlayerGame.getQuestions().get(0));
+    }
 
+    @Test
+    public void TestQuestionSetter() {
+        List<Question> questions = new ArrayList<>();
+        questions.add(new Question());
+        questions.add(new Question());
+        singlePlayerGame.setQuestions(questions);
+        assertEquals(2, singlePlayerGame.getQuestions().size());
+    }
+
+    @Test
+    public void TestQuestionNumberGetter() {
+        singlePlayerGame.nextQuestion();
+        singlePlayerGame.nextQuestion();
+        singlePlayerGame.nextQuestion();
+        assertEquals(4, singlePlayerGame.getQuestionNumber());
+    }
+
+    @Test
+    public void TestPlayerSetter() {
+        Player p = new Player("b", 420);
+        singlePlayerGame.setPlayer(p);
+        assertEquals(p, singlePlayerGame.getPlayer());
+    }
+
+    @Test
+    public void TestStreakSetter() {
+        singlePlayerGame.setStreak(3);
+        assertEquals(3, singlePlayerGame.getStreak());
+    }
+
+    @Test
+    public void TestQuestionNumberSetter() {
+        singlePlayerGame.setQuestionNumber(3);
+        assertEquals(3, singlePlayerGame.getQuestionNumber());
+    }
 }
