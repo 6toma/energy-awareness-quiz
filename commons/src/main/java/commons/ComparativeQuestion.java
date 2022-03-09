@@ -16,6 +16,8 @@ public class ComparativeQuestion extends Question{
     private List<Activity> activities; // list of activities
     private int correct_answer; // index of the correct answer in the list
 
+    public ComparativeQuestion(){} // needed to be able to build object from json
+
     public ComparativeQuestion(List<Activity> activities, boolean isMost){
         this.isMost = isMost;
         this.activities = activities;
