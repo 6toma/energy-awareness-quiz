@@ -22,8 +22,6 @@ import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
 import org.glassfish.jersey.client.ClientConfig;
 
-import javax.management.modelmbean.InvalidTargetObjectTypeException;
-
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 /**
