@@ -85,10 +85,15 @@ public class Main extends Application {
                 "scenes/EndScreen.fxml",
                 "css/EndScreen.css"
         );
+        var helpScreen = FXML.load(
+                HelpScreenCtrl.class,
+                "scenes/HelpScreen.fxml",
+                "css/HelpScreen.css"
+        );
 
         // add more scenes the same way
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
-        mainCtrl.initialize(primaryStage, homeScreen, waitingRoom, loadingScreen, questionScreen, usernameScreen, endScreen);
+        mainCtrl.initialize(primaryStage, homeScreen, waitingRoom, loadingScreen, questionScreen, usernameScreen, endScreen, helpScreen);
     }
 }

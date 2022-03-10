@@ -28,6 +28,9 @@ public class MainCtrl {
     private EndScreenCtrl endScreenCtrl;
     private Parent endScreenParent;
 
+    private HelpScreenCtrl helpScreenCtrl;
+    private Parent helpScreenParent;
+
     // default initializing code
     public void initialize(
             Stage primaryStage,
@@ -36,7 +39,8 @@ public class MainCtrl {
             Pair<LoadingScreenCtrl, Parent> loadingScreen,
             Pair<QuestionScreenCtrl, Parent> questionScreen,
             Pair<UsernameScreenCtrl, Parent> usernameScreen,
-            Pair<EndScreenCtrl, Parent> endScreen
+            Pair<EndScreenCtrl, Parent> endScreen,
+            Pair<HelpScreenCtrl, Parent> helpScreen
     ) {
         this.primaryStage = primaryStage;
 
@@ -57,6 +61,9 @@ public class MainCtrl {
 
         this.endScreenCtrl = endScreen.getKey();
         this.endScreenParent = endScreen.getValue();
+
+        this.helpScreenCtrl = helpScreen.getKey();
+        this.helpScreenParent = helpScreen.getValue();
 
         // TODO: uncomment to disable the fullscreen popup
         //primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
@@ -97,6 +104,11 @@ public class MainCtrl {
 
     public void showEndScreen() {
         primaryStage.getScene().setRoot(endScreenParent);
+        checkDarkMode();
+    }
+
+    public void showHelpScreen() {
+        primaryStage.getScene().setRoot(helpScreenParent);
         checkDarkMode();
     }
 
