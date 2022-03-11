@@ -49,7 +49,7 @@ public class HomeScreenCtrl {
     @FXML
     void toggleDarkMode() {
         isLightMode = !isLightMode;
-        if(!isLightMode)
+        if (!isLightMode)
             darkMode.setText("Light Mode");
         else {
             darkMode.setText("Dark Mode");
@@ -66,9 +66,9 @@ public class HomeScreenCtrl {
     }
 
     public void setUsernameOriginScreen(int usernameOriginScreen) {
-        if(usernameOriginScreen == 0 ||
-            usernameOriginScreen == 1 ||
-            usernameOriginScreen == 2)
+        if (usernameOriginScreen == 0 ||
+                usernameOriginScreen == 1 ||
+                usernameOriginScreen == 2)
             this.usernameOriginScreen = usernameOriginScreen;
     }
 

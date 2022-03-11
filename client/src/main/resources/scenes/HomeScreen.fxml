@@ -1,44 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.Region?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
-
-<StackPane fx:id="parentContainer" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="893.0" prefWidth="1318.0" stylesheets="@../css/main.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.HomeScreenCtrl">
+<?import java.lang.String?>
+<StackPane fx:id="parentContainer" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="893.0" prefWidth="1318.0"
+           stylesheets="@../css/main.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="client.scenes.HomeScreenCtrl">
     <StackPane styleClass="padding, margin" stylesheets="@../css/main.css">
-      <Button fx:id="darkMode" mnemonicParsing="false" onAction="#toggleDarkMode" styleClass="border, dark" text="Dark mode" StackPane.alignment="TOP_RIGHT">
-         <styleClass>
-            <String fx:value="border" />
-            <String fx:value="rounded" />
-         </styleClass>
-      </Button>
-        <Button fx:id="back" onAction="#exitApp" styleClass="border, exit, rounded" stylesheets="@../css/main.css" text="Exit" StackPane.alignment="TOP_LEFT" />
+        <Button fx:id="darkMode" mnemonicParsing="false" onAction="#toggleDarkMode" styleClass="border, dark"
+                text="Dark mode" StackPane.alignment="TOP_RIGHT">
+            <styleClass>
+                <String fx:value="border"/>
+                <String fx:value="rounded"/>
+            </styleClass>
+        </Button>
+        <Button fx:id="back" onAction="#exitApp" styleClass="border, exit, rounded" stylesheets="@../css/main.css"
+                text="Exit" StackPane.alignment="TOP_LEFT"/>
     </StackPane>
-    <VBox alignment="CENTER" maxWidth="747.0" prefHeight="893.0" prefWidth="747.0" stylesheets="@../css/main.css" StackPane.alignment="CENTER">
-      <Text fx:id="titleText" strokeType="OUTSIDE" strokeWidth="0.0" text="Quizzzzzz!" textAlignment="CENTER" wrappingWidth="526.13671875">
-         <font>
-            <Font size="96.0" />
-         </font>
-      </Text>
-      <Region maxHeight="178.0" minHeight="0.0" prefHeight="28.0" prefWidth="747.0" styleClass="margin" />
+    <VBox alignment="CENTER" maxWidth="747.0" prefHeight="893.0" prefWidth="747.0" stylesheets="@../css/main.css"
+          StackPane.alignment="CENTER">
+        <Text fx:id="titleText" strokeType="OUTSIDE" strokeWidth="0.0" text="Quizzzzzz!" textAlignment="CENTER"
+              wrappingWidth="526.13671875">
+            <font>
+                <Font size="96.0"/>
+            </font>
+        </Text>
+        <Region maxHeight="178.0" minHeight="0.0" prefHeight="28.0" prefWidth="747.0" styleClass="margin"/>
 
-           <Region maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" prefHeight="69.0" prefWidth="747.0" styleClass="margin" VBox.vgrow="ALWAYS" />
-        <Button fx:id="singleplayerButton" mnemonicParsing="false" onAction="#showUsernameScreenSingle" prefHeight="84.0" prefWidth="290.0" style="-fx-border-radius: 1000px;" styleClass="mainButton, rounded" text="Singleplayer">
+        <Region maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" prefHeight="69.0" prefWidth="747.0"
+                styleClass="margin" VBox.vgrow="ALWAYS"/>
+        <Button fx:id="singleplayerButton" mnemonicParsing="false" onAction="#showUsernameScreenSingle"
+                prefHeight="84.0" prefWidth="290.0" style="-fx-border-radius: 1000px;" styleClass="mainButton, rounded"
+                text="Singleplayer">
 
-               <font>
-                <Font size="40.0" />
+            <font>
+                <Font size="40.0"/>
             </font>
         </Button>
-        <Region maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="59.0" prefWidth="747.0" styleClass="margin" VBox.vgrow="ALWAYS" />
-        <Button fx:id="multiplayerButton" mnemonicParsing="false" onAction="#showUsernameScreenMulti" prefHeight="84.0" prefWidth="290.0" style="-fx-border-radius: 1000px;" styleClass="mainButton, rounded" text="Multiplayer">
+        <Region maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="59.0"
+                prefWidth="747.0" styleClass="margin" VBox.vgrow="ALWAYS"/>
+        <Button fx:id="multiplayerButton" mnemonicParsing="false" onAction="#showUsernameScreenMulti" prefHeight="84.0"
+                prefWidth="290.0" style="-fx-border-radius: 1000px;" styleClass="mainButton, rounded"
+                text="Multiplayer">
             <font>
-                <Font size="40.0" />
+                <Font size="40.0"/>
             </font>
         </Button>
         <Region maxHeight="-Infinity" minHeight="20" prefHeight="94.0" prefWidth="747.0" styleClass="margin" VBox.vgrow="ALWAYS" />
