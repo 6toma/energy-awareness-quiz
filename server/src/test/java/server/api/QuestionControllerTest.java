@@ -27,13 +27,13 @@ class QuestionControllerTest {
         que = new QuestionController(random, repo);
 
         activities = List.of(
-            new Activity(1L,"a", 1, "a"),
-            new Activity(2L,"b", 2, "b"),
-            new Activity(3L,"c", 3, "c"),
-            new Activity(4L,"d", 4, "d"),
-            new Activity(5L,"e", 5, "e"),
-            new Activity(6L,"f", 6, "f"),
-            new Activity(7L,"g", 7, "g")
+            new Activity("1", "image_a","a", 1, "a"),
+            new Activity("2", "image_b","b", 2, "b"),
+            new Activity("3", "image_c","c", 3, "c"),
+            new Activity("4", "image_d","d", 4, "d"),
+            new Activity("5", "image_e","e", 5, "e"),
+            new Activity("6", "image_f","f", 6, "f"),
+            new Activity("7", "image_g","g", 7, "g")
         );
 
         repo.activities.addAll(activities);

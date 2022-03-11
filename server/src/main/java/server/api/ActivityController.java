@@ -3,6 +3,7 @@ package server.api;
 import commons.Activity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+//import org.springframework.http.RequestEntity;
 import org.springframework.web.bind.annotation.*;
 import server.database.ActivityRepository;
 
@@ -29,8 +30,8 @@ public class ActivityController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Activity> getActivityById(@PathVariable("id") long id) {
-        if (id < 0 || !repo.existsById(id)) {
+    public ResponseEntity<Activity> getActivityById(@PathVariable("id") String id) {
+        if (!repo.existsById(id)) {
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok(repo.findById(id).get());
@@ -90,9 +91,9 @@ public class ActivityController {
     Api endpoint for updating an Activity in the database by specifying an id in the path
      */
     @PostMapping("/update/{id}")
-    public ResponseEntity<Activity> updateActivity(@RequestBody Activity activity, @PathVariable("id") long id) {
+    public ResponseEntity<Activity> updateActivity(@RequestBody Activity activity, @PathVariable("id") String id) {
         // check if a id exists in database
-        if (id < 0 || !repo.existsById(id)) {
+        if (!repo.existsById(id)) {
             return ResponseEntity.badRequest().build();
         }
 
@@ -126,9 +127,9 @@ public class ActivityController {
      *          or a bad request output when it fails
      */
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Activity> deleteActivity(@PathVariable("id") long id) {
+    public ResponseEntity<Activity> deleteActivity(@PathVariable("id") String id) {
         // check if the activity with this id exists in the database
-        if(id < 0 || !repo.existsById(id)) {
+        if(!repo.existsById(id)) {
             return ResponseEntity.badRequest().build();
         }
 
@@ -139,6 +140,5 @@ public class ActivityController {
         repo.deleteById(id);    // delete it
         return ResponseEntity.ok(deleted);
     }
-
 
 }

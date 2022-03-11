@@ -38,7 +38,7 @@ public class TestActivityRepository implements ActivityRepository {
     }
 
     @Override
-    public List<Activity> findAllById(Iterable<Long> longs) {
+    public List<Activity> findAllById(Iterable<String> longs) {
         return null;
     }
 
@@ -48,7 +48,7 @@ public class TestActivityRepository implements ActivityRepository {
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(String id) {
         activities.remove(findById(id).get());
     }
 
@@ -58,7 +58,7 @@ public class TestActivityRepository implements ActivityRepository {
     }
 
     @Override
-    public void deleteAllById(Iterable<? extends Long> longs) {
+    public void deleteAllById(Iterable<? extends String> longs) {
 
     }
 
@@ -74,7 +74,7 @@ public class TestActivityRepository implements ActivityRepository {
 
     @Override
     public <S extends Activity> S save(S activity) {
-        activity.setId((long) activities.size() + 1);
+        activity.setId(String.valueOf(activities.size() + 1));
         activities.add(activity);
         return activity;
     }
@@ -85,9 +85,9 @@ public class TestActivityRepository implements ActivityRepository {
     }
 
     @Override
-    public Optional<Activity> findById(Long id) {
+    public Optional<Activity> findById(String id) {
         for(Activity a : activities){
-            if(a.getId() == id){
+            if(a.getId().equals(id)){
                 return Optional.of(a);
             }
         }
@@ -95,7 +95,7 @@ public class TestActivityRepository implements ActivityRepository {
     }
 
     @Override
-    public boolean existsById(Long id) {
+    public boolean existsById(String id) {
         return findById(id).isPresent();
     }
 
@@ -120,7 +120,7 @@ public class TestActivityRepository implements ActivityRepository {
     }
 
     @Override
-    public void deleteAllByIdInBatch(Iterable<Long> longs) {
+    public void deleteAllByIdInBatch(Iterable<String> longs) {
 
     }
 
@@ -130,12 +130,12 @@ public class TestActivityRepository implements ActivityRepository {
     }
 
     @Override
-    public Activity getOne(Long aLong) {
+    public Activity getOne(String aLong) {
         return null;
     }
 
     @Override
-    public Activity getById(Long aLong) {
+    public Activity getById(String aLong) {
         return null;
     }
 
@@ -178,7 +178,7 @@ public class TestActivityRepository implements ActivityRepository {
     public Optional<List<Activity>> getRandomActivities(int limit) {
         List<Activity> result = new ArrayList<>();
         for(int i = 0; i < limit; i++){
-            result.add(findById( (random.nextLong() % activities.size()) + 1 ).get());
+            result.add(findById(String.valueOf( random.nextLong() % activities.size() + 1 )).get());
         }
         return Optional.of(result);
     }
