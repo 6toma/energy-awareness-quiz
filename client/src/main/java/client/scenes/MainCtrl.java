@@ -25,6 +25,9 @@ public class MainCtrl {
     private UsernameScreenCtrl usernameScreenCtrl;
     private Parent usernameScreenParent;
 
+    private EndScreenCtrl endScreenCtrl;
+    private Parent endScreenParent;
+
     // default initializing code
     public void initialize(
             Stage primaryStage,
@@ -32,7 +35,8 @@ public class MainCtrl {
             Pair<WaitingRoomCtrl, Parent> waitingRoom,
             Pair<LoadingScreenCtrl, Parent> loadingScreen,
             Pair<QuestionScreenCtrl, Parent> questionScreen,
-            Pair<UsernameScreenCtrl, Parent> usernameScreen
+            Pair<UsernameScreenCtrl, Parent> usernameScreen,
+            Pair<EndScreenCtrl, Parent> endScreen
     ) {
         this.primaryStage = primaryStage;
 
@@ -50,6 +54,9 @@ public class MainCtrl {
 
         this.usernameScreenCtrl = usernameScreen.getKey();
         this.usernameScreenParent = usernameScreen.getValue();
+
+        this.endScreenCtrl = endScreen.getKey();
+        this.endScreenParent = endScreen.getValue();
 
         // TODO: uncomment to disable the fullscreen popup
         //primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
@@ -88,11 +95,15 @@ public class MainCtrl {
         questionScreenCtrl.countdown();
     }
 
+    public void showEndScreen() {
+        primaryStage.getScene().setRoot(endScreenParent);
+        checkDarkMode();
+    }
+
     public void checkDarkMode() {
-        if(!homeScreenCtrl.getDarkMode()) {
+        if (!homeScreenCtrl.getDarkMode()) {
             primaryStage.getScene().getRoot().setBlendMode(BlendMode.DIFFERENCE);
-        }
-        else {
+        } else {
             primaryStage.getScene().getRoot().setBlendMode(null);
         }
     }
