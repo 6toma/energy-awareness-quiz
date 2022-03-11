@@ -132,5 +132,9 @@ public class MainCtrl {
         usernameScreenCtrl.resetUserText();
     }
 
+    public void setPreviousScreen(int previousScreen) {
+        helpScreenCtrl.setPreviousScreen(previousScreen);
+    }
+
 }
 

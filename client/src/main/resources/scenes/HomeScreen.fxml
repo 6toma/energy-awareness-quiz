@@ -19,7 +19,11 @@
         </Button>
         <Button fx:id="back" onAction="#exitApp" styleClass="border, exit, rounded" stylesheets="@../css/main.css"
                 text="Exit" StackPane.alignment="TOP_LEFT"/>
+        <Button mnemonicParsing="false" onAction="#showHelpScreen" styleClass="exit, rounded"
+                text="Help" StackPane.alignment="BOTTOM_LEFT"/>
     </StackPane>
+
+
     <VBox alignment="CENTER" maxWidth="747.0" prefHeight="893.0" prefWidth="747.0" stylesheets="@../css/main.css"
           StackPane.alignment="CENTER">
         <Text fx:id="titleText" strokeType="OUTSIDE" strokeWidth="0.0" text="Quizzzzzz!" textAlignment="CENTER"

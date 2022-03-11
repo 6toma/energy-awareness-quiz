@@ -1,9 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.AnchorPane?>
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="client.scenes.HelpScreenCtrl"
-            prefHeight="400.0" prefWidth="600.0">
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<StackPane xmlns="http://javafx.com/javafx"
+           xmlns:fx="http://javafx.com/fxml"
+           fx:controller="client.scenes.HelpScreenCtrl"
+           maxHeight="Infinity" maxWidth="Infinity">
 
-</AnchorPane>
+    <StackPane prefHeight="100.0" styleClass="padding">
+        <Button fx:id="back" onAction="#back" styleClass="exit, rounded" text="Back"
+                StackPane.alignment="TOP_LEFT"/>
+    </StackPane>
+
+    <VBox alignment="CENTER" StackPane.alignment="CENTER" maxWidth="1000">
+        <Region maxHeight="40" minHeight="40" VBox.vgrow="ALWAYS"/>
+        <Label alignment="CENTER" styleClass="wait" text="Help page"/>
+        <Region maxHeight="60" minHeight="60" VBox.vgrow="ALWAYS"/>
+        <ScrollPane
+                styleClass="rounded, no-padding"
+                VBox.vgrow="ALWAYS"
+                hbarPolicy="NEVER"
+        >
+            <VBox spacing="10" alignment="CENTER" maxWidth="Infinity">
+                <Label VBox.vgrow="ALWAYS" styleClass="header" text="Starting the game"/>
+                <Label
+                        VBox.vgrow="ALWAYS"
+                        maxWidth="-Infinity"
+                        styleClass="instruction"
+                        text="Firstly, you should fill in the Server field (no matter if you play singleplayer or multiplayer. Then you choose which variant of the game you want to play. You will be redirected to another screen where
+you have to insert your user name. After that depending if you chose single player or multiplayer you will
+either start a game or join the waiting room"
+                />
+                <Label VBox.vgrow="ALWAYS" styleClass="header" text="Waiting Room"/>
+                <Label VBox.vgrow="ALWAYS" styleClass="instruction" text="In the waiting room you see all the users you will play with. If you want to start the match
+click the Start button"/>
+                <Label styleClass="header" text="Question types"/>
+                <Label styleClass="instruction" text="There are 4 question types:"/>
+                <Label styleClass="instruction" text="Multiple Choice question"/>
+                <Label styleClass="instruction" text="Comparative question"/>
+                <Label styleClass="instruction" text="Instead of ... try ... question"/>
+                <Label styleClass="instruction" text="Estimation question"/>
+                <Label styleClass="header" text="Leaderboard"/>
+                <Label
+                        VBox.vgrow="ALWAYS"
+                        styleClass="instruction"
+                        text="If you play single player, leaderboard will be displayed at the end of the match. It will
+display all of your previous scores. If you play multiplayer, it will display the results of the current match
+and will appear after every question"
+                />
+                <Label styleClass="header" text="Points"/>
+                <Label VBox.vgrow="ALWAYS" styleClass="instruction" text="Depending on the correctness of the answer and quickness you will get different amount of
+points"
+                />
+            </VBox>
+        </ScrollPane>
+        <Region maxHeight="20" minHeight="20" VBox.vgrow="ALWAYS"/>
+    </VBox>
+</StackPane>

@@ -98,4 +98,10 @@ public class HomeScreenCtrl {
         mainCtrl.setUsernameOriginScreen(2);
         mainCtrl.showUsernameScreen();
     }
+
+    @FXML
+    public void showHelpScreen() {
+        mainCtrl.showHelpScreen();
+        mainCtrl.setPreviousScreen(1);
+    }
 }

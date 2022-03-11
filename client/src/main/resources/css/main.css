@@ -125,3 +125,8 @@
   -fx-font-size: 20;
   -fx-padding: 10px 20px;
 }
+
+.header{
+  -fx-font-size: 30px;
+  -fx-font-family: 'Futura PT Extra Bold';
+}
