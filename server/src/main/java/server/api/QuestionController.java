@@ -2,6 +2,7 @@ package server.api;
 
 import commons.Activity;
 import commons.ComparativeQuestion;
+import commons.Question;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,7 +13,7 @@ import java.util.List;
 import java.util.Random;
 
 @RestController
-@RequestMapping("/question")
+@RequestMapping("/api/questions")
 public class QuestionController {
 
     private final Random random; // Random function from Config file
