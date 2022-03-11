@@ -13,4 +13,8 @@ public class HelpScreenCtrl {
         this.mainCtrl = mainCtrl;
         this.server = server;
     }
+
+    public void back() {
+        mainCtrl.hideHelpScreen();
+    }
 }

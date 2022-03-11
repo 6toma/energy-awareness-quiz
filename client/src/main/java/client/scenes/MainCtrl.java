@@ -8,6 +8,7 @@ import commons.Question;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.effect.BlendMode;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
@@ -124,7 +125,12 @@ public class MainCtrl {
     }
 
     public void showHelpScreen() {
-        primaryStage.getScene().setRoot(helpScreenParent);
+        ((StackPane) primaryStage.getScene().getRoot()).getChildren().add(helpScreenParent);
+        checkDarkMode();
+    }
+
+    public void hideHelpScreen() {
+        ((StackPane) primaryStage.getScene().getRoot()).getChildren().remove(helpScreenParent);
         checkDarkMode();
     }
 

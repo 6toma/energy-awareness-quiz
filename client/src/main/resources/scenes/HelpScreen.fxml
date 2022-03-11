@@ -1,9 +1,66 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.AnchorPane?>
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="client.scenes.HelpScreenCtrl"
-            prefHeight="400.0" prefWidth="600.0">
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<StackPane
+        styleClass="bg"
+        xmlns="http://javafx.com/javafx"
+        xmlns:fx="http://javafx.com/fxml"
+        fx:controller="client.scenes.HelpScreenCtrl"
+        
+>
+    <StackPane prefHeight="100.0" styleClass="padding">
+        <Button fx:id="back" onAction="#back" styleClass="exit, rounded" text="Back"
+                StackPane.alignment="TOP_LEFT"/>
+    </StackPane>
 
-</AnchorPane>
+    <VBox alignment="CENTER" StackPane.alignment="CENTER" maxWidth="1000">
+        <Region maxHeight="40" minHeight="40" VBox.vgrow="ALWAYS"/>
+        <Label alignment="CENTER" styleClass="wait" text="Help page"/>
+        <Region maxHeight="60" minHeight="60" VBox.vgrow="ALWAYS"/>
+        <ScrollPane
+                styleClass="rounded, no-padding"
+                VBox.vgrow="ALWAYS"
+                hbarPolicy="NEVER"
+        >
+            <VBox spacing="10" alignment="CENTER" maxWidth="Infinity">
+                <Label VBox.vgrow="ALWAYS" styleClass="header" text="Starting the game"/>
+                <Label
+                        VBox.vgrow="ALWAYS"
+                        maxWidth="-Infinity"
+                        styleClass="instruction"
+                        text="Firstly, you should fill in the Server field (no matter if you play singleplayer or multiplayer. Then you choose which variant of the game you want to play. You will be redirected to another screen where
+you have to insert your user name. After that depending if you chose single player or multiplayer you will
+either start a game or join the waiting room"
+                />
+                <Label VBox.vgrow="ALWAYS" styleClass="header" text="Waiting Room"/>
+                <Label VBox.vgrow="ALWAYS" styleClass="instruction" text="In the waiting room you see all the users you will play with. If you want to start the match
+click the Start button"/>
+                <Label styleClass="header" text="Question types"/>
+                <Label styleClass="instruction"
+                       VBox.vgrow="ALWAYS"
+                       text="Different types of multiple choice questions, asking you to guess the correct energy consumption or to compare different activities."/>
+                <Label VBox.vgrow="ALWAYS"
+                       styleClass="instruction"
+                       text="Open questions, in which you should try to estimate the energy consumption of a certain activity by inputting a number yourself. The closer you are to the correct answer, the more points you get!"/>
+                <Label styleClass="header" text="Jokers"/>
+                <Label VBox.vgrow="ALWAYS"
+                       styleClass="instruction"
+                       text="Throughout the game, you will have 3 power-ups to use (so called jokers). You will be able to shorten answer time of your opponents, delete 2 wrong answers from a question and double points from current question "/>
+                <Label styleClass="header" text="Leaderboard"/>
+                <Label
+                        VBox.vgrow="ALWAYS"
+                        styleClass="instruction"
+                        text="If you play single player, leaderboard will be displayed at the end of the match. It will
+display all of your previous scores. If you play multiplayer, it will display the results of the current match
+and will appear after every question"
+                />
+                <Label styleClass="header" text="Points"/>
+                <Label VBox.vgrow="ALWAYS" styleClass="instruction" text="Depending on the correctness of the answer and quickness you will get different amount of
+points"
+                />
+            </VBox>
+        </ScrollPane>
+        <Region maxHeight="20" minHeight="20" VBox.vgrow="ALWAYS"/>
+    </VBox>
+</StackPane>
