@@ -2,10 +2,12 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import commons.Player;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 
 
 /**
@@ -33,6 +35,8 @@ public class HomeScreenCtrl {
     @FXML
     private Button darkMode;
 
+    @FXML
+    private TextField inputServerURLField;
 
     @Inject
     public HomeScreenCtrl(ServerUtils server, MainCtrl mainCtrl) {
@@ -89,12 +93,33 @@ public class HomeScreenCtrl {
 
     @FXML
     public void showUsernameScreenSingle() {
+
+        // Testing ServerUtils getCompQuestion functionality
+        System.out.println(inputServerURLField.getText());
+        server.setServerURL(inputServerURLField.getText());
+        try{
+            System.out.println(server.getCompQuestion());
+        } catch(Exception e) {
+            System.err.println("Invalid server url");
+        }
+
         mainCtrl.setUsernameOriginScreen(1);
         mainCtrl.showUsernameScreen();
     }
 
     @FXML
     public void showUsernameScreenMulti() {
+
+        // Testing ServerUtils postPlayer functionality
+        System.out.println(inputServerURLField.getText());
+        server.setServerURL(inputServerURLField.getText());
+        Player player = new Player("test", 7357);
+        try{
+            System.out.println(server.postPlayer(player));
+        } catch(Exception e) {
+            System.err.println("Invalid server url");
+        }
+
         mainCtrl.setUsernameOriginScreen(2);
         mainCtrl.showUsernameScreen();
     }
