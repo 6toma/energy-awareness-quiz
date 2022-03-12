@@ -4,6 +4,7 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 
 public class EndScreenCtrl {
 
@@ -14,6 +15,8 @@ public class EndScreenCtrl {
     private Button playAgain;
     @FXML
     private Button goToHomeScreen;
+    @FXML
+    private Label scoreLabel;
 
     @Inject
     public EndScreenCtrl(ServerUtils server, MainCtrl mainCtrl) {
@@ -28,9 +31,13 @@ public class EndScreenCtrl {
 
     public void playAgain() {
         if (mainCtrl.getUsernameOriginScreen() == 1) {
-            mainCtrl.showLoadingScreen();
+            mainCtrl.newSinglePlayerGame();
         } else {
             mainCtrl.showWaitingRoom();
         }
+    }
+
+    public void setScoreLabel(int score){
+        scoreLabel.setText("Your score is " + score);
     }
 }

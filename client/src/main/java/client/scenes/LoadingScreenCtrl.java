@@ -50,15 +50,14 @@ public class LoadingScreenCtrl {
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
+                        if(second == 0) {
+                            cancel();
+                            mainCtrl.nextQuestionScreen();
+                            counter.setText("3");
+                        }
                         counter.setText(String.valueOf(second--));
                     }
                 });
-
-                if(second == 0) {
-                    cancel();
-                    mainCtrl.showQuestionScreen();
-                    counter.setText("3");
-                }
             }
         };
 

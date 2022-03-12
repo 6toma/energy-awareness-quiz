@@ -70,10 +70,10 @@ public class Main extends Application {
                 "scenes/LoadingScreen.fxml",
                 "css/LoadingScreen.css"
         );
-        var questionScreen = FXML.load(
-                QuestionScreenCtrl.class,
-                "scenes/QuestionScreen.fxml",
-                "css/QuestionScreen.css"
+        var comparativeQuestionScreen = FXML.load(
+                ComparativeQuestionScreenCtrl.class,
+            "scenes/ComparativeQuestionScreen.fxml",
+            "css/ComparativeQuestionScreen.css"
         );
         var usernameScreen = FXML.load(
                 UsernameScreenCtrl.class,
@@ -89,6 +89,6 @@ public class Main extends Application {
         // add more scenes the same way
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
-        mainCtrl.initialize(primaryStage, homeScreen, waitingRoom, loadingScreen, questionScreen, usernameScreen, endScreen);
+        mainCtrl.initialize(primaryStage, homeScreen, waitingRoom, loadingScreen, comparativeQuestionScreen, usernameScreen, endScreen);
     }
 }
