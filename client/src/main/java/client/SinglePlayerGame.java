@@ -18,8 +18,15 @@ public class SinglePlayerGame {
     private Player player;
     private int streak = 0; // streak field for getting more points when you answer questions correctly in a row
     private int questionNumber = 1;
+    private int maxQuestions;
 
     public SinglePlayerGame() {}
+
+    public SinglePlayerGame(int maxQuestions) {
+        this.player = new Player();
+        this.questions = new ArrayList<>();
+        this.maxQuestions = maxQuestions;
+    }
 
     public SinglePlayerGame(Player player) {
         this.player = player;
@@ -32,7 +39,7 @@ public class SinglePlayerGame {
     }
 
     public boolean addQuestion(Question question){
-        boolean isInQuestionList = false;
+
         for(int i = 0; i < questions.size(); i++) {
             if (question.equals(questions.get(i))) return false;
         }
@@ -128,4 +135,11 @@ public class SinglePlayerGame {
         this.questionNumber = questionNumber;
     }
 
+    public int getMaxQuestions() {
+        return maxQuestions;
+    }
+
+    public void setMaxQuestions(int maxQuestions) {
+        this.maxQuestions = maxQuestions;
+    }
 }
