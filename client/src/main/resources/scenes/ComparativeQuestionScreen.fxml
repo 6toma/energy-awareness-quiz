@@ -18,40 +18,28 @@
                  <Region layoutX="10.0" layoutY="120.0" maxHeight="20" minHeight="20" styleClass="margin" />
         <Label fx:id="questionLabel" alignment="CENTER" prefHeight="129.0" prefWidth="1191.0" style="-fx-font-size: 54; -fx-font-family: Futura PT Medium;" text="Question" wrapText="true" />
         <Region maxHeight="20" minHeight="20" styleClass="margin" VBox.vgrow="ALWAYS" />
-        <Button fx:id="answer1" mnemonicParsing="false" onAction="#answer1Clicked" text="Answer 1">
+        <Button fx:id="answer1" mnemonicParsing="false" onAction="#answer1Clicked" text="Answer 1" styleClass="border, rounded">
             <font>
                 <Font size="24.0" />
             </font>
-         <styleClass>
-            <String fx:value="border" />
-            <String fx:value="rounded" />
-         </styleClass>
         </Button>
         <Region maxHeight="20" minHeight="20" styleClass="margin" VBox.vgrow="ALWAYS" />
-        <Button fx:id="answer2" layoutX="138.0" layoutY="121.0" mnemonicParsing="false" onAction="#answer2Clicked" text="Answer 2">
+        <Button fx:id="answer2" layoutX="138.0" layoutY="121.0" mnemonicParsing="false" styleClass="border, rounded" onAction="#answer2Clicked" text="Answer 2">
             <font>
                 <Font size="24.0" />
             </font>
-         <styleClass>
-            <String fx:value="border" />
-            <String fx:value="rounded" />
-         </styleClass>
         </Button>
         <Region layoutX="10.0" layoutY="172.0" maxHeight="20" minHeight="20" prefHeight="20.0" prefWidth="697.0" styleClass="margin" />
-        <Button fx:id="answer3" layoutX="138.0" layoutY="121.0" onAction="#answer3Clicked" text="Answer 3">
+        <Button fx:id="answer3" layoutX="138.0" layoutY="121.0" styleClass="border, rounded" onAction="#answer3Clicked" text="Answer 3">
             <font>
                 <Font size="24.0" />
             </font>
-         <styleClass>
-            <String fx:value="border" />
-            <String fx:value="rounded" />
-         </styleClass>
         </Button>
         <Region layoutX="10.0" layoutY="244.0" maxHeight="20" minHeight="20" prefHeight="20.0" prefWidth="593.0" styleClass="margin" />
     </VBox>
     <StackPane maxHeight="132.0" maxWidth="245.0" prefHeight="132.0" prefWidth="245.0" styleClass="padding, margin" stylesheets="@../css/ComparativeQuestionScreen.css" StackPane.alignment="BOTTOM_LEFT">
       <children>
-           <Button fx:id="exit" onAction="#exit" styleClass="border, rounded" text="Leave" StackPane.alignment="BOTTOM_LEFT" />
+           <Button fx:id="exit" onAction="#exit" styleClass="exit, border, rounded" text="Leave" StackPane.alignment="BOTTOM_LEFT" />
       </children>
     </StackPane>
 

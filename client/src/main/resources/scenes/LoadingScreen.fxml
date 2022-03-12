@@ -8,7 +8,7 @@
 
 <StackPane maxHeight="Infinity" maxWidth="Infinity" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.LoadingScreenCtrl">
     <StackPane styleClass="padding">
-        <Button fx:id="back" onAction="#back" styleClass="border, rounded" text="Back" StackPane.alignment="TOP_LEFT" />
+        <Button fx:id="back" onAction="#back" styleClass="exit, border, rounded" text="Back" StackPane.alignment="TOP_LEFT" />
     </StackPane>
 
     <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" StackPane.alignment="CENTER">

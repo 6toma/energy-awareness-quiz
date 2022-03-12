@@ -10,13 +10,8 @@
            stylesheets="@../css/main.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
            fx:controller="client.scenes.HomeScreenCtrl">
     <StackPane styleClass="padding, margin" stylesheets="@../css/main.css">
-        <Button fx:id="darkMode" mnemonicParsing="false" onAction="#toggleDarkMode" styleClass="border, dark"
-                text="Dark mode" StackPane.alignment="TOP_RIGHT">
-            <styleClass>
-                <String fx:value="border"/>
-                <String fx:value="rounded"/>
-            </styleClass>
-        </Button>
+        <Button fx:id="darkMode" mnemonicParsing="false" onAction="#toggleDarkMode" styleClass="border, dark, rounded"
+                text="Dark mode" StackPane.alignment="TOP_RIGHT"/>
         <Button fx:id="back" onAction="#exitApp" styleClass="border, exit, rounded" stylesheets="@../css/main.css"
                 text="Exit" StackPane.alignment="TOP_LEFT"/>
     </StackPane>
