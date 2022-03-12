@@ -39,7 +39,7 @@ public class SinglePlayerGame {
     }
 
     public boolean addQuestion(Question question){
-
+        // TODO: Make this comparison actually do something, right now it uses Object's equals method. Probably should use a set or something
         for(int i = 0; i < questions.size(); i++) {
             if (question.equals(questions.get(i))) return false;
         }

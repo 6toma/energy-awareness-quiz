@@ -54,8 +54,9 @@ public class LoadingScreenCtrl {
                             cancel();
                             mainCtrl.nextQuestionScreen();
                             counter.setText("3");
+                        } else {
+                            counter.setText(String.valueOf(second--));
                         }
-                        counter.setText(String.valueOf(second--));
                     }
                 });
             }
