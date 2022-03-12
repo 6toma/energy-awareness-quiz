@@ -38,7 +38,7 @@ public class ServerUtils {
 
     public ComparativeQuestion getCompQuestion() {
         return ClientBuilder.newClient(new ClientConfig()) //
-            .target(serverURL).path("/question/comparative") // the URL path which we HTTP GET for comparative questions
+            .target(serverURL).path("api/questions/comparative") // the URL path which we HTTP GET for comparative questions
             .request(APPLICATION_JSON) //
             .accept(APPLICATION_JSON) //
             .get(new GenericType<ComparativeQuestion>() {});
@@ -57,6 +57,12 @@ public class ServerUtils {
         return serverURL;
     }
 
+    /**
+     * Sets the server URL
+     * If input invalid sets url to default
+     *
+     * @param serverURL
+     */
     public void setServerURL(String serverURL) {
         if(serverURL.length() > 0){
             this.serverURL = serverURL;

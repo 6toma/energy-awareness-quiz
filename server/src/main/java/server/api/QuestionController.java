@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Random;
 
 @RestController
-@RequestMapping("/question")
+@RequestMapping("/api/questions")
 public class QuestionController {
 
     private final Random random; // Random function from Config file

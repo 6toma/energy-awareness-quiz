@@ -91,20 +91,23 @@ public class HomeScreenCtrl {
     }
     */
 
+    /**
+     * Tries to get a question from the server
+     * If succeeds connect create a new singlePlayerGame and go to the username screen
+     *
+     * TODO:
+     * - Show error to user if connection to server failed
+     */
     @FXML
     public void showUsernameScreenSingle() {
 
-        // Testing ServerUtils getCompQuestion functionality
-        System.out.println(inputServerURLField.getText());
-        server.setServerURL(inputServerURLField.getText());
+        mainCtrl.getServer().setServerURL(inputServerURLField.getText());
         try{
-            System.out.println(server.getCompQuestion());
+            mainCtrl.newSinglePlayerGame();
         } catch(Exception e) {
-            System.err.println("Invalid server url");
+            e.printStackTrace();
+            System.err.println("Connection failed");
         }
-
-        mainCtrl.setUsernameOriginScreen(1);
-        mainCtrl.showUsernameScreen();
     }
 
     @FXML
@@ -117,7 +120,7 @@ public class HomeScreenCtrl {
         try{
             System.out.println(server.postPlayer(player));
         } catch(Exception e) {
-            System.err.println("Invalid server url");
+            System.err.println("Connection failed");
         }
 
         mainCtrl.setUsernameOriginScreen(2);
