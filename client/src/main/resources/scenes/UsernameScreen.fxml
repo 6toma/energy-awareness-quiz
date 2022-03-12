@@ -49,12 +49,7 @@
             <Region maxHeight="61.0" minHeight="20" prefHeight="33.0" prefWidth="747.0" styleClass="margin" VBox.vgrow="ALWAYS" />
             <Button fx:id="setUsernameButton" mnemonicParsing="false" onAction="#setUsernameButtonClicked" styleClass="mainButton, rounded" text="Set username" />
             <Region maxHeight="61.0" minHeight="20" prefHeight="28.0" prefWidth="747.0" styleClass="margin" />
-            <Button fx:id="continueButton" disable="true" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" onAction="#showNextScreen" prefHeight="71.0" prefWidth="235.0" stylesheets="@../css/main.css" text="Continue" textAlignment="CENTER">
-               <styleClass>
-                  <String fx:value="border" />
-                  <String fx:value="rounded" />
-               </styleClass>
-            </Button>
+            <Button fx:id="continueButton" disable="true" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" onAction="#showNextScreen" prefHeight="71.0" prefWidth="235.0" stylesheets="@../css/main.css" text="Continue" textAlignment="CENTER" styleClass="mainButton, rounded" />
          </children>
       </VBox>
    </children>
