@@ -39,3 +39,7 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### Activity Bank ###
+/server/src/main/resources/json/
+/server/src/main/resources/activity-bank-pictures/

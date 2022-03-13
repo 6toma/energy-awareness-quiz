@@ -2,6 +2,7 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import commons.Player;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -60,6 +61,8 @@ public class UsernameScreenCtrl {
     @FXML
     void showNextScreen(ActionEvent event) {
         if(mainCtrl.getUsernameOriginScreen() == 1) {
+
+            mainCtrl.getSinglePlayerGame().setPlayer(new Player(inputUsernameField.getText()));
             mainCtrl.showLoadingScreen();
         } else {
             mainCtrl.showWaitingRoom();

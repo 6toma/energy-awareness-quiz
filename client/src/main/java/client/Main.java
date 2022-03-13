@@ -70,19 +70,30 @@ public class Main extends Application {
                 "scenes/LoadingScreen.fxml",
                 "css/LoadingScreen.css"
         );
-        var questionScreen = FXML.load(
-                QuestionScreenCtrl.class,
-                "scenes/QuestionScreen.fxml",
-                "css/QuestionScreen.css"
+        var comparativeQuestionScreen = FXML.load(
+                ComparativeQuestionScreenCtrl.class,
+                "scenes/ComparativeQuestionScreen.fxml",
+                "css/ComparativeQuestionScreen.css"
         );
         var usernameScreen = FXML.load(
                 UsernameScreenCtrl.class,
                 "scenes/UsernameScreen.fxml",
                 "css/main.css"
         );
+        var endScreen = FXML.load(
+                EndScreenCtrl.class,
+                "scenes/EndScreen.fxml",
+                "css/EndScreen.css"
+        );
+        var helpScreen = FXML.load(
+                HelpScreenCtrl.class,
+                "scenes/HelpScreen.fxml",
+                "css/HelpScreen.css"
+        );
+
         // add more scenes the same way
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
-        mainCtrl.initialize(primaryStage, homeScreen, waitingRoom, loadingScreen, questionScreen, usernameScreen);
+        mainCtrl.initialize(primaryStage, homeScreen, waitingRoom, loadingScreen, comparativeQuestionScreen, usernameScreen, endScreen, helpScreen);
     }
 }

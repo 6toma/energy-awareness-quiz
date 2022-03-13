@@ -125,3 +125,7 @@
   -fx-font-size: 20;
   -fx-padding: 10px 20px;
 }
+
+.bg {
+  -fx-background-color: linear-gradient(to bottom right, #b5e48c, #1a759f);
+}

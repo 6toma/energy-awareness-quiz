@@ -29,4 +29,38 @@ public class Main {
     public static void main(String[] args) {
         SpringApplication.run(Main.class, args);
     }
+
+
+    //used for uploading activities from JSON file to the
+    //database
+    //IF UNCOMMENTED, THEN ALL ACTIVITIES FROM THE FILE
+    //WILL BE UPLOADED TO CURRENT DATABASE
+    //ONLY USE IF USING THE IN-MEMORY TESTING DB
+    //DON'T USE IF THE CURRENT DB IS NOT IN-MEMORY
+    /*
+    @Bean
+    CommandLineRunner runner(ActivityRepository activityRepo) {
+        return args -> {
+            ObjectMapper mapper = new ObjectMapper();
+            TypeReference<List<Activity>> mapType = new TypeReference<>() {
+            };
+            InputStream inputStream = TypeReference
+                    .class
+                    .getClassLoader()
+                    .getResourceAsStream(
+                            "json/activities.json"
+            );
+
+            try {
+                List<Activity> activityList = mapper.readValue(inputStream, mapType);
+                activityRepo.saveAll(activityList);
+                System.out.println("Activity list saved successfully");
+            }
+            catch(IOException e) {
+                System.out.println(e.getMessage());
+            }
+        };
+    }
+    */
+
 }
