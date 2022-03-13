@@ -5,10 +5,13 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.ComparativeQuestion;
 import commons.Question;
+import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.effect.BlendMode;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import javafx.util.Pair;
 
 public class MainCtrl {
@@ -82,6 +85,15 @@ public class MainCtrl {
         primaryStage.show();
         primaryStage.setFullScreen(true);
         checkDarkMode();
+
+        // Sets proper exit code to window close request
+        primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent t) {
+                Platform.exit();
+                System.exit(0);
+            }
+        });
     }
 
     public void showHomeScreen() {
