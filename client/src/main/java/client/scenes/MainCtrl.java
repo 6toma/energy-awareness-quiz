@@ -189,9 +189,15 @@ public class MainCtrl {
      * Called to end the single player game
      * Shows the end screen and sends score to the server
      */
-    public void endSinglePlayerGame(){
+    public void endSinglePlayerGame() {
+        //show End screen with score
         endScreenCtrl.setScoreLabel(singlePlayerGame.getPlayer().getScore());
         showEndScreen();
+
+        //reset Question screen to prepare it for a new game
+        comparativeQuestionScreenCtrl.resetComparativeQuestionScreen();
+
+        //store player's end score
         try{
             server.postPlayer(singlePlayerGame.getPlayer());
         }catch(Exception e){
