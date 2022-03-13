@@ -31,9 +31,9 @@ class ActivityControllerTest {
         act = new ActivityController(repo);
 
         activities = List.of(
-                new Activity("1", "image_a","a", 1, "a"),
-                new Activity("2", "image_b","b", 2, "b"),
-                new Activity("3", "image_c","c", 3, "c")
+                new Activity("1", "image_a","a", 1L, "a"),
+                new Activity("2", "image_b","b", 2L, "b"),
+                new Activity("3", "image_c","c", 3L, "c")
         );
     }
 

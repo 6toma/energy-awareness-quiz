@@ -19,7 +19,7 @@ public class Activity {
 
     private String image_path;
     private String title;
-    private Integer consumption_in_wh;
+    private Long consumption_in_wh;
     private String source;
 
     public Activity(){ } // needed for creating object from JSON
@@ -34,7 +34,7 @@ public class Activity {
 
      */
 
-    public Activity(String id, String image_path, String title, Integer consumption_in_wh, String source) {
+    public Activity(String id, String image_path, String title, Long consumption_in_wh, String source) {
         this.id = id;
         this.image_path = image_path;
         this.title = title;
@@ -65,7 +65,7 @@ public class Activity {
     public int hashCode() {
         return Objects.hash(id, title, consumption_in_wh, source);
     }
-
+    
     public String getId() {
         return id;
     }
@@ -90,11 +90,11 @@ public class Activity {
         this.title = title;
     }
 
-    public Integer getConsumption_in_wh() {
+    public Long getConsumption_in_wh() {
         return consumption_in_wh;
     }
 
-    public void setConsumption_in_wh(Integer consumption_in_wh) {
+    public void setConsumption_in_wh(Long consumption_in_wh) {
         this.consumption_in_wh = consumption_in_wh;
     }
 
