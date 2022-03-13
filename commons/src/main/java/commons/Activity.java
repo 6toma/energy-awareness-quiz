@@ -10,10 +10,7 @@ import java.util.Objects;
  */
 @Entity
 public class Activity {
-
-    /*
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    */
+    
     @Id
     private String id;
 
@@ -24,15 +21,13 @@ public class Activity {
 
     public Activity(){ } // needed for creating object from JSON
 
-    /*
-    public Activity(String image_path, String title, Integer consumption_in_wh, String source) {
+
+    public Activity(String image_path, String title, Long consumption_in_wh, String source) {
         this.image_path = image_path;
         this.title = title;
         this.consumption_in_wh = consumption_in_wh;
         this.source = source;
     }
-
-     */
 
     public Activity(String id, String image_path, String title, Long consumption_in_wh, String source) {
         this.id = id;
