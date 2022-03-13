@@ -21,7 +21,9 @@ public class Activity {
     private Integer consumption_in_wh;
     private String source;
 
-    public Activity(){ } // needed for creating object from JSON
+    // needed for creating object from JSON
+    public Activity() {
+    }
 
     public Activity(String title, Integer consumption_in_wh, String source) {
         this.title = title;
@@ -39,11 +41,11 @@ public class Activity {
     @Override
     public String toString() {
         return "Activity{" +
-            "id=" + id +
-            ", title='" + title + '\'' +
-            ", consumption_in_wh=" + consumption_in_wh +
-            ", source='" + source + '\'' +
-            '}';
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", consumption_in_wh=" + consumption_in_wh +
+                ", source='" + source + '\'' +
+                '}';
     }
 
     @Override

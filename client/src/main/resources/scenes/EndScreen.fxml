@@ -1,33 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.net.URL?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.Region?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
-
-<StackPane maxHeight="Infinity" maxWidth="Infinity" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.EndScreenCtrl">
+<?import javafx.scene.layout.*?>
+<?import java.net.URL?>
+<StackPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="client.scenes.EndScreenCtrl">
 
     <StackPane styleClass="padding">
         <VBox alignment="CENTER" maxWidth="1920.0" prefHeight="1500.0" prefWidth="1920.0" StackPane.alignment="CENTER">
-            <Region maxHeight="20" minHeight="20" VBox.vgrow="ALWAYS" />
-            <Label alignment="CENTER" prefHeight="80.0" prefWidth="1200.0" styleClass="wait" text="Congratulations! You finished the quiz!" />
-            <Label fx:id="scoreLabel" alignment="CENTER" prefHeight="80.0" prefWidth="1200.0" styleClass="wait" text="Your score is !ENTER SCORE!" />
-            <Region maxHeight="20" minHeight="20" VBox.vgrow="ALWAYS" />
+            <Region maxHeight="20" minHeight="20" VBox.vgrow="ALWAYS"/>
+            <Label alignment="CENTER" prefHeight="80.0" prefWidth="1200.0" styleClass="wait"
+                   text="Congratulations! You finished the quiz!"/>
+            <Label fx:id="scoreLabel" alignment="CENTER" prefHeight="80.0" prefWidth="1200.0" styleClass="wait"
+                   text="Your score is !ENTER SCORE!"/>
+            <Region maxHeight="20" minHeight="20" VBox.vgrow="ALWAYS"/>
             <StackPane>
-                <Region maxHeight="70" minHeight="70" VBox.vgrow="ALWAYS" />
-                <Button fx:id="playAgain" alignment="CENTER" onAction="#playAgain" styleClass="mainButton, border, rounded" text="Play again" />
+                <Region maxHeight="70" minHeight="70" VBox.vgrow="ALWAYS"/>
+                <Button fx:id="playAgain" alignment="CENTER" onAction="#playAgain"
+                        styleClass="mainButton, border, rounded" text="Play again"/>
             </StackPane>
-            <Region maxHeight="40" minHeight="40" VBox.vgrow="ALWAYS" />
+            <Region maxHeight="40" minHeight="40" VBox.vgrow="ALWAYS"/>
             <StackPane>
-                <Button fx:id="goToHomeScreen" alignment="CENTER" onAction="#goToHomeScreen" styleClass="mainButton, border, rounded" text="Home" />
-                <Region maxHeight="40" minHeight="40" VBox.vgrow="ALWAYS" />
+                <Button fx:id="goToHomeScreen" alignment="CENTER" onAction="#goToHomeScreen"
+                        styleClass="mainButton, border, rounded" text="Home"/>
+                <Region maxHeight="40" minHeight="40" VBox.vgrow="ALWAYS"/>
             </StackPane>
         </VBox>
     </StackPane>
-   <stylesheets>
-      <URL value="@../css/main.css" />
-      <URL value="@../css/EndScreen.css" />
-   </stylesheets>
+    <stylesheets>
+        <URL value="@../css/main.css"/>
+        <URL value="@../css/EndScreen.css"/>
+    </stylesheets>
 </StackPane>
