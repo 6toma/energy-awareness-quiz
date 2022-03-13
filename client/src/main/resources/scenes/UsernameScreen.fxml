@@ -32,7 +32,7 @@
       </StackPane>
       <VBox alignment="CENTER" maxWidth="747.0" prefHeight="893.0" prefWidth="747.0" stylesheets="@../css/main.css">
          <children>
-            <Label fx:id="usernameField" alignment="CENTER" prefHeight="134.0" prefWidth="769.0" style="-fx-font-size: 54; -fx-font-family: Futura PT Medium;" text="Please input your username!" textAlignment="JUSTIFY" wrapText="true">
+            <Label fx:id="usernameField" alignment="CENTER" prefWidth="747.0" style="-fx-font-size: 54; -fx-font-family: Futura PT Medium;" text="Please input your username!" textAlignment="JUSTIFY" wrapText="true">
                <font>
                   <Font size="11.0" />
                </font>
