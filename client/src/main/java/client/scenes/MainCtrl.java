@@ -158,7 +158,8 @@ public class MainCtrl {
     public void nextQuestionScreen() {
         if(singlePlayerGame != null
             && singlePlayerGame.getQuestions().size() > 0
-            && singlePlayerGame.getQuestionNumber() <= singlePlayerGame.getMaxQuestions()){
+            && singlePlayerGame.getQuestionNumber() <= singlePlayerGame.getMaxQuestions()
+                + comparativeQuestionScreenCtrl.jokerAdditionalQuestion()) {
 
             Question question = singlePlayerGame.getQuestions().get( singlePlayerGame.getQuestionNumber() - 1);
 
