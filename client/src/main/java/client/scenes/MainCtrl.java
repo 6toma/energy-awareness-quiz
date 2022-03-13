@@ -153,9 +153,10 @@ public class MainCtrl {
         checkDarkMode();
     }
 
-    public void showScoreChangeScreen(){
+    public void showScoreChangeScreen(int pointsGained){
         ((StackPane) primaryStage.getScene().getRoot()).getChildren().add(scoreChangeScreenParent);
         checkDarkMode();
+        showScore(pointsGained);
         scoreChangeScreenCtrl.countdown();
     }
 
@@ -257,8 +258,8 @@ public class MainCtrl {
         }
     }
 
-    public void showScore() {
-        int gained = singlePlayerGame.getScore();
+    public void showScore(int pointsGained) {
+        int gained = pointsGained;
         int total = singlePlayerGame.getPlayer().getScore();
         int streak = singlePlayerGame.getStreak();
         scoreChangeScreenCtrl.setScoreLabels(gained, total, streak);

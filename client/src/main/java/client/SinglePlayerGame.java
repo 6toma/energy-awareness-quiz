@@ -61,18 +61,20 @@ public class SinglePlayerGame {
      * @param guessQuestionRate for every other question than a guess question this will be set to 1.0
      *                          for the guess question this will be set to a percentage how good the guess was
      */
-    public void addPoints(int timeWhenAnswered, double guessQuestionRate){
+    public int addPoints(int timeWhenAnswered, double guessQuestionRate){
         if(timeWhenAnswered == -1){
             resetStreak();
             nextQuestion();
-            return;
+            return -1;
         }
         incrementStreak();
         int currentScore = getPlayer().getScore();
         int pointsToBeAdded = (int)Math.round(guessQuestionRate * getPointsToBeAdded(timeWhenAnswered));
         player.setScore( currentScore + pointsToBeAdded );
         nextQuestion();
+        return pointsToBeAdded;
     }
+
 
 
     /**
