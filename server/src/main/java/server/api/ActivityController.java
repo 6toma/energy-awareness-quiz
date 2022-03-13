@@ -72,6 +72,15 @@ public class ActivityController {
             return ResponseEntity.badRequest().build();
         }
 
+        // filters invalid values
+        if (activity.getTitle().length() > 255
+                || activity.getConsumption_in_wh() > Long.MAX_VALUE
+                || activity.getSource().length() > 255
+                || activity.getId().length() > 255
+                || activity.getImage_path().length() > 255) {
+            return ResponseEntity.badRequest().build();
+        }
+
         Activity act = repo.save(activity); // saves activity to the database
         return ResponseEntity.ok(act); // returns the same object if everything ok
     }
