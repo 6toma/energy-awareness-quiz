@@ -7,7 +7,7 @@ public class Notification {
         this.messageContent = messageContent;
     }
 
-    public static String getMessageContent() {
+    public String getMessageContent() {
         return messageContent;
     }
 

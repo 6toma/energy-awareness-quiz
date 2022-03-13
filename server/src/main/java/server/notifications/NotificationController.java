@@ -11,7 +11,7 @@ public class NotificationController {
     @MessageMapping("/notification")
     @SendTo("/topic/notifications")
     public ResponseNotification getNotification(final Notification notification) {
-        return new ResponseNotification(HtmlUtils.htmlEscape(Notification.getMessageContent()));
+        return new ResponseNotification(HtmlUtils.htmlEscape(notification.getMessageContent()));
     }
 }
 
