@@ -31,7 +31,7 @@ public class EndScreenCtrl {
 
     public void playAgain() {
         if (mainCtrl.getUsernameOriginScreen() == 1) {
-            mainCtrl.newSinglePlayerGame();
+            mainCtrl.consecutiveSinglePlayerGame(mainCtrl.getCurrentUsername());
         } else {
             mainCtrl.showWaitingRoom();
         }

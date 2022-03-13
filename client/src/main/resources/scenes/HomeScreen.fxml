@@ -6,15 +6,19 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 <?import java.lang.String?>
-<StackPane fx:id="parentContainer" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="893.0" prefWidth="1318.0"
-           stylesheets="@../css/main.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+<StackPane fx:id="parentContainer"
+           xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
            fx:controller="client.scenes.HomeScreenCtrl">
     <StackPane styleClass="padding, margin" stylesheets="@../css/main.css">
         <Button fx:id="darkMode" mnemonicParsing="false" onAction="#toggleDarkMode" styleClass="border, dark, rounded"
                 text="Dark mode" StackPane.alignment="TOP_RIGHT"/>
         <Button fx:id="back" onAction="#exitApp" styleClass="border, exit, rounded" stylesheets="@../css/main.css"
                 text="Exit" StackPane.alignment="TOP_LEFT"/>
+        <Button mnemonicParsing="false" onAction="#showHelpScreen" styleClass="exit, rounded"
+                text="Help" StackPane.alignment="BOTTOM_LEFT"/>
     </StackPane>
+
+
     <VBox alignment="CENTER" maxWidth="747.0" prefHeight="893.0" prefWidth="747.0" stylesheets="@../css/main.css"
           StackPane.alignment="CENTER">
         <Text fx:id="titleText" strokeType="OUTSIDE" strokeWidth="0.0" text="Quizzzzzz!" textAlignment="CENTER"
@@ -44,12 +48,14 @@
                 <Font size="40.0"/>
             </font>
         </Button>
-        <Region maxHeight="-Infinity" minHeight="20" prefHeight="94.0" prefWidth="747.0" styleClass="margin" VBox.vgrow="ALWAYS" />
-        <TextField fx:id="inputServerURLField" prefHeight="25.0" prefWidth="416.0" promptText="Room URL" styleClass="rounded">
-         <VBox.margin>
-            <Insets left="150.0" right="150.0" />
-         </VBox.margin>
-      </TextField>
+        <Region maxHeight="-Infinity" minHeight="20" prefHeight="94.0" prefWidth="747.0" styleClass="margin"
+                VBox.vgrow="ALWAYS"/>
+        <TextField fx:id="inputServerURLField" prefHeight="25.0" prefWidth="416.0" promptText="Room URL"
+                   styleClass="rounded">
+            <VBox.margin>
+                <Insets left="150.0" right="150.0"/>
+            </VBox.margin>
+        </TextField>
     </VBox>
 
 </StackPane>
