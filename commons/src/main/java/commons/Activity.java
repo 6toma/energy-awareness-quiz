@@ -65,7 +65,7 @@ public class Activity {
     public int hashCode() {
         return Objects.hash(id, title, consumption_in_wh, source);
     }
-    
+
     public String getId() {
         return id;
     }
