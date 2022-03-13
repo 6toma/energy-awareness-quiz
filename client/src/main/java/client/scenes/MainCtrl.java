@@ -6,9 +6,11 @@ import com.google.inject.Inject;
 import commons.ComparativeQuestion;
 import commons.Question;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.effect.BlendMode;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -203,7 +205,17 @@ public class MainCtrl {
                 }
             }catch(Exception e){
                 // TODO: error pop-up
-                System.out.println("Connection failed");
+                Alert alert = new Alert(Alert.AlertType.NONE);
+                EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
+                    public void handle(ActionEvent e) {
+                        // set alert type
+                        alert.setAlertType(Alert.AlertType.ERROR);
+                        // set content text
+                        alert.setContentText("connection failed");
+                        // show the dialog
+                        alert.show();
+                    }
+                };
             }
 
         } else {
@@ -222,7 +234,17 @@ public class MainCtrl {
             server.postPlayer(singlePlayerGame.getPlayer());
         }catch(Exception e){
             e.printStackTrace();
-            System.err.println("Connection failed");
+            Alert alert = new Alert(Alert.AlertType.NONE);
+            EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
+                public void handle(ActionEvent e) {
+                    // set alert type
+                    alert.setAlertType(Alert.AlertType.ERROR);
+                    // set content text
+                    alert.setContentText("connection failed");
+                    // show the dialog
+                    alert.show();
+                }
+            };
         }
     }
 
