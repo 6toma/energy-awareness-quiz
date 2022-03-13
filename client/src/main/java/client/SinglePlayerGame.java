@@ -28,6 +28,12 @@ public class SinglePlayerGame {
         this.maxQuestions = maxQuestions;
     }
 
+    public SinglePlayerGame(int maxQuestions, String username) {
+        this.player = new Player(username);
+        this.questions = new ArrayList<>();
+        this.maxQuestions = maxQuestions;
+    }
+
     public SinglePlayerGame(Player player) {
         this.player = player;
         this.questions = new ArrayList<>();
