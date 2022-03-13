@@ -94,7 +94,7 @@ public class HomeScreenCtrl {
     /**
      * Tries to get a question from the server
      * If succeeds connect create a new singlePlayerGame and go to the username screen
-     *
+     * <p>
      * TODO:
      * - Show error to user if connection to server failed
      */
@@ -102,9 +102,9 @@ public class HomeScreenCtrl {
     public void showUsernameScreenSingle() {
 
         mainCtrl.getServer().setServerURL(inputServerURLField.getText());
-        try{
+        try {
             mainCtrl.newSinglePlayerGame();
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             System.err.println("Connection failed");
         }
@@ -117,13 +117,18 @@ public class HomeScreenCtrl {
         System.out.println(inputServerURLField.getText());
         server.setServerURL(inputServerURLField.getText());
         Player player = new Player("test", 7357);
-        try{
+        try {
             System.out.println(server.postPlayer(player));
-        } catch(Exception e) {
+        } catch (Exception e) {
             System.err.println("Connection failed");
         }
 
         mainCtrl.setUsernameOriginScreen(2);
         mainCtrl.showUsernameScreen();
+    }
+
+    @FXML
+    public void showHelpScreen() {
+        mainCtrl.showHelpScreen();
     }
 }
