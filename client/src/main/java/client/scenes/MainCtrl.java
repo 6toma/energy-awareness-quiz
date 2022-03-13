@@ -42,6 +42,9 @@ public class MainCtrl {
     private HelpScreenCtrl helpScreenCtrl;
     private Parent helpScreenParent;
 
+    private ScoreChangeScreenCtrl scoreChangeScreenCtrl;
+    private Parent scoreChangeScreenParent;
+
     // single player variables
     private SinglePlayerGame singlePlayerGame;
     int singlePlayerGameQuestions = 5;
@@ -60,7 +63,8 @@ public class MainCtrl {
             Pair<ComparativeQuestionScreenCtrl, Parent> comparativeQuestionScreen,
             Pair<UsernameScreenCtrl, Parent> usernameScreen,
             Pair<EndScreenCtrl, Parent> endScreen,
-            Pair<HelpScreenCtrl, Parent> helpScreen
+            Pair<HelpScreenCtrl, Parent> helpScreen,
+            Pair<ScoreChangeScreenCtrl, Parent> scoreChangeScreen
     ) {
         this.primaryStage = primaryStage;
 
@@ -84,6 +88,9 @@ public class MainCtrl {
 
         this.helpScreenCtrl = helpScreen.getKey();
         this.helpScreenParent = helpScreen.getValue();
+
+        this.scoreChangeScreenCtrl = scoreChangeScreen.getKey();
+        this.scoreChangeScreenParent = scoreChangeScreen.getValue();
 
         // TODO: uncomment to disable the fullscreen popup
         //primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
@@ -144,6 +151,12 @@ public class MainCtrl {
     public void hideHelpScreen() {
         ((StackPane) primaryStage.getScene().getRoot()).getChildren().remove(helpScreenParent);
         checkDarkMode();
+    }
+
+    public void showScoreChangeScreen(){
+        ((StackPane) primaryStage.getScene().getRoot()).getChildren().add(scoreChangeScreenParent);
+        checkDarkMode();
+        scoreChangeScreenCtrl.countdown();
     }
 
     public void checkDarkMode() {
@@ -242,6 +255,14 @@ public class MainCtrl {
             e.printStackTrace();
             System.err.println("Connection failed");
         }
+    }
+
+    public void showScore() {
+        int gained = singlePlayerGame.getScore();
+        int total = singlePlayerGame.getPlayer().getScore();
+        int streak = singlePlayerGame.getStreak();
+        scoreChangeScreenCtrl.setScoreLabels(gained, total, streak);
+        showComparativeQuestionScreen();
     }
 
     public SinglePlayerGame getSinglePlayerGame() {
