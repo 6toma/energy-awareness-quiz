@@ -2,10 +2,12 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import commons.Player;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 
 
 /**
@@ -33,7 +35,8 @@ public class HomeScreenCtrl {
     @FXML
     private Button darkMode;
 
-
+    @FXML
+    private TextField inputServerURLField;
 
     @Inject
     public HomeScreenCtrl(ServerUtils server, MainCtrl mainCtrl) {
@@ -46,7 +49,7 @@ public class HomeScreenCtrl {
     @FXML
     void toggleDarkMode() {
         isLightMode = !isLightMode;
-        if(!isLightMode)
+        if (!isLightMode)
             darkMode.setText("Light Mode");
         else {
             darkMode.setText("Dark Mode");
@@ -63,9 +66,9 @@ public class HomeScreenCtrl {
     }
 
     public void setUsernameOriginScreen(int usernameOriginScreen) {
-        if(usernameOriginScreen == 0 ||
-            usernameOriginScreen == 1 ||
-            usernameOriginScreen == 2)
+        if (usernameOriginScreen == 0 ||
+                usernameOriginScreen == 1 ||
+                usernameOriginScreen == 2)
             this.usernameOriginScreen = usernameOriginScreen;
     }
 
@@ -88,15 +91,44 @@ public class HomeScreenCtrl {
     }
     */
 
+    /**
+     * Tries to get a question from the server
+     * If succeeds connect create a new singlePlayerGame and go to the username screen
+     * <p>
+     * TODO:
+     * - Show error to user if connection to server failed
+     */
     @FXML
     public void showUsernameScreenSingle() {
-        mainCtrl.setUsernameOriginScreen(1);
-        mainCtrl.showUsernameScreen();
+
+        mainCtrl.getServer().setServerURL(inputServerURLField.getText());
+        try {
+            mainCtrl.newSinglePlayerGame();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Connection failed");
+        }
     }
 
     @FXML
     public void showUsernameScreenMulti() {
+
+        // Testing ServerUtils postPlayer functionality
+        System.out.println(inputServerURLField.getText());
+        server.setServerURL(inputServerURLField.getText());
+        Player player = new Player("test", 7357);
+        try {
+            System.out.println(server.postPlayer(player));
+        } catch (Exception e) {
+            System.err.println("Connection failed");
+        }
+
         mainCtrl.setUsernameOriginScreen(2);
         mainCtrl.showUsernameScreen();
+    }
+
+    @FXML
+    public void showHelpScreen() {
+        mainCtrl.showHelpScreen();
     }
 }

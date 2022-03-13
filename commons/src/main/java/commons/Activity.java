@@ -19,7 +19,9 @@ public class Activity {
     private Long consumption_in_wh;
     private String source;
 
-    public Activity(){ } // needed for creating object from JSON
+    // needed for creating object from JSON
+    public Activity() {
+    }
 
 
     public Activity(String image_path, String title, Long consumption_in_wh, String source) {
