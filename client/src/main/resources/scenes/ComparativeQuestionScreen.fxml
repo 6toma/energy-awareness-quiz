@@ -16,7 +16,7 @@
     <VBox alignment="CENTER" StackPane.alignment="CENTER">
 
                  <Region layoutX="10.0" layoutY="120.0" maxHeight="20" minHeight="20" styleClass="margin" />
-        <Label fx:id="questionLabel" alignment="CENTER" prefHeight="129.0" prefWidth="1191.0" style="-fx-font-size: 54; -fx-font-family: Futura PT Medium;" text="Question" wrapText="true" />
+        <Label fx:id="questionLabel" alignment="CENTER" prefWidth="1191.0" style="-fx-font-size: 54; -fx-font-family: Futura PT Medium;" text="Question" wrapText="true" />
         <Region maxHeight="20" minHeight="20" styleClass="margin" VBox.vgrow="ALWAYS" />
         <Button fx:id="answer1" mnemonicParsing="false" onAction="#answer1Clicked" text="Answer 1">
             <font>
