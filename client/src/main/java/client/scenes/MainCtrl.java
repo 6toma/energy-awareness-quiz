@@ -202,9 +202,10 @@ public class MainCtrl {
      * Shows the end screen if next question isn't defined
      */
     public void nextQuestionScreen() {
-        if (singlePlayerGame != null
-                && singlePlayerGame.getQuestions().size() > 0
-                && singlePlayerGame.getQuestionNumber() <= singlePlayerGame.getMaxQuestions()) {
+        if(singlePlayerGame != null
+            && singlePlayerGame.getQuestions().size() > 0
+            && singlePlayerGame.getQuestionNumber() <= singlePlayerGame.getMaxQuestions()
+                + comparativeQuestionScreenCtrl.jokerAdditionalQuestion()) {
 
             Question question = singlePlayerGame.getQuestions().get(singlePlayerGame.getQuestionNumber() - 1);
 
@@ -246,9 +247,15 @@ public class MainCtrl {
      * Shows the end screen and sends score to the server
      */
     public void endSinglePlayerGame() {
+        //show End screen with score
         endScreenCtrl.setScoreLabel(singlePlayerGame.getPlayer().getScore());
         showEndScreen();
-        try {
+
+        //reset Question screen to prepare it for a new game
+        comparativeQuestionScreenCtrl.resetComparativeQuestionScreen();
+
+        //store player's end score
+        try{
             server.postPlayer(singlePlayerGame.getPlayer());
         } catch (Exception e) {
             e.printStackTrace();
