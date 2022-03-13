@@ -151,6 +151,20 @@ public class MainCtrl {
     }
 
     /**
+     * Similar to newSinglePlayerGame(), but requires a username
+     * @param username The username, used in the previous game
+     */
+    public void consecutiveSinglePlayerGame(String username) {
+        ComparativeQuestion question = server.getCompQuestion();
+
+        singlePlayerGame = new SinglePlayerGame(singlePlayerGameQuestions, username);
+        singlePlayerGame.addQuestion(question);
+
+        //skipping over the part where we ask for username
+        showLoadingScreen();
+    }
+
+    /**
      * Shows the correct question screen based on the next question
      *
      * Shows the end screen if next question isn't defined
@@ -206,6 +220,10 @@ public class MainCtrl {
 
     public ServerUtils getServer() {
         return server;
+    }
+
+    public String getCurrentUsername() {
+        return this.singlePlayerGame.getPlayer().getName();
     }
 }
 
