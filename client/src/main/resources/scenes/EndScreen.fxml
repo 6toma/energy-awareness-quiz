@@ -22,9 +22,8 @@
             </StackPane>
             <Region maxHeight="40" minHeight="40" VBox.vgrow="ALWAYS"/>
             <StackPane>
-                <Button fx:id="goToHomeScreen" alignment="CENTER" onAction="#goToHomeScreen"
-                        styleClass="mainButton, border, rounded" text="Home"/>
-                <Region maxHeight="40" minHeight="40" VBox.vgrow="ALWAYS"/>
+                <Region maxHeight="70" minHeight="70" VBox.vgrow="ALWAYS" />
+                <Button fx:id="goToHomeScreen" alignment="CENTER" onAction="#goToHomeScreen" styleClass="mainButton, border, rounded" text="Home" />
             </StackPane>
         </VBox>
     </StackPane>
