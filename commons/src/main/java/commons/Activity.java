@@ -1,37 +1,39 @@
 package commons;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.util.Objects;
 
 /**
- * Activity class that is stored in the database
- *
- * Stores an activities
+ * Activity class
+ * Activities are stored in the database
  */
 @Entity
 public class Activity {
-
+    
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private String id;
 
+    private String image_path;
     private String title;
-    private Integer consumption_in_wh;
+    private Long consumption_in_wh;
     private String source;
 
-    public Activity(){ } // needed for creating object from JSON
+    // needed for creating object from JSON
+    public Activity() {
+    }
 
-    public Activity(String title, Integer consumption_in_wh, String source) {
+
+    public Activity(String image_path, String title, Long consumption_in_wh, String source) {
+        this.image_path = image_path;
         this.title = title;
         this.consumption_in_wh = consumption_in_wh;
         this.source = source;
     }
 
-    public Activity(Long id, String title, Integer consumption_in_wh, String source) {
+    public Activity(String id, String image_path, String title, Long consumption_in_wh, String source) {
         this.id = id;
+        this.image_path = image_path;
         this.title = title;
         this.consumption_in_wh = consumption_in_wh;
         this.source = source;
@@ -40,11 +42,12 @@ public class Activity {
     @Override
     public String toString() {
         return "Activity{" +
-            "id=" + id +
-            ", title='" + title + '\'' +
-            ", consumption_in_wh=" + consumption_in_wh +
-            ", source='" + source + '\'' +
-            '}';
+                "id=" + id +
+                ", image_path='" + image_path + '\'' +
+                ", title='" + title + '\'' +
+                ", consumption_in_wh=" + consumption_in_wh +
+                ", source='" + source + '\'' +
+                '}';
     }
 
     @Override
@@ -52,7 +55,7 @@ public class Activity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Activity activity = (Activity) o;
-        return Objects.equals(id, activity.id) && Objects.equals(title, activity.title) && Objects.equals(consumption_in_wh, activity.consumption_in_wh) && Objects.equals(source, activity.source);
+        return Objects.equals(id, activity.id) && Objects.equals(image_path, activity.image_path) && Objects.equals(title, activity.title) && Objects.equals(consumption_in_wh, activity.consumption_in_wh) && Objects.equals(source, activity.source);
     }
 
     @Override
@@ -60,12 +63,20 @@ public class Activity {
         return Objects.hash(id, title, consumption_in_wh, source);
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
+    }
+
+    public String getImage_path() {
+        return image_path;
+    }
+
+    public void setImage_path(String image_path) {
+        this.image_path = image_path;
     }
 
     public String getTitle() {
@@ -76,11 +87,11 @@ public class Activity {
         this.title = title;
     }
 
-    public Integer getConsumption_in_wh() {
+    public Long getConsumption_in_wh() {
         return consumption_in_wh;
     }
 
-    public void setConsumption_in_wh(Integer consumption_in_wh) {
+    public void setConsumption_in_wh(Long consumption_in_wh) {
         this.consumption_in_wh = consumption_in_wh;
     }
 

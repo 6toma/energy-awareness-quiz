@@ -15,18 +15,15 @@
  */
 package client;
 
-import static com.google.inject.Guice.createInjector;
+import client.scenes.*;
+import com.google.inject.Injector;
+import javafx.application.Application;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-import com.google.inject.Injector;
-
-import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
+import static com.google.inject.Guice.createInjector;
 
 /**
  * Main class for client application
@@ -42,6 +39,7 @@ public class Main extends Application {
 
     /**
      * Starts the stage (window)
+     *
      * @param primaryStage
      * @throws IOException
      */
@@ -56,9 +54,46 @@ public class Main extends Application {
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
         mainCtrl.initialize(primaryStage, overview, add); //main controller gets 2 scenes it can switch between
          */
-        Parent root = FXMLLoader.load(getClass().getResource("/HomeScreen.fxml"));
-        primaryStage.setTitle("Hello World!");
-        primaryStage.setScene(new Scene(root));
-        primaryStage.show();
+
+        var homeScreen = FXML.load(
+                HomeScreenCtrl.class,
+                "scenes/HomeScreen.fxml",
+                "css/HomeScreen.css"
+        );
+        var waitingRoom = FXML.load(
+                WaitingRoomCtrl.class,
+                "scenes/WaitingRoom.fxml",
+                "css/WaitingRoom.css"
+        );
+        var loadingScreen = FXML.load(
+                LoadingScreenCtrl.class,
+                "scenes/LoadingScreen.fxml",
+                "css/LoadingScreen.css"
+        );
+        var comparativeQuestionScreen = FXML.load(
+                ComparativeQuestionScreenCtrl.class,
+                "scenes/ComparativeQuestionScreen.fxml",
+                "css/ComparativeQuestionScreen.css"
+        );
+        var usernameScreen = FXML.load(
+                UsernameScreenCtrl.class,
+                "scenes/UsernameScreen.fxml",
+                "css/main.css"
+        );
+        var endScreen = FXML.load(
+                EndScreenCtrl.class,
+                "scenes/EndScreen.fxml",
+                "css/EndScreen.css"
+        );
+        var helpScreen = FXML.load(
+                HelpScreenCtrl.class,
+                "scenes/HelpScreen.fxml",
+                "css/HelpScreen.css"
+        );
+
+        // add more scenes the same way
+
+        var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
+        mainCtrl.initialize(primaryStage, homeScreen, waitingRoom, loadingScreen, comparativeQuestionScreen, usernameScreen, endScreen, helpScreen);
     }
 }

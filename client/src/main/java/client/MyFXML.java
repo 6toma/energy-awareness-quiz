@@ -15,19 +15,17 @@
  */
 package client;
 
-import java.io.IOException;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Path;
-
 import com.google.inject.Injector;
-
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.util.Builder;
 import javafx.util.BuilderFactory;
 import javafx.util.Callback;
 import javafx.util.Pair;
+
+import java.io.IOException;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
 /**
  * FXML implementation
@@ -40,20 +38,21 @@ public class MyFXML {
         this.injector = injector;
     }
 
-    public <T> Pair<T, Parent> load(Class<T> c, String... parts) {
+    public <T> Pair<T, Parent> load(Class<T> c, String fxmlPath, String cssPath) {
         try {
-            var loader = new FXMLLoader(getLocation(parts), null, null, new MyFactory(), StandardCharsets.UTF_8);
+            URL fxmlUrl = MyFXML.class.getClassLoader().getResource(fxmlPath);
+            var loader = new FXMLLoader(fxmlUrl, null, null, new MyFactory(), StandardCharsets.UTF_8);
             Parent parent = loader.load();
+
+            if (cssPath != null) {
+                parent.getStylesheets().add(cssPath);
+            }
+
             T ctrl = loader.getController();
             return new Pair<>(ctrl, parent);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    private URL getLocation(String... parts) {
-        var path = Path.of("", parts).toString();
-        return MyFXML.class.getClassLoader().getResource(path);
     }
 
     private class MyFactory implements BuilderFactory, Callback<Class<?>, Object> {
