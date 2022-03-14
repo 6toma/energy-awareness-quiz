@@ -7,7 +7,16 @@
 }
 
 .progress-bar .bar {
-  -fx-background-color: #1e6091;
+  -fx-background-color: #1E6091;
   -fx-border-radius: 100px;
   -fx-background-radius: 100px;
+}
+
+.joker {
+  -fx-background-color: #FFFFFF;
+  -fx-background-radius: 20px;
+}
+
+.answer:disabled {
+  -fx-opacity: 0.8;
 }

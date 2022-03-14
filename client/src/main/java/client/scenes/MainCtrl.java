@@ -6,9 +6,11 @@ import com.google.inject.Inject;
 import commons.ComparativeQuestion;
 import commons.Question;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.effect.BlendMode;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
@@ -214,9 +216,10 @@ public class MainCtrl {
      * Shows the end screen if next question isn't defined
      */
     public void nextQuestionScreen() {
-        if (singlePlayerGame != null
-                && singlePlayerGame.getQuestions().size() > 0
-                && singlePlayerGame.getQuestionNumber() <= singlePlayerGame.getMaxQuestions()) {
+        if(singlePlayerGame != null
+            && singlePlayerGame.getQuestions().size() > 0
+            && singlePlayerGame.getQuestionNumber() <= singlePlayerGame.getMaxQuestions()
+                + comparativeQuestionScreenCtrl.jokerAdditionalQuestion()) {
 
             Question question = singlePlayerGame.getQuestions().get(singlePlayerGame.getQuestionNumber() - 1);
 
@@ -235,7 +238,17 @@ public class MainCtrl {
                 }
             } catch (Exception e) {
                 // TODO: error pop-up
-                System.out.println("Connection failed");
+                Alert alert = new Alert(Alert.AlertType.NONE);
+                EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
+                    public void handle(ActionEvent e) {
+                        // set alert type
+                        alert.setAlertType(Alert.AlertType.ERROR);
+                        // set content text
+                        alert.setContentText("connection failed");
+                        // show the dialog
+                        alert.show();
+                    }
+                };
             }
 
         } else {
@@ -248,13 +261,29 @@ public class MainCtrl {
      * Shows the end screen and sends score to the server
      */
     public void endSinglePlayerGame() {
+        //show End screen with score
         endScreenCtrl.setScoreLabel(singlePlayerGame.getPlayer().getScore());
         showEndScreen();
-        try {
+
+        //reset Question screen to prepare it for a new game
+        comparativeQuestionScreenCtrl.resetComparativeQuestionScreen();
+
+        //store player's end score
+        try{
             server.postPlayer(singlePlayerGame.getPlayer());
         } catch (Exception e) {
             e.printStackTrace();
-            System.err.println("Connection failed");
+            Alert alert = new Alert(Alert.AlertType.NONE);
+            EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
+                public void handle(ActionEvent e) {
+                    // set alert type
+                    alert.setAlertType(Alert.AlertType.ERROR);
+                    // set content text
+                    alert.setContentText("connection failed");
+                    // show the dialog
+                    alert.show();
+                }
+            };
         }
     }
 
