@@ -56,6 +56,7 @@
 
 * {
   -fx-font-family: 'Futura PT Medium';
+  /*-fx-font-weight: bold;  for bold text*/
 }
 
 .root {
