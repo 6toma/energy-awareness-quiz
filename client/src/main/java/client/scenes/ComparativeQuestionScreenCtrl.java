@@ -21,15 +21,9 @@ public class ComparativeQuestionScreenCtrl {
 
     private ComparativeQuestion question;
 
-    // Strings used to construct the question text
-    private String questionTextStart = "Which activity uses the ";
-    private String questionTextIsMost = "most";
-    private String questionTextNotMost = "least";
-    private String questionTextEnd = " energy?";
-
     // for how long to show question and answer
-    private double questionTime = 5.0;
-    private double answerTime = 4.0;
+    private final double questionTime = 5.0;
+    private final double answerTime = 4.0;
 
     private int timeWhenAnswered = -1;
     private int currentTime = (int) questionTime;
@@ -143,13 +137,15 @@ public class ComparativeQuestionScreenCtrl {
     }
 
     private void setQuestionText(){
-        String questionText = questionTextStart;
+        // Strings used to construct the question text
+        String mostOrLeast;
         if(this.question.isMost()){
-            questionText += questionTextIsMost;
+            mostOrLeast = "most";
         } else {
-            questionText += questionTextNotMost;
+            mostOrLeast = "least";
         }
-        this.questionLabel.setText(questionText + questionTextEnd);
+        String questionText = "Which activity uses the " + mostOrLeast + " amount of energy?";
+        this.questionLabel.setText(questionText);
     }
 
     private void setAnswerTexts(){
@@ -168,9 +164,17 @@ public class ComparativeQuestionScreenCtrl {
     }
 
     private void showAnswers(){
+        // disable answer buttons, so they can't be clicked while
+        // answers are being shown
         answer1.setDisable(true);
         answer2.setDisable(true);
         answer3.setDisable(true);
+
+        // disable joker buttons, so they can't be clicked while
+        // answers are being shown
+        joker1.setDisable(true);
+        joker2.setDisable(true);
+        joker3.setDisable(true);
 
         int correctAnswer = question.getCorrect_answer();
 
@@ -183,6 +187,20 @@ public class ComparativeQuestionScreenCtrl {
         } else {
             answer3.setStyle("-fx-background-color: #00ff00;");
         }
+
+        // make it so that answers also show the respective consumptions
+        answer1.setText(
+                this.question.getActivities().get(0).getTitle()
+                        + " - " + this.question.getActivities().get(0).getConsumption_in_wh()
+                        + " Wh");
+        answer2.setText(
+                this.question.getActivities().get(1).getTitle()
+                        + " - " + this.question.getActivities().get(1).getConsumption_in_wh()
+                        + " Wh");
+        answer3.setText(
+                this.question.getActivities().get(2).getTitle()
+                        + " - " + this.question.getActivities().get(2).getConsumption_in_wh()
+                        + " Wh");
     }
 
     // reset attributes to default
@@ -192,9 +210,16 @@ public class ComparativeQuestionScreenCtrl {
         answer1.setStyle("");
         answer2.setStyle("");
         answer3.setStyle("");
+
+        // re-enable answers
         answer1.setDisable(false);
         answer2.setDisable(false);
         answer3.setDisable(false);
+
+        // re-enable jokers
+        joker1.setDisable(false);
+        joker2.setDisable(false);
+        joker3.setDisable(false);
     }
 
     private void endQuestion(){
@@ -210,7 +235,7 @@ public class ComparativeQuestionScreenCtrl {
         timer = new Timer();
         //even if the correct answer was selected before the question was changed, points won't be added
         timeWhenAnswered = -1;
-        //doesn't add points, but is used to increment the number of the current guestion in the list
+        //doesn't add points, but is used to increment the number of the current question in the list
         mainCtrl.getSinglePlayerGame().addPoints(timeWhenAnswered, 1.0);
         endQuestion();
     }
