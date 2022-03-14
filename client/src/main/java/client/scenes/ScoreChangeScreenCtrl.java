@@ -54,6 +54,7 @@ public class ScoreChangeScreenCtrl {
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
+                        cancel();
                         mainCtrl.nextQuestionScreen();
                     }
                 });
