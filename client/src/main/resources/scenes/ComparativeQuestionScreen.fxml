@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="607.0" prefWidth="1097.0" stylesheets="@../css/ComparativeQuestionScreen.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.ComparativeQuestionScreenCtrl">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="769.0" prefWidth="1229.0" stylesheets="@../css/ComparativeQuestionScreen.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.ComparativeQuestionScreenCtrl">
     <StackPane prefHeight="607.0" prefWidth="1506.0">
         <ProgressBar fx:id="progressBar" maxHeight="60.0" maxWidth="2000.0" prefHeight="60.0" prefWidth="829.0" progress="0.0" StackPane.alignment="TOP_CENTER" />
     </StackPane>
@@ -22,12 +22,12 @@
                  <Region layoutX="10.0" layoutY="120.0" maxHeight="20" minHeight="20" styleClass="margin" />
         <Label fx:id="questionLabel" alignment="CENTER" prefWidth="1191.0" style="-fx-font-size: 54; -fx-font-family: Futura PT Medium;" text="Question" wrapText="true" />
         <Region maxHeight="20" minHeight="20" styleClass="margin" VBox.vgrow="ALWAYS" />
-      <HBox prefHeight="100.0" prefWidth="200.0">
+      <HBox prefWidth="200.0">
          <children>
             <Region minWidth="150.0" styleClass="margin" />
-            <VBox alignment="TOP_CENTER" prefHeight="260.0" prefWidth="700.0">
+            <VBox alignment="TOP_CENTER" prefWidth="700.0">
                <children>
-                    <Button fx:id="answer1" mnemonicParsing="false" onAction="#answer1Clicked" text="Answer 1">
+                    <Button fx:id="answer1" mnemonicParsing="false" onAction="#answer1Clicked" text="Answer 1" wrapText="true">
                         <font>
                             <Font size="24.0" />
                         </font>
@@ -37,7 +37,7 @@
                      </styleClass>
                     </Button>
                     <Region maxHeight="20" minHeight="20" styleClass="margin" VBox.vgrow="ALWAYS" />
-                    <Button fx:id="answer2" mnemonicParsing="false" onAction="#answer2Clicked" text="Answer 2">
+                    <Button fx:id="answer2" mnemonicParsing="false" onAction="#answer2Clicked" text="Answer 2" wrapText="true">
                         <font>
                             <Font size="24.0" />
                         </font>
@@ -47,7 +47,7 @@
                      </styleClass>
                     </Button>
                     <Region maxHeight="20" minHeight="20" prefHeight="20.0" prefWidth="697.0" styleClass="margin" />
-                    <Button fx:id="answer3" onAction="#answer3Clicked" text="Answer 3">
+                    <Button fx:id="answer3" onAction="#answer3Clicked" text="Answer 3" wrapText="true">
                         <font>
                             <Font size="24.0" />
                         </font>
@@ -75,11 +75,11 @@
                <Insets />
             </StackPane.margin>
             <children>
-               <Button fx:id="joker1" onAction="#joker1" alignment="CENTER" contentDisplay="CENTER" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="100.0" prefWidth="140.0" styleClass="joker" text="1" />
+               <Button fx:id="joker1" alignment="CENTER" contentDisplay="CENTER" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#joker1" prefHeight="100.0" prefWidth="140.0" styleClass="joker" text="1" />
                <Region prefWidth="40.0" styleClass="margin" />
-               <Button fx:id="joker2" onAction="#joker2" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="100.0" prefWidth="140.0" styleClass="joker" text="2" />
+               <Button fx:id="joker2" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#joker2" prefHeight="100.0" prefWidth="140.0" styleClass="joker" text="2" />
                <Region layoutX="851.0" layoutY="10.0" prefWidth="40.0" styleClass="margin" />
-               <Button fx:id="joker3" onAction="#joker3" alignment="CENTER" layoutX="851.0" layoutY="41.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="100.0" prefWidth="140.0" styleClass="joker" text="3" />
+               <Button fx:id="joker3" alignment="CENTER" layoutX="851.0" layoutY="41.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#joker3" prefHeight="100.0" prefWidth="140.0" styleClass="joker" text="3" />
             </children>
          </HBox>
       </children>
