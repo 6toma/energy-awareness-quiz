@@ -118,6 +118,14 @@
   -fx-font-size: 100;
 }
 
+.label-box{
+  -fx-font-size: 100;
+  -fx-padding: 10px 20px;
+  -fx-background-color: #1A759F;
+  -fx-border-radius: 50px;
+  -fx-background-radius: 50px;
+}
+
 .wait {
   -fx-font-size: 50;
 }
