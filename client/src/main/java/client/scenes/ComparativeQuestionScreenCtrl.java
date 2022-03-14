@@ -3,21 +3,19 @@ package client.scenes;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.ComparativeQuestion;
-import javafx.application.Platform;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
-
-import java.util.Timer;
-import java.util.TimerTask;
+import javafx.util.Duration;
 
 public class ComparativeQuestionScreenCtrl {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
-
-    private Timer timer = new Timer();
 
     private ComparativeQuestion question;
 
@@ -28,15 +26,20 @@ public class ComparativeQuestionScreenCtrl {
     private String questionTextEnd = " energy?";
 
     // for how long to show question and answer
-    private double questionTime = 5.0;
+    private double questionTime = 15.0;
     private double answerTime = 4.0;
 
+    // FPS of the progress bar
+    private int FPS = 60;
+
     private int timeWhenAnswered = -1;
-    private int currentTime = (int) questionTime;
 
     private boolean joker1Used = false;
     private boolean joker2Used = false;
     private boolean joker3Used = false;
+
+    private Timeline questionTimer;
+    private Timeline answerTimer;
 
     @FXML
     private Label questionLabel;
@@ -94,46 +97,21 @@ public class ComparativeQuestionScreenCtrl {
 
     public void exit() {
         mainCtrl.showHomeScreen();
-        timer.cancel();
-        timer = new Timer();
+        stopTimers();
         resetComparativeQuestionScreen();
     }
 
     public void countdown() {
 
-        TimerTask task = new TimerTask() {
-            double progress = 0.0;
-            double progressTimer = questionTime; // how many seconds should the timer last for
+        KeyFrame start = new KeyFrame(Duration.ZERO, new KeyValue(progressBar.progressProperty(), 0));
+        KeyFrame qEnd = new KeyFrame(Duration.seconds(questionTime), e -> {
+            showAnswers();
+        }, new KeyValue(progressBar.progressProperty(), 1));
 
-            @Override
-            public void run() {
+        questionTimer = new Timeline(start, qEnd);
+        questionTimer.setCycleCount(1);
 
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        if(progress >= 1.0) {
-                            // check if it's the end of the question or end of the answer
-                            if(progressTimer == questionTime){
-                                progressTimer = answerTime;
-                                progressBar.setProgress(0.0);
-                                progress = 0.0;
-                                showAnswers();
-                            } else {
-                                endQuestion();
-                                cancel();
-                            }
-                        }
-
-                        progressBar.setProgress(progress);
-                        progress += 1 / progressTimer;
-                        currentTime -= 1;
-                    }
-                });
-            }
-        };
-
-        timer.schedule(task, 0, 1000);
+        questionTimer.play();
     }
 
     public void setQuestion(ComparativeQuestion question) {
@@ -163,11 +141,19 @@ public class ComparativeQuestionScreenCtrl {
         if(answer != correctAnswer){
             timeWhenAnswered = -1;
         } else {
-            timeWhenAnswered = currentTime;
+            timeWhenAnswered = (int) (progressBar.getProgress() * questionTime);
         }
     }
 
     private void showAnswers(){
+        KeyFrame start = new KeyFrame(Duration.ZERO, new KeyValue(progressBar.progressProperty(), 0));
+        KeyFrame aEnd = new KeyFrame(Duration.seconds(answerTime), e -> {
+            endQuestion();
+        }, new KeyValue(progressBar.progressProperty(), 1));
+        answerTimer = new Timeline(start, aEnd);
+        answerTimer.setCycleCount(1);
+        answerTimer.play();
+
         answer1.setDisable(true);
         answer2.setDisable(true);
         answer3.setDisable(true);
@@ -188,7 +174,6 @@ public class ComparativeQuestionScreenCtrl {
     // reset attributes to default
     private void reset(){
         timeWhenAnswered = -1;
-        currentTime = (int) questionTime;
         answer1.setStyle("");
         answer2.setStyle("");
         answer3.setStyle("");
@@ -206,8 +191,8 @@ public class ComparativeQuestionScreenCtrl {
     private void joker1() {
         joker1.setDisable(true);
         joker1Used = true;
-        timer.cancel();
-        timer = new Timer();
+
+        stopTimers();
         //even if the correct answer was selected before the question was changed, points won't be added
         timeWhenAnswered = -1;
         //doesn't add points, but is used to increment the number of the current guestion in the list
@@ -259,6 +244,17 @@ public class ComparativeQuestionScreenCtrl {
             return 1;
         } else {
             return 0;
+        }
+    }
+
+    private void stopTimers(){
+        if(questionTimer != null){
+            questionTimer.stop();
+            questionTimer = null;
+        }
+        if(answerTimer != null){
+            answerTimer.stop();
+            answerTimer = null;
         }
     }
 }
