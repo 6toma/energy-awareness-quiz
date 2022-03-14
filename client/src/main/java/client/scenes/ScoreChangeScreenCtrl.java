@@ -35,7 +35,7 @@ public class ScoreChangeScreenCtrl {
     public void setScoreLabels(int gained, int total, int streak ){
         scoreGained.setText("+" + gained);
         scoreTotal.setText("Score: " + total);
-        scoreStreak.setText("Steak: " + streak);
+        scoreStreak.setText("Streak: " + streak);
     }
 
     public void exit() {
