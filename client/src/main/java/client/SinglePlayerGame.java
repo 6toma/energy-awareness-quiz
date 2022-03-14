@@ -65,7 +65,7 @@ public class SinglePlayerGame {
         if(timeWhenAnswered == -1){
             resetStreak();
             nextQuestion();
-            return -1;
+            return 0;
         }
         incrementStreak();
         int currentScore = getPlayer().getScore();
