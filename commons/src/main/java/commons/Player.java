@@ -31,19 +31,26 @@ public class Player {
 
     public Player(String name, Integer score) {
         this.name = name;
-        this.score = score;
+        this.score = score >= 0 ? score : 0; // check if score is smaller than 0
     }
+
     public Player(Long id, String name, Integer score) {
         this.id = id;
         this.name = name;
-        this.score = score;
+        this.score = score >= 0 ? score : 0; // check if score is smaller than 0
     }
 
     @Override
     public String toString() {
+        if(name != null)
+            return "Player{" +
+                    "ID=" + id +
+                    ", name='" + name + '\'' +  // difference is on this line
+                    ", score=" + score +
+                    '}';
         return "Player{" +
-                "ID=" + id + '\'' +
-                "name='" + name + '\'' +
+                "ID=" + id +
+                ", name=null" + // difference is because non-null name has ' ' marks before and after, but a null name shouldn't have them
                 ", score=" + score +
                 '}';
     }
@@ -74,7 +81,9 @@ public class Player {
     }
 
     public void setName(String name) {
-        this.name = name;
+        if(name.length() > 0)
+            this.name = name;
+        else throw new IllegalArgumentException("Name cannot be empty");
     }
 
     public Integer getScore() {
@@ -82,6 +91,8 @@ public class Player {
     }
 
     public void setScore(Integer score) {
-        this.score = score;
+        if(score >= 0)
+            this.score = score;
+        else throw new IllegalArgumentException("Score cannot be negative");
     }
 }
