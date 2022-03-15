@@ -27,6 +27,7 @@ public class ComparativeQuestionScreenCtrl {
 
     private int timeWhenAnswered = -1;
     private int currentTime = (int) questionTime;
+    private int pointsGainedForQuestion = 0;
 
     private boolean joker1Used = false;
     private boolean joker2Used = false;
@@ -178,7 +179,7 @@ public class ComparativeQuestionScreenCtrl {
 
         int correctAnswer = question.getCorrect_answer();
 
-        mainCtrl.getSinglePlayerGame().addPoints(timeWhenAnswered, 1.0);
+        pointsGainedForQuestion = mainCtrl.getSinglePlayerGame().addPoints(timeWhenAnswered, 1.0);
         // highlight correct answer
         if(correctAnswer == 0){
             answer1.setStyle("-fx-background-color: #00ff00;");
@@ -224,7 +225,7 @@ public class ComparativeQuestionScreenCtrl {
 
     private void endQuestion(){
         reset();
-        mainCtrl.nextQuestionScreen();
+        mainCtrl.showScoreChangeScreen(pointsGainedForQuestion);
     }
 
     @FXML
