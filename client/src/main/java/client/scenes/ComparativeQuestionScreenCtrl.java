@@ -20,11 +20,8 @@ public class ComparativeQuestionScreenCtrl {
     private ComparativeQuestion question;
 
     // for how long to show question and answer
-    private double questionTime = 5.0;
+    private double questionTime = 15.0;
     private double answerTime = 4.0;
-
-    // FPS of the progress bar
-    private int FPS = 60;
 
     private int timeWhenAnswered = -1;
     private int currentTime = (int) questionTime;
@@ -34,6 +31,8 @@ public class ComparativeQuestionScreenCtrl {
     private boolean joker2Used = false;
     private boolean joker3Used = false;
 
+    // Timeline objects used for animating the progressbar
+    // Global objects because they need to be accessed from different methods
     private Timeline questionTimer;
     private Timeline answerTimer;
 
@@ -97,16 +96,27 @@ public class ComparativeQuestionScreenCtrl {
         resetComparativeQuestionScreen();
     }
 
+    /**
+     * Uses a Timeline object to create the progress bar and timer
+     * Timeline is like animation, it uses KeyFrame objects which set at which point in what should the scene look like
+     * Keyframes can also run code by adding a lambda function in them
+     */
     public void countdown() {
 
+        // set the progressbar value to be 0 at the beginning of the animation
         KeyFrame start = new KeyFrame(Duration.ZERO, new KeyValue(progressBar.progressProperty(), 0));
-        KeyFrame qEnd = new KeyFrame(Duration.seconds(questionTime), e -> {
-            showAnswers();
-        }, new KeyValue(progressBar.progressProperty(), 1));
 
+        // set the keyframe at the end of the animation
+        KeyFrame qEnd = new KeyFrame(Duration.seconds(questionTime), e -> { // whatever is in e -> {} will be run when this keyframe is reached
+            showAnswers(); // show answers when the animation is done
+        }, new KeyValue(progressBar.progressProperty(), 1)); // set the progressbar value to be 1
+
+        // initialize the timeline with the 2 keyframes
         questionTimer = new Timeline(start, qEnd);
+        // set timeline to only run once (can also be made to loop indefinitely)
         questionTimer.setCycleCount(1);
 
+        // starts the timeline
         questionTimer.play();
     }
 
@@ -144,16 +154,18 @@ public class ComparativeQuestionScreenCtrl {
     }
 
     private void showAnswers(){
-        // disable answer buttons, so they can't be clicked while
-        // answers are being shown
+
+        // This creates another timeline for the timer for the answerTime. See countdown() for a more in-depth breakdown
         KeyFrame start = new KeyFrame(Duration.ZERO, new KeyValue(progressBar.progressProperty(), 0));
         KeyFrame aEnd = new KeyFrame(Duration.seconds(answerTime), e -> {
-            endQuestion();
+            endQuestion(); // end the question when the animation is done
         }, new KeyValue(progressBar.progressProperty(), 1));
         answerTimer = new Timeline(start, aEnd);
         answerTimer.setCycleCount(1);
         answerTimer.play();
 
+        // disable answer buttons, so they can't be clicked while
+        // answers are being shown
         answer1.setDisable(true);
         answer2.setDisable(true);
         answer3.setDisable(true);
@@ -274,6 +286,11 @@ public class ComparativeQuestionScreenCtrl {
         }
     }
 
+    /**
+     * Method which stops the timeline animations.
+     * This needs to be done when leaving the screen before the animation is finished,
+     * otherwise the code at the end will still be run
+     */
     private void stopTimers(){
         if(questionTimer != null){
             questionTimer.stop();
