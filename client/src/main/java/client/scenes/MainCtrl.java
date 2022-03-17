@@ -47,6 +47,9 @@ public class MainCtrl {
     private ScoreChangeScreenCtrl scoreChangeScreenCtrl;
     private Parent scoreChangeScreenParent;
 
+    private SettingsScreenCtrl settingsScreenCtrl;
+    private Parent settingsScreenParent;
+
     // single player variables
     private SinglePlayerGame singlePlayerGame;
     int singlePlayerGameQuestions = 5;
@@ -66,7 +69,8 @@ public class MainCtrl {
             Pair<UsernameScreenCtrl, Parent> usernameScreen,
             Pair<EndScreenCtrl, Parent> endScreen,
             Pair<HelpScreenCtrl, Parent> helpScreen,
-            Pair<ScoreChangeScreenCtrl, Parent> scoreChangeScreen
+            Pair<ScoreChangeScreenCtrl, Parent> scoreChangeScreen,
+            Pair<SettingsScreenCtrl, Parent> settingsScreen
     ) {
         this.primaryStage = primaryStage;
 
@@ -94,6 +98,9 @@ public class MainCtrl {
         this.scoreChangeScreenCtrl = scoreChangeScreen.getKey();
         this.scoreChangeScreenParent = scoreChangeScreen.getValue();
 
+        this.settingsScreenCtrl = settingsScreen.getKey();
+        this.settingsScreenParent =  settingsScreen.getValue();
+
         // TODO: uncomment to disable the fullscreen popup
         //primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
 
@@ -120,6 +127,11 @@ public class MainCtrl {
 
     public void showWaitingRoom() {
         primaryStage.getScene().setRoot(waitingRoomParent);
+        checkDarkMode();
+    }
+
+    public void showSettingsScreen(){
+        primaryStage.getScene().setRoot(settingsScreenParent);
         checkDarkMode();
     }
 
