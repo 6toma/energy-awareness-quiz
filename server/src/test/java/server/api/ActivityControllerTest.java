@@ -63,16 +63,86 @@ class ActivityControllerTest {
         assertEquals(ResponseEntity.badRequest().build(), act.getActivityById("8"));
     }
 
-    /*
+
+    @Test
+    public void addActivityTestTitle(){
+        Activity added = new Activity("1","image_a",null, 1L, "a");
+        assertEquals(ResponseEntity.badRequest().build(), act.addActivity(added));
+
+        Activity added2 = new Activity("1","image_a","", 1L, "a");
+        assertEquals(ResponseEntity.badRequest().build(), act.addActivity(added2));
+
+        String title = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" // 50 characters per line
+            + "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+            + "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+            + "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+            + "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+            + "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"; // total 300 characters
+        Activity added3 = new Activity("1","image_a",title, 1L, "a");
+        assertEquals(ResponseEntity.badRequest().build(), act.addActivity(added3));
+    }
+
+    @Test
+    public void addActivityTestId(){
+        Activity added = new Activity(null,"image_a","a", 1L, "a");
+        assertEquals(ResponseEntity.badRequest().build(), act.addActivity(added));
+
+        Activity added2 = new Activity("","image_a","a", 1L, "a");
+        assertEquals(ResponseEntity.badRequest().build(), act.addActivity(added2));
+
+        String id = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" // 50 characters per line
+            + "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+            + "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+            + "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+            + "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+            + "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"; // total 300 characters
+        Activity added3 = new Activity(id,"image_a","title", 1L, "a");
+        assertEquals(ResponseEntity.badRequest().build(), act.addActivity(added3));
+    }
+
+    @Test
+    public void addActivityTestConsumption(){
+        Activity added = new Activity("1","image_a","a", null, "a");
+        assertEquals(ResponseEntity.badRequest().build(), act.addActivity(added));
+    }
+
+    @Test
+    public void addActivityTestSource(){
+        Activity added = new Activity("1","image_a","a", 1L, null);
+        assertEquals(ResponseEntity.badRequest().build(), act.addActivity(added));
+
+        Activity added2 = new Activity("1","image_a","a", 1L, "");
+        assertEquals(ResponseEntity.badRequest().build(), act.addActivity(added2));
+
+        String source = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" // 50 characters per line
+            + "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+            + "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+            + "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+            + "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+            + "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"; // total 300 characters
+        Activity added3 = new Activity("id","image_a","title", 1L, source);
+        assertEquals(ResponseEntity.badRequest().build(), act.addActivity(added3));
+    }
+
+    @Test
+    public void addActivityTestImagePath(){
+        String path = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" // 50 characters per line
+            + "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+            + "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+            + "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+            + "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+            + "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"; // total 300 characters
+        Activity added3 = new Activity("id", path,"title", 1L, "source");
+        assertEquals(ResponseEntity.badRequest().build(), act.addActivity(added3));
+    }
+
     @Test
     public void addActivityTest(){
-        Activity added = new Activity("image_a","a", 1, "a");
-        Activity expected = new Activity("1", "image_a","a", 1, "a");
+        Activity added = new Activity("1","image_a","a", 1L, "a");
+        Activity expected = new Activity("1", "image_a","a", 1L, "a");
         assertEquals(expected, act.addActivity(added).getBody());
         assertEquals(expected, repo.activities.get(0));
     }
-
-     */
 
     @Test
     public void addManyActivitiesTest(){
@@ -101,5 +171,61 @@ class ActivityControllerTest {
         repo.activities.addAll(activities);
         assertEquals(activities.get(1), act.deleteActivity("2").getBody());
         assertEquals(List.of(activities.get(0), activities.get(2)), repo.activities);
+    }
+
+    @Test
+    public void updateActivityTestTitle(){
+        repo.activities.addAll(activities);
+
+        Activity update = new Activity();
+        update.setTitle("new");
+        Activity expected = new Activity("1", "image_a","new", 1L, "a");
+        assertEquals(expected, act.updateActivity(update, "1").getBody());
+    }
+
+    @Test
+    public void updateActivityTestConsumption(){
+        repo.activities.addAll(activities);
+
+        Activity update = new Activity();
+        update.setConsumption_in_wh(10L);
+        Activity expected = new Activity("1", "image_a","a", 10L, "a");
+        assertEquals(expected, act.updateActivity(update, "1").getBody());
+    }
+
+    @Test
+    public void updateActivityTestSource(){
+        repo.activities.addAll(activities);
+
+        Activity update = new Activity();
+        update.setSource("new");
+        Activity expected = new Activity("1", "image_a","a", 1L, "new");
+        assertEquals(expected, act.updateActivity(update, "1").getBody());
+    }
+
+    @Test
+    public void updateActivityTestImage_path(){
+        repo.activities.addAll(activities);
+
+        Activity update = new Activity();
+        update.setImage_path("new");
+        Activity expected = new Activity("1", "new","a", 1L, "a");
+        assertEquals(expected, act.updateActivity(update, "1").getBody());
+    }
+
+    @Test
+    public void updateActivityTestInvalidId(){
+        repo.activities.addAll(activities);
+
+        Activity update = new Activity("1", "image_a","new", 1L, "a");
+        assertEquals(ResponseEntity.badRequest().build(), act.updateActivity(update, "8"));
+    }
+
+    @Test
+    public void updateActivityTestInvalidUpdateActivity(){
+        repo.activities.addAll(activities);
+
+        Activity update = new Activity();
+        assertEquals(ResponseEntity.badRequest().build(), act.updateActivity(update, "1"));
     }
 }
