@@ -154,6 +154,11 @@ class ActivityControllerTest {
     }
 
     @Test
+    public void addManyActivitiesTestNull(){
+        assertEquals(ResponseEntity.badRequest().build(), act.addManyActivities(null));
+    }
+
+    @Test
     public void addActivityTestNull(){
         assertEquals(ResponseEntity.badRequest().build(), act.addActivity(null));
     }
@@ -167,10 +172,21 @@ class ActivityControllerTest {
     }
 
     @Test
+    public void getRandomActivityTestEmpty(){
+        assertEquals(ResponseEntity.badRequest().build(), act.getRandomActivity());
+    }
+
+    @Test
     public void deleteActivityTest(){
         repo.activities.addAll(activities);
         assertEquals(activities.get(1), act.deleteActivity("2").getBody());
         assertEquals(List.of(activities.get(0), activities.get(2)), repo.activities);
+    }
+
+    @Test
+    public void deleteActivityTestInvalidID(){
+        repo.activities.addAll(activities);
+        assertEquals(ResponseEntity.badRequest().build(), act.deleteActivity("8"));
     }
 
     @Test
