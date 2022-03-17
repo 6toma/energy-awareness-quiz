@@ -21,6 +21,30 @@ public class SinglePlayerGameTest {
     }
 
     @Test
+    public void TestEmptyConstructor() {
+        singlePlayerGame = new SinglePlayerGame();
+        assertNotNull(singlePlayerGame);
+    }
+
+    @Test
+    public void TestConstructorPlayer() {
+        singlePlayerGame = new SinglePlayerGame(new Player("a"));
+        assertNotNull(singlePlayerGame);
+    }
+
+    @Test
+    public void TestConstructorMaxQuestions() {
+        singlePlayerGame = new SinglePlayerGame(1);
+        assertNotNull(singlePlayerGame);
+    }
+
+    @Test
+    public void TestConstructorMaxQuestionsUserName() {
+        singlePlayerGame = new SinglePlayerGame(1, "username");
+        assertNotNull(singlePlayerGame);
+    }
+
+    @Test
     public void TestConstructor() {
         assertNotNull(singlePlayerGame);
     }
