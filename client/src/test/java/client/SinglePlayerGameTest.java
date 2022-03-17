@@ -1,3 +1,5 @@
+package client;
+
 import client.SinglePlayerGame;
 import commons.Player;
 import commons.Question;

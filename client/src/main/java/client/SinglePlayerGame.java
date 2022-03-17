@@ -3,15 +3,16 @@ package client;
 
 import commons.Player;
 import commons.Question;
+import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Single player game class
  * Used for handling a single-player game
  */
+@Data
 public class SinglePlayerGame {
 
     private List<Question> questions;
@@ -98,56 +99,4 @@ public class SinglePlayerGame {
     public void resetStreak() { streak = 0;}
 
     public void incrementStreak() { streak++;}
-
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof SinglePlayerGame)) return false;
-        SinglePlayerGame that = (SinglePlayerGame) o;
-        return getStreak() == that.getStreak() && getQuestionNumber() == that.getQuestionNumber() && Objects.equals(questions, that.questions) && Objects.equals(getPlayer(), that.getPlayer());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(questions, getPlayer(), getStreak(), getQuestionNumber());
-    }
-
-    public Player getPlayer() {
-        return player;
-    }
-
-    public int getStreak() {
-        return streak;
-    }
-
-    public List<Question> getQuestions() {
-        return questions;
-    }
-
-    public void setQuestions(List<Question> questions) {
-        this.questions = questions;
-    }
-
-    public int getQuestionNumber() { return questionNumber; }
-
-    public void setPlayer(Player player) {
-        this.player = player;
-    }
-
-    public void setStreak(int streak) {
-        this.streak = streak;
-    }
-
-    public void setQuestionNumber(int questionNumber) {
-        this.questionNumber = questionNumber;
-    }
-
-    public int getMaxQuestions() {
-        return maxQuestions;
-    }
-
-    public void setMaxQuestions(int maxQuestions) {
-        this.maxQuestions = maxQuestions;
-    }
 }
