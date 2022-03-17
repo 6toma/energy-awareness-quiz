@@ -1,4 +1,4 @@
-package server.api;
+package server.api.dependencies;
 
 import commons.Activity;
 import org.springframework.data.domain.Example;
