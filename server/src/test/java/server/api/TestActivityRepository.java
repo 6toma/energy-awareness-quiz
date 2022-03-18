@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * ActivityRepository implementation for testing
@@ -181,5 +182,20 @@ public class TestActivityRepository implements ActivityRepository {
             result.add(findById(String.valueOf( random.nextLong() % activities.size() + 1 )).get());
         }
         return Optional.of(result);
+    }
+
+    @Override
+    public Optional<Activity> getRandomActivity() {
+        return Optional.of(findById(String.valueOf( random.nextLong() % activities.size() + 1 )).get());
+    }
+
+    @Override
+    public int numberDistinctConsumptions() {
+        List<Long> distinctConsumptions = activities
+                                        .stream()
+                                        .map(Activity::getConsumption_in_wh)
+                                        .distinct()
+                                        .collect(Collectors.toList());
+        return distinctConsumptions.size();
     }
 }
