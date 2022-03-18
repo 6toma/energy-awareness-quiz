@@ -7,7 +7,10 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+
+import java.util.List;
 
 
 /**
@@ -37,6 +40,12 @@ public class HomeScreenCtrl {
 
     @FXML
     private TextField inputServerURLField;
+
+    @FXML
+    private Label playerLabel1, playerLabel2;
+
+    @FXML
+    private Label scoreLabel1, scoreLabel2;
 
     @Inject
     public HomeScreenCtrl(ServerUtils server, MainCtrl mainCtrl) {
@@ -72,24 +81,23 @@ public class HomeScreenCtrl {
             this.usernameOriginScreen = usernameOriginScreen;
     }
 
+    /**
+     * Used to update leaderboard entries
+     * Method is meant to be used paired with
+     * a GET request from the server in order
+     * to get the current top 10 list
+     *
+     * current method body is a placeholder used
+     * to get a feel of the scope of the method
+     */
     @FXML
-    void exitApp(ActionEvent event) {
-        // to fully terminate the client process
-        Platform.exit();
-        System.exit(0);
+    public void setPlayer() {
+        List<String> list = List.of("Matt", "Coolguy123", "Gamewinner_xX", "he who shall not be named", "bro");
+        int randomName = (int) Math.floor(Math.random() * list.size());
+        playerLabel1.setText(list.get(randomName));
+        Integer randomScore = (int) Math.floor(Math.random() * 250) + 5000;
+        scoreLabel1.setText(randomScore.toString());
     }
-
-    /*
-    @FXML
-    public void showWaitingRoom() {
-        mainCtrl.showWaitingRoom();
-    }
-
-    @FXML
-    public void showLoadingScreen() {
-        mainCtrl.showLoadingScreen();
-    }
-    */
 
     /**
      * Tries to get a question from the server
@@ -130,5 +138,12 @@ public class HomeScreenCtrl {
     @FXML
     public void showHelpScreen() {
         mainCtrl.showHelpScreen();
+    }
+
+    @FXML
+    void exitApp(ActionEvent event) {
+        // to fully terminate the client process
+        Platform.exit();
+        System.exit(0);
     }
 }
