@@ -43,7 +43,7 @@
       </Button>
       <Button fx:id="settings" onAction="#goToSettings" stylesheets="@../css/main.css" text="Settings" StackPane.alignment="TOP_RIGHT">
           <styleClass>
-              <String fx:value="settings" />
+              <String fx:value="exit" />
               <String fx:value="rounded" />
           </styleClass>
       </Button>

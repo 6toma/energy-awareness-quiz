@@ -120,53 +120,91 @@ public class MainCtrl {
         });
     }
 
+    /**
+     * method for showing the homescreen
+     */
     public void showHomeScreen() {
         primaryStage.getScene().setRoot(homeScreenParent);
         checkDarkMode();
     }
 
+    /**
+     * method for showing the waiting room
+     */
     public void showWaitingRoom() {
         primaryStage.getScene().setRoot(waitingRoomParent);
         checkDarkMode();
     }
 
+    /**
+     * method for showing the settings screen
+     */
     public void showSettingsScreen(){
         primaryStage.getScene().setRoot(settingsScreenParent);
         checkDarkMode();
     }
 
+    /**
+     * method for hiding the settings screen
+     */
+    public void hideSettingsScreen(){
+        primaryStage.getScene().setRoot(settingsScreenParent);
+        checkDarkMode();
+    }
+
+    /**
+     * method for showing the laoding screen
+     */
     public void showLoadingScreen() {
         primaryStage.getScene().setRoot(loadingScreenParent);
         checkDarkMode();
         loadingScreenCtrl.countdown();
     }
 
+    /**
+     * method for showing the username screen
+     */
     public void showUsernameScreen() {
         primaryStage.getScene().setRoot(usernameScreenParent);
         checkDarkMode();
     }
 
+    /**
+     * method for showing the comparative question
+     */
     public void showComparativeQuestionScreen() {
         primaryStage.getScene().setRoot(comparativeQuestionScreenParent);
         checkDarkMode();
         comparativeQuestionScreenCtrl.countdown();
     }
 
+    /**
+     * method for showing the end screen
+     */
     public void showEndScreen() {
         primaryStage.getScene().setRoot(endScreenParent);
         checkDarkMode();
     }
 
+    /**
+     * method for showing the help screen
+     */
     public void showHelpScreen() {
         ((StackPane) primaryStage.getScene().getRoot()).getChildren().add(helpScreenParent);
         checkDarkMode();
     }
 
+    /**
+     * method for hiding the help screen
+     */
     public void hideHelpScreen() {
         ((StackPane) primaryStage.getScene().getRoot()).getChildren().remove(helpScreenParent);
         checkDarkMode();
     }
 
+    /**
+     * method for showing the score change screen
+     */
     public void showScoreChangeScreen(int pointsGained){
         primaryStage.getScene().setRoot(scoreChangeScreenParent);
         checkDarkMode();
@@ -181,6 +219,7 @@ public class MainCtrl {
             primaryStage.getScene().getRoot().setBlendMode(null);
         }
     }
+
 
     public int getUsernameOriginScreen() {
         return homeScreenCtrl.getUsernameOriginScreen();
