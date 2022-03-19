@@ -203,25 +203,25 @@ public class PlayerTest {
     @Test
     public void toStringTest1() {
         Player player = new Player(1L, "p1", 1200);
-        assertEquals("Player{ID=1, name='p1', score=1200}", player.toString());
+        assertEquals("Player(id=1, name=p1, score=1200)", player.toString());
     }
 
     @Test
     public void toStringTest2() {
         Player player = new Player("p1", 1200);
-        assertEquals("Player{ID=null, name='p1', score=1200}", player.toString());
+        assertEquals("Player(id=null, name=p1, score=1200)", player.toString());
     }
 
     @Test
     public void toStringTest3() {
         Player player = new Player("p1");
-        assertEquals("Player{ID=null, name='p1', score=0}", player.toString());
+        assertEquals("Player(id=null, name=p1, score=0)", player.toString());
     }
 
     @Test
     public void toStringTest4() {
         Player player = new Player();
-        assertEquals("Player{ID=null, name=null, score=null}", player.toString());
+        assertEquals("Player(id=null, name=null, score=null)", player.toString());
     }
 
 }
