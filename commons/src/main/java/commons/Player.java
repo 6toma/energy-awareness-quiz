@@ -30,24 +30,48 @@ public class Player {
     private Integer score;
 
 
-    public Player(){ } // needed for creating object from JSON
+    /**
+     * Empty constructor
+     * Used by Jackson to create object from JSON
+     */
+    public Player(){ }
 
+    /**
+     * Creates new player with name
+     * @param name
+     */
     public Player(String name) {
         this.name = name;
         this.score = 0;
     }
 
+    /**
+     * Creates new player with name and score
+     * @param name
+     * @param score
+     */
     public Player(String name, Integer score) {
         this.name = name;
         this.score = score >= 0 ? score : 0; // check if score is smaller than 0
     }
 
+    /**
+     * Creates new player with id, name and score
+     * @param id
+     * @param name
+     * @param score
+     */
     public Player(Long id, String name, Integer score) {
         this.id = id;
         this.name = name;
         this.score = score >= 0 ? score : 0; // check if score is smaller than 0
     }
 
+    /**
+     * Sets name
+     * @param name
+     * @throws IllegalArgumentException if name is empty
+     */
     public void setName(String name) {
         this.name = name;
         if(name.length() > 0)
@@ -55,6 +79,11 @@ public class Player {
         else throw new IllegalArgumentException("Name cannot be empty");
     }
 
+    /**
+     * Sets score
+     * @param score
+     * @throws IllegalArgumentException if score is negative
+     */
     public void setScore(Integer score) {
         this.score = score;
         if(score >= 0)
