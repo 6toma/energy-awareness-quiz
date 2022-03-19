@@ -23,18 +23,37 @@ public class Player {
     private String name;
     private Integer score;
 
+    /**
+     * Empty constructor
+     * Used by Jackson to create object from JSON
+     */
+    public Player(){ }
 
-    public Player(){ } // needed for creating object from JSON
-
+    /**
+     * Constructor which specifies the name
+     * @param name Name of the player
+     */
     public Player(String name) {
         this.name = name;
         this.score = 0;
     }
 
+    /**
+     * Constructor which specifies the name and the score
+     * @param name Name of the player
+     * @param score Player score
+     */
     public Player(String name, Integer score) {
         this.name = name;
         this.score = score;
     }
+
+    /**
+     * Constructor with all parameters
+     * @param id ID of the player in the database
+     * @param name Name of the player
+     * @param score Player score
+     */
     public Player(Long id, String name, Integer score) {
         this.id = id;
         this.name = name;
