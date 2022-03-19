@@ -40,9 +40,9 @@ public class SettingsScreenCtrl {
         mainCtrl.showHelpScreen();
     }
 
-//    public boolean getDarkMode() {
-//        return isLightMode;
-//    }
+    public boolean getDarkMode() {
+        return isLightMode;
+    }
 
     public void exit() {
         mainCtrl.showHomeScreen();

@@ -121,7 +121,7 @@ public class MainCtrl {
     }
 
     /**
-     * method for showing the homescreen
+     * method for showing the home screen
      */
     public void showHomeScreen() {
         primaryStage.getScene().setRoot(homeScreenParent);
@@ -204,8 +204,11 @@ public class MainCtrl {
         scoreChangeScreenCtrl.countdown();
     }
 
+    /**
+     * method for changing mode to opposite colour
+     */
     public void checkDarkMode() {
-        if (!homeScreenCtrl.getDarkMode()) {
+        if (settingsScreenCtrl.getDarkMode()) {
             primaryStage.getScene().getRoot().setBlendMode(BlendMode.DIFFERENCE);
         } else {
             primaryStage.getScene().getRoot().setBlendMode(null);
