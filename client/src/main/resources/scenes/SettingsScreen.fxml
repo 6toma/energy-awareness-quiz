@@ -12,7 +12,11 @@
 
 <StackPane fx:id="parentContainer" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.HomeScreenCtrl">
     <StackPane styleClass="padding, margin" stylesheets="@../css/main.css">
-        <Button fx:id="back" onAction="#exitApp" styleClass="rounded" stylesheets="@../css/main.css" text="Back" StackPane.alignment="TOP_LEFT" />
+        <Button fx:id="back" onAction="#exitApp" stylesheets="@../css/main.css" text="Back" StackPane.alignment="TOP_LEFT">
+         <styleClass>
+            <String fx:value="rounded" />
+            <String fx:value="exit" />
+         </styleClass></Button>
     </StackPane>
 
                                        
@@ -41,7 +45,7 @@
                                                <Region maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" prefHeight="69.0" prefWidth="747.0" styleClass="margin" VBox.vgrow="ALWAYS" />
       <Button mnemonicParsing="false" text="Admin Panel">
          <styleClass>
-            <String fx:value="dark" />
+            <String fx:value="exit" />
             <String fx:value="rounded" />
          </styleClass>
       </Button>
