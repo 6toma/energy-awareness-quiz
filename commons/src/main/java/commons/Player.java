@@ -33,11 +33,12 @@ public class Player {
 
     public Player(String name, Integer score) {
         this.name = name;
-        this.score = score;
+        this.score = score >= 0 ? score : 0; // check if score is smaller than 0
     }
+
     public Player(Long id, String name, Integer score) {
         this.id = id;
         this.name = name;
-        this.score = score;
+        this.score = score >= 0 ? score : 0; // check if score is smaller than 0
     }
 }
