@@ -1,6 +1,9 @@
 package commons;
 
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,51 +15,50 @@ import javax.persistence.Id;
  *
  * Stores an activities
  */
-@Data
+@ToString @EqualsAndHashCode
 @Entity
 public class Player {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Getter @Setter
     private Long id;
 
+    @Getter
     private String name;
+    @Getter
     private Integer score;
 
-    /**
-     * Empty constructor
-     * Used by Jackson to create object from JSON
-     */
-    public Player(){ }
 
-    /**
-     * Constructor which specifies the name
-     * @param name Name of the player
-     */
+    public Player(){ } // needed for creating object from JSON
+
     public Player(String name) {
         this.name = name;
         this.score = 0;
     }
 
-    /**
-     * Constructor which specifies the name and the score
-     * @param name Name of the player
-     * @param score Player score
-     */
     public Player(String name, Integer score) {
         this.name = name;
-        this.score = score;
+        this.score = score >= 0 ? score : 0; // check if score is smaller than 0
     }
 
-    /**
-     * Constructor with all parameters
-     * @param id ID of the player in the database
-     * @param name Name of the player
-     * @param score Player score
-     */
     public Player(Long id, String name, Integer score) {
         this.id = id;
         this.name = name;
+        this.score = score >= 0 ? score : 0; // check if score is smaller than 0
+    }
+
+    public void setName(String name) {
+        this.name = name;
+        if(name.length() > 0)
+            this.name = name;
+        else throw new IllegalArgumentException("Name cannot be empty");
+    }
+
+    public void setScore(Integer score) {
         this.score = score;
+        if(score >= 0)
+            this.score = score;
+        else throw new IllegalArgumentException("Score cannot be negative");
     }
 }
