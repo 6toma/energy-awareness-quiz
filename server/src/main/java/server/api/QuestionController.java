@@ -40,7 +40,7 @@ public class QuestionController {
             return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED).build();
         }
 
-        List<Activity> activities = activitiesWithDistinctConsumptions(limit); // gets 3 random activities
+        List<Activity> activities = activitiesWithSuitableConsumptions(limit); // gets 3 random activities
 
         int n = (int) random.nextLong();
         boolean isMost = n % 2 == 0; // gets a random true or false
@@ -54,7 +54,7 @@ public class QuestionController {
      * @param size The number of activities with distinct consumption to be fetched from the database
      * @return A list of activities
      */
-    private List<Activity> activitiesWithDistinctConsumptions(int size) {
+    private List<Activity> activitiesWithSuitableConsumptions(int size) {
         //base case
         if (size == 1) {
             List<Activity> result = new ArrayList<Activity>();
@@ -62,19 +62,50 @@ public class QuestionController {
             return result;
         }
 
-        List<Activity> result = activitiesWithDistinctConsumptions(size - 1);
+        List<Activity> result = activitiesWithSuitableConsumptions(size - 1);
 
-        boolean distinct;
+        //try to get an activity with a comparable consumption
+        Optional<Activity> addition = getSuitableActivity(result, 100);
+        //if unsuccessful - just get a random one
+        if(addition.isEmpty()) addition = getActivityDistinctConsumption(result);
+
+        result.add(addition.get());
+        return result;
+    }
+
+    private Optional<Activity> getSuitableActivity(List<Activity> list, int tries) {
         Optional<Activity> addition;
+        boolean suitable;
+        int counter = 0;
+
+        do {
+            suitable = true;
+            addition = repo.getRandomActivity();
+            for (Activity activity : list) {
+                if (addition.get().getConsumption_in_wh() == activity.getConsumption_in_wh()
+                        || addition.get().getConsumption_in_wh() < list.get(0).getConsumption_in_wh() * 0.5
+                        || addition.get().getConsumption_in_wh() > list.get(0).getConsumption_in_wh() * 1.5) suitable = false;
+            }
+            counter++;
+        } while (!suitable && counter != tries);
+
+        //if the max number of tries is reached, but no suitable activity is found - return empty
+        if(counter == tries && !suitable) return Optional.empty();
+        return addition;
+    }
+
+    private Optional<Activity> getActivityDistinctConsumption(List<Activity> list) {
+        Optional<Activity> addition;
+        boolean distinct;
+
         do {
             distinct = true;
             addition = repo.getRandomActivity();
-            for (Activity activity : result) {
+            for (Activity activity : list) {
                 if (addition.get().getConsumption_in_wh() == activity.getConsumption_in_wh()) distinct = false;
             }
         } while (!distinct);
 
-        result.add(addition.get());
-        return result;
+        return addition;
     }
 }
