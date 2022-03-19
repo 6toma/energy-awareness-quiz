@@ -27,6 +27,10 @@ import java.util.Random;
 @Configuration
 public class Config {
 
+    /**
+     * Returns a new random object
+     * @return a new java Random object
+     */
     @Bean
     public Random getRandom() {
         return new Random();
