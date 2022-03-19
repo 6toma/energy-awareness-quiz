@@ -2,6 +2,7 @@ package server.api;
 
 import commons.Player;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.database.PlayerRepository;
@@ -35,6 +36,14 @@ public class PlayerController {
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok(repo.findById(id).get());
+    }
+
+    @GetMapping("/leaderboard/{number}")
+    public ResponseEntity<List<Player>> getTopPlayers(@PathVariable("number") Long numberOfPlayers) {
+        if (repo.count()<numberOfPlayers) { //count() returns a Long
+            return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED).build();
+        }
+        return ResponseEntity.ok(repo.getTopPlayers(numberOfPlayers.intValue()).get());
     }
 
     @PostMapping(path = {"/add-one", "/add-one/"})
