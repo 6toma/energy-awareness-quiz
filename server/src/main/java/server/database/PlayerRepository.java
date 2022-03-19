@@ -16,7 +16,6 @@ public interface PlayerRepository extends JpaRepository<Player, Long> {
      * @param limit how many distinct players do you want
      * @return Optional of a Player list
      */
-
     @Query(
             nativeQuery=true,
             value="SELECT * FROM Player a ORDER BY score DESC LIMIT ?1")

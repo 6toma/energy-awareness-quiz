@@ -71,6 +71,13 @@ public class ServerUtils {
         }
     }
 
+    /**
+     * Returns a list of players with the highest scores
+     * List returned should be ordered in descending order unless some magic
+     *
+     * @param numberOfTop determines how many players in list
+     * @return A list of top numberOfTop players
+     */
     public List<Player> getLeaderPlayers(int numberOfTop){
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(serverURL).path("api/leaderboard/"+numberOfTop)
