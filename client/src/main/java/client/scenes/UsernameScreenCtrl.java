@@ -23,6 +23,11 @@ public class UsernameScreenCtrl {
     @FXML
     private Button continueButton;
 
+    /**
+     * Creates a new screen with injections
+     * @param server ServerUtils class
+     * @param mainCtrl Main Controller
+     */
     @Inject
     public UsernameScreenCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
@@ -70,6 +75,9 @@ public class UsernameScreenCtrl {
         resetUserText();
     }
 
+    /**
+     * Resets the text in the username field
+     */
     public void resetUserText() {
         usernameField.setText("Please input your username!");
         inputUsernameField.clear();
