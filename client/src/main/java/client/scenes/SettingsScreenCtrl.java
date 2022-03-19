@@ -12,12 +12,6 @@ public class SettingsScreenCtrl {
     private final MainCtrl mainCtrl;
     public boolean isLightMode;
 
-    @FXML
-    private Button darkMode;
-
-    @FXML
-    private TextField inputServerURLField;
-
     @Inject
     public SettingsScreenCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
@@ -25,9 +19,15 @@ public class SettingsScreenCtrl {
     }
 
     @FXML
+    private Button darkMode;
+
+    @FXML
+    private TextField inputServerURLField;
+
+    @FXML
     void toggleDarkMode() {
         isLightMode = !isLightMode;
-        if (!isLightMode)
+        if (isLightMode)
             darkMode.setText("Light Mode");
         else {
             darkMode.setText("Dark Mode");
@@ -35,11 +35,16 @@ public class SettingsScreenCtrl {
         mainCtrl.checkDarkMode();
     }
 
-    public boolean getDarkMode() {
-        return isLightMode;
+    @FXML
+    public void showHelpScreen() {
+        mainCtrl.showHelpScreen();
     }
 
-    public void back() {
-        mainCtrl.hideSettingsScreen();
+//    public boolean getDarkMode() {
+//        return isLightMode;
+//    }
+
+    public void exit() {
+        mainCtrl.showHomeScreen();
     }
 }

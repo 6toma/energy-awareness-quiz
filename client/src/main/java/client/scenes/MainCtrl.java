@@ -145,14 +145,6 @@ public class MainCtrl {
     }
 
     /**
-     * method for hiding the settings screen
-     */
-    public void hideSettingsScreen(){
-        primaryStage.getScene().setRoot(settingsScreenParent);
-        checkDarkMode();
-    }
-
-    /**
      * method for showing the laoding screen
      */
     public void showLoadingScreen() {

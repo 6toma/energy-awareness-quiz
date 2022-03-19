@@ -46,16 +46,16 @@ public class HomeScreenCtrl {
         this.usernameOriginScreen = 0; //still on home screen
     }
 
-    @FXML
-    void toggleDarkMode() {
-        isLightMode = !isLightMode;
-        if (!isLightMode)
-            darkMode.setText("Light Mode");
-        else {
-            darkMode.setText("Dark Mode");
-        }
-        mainCtrl.checkDarkMode();
-    }
+//    @FXML
+//    void toggleDarkMode() {
+//        isLightMode = !isLightMode;
+//        if (!isLightMode)
+//            darkMode.setText("Light Mode");
+//        else {
+//            darkMode.setText("Dark Mode");
+//        }
+//        mainCtrl.checkDarkMode();
+//    }
 
     public boolean getDarkMode() {
         return isLightMode;

@@ -10,9 +10,9 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<StackPane fx:id="parentContainer" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.HomeScreenCtrl">
+<StackPane fx:id="parentContainer" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.SettingsScreenCtrl">
     <StackPane styleClass="padding, margin" stylesheets="@../css/main.css">
-        <Button fx:id="back" onAction="#exitApp" stylesheets="@../css/main.css" text="Back" StackPane.alignment="TOP_LEFT">
+        <Button fx:id="back" onAction="#exit" stylesheets="@../css/main.css" text="Back" StackPane.alignment="TOP_LEFT">
          <styleClass>
             <String fx:value="rounded" />
             <String fx:value="exit" />
@@ -33,7 +33,7 @@
             </VBox.margin>
         </TextField>
       <Region maxWidth="-Infinity" minHeight="0.0" prefHeight="60.0" prefWidth="747.0" styleClass="margin" />
-        <Button fx:id="darkMode" minWidth="251.0" mnemonicParsing="false" onAction="#toggleDarkMode" text="Dark mode">
+        <Button fx:id="darkMode" minWidth="251.0" mnemonicParsing="false" onAction="#toggleDarkMode" text="Dark Mode">
          <styleClass>
             <String fx:value="dark" />
             <String fx:value="rounded" />
@@ -41,7 +41,6 @@
       </Button>
         <Region maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0" prefWidth="747.0" styleClass="margin" VBox.vgrow="ALWAYS" />
         <Button minWidth="251.0" mnemonicParsing="false" onAction="#showHelpScreen" styleClass="exit, rounded" text="Help" />
-
                                                <Region maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" prefHeight="69.0" prefWidth="747.0" styleClass="margin" VBox.vgrow="ALWAYS" />
       <Button mnemonicParsing="false" text="Admin Panel">
          <styleClass>
