@@ -71,9 +71,9 @@ public class ServerUtils {
         }
     }
 
-    public List<Player> getLeaderPlayers(){
+    public List<Player> getLeaderPlayers(int numberOfTop){
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(serverURL).path("api/leaderboard/10")
+                .target(serverURL).path("api/leaderboard/"+numberOfTop)
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<List<Player>>() {});
