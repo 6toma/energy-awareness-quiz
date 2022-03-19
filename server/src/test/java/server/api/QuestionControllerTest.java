@@ -21,6 +21,7 @@ class QuestionControllerTest {
 
     /**
      * Sets up a new question controller with testing dependencies
+     * Runs before every test
      */
     @BeforeEach
     public void setup(){
@@ -41,6 +42,10 @@ class QuestionControllerTest {
         repo.activities.addAll(activities);
     }
 
+    /**
+     * Test for getting a random comparative question
+     * Uses TestRandom implementation so random is predictable
+     */
     @Test //repo and que have different TestRandom objects!
     void getRandomComparativeTest() {
         List<Activity> e1_list = List.of(activities.get(0), activities.get(1), activities.get(2));
