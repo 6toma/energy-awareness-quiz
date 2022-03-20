@@ -62,7 +62,7 @@ public class QuestionController {
         Optional<List<String>> ids;
         /* pivot may not be included in final selection
         it is used just to have an estimate of the consumption the activities should have */
-        Activity pivot = repo.getRandomActivity().get();
+        Activity pivot = repo.getRandomActivities(1).get().get(0);
 
         /* get a list of random activities with consumption in the interval
         * (lowerBound * pivot.getConsumption_in_wh(), upperBound * pivot.getConsumption_in_wh())

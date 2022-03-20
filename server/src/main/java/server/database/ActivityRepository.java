@@ -22,15 +22,6 @@ public interface ActivityRepository extends JpaRepository<Activity, String> {
     Optional<List<Activity>> getRandomActivities(int limit);
 
     /**
-     * Gets a random activity
-     * @return Optional of an Activity
-     */
-    @Query(
-            nativeQuery=true,
-            value="SELECT * FROM Activity ORDER BY random() LIMIT 1")
-    Optional<Activity> getRandomActivity();
-
-    /**
      * Calculates the total number of distinct values all the Activities have for Consumption
      * @return The number of distinct values for Consumption
      */
