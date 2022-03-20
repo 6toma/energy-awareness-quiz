@@ -6,6 +6,7 @@ import lombok.ToString;
 import javax.imageio.ImageIO;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -27,7 +28,8 @@ public class Activity {
     private Long consumption_in_wh;
     private String source;
     @ToString.Exclude
-    private Image image;
+    @Transient
+    private BufferedImage image;
 
     // needed for creating object from JSON
     public Activity() {
@@ -57,7 +59,7 @@ public class Activity {
     public void initializeImage(){
         BufferedImage img;
         try{
-            img = ImageIO.read(new File("./server/src/main/resources/images/" + this.image_path));
+            img = ImageIO.read(new File("./server/src/main/resources/activity-bank-pictures/" + this.image_path));
             this.image = img;
         } catch (IOException e){
             e.printStackTrace();
