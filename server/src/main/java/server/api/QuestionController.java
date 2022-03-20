@@ -7,8 +7,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import server.Config;
 import server.database.ActivityRepository;
 
+import java.io.File;
 import java.util.List;
 import java.util.Random;
 
@@ -43,7 +45,7 @@ public class QuestionController {
         boolean isMost = n % 2 == 0; // gets a random true or false
         ComparativeQuestion q = new ComparativeQuestion(activities, isMost);
         for(Activity a : q.getActivities()){
-            a.initializeImage();
+            a.initializeImage(new File(Config.defaultImagePath + a.getImage_path()));
         }
         return ResponseEntity.ok(q);
     }

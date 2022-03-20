@@ -4,8 +4,10 @@ import commons.Activity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import server.Config;
 import server.database.ActivityRepository;
 
+import java.io.File;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,7 +47,7 @@ public class ActivityController {
             return ResponseEntity.badRequest().build();
         }
         Activity activity = repo.findById(id).get();
-        activity.initializeImage();
+        activity.initializeImage(new File(Config.defaultImagePath + activity.getImage_path()));
         return ResponseEntity.ok(activity);
     }
 
