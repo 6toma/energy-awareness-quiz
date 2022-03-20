@@ -27,6 +27,8 @@ import java.util.Random;
 @Configuration
 public class Config {
 
+    public static String defaultImagePath = "./server/src/main/resources/activity-bank-pictures/";
+
     @Bean
     public Random getRandom() {
         return new Random();
