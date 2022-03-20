@@ -145,15 +145,4 @@ public class HomeScreenCtrl {
         mainCtrl.setUsernameOriginScreen(2);
         mainCtrl.showUsernameScreen();
     }
-
-<<<<<<< client/src/main/java/client/scenes/HomeScreenCtrl.java
-    /**
-     * Shows the help screen
-     */
-    @FXML
-    public void showHelpScreen() {
-        mainCtrl.showHelpScreen();
-    }
-=======
->>>>>>> client/src/main/java/client/scenes/HomeScreenCtrl.java
 }
