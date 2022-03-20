@@ -1,4 +1,4 @@
-package server.api;
+package server.api.dependencies;
 
 import commons.Activity;
 import org.springframework.data.domain.Example;
@@ -76,7 +76,6 @@ public class TestActivityRepository implements ActivityRepository {
 
     @Override
     public <S extends Activity> S save(S activity) {
-        activity.setId(String.valueOf(activities.size() + 1));
         activities.add(activity);
         return activity;
     }

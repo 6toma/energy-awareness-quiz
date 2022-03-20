@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import server.database.ActivityRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Activity endpoints go in this controller
@@ -18,16 +19,30 @@ public class ActivityController {
 
     private final ActivityRepository repo;
 
+    /**
+     * Creates new ActivityController object
+     * Sets repository to repo
+     * @param repo repository to use
+     */
     @Autowired
     public ActivityController(ActivityRepository repo) {
         this.repo = repo;
     }
 
+    /**
+     * API GET ALL ACTIVITIES ENDPOINT
+     * @return list of all activities in the database
+     */
     @GetMapping(path = {"", "/"})
     public List<Activity> getAll() {
         return repo.findAll();
     }
 
+    /**
+     * API GET ACTIVITY BY ID ENDPOINT
+     * @param id id of activity to be returned
+     * @return activity with specified id. Bad request response entity if invalid id
+     */
     @GetMapping("/{id}")
     public ResponseEntity<Activity> getActivityById(@PathVariable("id") String id) {
         if (!repo.existsById(id)) {
@@ -59,25 +74,13 @@ public class ActivityController {
     /**
      * adds an activity to the database
      * @param activity
-     * @return the activity which was added
+     * @return the activity which was added, bad request if invalid activity
      */
     @PostMapping(path = {"/add-one", "/add-one/"})
     public ResponseEntity<Activity> addActivity(@RequestBody Activity activity) {
 
-        // checks if the json is of a proper activity
-        if (activity == null || isNullOrEmpty(activity.getTitle())
-            || isNullOrEmpty(activity.getConsumption_in_wh())
-            || isNullOrEmpty(activity.getSource())) {
 
-            return ResponseEntity.badRequest().build();
-        }
-
-        // filters invalid values
-        if (activity.getTitle().length() > 255
-                || activity.getConsumption_in_wh() > Long.MAX_VALUE
-                || activity.getSource().length() > 255
-                || activity.getId().length() > 255
-                || activity.getImage_path().length() > 255) {
+        if (invalidActivity(activity)){
             return ResponseEntity.badRequest().build();
         }
 
@@ -85,39 +88,44 @@ public class ActivityController {
         return ResponseEntity.ok(act); // returns the same object if everything ok
     }
 
-    private static boolean isNullOrEmpty(Object o) { // checks if an object is null or empty
-        if (o == null) {
-            return true;
-        }
-        if (o instanceof String) {
-            String s = (String) o;
-            return s.isEmpty();
-        }
-        return false;
-    }
+
     /**
-    Api endpoint for updating an Activity in the database by specifying an id in the path
+     * API UPDATE ACTIVITY BY ID
+     * @param activity Activity object with updated parameters
+     * @param id ID of activity to be updated
+     * @return updated activity if successful, bad request if invalid update activity or invalid id
      */
     @PostMapping("/update/{id}")
     public ResponseEntity<Activity> updateActivity(@RequestBody Activity activity, @PathVariable("id") String id) {
-        // check if a id exists in database
-        if (!repo.existsById(id)) {
+
+        Optional<Activity> dbActivityOpt = repo.findById(id); // get the player from the database
+
+        if (dbActivityOpt.isEmpty() || invalidUpdate(activity)) {
             return ResponseEntity.badRequest().build();
         }
+        Activity dbActivity = dbActivityOpt.get();
 
-        // checks if the json is of a proper activity
-        if(activity == null || isNullOrEmpty(activity.getTitle())
-                || isNullOrEmpty(activity.getConsumption_in_wh())
-                || isNullOrEmpty(activity.getSource())){
-
-            return ResponseEntity.badRequest().build();
+        if (!isNullOrEmpty(activity.getTitle())) { // check if a new title is specified
+            dbActivity.setTitle(activity.getTitle());
+        }
+        if (!isNullOrEmpty(activity.getConsumption_in_wh())) { // check if a new consumption is specified
+            dbActivity.setConsumption_in_wh(activity.getConsumption_in_wh());
+        }
+        if (!isNullOrEmpty(activity.getSource())) { // check if a new source is specified
+            dbActivity.setSource(activity.getSource());
+        }
+        if (!isNullOrEmpty(activity.getImage_path())) { // check if a new image_path is specified
+            dbActivity.setImage_path(activity.getImage_path());
         }
 
-        activity.setId(id);  // set the id of the record to be changed
-        repo.save(activity); // update the activity
-        return ResponseEntity.ok(activity);
+        Activity saved = repo.save(dbActivity); // update the player
+        return ResponseEntity.ok(saved); // for some reason I can't return dbPlayer, it throws an internal server error
     }
 
+    /**
+     * API GET RANDOM ACTIVITY
+     * @return 1 random activity from the database
+     */
     @GetMapping("/random")
     public ResponseEntity<Activity> getRandomActivity(){
         if (repo.count()==0){ // checks if the repository is empty
@@ -147,6 +155,71 @@ public class ActivityController {
 
         repo.deleteById(id);    // delete it
         return ResponseEntity.ok(deleted);
+    }
+
+    /**
+     * Checks if activity is invalid for updating
+     * invalid if:
+     *  - is null
+     *  - title, consumption, source and image path are all null or empty
+     *
+     * @param activity
+     * @return true if activity is null or has no updatable fields specified
+     */
+    private boolean invalidUpdate(Activity activity){
+        return activity == null // bad request if editable id doesn't exist or no new values given
+            || isNullOrEmpty(activity.getTitle())
+            && isNullOrEmpty(activity.getConsumption_in_wh())
+            && isNullOrEmpty(activity.getSource())
+            && isNullOrEmpty(activity.getImage_path());
+    }
+
+    /**
+     * Checks if the activity is valid
+     * invalid if:
+     *  - is null
+     *  - title is null or empty
+     *  - id is null or empty
+     *  - consumption is null
+     *  - source is null or empty
+     *  - title length > 255 chars
+     *  - consumption > Long.MAX_VALUE
+     *  - source length > 255 chars
+     *  - id length > 255 chars
+     *  - image path length > 255 chars
+     *
+     * @param activity
+     * @return true if activity is invalid, false otherwise
+     */
+    private boolean invalidActivity(Activity activity){
+        return activity == null
+            || isNullOrEmpty(activity.getTitle())
+            || isNullOrEmpty(activity.getId())
+            || isNullOrEmpty(activity.getConsumption_in_wh())
+            || isNullOrEmpty(activity.getSource())
+            || activity.getTitle().length() > 255
+            || activity.getConsumption_in_wh() > Long.MAX_VALUE
+            || activity.getSource().length() > 255
+            || activity.getId().length() > 255
+            || activity.getImage_path().length() > 255;
+    }
+
+    /**
+     * Checks if object is null
+     * If object is string also checks if string is empty
+     *
+     * @param o Object to check if is null or empty
+     * @return true if object is null or if object is string and is empty, else false
+     */
+    private static boolean isNullOrEmpty(Object o) { // checks if an object is null or empty
+        if (o == null) {
+            return true;
+        }
+        if (o instanceof String) {
+            String s = (String) o;
+            return s.isEmpty();
+        }
+        return false;
     }
 
 }

@@ -7,7 +7,11 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import lombok.Getter;
+
+import java.util.List;
 
 
 /**
@@ -23,9 +27,8 @@ public class HomeScreenCtrl {
 
     public boolean isLightMode;
 
-    //0 - still on home screen
-    //1 - reached username screen by pressing SINGLEPLAYER
-    //2 - reached username screen by pressing MULTIPLAYER
+
+    @Getter
     public int usernameOriginScreen;
 
     // @FXML
@@ -38,6 +41,17 @@ public class HomeScreenCtrl {
     @FXML
     private TextField inputServerURLField;
 
+    @FXML
+    private Label playerLabel1, playerLabel2;
+
+    @FXML
+    private Label scoreLabel1, scoreLabel2;
+
+    /**
+     * Creates a new screen with injections
+     * @param server ServerUtils class
+     * @param mainCtrl Main Controller
+     */
     @Inject
     public HomeScreenCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
@@ -46,25 +60,19 @@ public class HomeScreenCtrl {
         this.usernameOriginScreen = 0; //still on home screen
     }
 
-    @FXML
-    void toggleDarkMode() {
-        isLightMode = !isLightMode;
-        if (!isLightMode)
-            darkMode.setText("Light Mode");
-        else {
-            darkMode.setText("Dark Mode");
-        }
-        mainCtrl.checkDarkMode();
-    }
-
+    /**
+     * Gets the value of isLightMode
+     * @return false if is in dark mode (??)
+     */
     public boolean getDarkMode() {
         return isLightMode;
     }
 
-    public int getUsernameOriginScreen() {
-        return usernameOriginScreen;
-    }
-
+    /**
+     * Sets the origin of the username selection screen
+     * @param usernameOriginScreen 1 if going to single player
+     *                             2 if going to multiplayer
+     */
     public void setUsernameOriginScreen(int usernameOriginScreen) {
         if (usernameOriginScreen == 0 ||
                 usernameOriginScreen == 1 ||
@@ -72,24 +80,36 @@ public class HomeScreenCtrl {
             this.usernameOriginScreen = usernameOriginScreen;
     }
 
+
+    /**
+     * This method transfers the user to the settings screen
+     * where he/she can switch to dark mode, read the help page,
+     * enter the room URL or go to admin panel
+     * @param event
+     */
     @FXML
-    void exitApp(ActionEvent event) {
-        // to fully terminate the client process
-        Platform.exit();
-        System.exit(0);
+    void goToSettings(ActionEvent event) {
+        mainCtrl.showSettingsScreen();
     }
 
-    /*
+    /**
+     * Used to update leaderboard entries
+     * Method is meant to be used paired with
+     * a GET request from the server in order
+     * to get the current top 10 list
+     *
+     * current method body is a placeholder used
+     * to get a feel of the scope of the method
+     */
     @FXML
-    public void showWaitingRoom() {
-        mainCtrl.showWaitingRoom();
+    public void setPlayer() {
+        List<String> list = List.of("Matt", "Coolguy123", "Gamewinner_xX", "he who shall not be named", "bro");
+        int randomName = (int) Math.floor(Math.random() * list.size());
+        playerLabel1.setText(list.get(randomName));
+        Integer randomScore = (int) Math.floor(Math.random() * 250) + 5000;
+        scoreLabel1.setText(randomScore.toString());
     }
 
-    @FXML
-    public void showLoadingScreen() {
-        mainCtrl.showLoadingScreen();
-    }
-    */
 
     /**
      * Tries to get a question from the server
@@ -101,7 +121,7 @@ public class HomeScreenCtrl {
     @FXML
     public void showUsernameScreenSingle() {
 
-        mainCtrl.getServer().setServerURL(inputServerURLField.getText());
+        mainCtrl.getServer().setServerURL(mainCtrl.getServerURL());
         try {
             mainCtrl.newSinglePlayerGame();
         } catch (Exception e) {
@@ -110,12 +130,16 @@ public class HomeScreenCtrl {
         }
     }
 
+    /**
+     * Run when pressed multiplayer
+     * Sends you to the username selection screen
+     */
     @FXML
     public void showUsernameScreenMulti() {
 
         // Testing ServerUtils postPlayer functionality
-        System.out.println(inputServerURLField.getText());
-        server.setServerURL(inputServerURLField.getText());
+        System.out.println(mainCtrl.getServerURL());
+        server.setServerURL(mainCtrl.getServerURL());
         Player player = new Player("test", 7357);
         try {
             System.out.println(server.postPlayer(player));
@@ -127,8 +151,18 @@ public class HomeScreenCtrl {
         mainCtrl.showUsernameScreen();
     }
 
+    /**
+     * Shows the help screen
+     */
     @FXML
     public void showHelpScreen() {
         mainCtrl.showHelpScreen();
+    }
+
+    @FXML
+    void exitApp(ActionEvent event) {
+        // to fully terminate the client process
+        Platform.exit();
+        System.exit(0);
     }
 }

@@ -17,6 +17,11 @@
   -fx-background-radius: 20px;
 }
 
+.joker:hover {
+  -fx-background-color: #808080;
+  -fx-font-weight: bold;
+}
+
 .answer:disabled {
   -fx-opacity: 0.8;
 }
