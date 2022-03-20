@@ -86,7 +86,7 @@
   -fx-text-fill: white;
 }
 
-.help:hover {
+.settings:hover {
   -fx-background-color: radial-gradient(focus-angle 45deg, focus-distance 5%, radius 99%, reflect, yellow, honeydew);
 }
 

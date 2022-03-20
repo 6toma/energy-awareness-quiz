@@ -10,7 +10,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<StackPane fx:id="parentContainer" stylesheets="@../css/SettingsScreen.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.SettingsScreenCtrl">
+<StackPane fx:id="parentContainer" prefHeight="893.0" prefWidth="1036.0" stylesheets="@../css/SettingsScreen.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.SettingsScreenCtrl">
     <StackPane styleClass="padding, margin" stylesheets="@../css/main.css">
         <Button fx:id="back" onAction="#exit" stylesheets="@../css/main.css" text="Back" StackPane.alignment="TOP_LEFT">
          <styleClass>
@@ -34,11 +34,15 @@
          </styleClass>
       </Button>
         <Region maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" prefHeight="60.0" prefWidth="747.0" styleClass="margin" VBox.vgrow="ALWAYS" />
-        <Button minWidth="251.0" mnemonicParsing="false" onAction="#showHelpScreen" styleClass="exit, rounded" text="Help" />
+        <Button minWidth="251.0" mnemonicParsing="false" onAction="#showHelpScreen" text="Help">
+         <styleClass>
+            <String fx:value="functionality-button" />
+            <String fx:value="rounded" />
+         </styleClass></Button>
                                                <Region maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" prefHeight="60.0" prefWidth="747.0" styleClass="margin" VBox.vgrow="ALWAYS" />
       <Button mnemonicParsing="false" text="Admin Panel">
          <styleClass>
-            <String fx:value="exit" />
+            <String fx:value="functionality-button" />
             <String fx:value="rounded" />
          </styleClass>
       </Button>
