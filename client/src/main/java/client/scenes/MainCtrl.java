@@ -57,12 +57,27 @@ public class MainCtrl {
     private SinglePlayerGame singlePlayerGame;
     private int singlePlayerGameQuestions = 5;
 
+    /**
+     * Creates a new MainCtrl with server
+     * @param server ServerUtils object
+     */
     @Inject
     public MainCtrl(ServerUtils server) {
         this.server = server;
     }
 
-    // default initializing code
+    /**
+     * Initializes the screen
+     * @param primaryStage The primary stage to use (window)
+     * @param homeScreen Screens that main controller can communicate with
+     * @param waitingRoom
+     * @param loadingScreen
+     * @param comparativeQuestionScreen
+     * @param usernameScreen
+     * @param endScreen
+     * @param helpScreen
+     * @param scoreChangeScreen
+     */
     public void initialize(
             Stage primaryStage,
             Pair<HomeScreenCtrl, Parent> homeScreen,
@@ -218,15 +233,27 @@ public class MainCtrl {
         }
     }
 
-
+    /**
+     * Gets the origin of usernamescreen
+     * @return 1 - Singleplayer, 2 - Multiplayer
+     */
     public int getUsernameOriginScreen() {
         return homeScreenCtrl.getUsernameOriginScreen();
     }
 
+    /**
+     * Sets the usernameOriginScreen
+     * @param usernameOriginScreen value
+     *                             1 - Singleplayer
+     *                             2 - Multiplayer
+     */
     public void setUsernameOriginScreen(int usernameOriginScreen) {
         homeScreenCtrl.setUsernameOriginScreen(usernameOriginScreen);
     }
 
+    /**
+     * Resets the username text in usernamescreen
+     */
     public void resetUserText() {
         usernameScreenCtrl.resetUserText();
     }
@@ -336,6 +363,10 @@ public class MainCtrl {
         }
     }
 
+    /**
+     * Shows the current score on the score change screen
+     * @param pointsGained number of points to be added to the score
+     */
     public void showScore(int pointsGained) {
         int gained = pointsGained;
         int total = singlePlayerGame.getPlayer().getScore();
@@ -343,10 +374,18 @@ public class MainCtrl {
         scoreChangeScreenCtrl.setScoreLabels(gained, total, streak);
     }
 
+    /**
+     * Gets the username
+     * @return Username of current player of singlePlayerGame
+     */
     public String getCurrentUsername() {
         return this.singlePlayerGame.getPlayer().getName();
     }
 
+    /**
+     * Gets the server url from the settings screen
+     * @return
+     */
     public String getServerURL() {
         return this.settingsScreenCtrl.getServerURL();
     }

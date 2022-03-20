@@ -25,6 +25,7 @@ class ActivityControllerTest {
 
     /**
      * Sets up a new activity controller with testing dependencies
+     * Runs before every test
      */
     @BeforeEach
     public void setup(){
@@ -38,18 +39,27 @@ class ActivityControllerTest {
         );
     }
 
+    /**
+     * Test for getAll with many activities
+     */
     @Test
     public void getAllTestMany(){
         repo.activities.addAll(activities);
         assertEquals(activities, act.getAll());
     }
 
+    /**
+     * Test for getAll with no activities
+     */
     @Test
     public void getAllTestEmpty(){
         List<Activity> expected = new ArrayList<>();
         assertEquals(expected, act.getAll());
     }
 
+    /**
+     * Test for getActivityById
+     */
     @Test
     public void getActivityByIdTest(){
         repo.activities.addAll(activities);
@@ -58,12 +68,17 @@ class ActivityControllerTest {
         assertEquals(activities.get(2), act.getActivityById("3").getBody());
     }
 
+    /**
+     * Test for getActivityById with invalid id
+     */
     @Test
     public void getActivityByIdTestInvalidId(){
         assertEquals(ResponseEntity.badRequest().build(), act.getActivityById("8"));
     }
 
-
+    /**
+     * Test for Add activity with invalid title
+     */
     @Test
     public void addActivityTestTitle(){
         Activity added = new Activity("1","image_a",null, 1L, "a");
@@ -82,6 +97,9 @@ class ActivityControllerTest {
         assertEquals(ResponseEntity.badRequest().build(), act.addActivity(added3));
     }
 
+    /**
+     * Test for Add activity with invalid id
+     */
     @Test
     public void addActivityTestId(){
         Activity added = new Activity(null,"image_a","a", 1L, "a");
@@ -100,12 +118,18 @@ class ActivityControllerTest {
         assertEquals(ResponseEntity.badRequest().build(), act.addActivity(added3));
     }
 
+    /**
+     * Test for Add activity with invalid consumption
+     */
     @Test
     public void addActivityTestConsumption(){
         Activity added = new Activity("1","image_a","a", null, "a");
         assertEquals(ResponseEntity.badRequest().build(), act.addActivity(added));
     }
 
+    /**
+     * Test for Add activity with invalid source
+     */
     @Test
     public void addActivityTestSource(){
         Activity added = new Activity("1","image_a","a", 1L, null);
@@ -124,6 +148,9 @@ class ActivityControllerTest {
         assertEquals(ResponseEntity.badRequest().build(), act.addActivity(added3));
     }
 
+    /**
+     * Test for Add activity with invalid image path
+     */
     @Test
     public void addActivityTestImagePath(){
         String path = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" // 50 characters per line
@@ -136,6 +163,9 @@ class ActivityControllerTest {
         assertEquals(ResponseEntity.badRequest().build(), act.addActivity(added3));
     }
 
+    /**
+     * Test for Adding an activity
+     */
     @Test
     public void addActivityTest(){
         Activity added = new Activity("1","image_a","a", 1L, "a");
@@ -144,6 +174,9 @@ class ActivityControllerTest {
         assertEquals(expected, repo.activities.get(0));
     }
 
+    /**
+     * Test for Add activity with invalid title
+     */
     @Test
     public void addManyActivitiesTest(){
 
@@ -153,16 +186,26 @@ class ActivityControllerTest {
         assertEquals(activities, repo.activities);
     }
 
+    /**
+     * Test for adding many activities with activities = null
+     */
     @Test
     public void addManyActivitiesTestNull(){
         assertEquals(ResponseEntity.badRequest().build(), act.addManyActivities(null));
     }
 
+    /**
+     * Test for adding activity with activity = null
+     */
     @Test
     public void addActivityTestNull(){
         assertEquals(ResponseEntity.badRequest().build(), act.addActivity(null));
     }
 
+    /**
+     * Test for getting a random activity
+     * Uses a TestRandom implementation for random the number is predictable
+     */
     @Test
     public void getRandomActivityTest(){
         repo.activities.addAll(activities);
@@ -171,11 +214,17 @@ class ActivityControllerTest {
         assertEquals(activities.get(2), act.getRandomActivity().getBody());
     }
 
+    /**
+     * Test for getting a random activity with empty activity list
+     */
     @Test
     public void getRandomActivityTestEmpty(){
         assertEquals(ResponseEntity.badRequest().build(), act.getRandomActivity());
     }
 
+    /**
+     * Test for deleteActivity
+     */
     @Test
     public void deleteActivityTest(){
         repo.activities.addAll(activities);
@@ -183,12 +232,18 @@ class ActivityControllerTest {
         assertEquals(List.of(activities.get(0), activities.get(2)), repo.activities);
     }
 
+    /**
+     * Test for deleteActivity with invalid ID
+     */
     @Test
     public void deleteActivityTestInvalidID(){
         repo.activities.addAll(activities);
         assertEquals(ResponseEntity.badRequest().build(), act.deleteActivity("8"));
     }
 
+    /**
+     * Test for updating activity title
+     */
     @Test
     public void updateActivityTestTitle(){
         repo.activities.addAll(activities);
@@ -199,6 +254,9 @@ class ActivityControllerTest {
         assertEquals(expected, act.updateActivity(update, "1").getBody());
     }
 
+    /**
+     * Test for updating activity consumption
+     */
     @Test
     public void updateActivityTestConsumption(){
         repo.activities.addAll(activities);
@@ -209,6 +267,9 @@ class ActivityControllerTest {
         assertEquals(expected, act.updateActivity(update, "1").getBody());
     }
 
+    /**
+     * Test for updating activity source
+     */
     @Test
     public void updateActivityTestSource(){
         repo.activities.addAll(activities);
@@ -219,6 +280,9 @@ class ActivityControllerTest {
         assertEquals(expected, act.updateActivity(update, "1").getBody());
     }
 
+    /**
+     * Test for updating activity image path
+     */
     @Test
     public void updateActivityTestImage_path(){
         repo.activities.addAll(activities);
@@ -229,6 +293,9 @@ class ActivityControllerTest {
         assertEquals(expected, act.updateActivity(update, "1").getBody());
     }
 
+    /**
+     * Test for updating activity with invalid id
+     */
     @Test
     public void updateActivityTestInvalidId(){
         repo.activities.addAll(activities);
@@ -237,6 +304,9 @@ class ActivityControllerTest {
         assertEquals(ResponseEntity.badRequest().build(), act.updateActivity(update, "8"));
     }
 
+    /**
+     * Test for updating activity with invalid id
+     */
     @Test
     public void updateActivityTestInvalidUpdateActivity(){
         repo.activities.addAll(activities);

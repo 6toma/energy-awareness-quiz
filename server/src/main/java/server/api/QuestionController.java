@@ -19,6 +19,11 @@ public class QuestionController {
     private final Random random; // Random function from Config file
     private final ActivityRepository repo;
 
+    /**
+     * Creates new QuestionController object
+     * @param random Random bean from config
+     * @param repo repository to use
+     */
     public QuestionController(Random random, ActivityRepository repo) {
         this.random = random;
         this.repo = repo;

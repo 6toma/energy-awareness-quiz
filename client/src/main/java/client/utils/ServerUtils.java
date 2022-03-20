@@ -36,9 +36,17 @@ public class ServerUtils {
     @Getter
     private String serverURL = defaultURL;
 
+    /**
+     * Constructor for ServerUtils
+     * No need to specifiy any fields
+     */
     public ServerUtils() {
     }
 
+    /**
+     * Gets a comparative question from the server
+     * @return Comparative Question if successful
+     */
     public ComparativeQuestion getCompQuestion() {
         return ClientBuilder.newClient(new ClientConfig()) //
             .target(serverURL).path("api/questions/comparative") // the URL path which we HTTP GET for comparative questions
@@ -47,6 +55,11 @@ public class ServerUtils {
             .get(new GenericType<ComparativeQuestion>() {});
     }
 
+    /**
+     * Posts a Player object to the server
+     * @param player to be posted
+     * @return The posted player if successful
+     */
     public Player postPlayer(Player player){
         return ClientBuilder.newClient(new ClientConfig()) //
             .target(serverURL).path("api/players/add-one") // the URL path where we HTTP POST for adding high scores

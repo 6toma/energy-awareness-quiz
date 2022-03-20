@@ -16,6 +16,11 @@ public class WaitingRoomCtrl {
     @FXML
     private Button back;
 
+    /**
+     * Creates a new screen with injections
+     * @param server ServerUtils class
+     * @param mainCtrl Main Controller
+     */
     @Inject
     public WaitingRoomCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
@@ -23,6 +28,10 @@ public class WaitingRoomCtrl {
 
     }
 
+    /**
+     * Resets the username screen text
+     * Goes back to the home screen
+     */
     public void back() {
         mainCtrl.resetUserText();
         mainCtrl.showHomeScreen();
