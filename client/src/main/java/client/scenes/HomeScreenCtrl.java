@@ -103,7 +103,7 @@ public class HomeScreenCtrl {
         List<Player> players = server.getLeaderPlayers(10);
         if (players.size()<10){
             for (int i=0; i<(10-players.size());i++){
-                players.add(new Player("",0));
+                players.add(new Player("Empty",0));
             }
         }
 
