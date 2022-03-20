@@ -68,16 +68,6 @@ public class HomeScreenCtrl {
             this.usernameOriginScreen = usernameOriginScreen;
     }
 
-    /**
-     * This method exits the app
-     * @param event
-     */
-    @FXML
-    void exitApp(ActionEvent event) {
-        // to fully terminate the client process
-        Platform.exit();
-        System.exit(0);
-    }
 
     /**
      * This method transfers the user to the settings screen
@@ -89,16 +79,25 @@ public class HomeScreenCtrl {
     void goToSettings(ActionEvent event) {
         mainCtrl.showSettingsScreen();
     }
-    /*
+
+    /**
+     * Used to update leaderboard entries
+     * Method is meant to be used paired with
+     * a GET request from the server in order
+     * to get the current top 10 list
+     *
+     * current method body is a placeholder used
+     * to get a feel of the scope of the method
+     */
     @FXML
-    public void showWaitingRoom() {
-        mainCtrl.showWaitingRoom();
+    public void setPlayer() {
+        List<String> list = List.of("Matt", "Coolguy123", "Gamewinner_xX", "he who shall not be named", "bro");
+        int randomName = (int) Math.floor(Math.random() * list.size());
+        playerLabel1.setText(list.get(randomName));
+        Integer randomScore = (int) Math.floor(Math.random() * 250) + 5000;
+        scoreLabel1.setText(randomScore.toString());
     }
 
-    @FXML
-    public void showLoadingScreen() {
-        mainCtrl.showLoadingScreen();
-    }
 
     /**
      * Tries to get a question from the server
