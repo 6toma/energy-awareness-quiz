@@ -70,7 +70,7 @@
 
 .rounded {
   -fx-border-radius: 100px;
-  -fx-background-radius: 100px;
+  -fx-background-radius: 105px;
 }
 
 .button {
@@ -82,10 +82,19 @@
 }
 
 .exit:hover {
-  -fx-background-color: radial-gradient(focus-angle 45deg, focus-distance 5%, radius 99%, reflect, darkred, yellow);
+  -fx-background-color: radial-gradient(focus-angle 45deg, focus-distance 5%, radius 99%, reflect, darkred, darkorange);
+  -fx-text-fill: white;
 }
 
-.mainButton:hover {
+.settings:hover {
+  -fx-background-color: radial-gradient(focus-angle 45deg, focus-distance 5%, radius 99%, reflect, yellow, honeydew);
+}
+
+.functionality-button:hover {
+  -fx-background-color: radial-gradient(focus-angle 60deg, focus-distance 25%, radius 75%, reflect, greenyellow, white);
+}
+
+.game-button:hover {
   -fx-background-color: radial-gradient(focus-angle 45deg, focus-distance 5%, radius 99%, reflect, cornflowerblue, greenyellow);
 }
 
@@ -93,6 +102,8 @@
   -fx-background-color: black;
   -fx-text-fill: white;
 }
+
+
 
 .padding {
   -fx-padding: 20px;

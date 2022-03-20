@@ -18,8 +18,17 @@ public class ComparativeQuestion extends Question{
     private List<Activity> activities; // list of activities
     private int correct_answer; // index of the correct answer in the list
 
+    /**
+     * Empty constructor
+     * Used by Jackson to create object from JSON
+     */
     public ComparativeQuestion(){} // needed to be able to build object from json
 
+    /**
+     * Constructor which specifies a list of activities and if question isMost
+     * @param activities List of activities (usually 3)
+     * @param isMost If question asks for the most energy consumption
+     */
     public ComparativeQuestion(List<Activity> activities, boolean isMost){
         this.isMost = isMost;
         this.activities = activities;

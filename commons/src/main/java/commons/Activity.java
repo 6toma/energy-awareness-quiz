@@ -31,11 +31,20 @@ public class Activity {
     @Transient // Image is not stored in the database
     private byte[] image; // image is a byte array because it's a pretty efficient way to send it (I hope)
 
-    // needed for creating object from JSON
+    /**
+     * Empty constructor
+     * Used by Jackson to create object from JSON
+     */
     public Activity() {
     }
 
-
+    /**
+     * Constructor with all parameters except ID
+     * @param image_path path of the image
+     * @param title Activity text used in questions
+     * @param consumption_in_wh Consumption in Wh
+     * @param source Source of the activity consumption
+     */
     public Activity(String image_path, String title, Long consumption_in_wh, String source) {
         this.image_path = image_path;
         this.title = title;
@@ -43,6 +52,14 @@ public class Activity {
         this.source = source;
     }
 
+    /**
+     * Constructor with all parameters
+     * @param id ID of the activity in the database
+     * @param image_path path of the image
+     * @param title Activity text used in questions
+     * @param consumption_in_wh Consumption in Wh
+     * @param source Source of the activity consumption
+     */
     public Activity(String id, String image_path, String title, Long consumption_in_wh, String source) {
         this.id = id;
         this.image_path = image_path;

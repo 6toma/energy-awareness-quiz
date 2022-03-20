@@ -1,61 +1,156 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
-<?import java.lang.String?>
-<StackPane fx:id="parentContainer"
-           xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
-           fx:controller="client.scenes.HomeScreenCtrl">
-    <StackPane styleClass="padding, margin" stylesheets="@../css/main.css">
-        <Button fx:id="darkMode" mnemonicParsing="false" onAction="#toggleDarkMode" styleClass="border, dark, rounded"
-                text="Dark mode" StackPane.alignment="TOP_RIGHT"/>
-        <Button fx:id="back" onAction="#exitApp" styleClass="border, exit, rounded" stylesheets="@../css/main.css"
-                text="Exit" StackPane.alignment="TOP_LEFT"/>
-        <Button mnemonicParsing="false" onAction="#showHelpScreen" styleClass="exit, rounded"
-                text="Help" StackPane.alignment="BOTTOM_LEFT"/>
+
+<StackPane fx:id="parentContainer" prefHeight="907.0" prefWidth="1574.0" stylesheets="@../css/HomeScreen.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.HomeScreenCtrl">
+    <StackPane prefWidth="1313.0" styleClass="padding, margin" stylesheets="@../css/main.css">
+        <Button fx:id="settings" mnemonicParsing="false" onAction="#goToSettings" text="Settings" StackPane.alignment="TOP_RIGHT">
+         <styleClass>
+            <String fx:value="settings" />
+            <String fx:value="rounded" />
+         </styleClass></Button>
+        <Button fx:id="back" onAction="#exitApp" stylesheets="@../css/main.css" text="Exit" StackPane.alignment="TOP_LEFT">
+         <styleClass>
+            <String fx:value="exit" />
+            <String fx:value="rounded" />
+         </styleClass></Button>
     </StackPane>
+   <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="666.0" prefWidth="2154.0">
+      <children>
+         <Region maxHeight="178.0" maxWidth="-Infinity" minHeight="0.0" minWidth="-Infinity" prefHeight="178.0" prefWidth="323.0" styleClass="margin" />
+      
+                                                                                 
+                                                                                     <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="638.0" prefWidth="752.0" stylesheets="@../css/main.css">
+              <Text fx:id="titleText" strokeType="OUTSIDE" strokeWidth="0.0" text="Quizzzzzz!" textAlignment="CENTER" wrappingWidth="526.13671875">
+                  <font>
+                      <Font size="96.0" />
+                  </font>
+              </Text>
+              <Region maxHeight="178.0" minHeight="0.0" prefHeight="40.0" prefWidth="747.0" styleClass="margin" />
+      
+                                                                                         <Region maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" prefHeight="55.0" prefWidth="747.0" styleClass="margin" VBox.vgrow="ALWAYS" />
+              <Button fx:id="singleplayerButton" mnemonicParsing="false" onAction="#showUsernameScreenSingle" prefHeight="84.0" prefWidth="290.0" style="-fx-border-radius: 1000px;" text="Singleplayer">
+      
+                                                                                             <font>
+                      <Font size="40.0" />
+                  </font>
+               <styleClass>
+                  <String fx:value="functionality-button" />
+                  <String fx:value="rounded" />
+               </styleClass>
+              </Button>
+              <Region maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="33.0" prefWidth="747.0" styleClass="margin" VBox.vgrow="ALWAYS" />
+              <Button fx:id="multiplayerButton" mnemonicParsing="false" onAction="#showUsernameScreenMulti" prefHeight="84.0" prefWidth="290.0" style="-fx-border-radius: 1000px;" text="Multiplayer">
+                  <font>
+                      <Font size="40.0" />
+                  </font>
+               <styleClass>
+                  <String fx:value="functionality-button" />
+                  <String fx:value="rounded" />
+               </styleClass>
+              </Button>
+              <Region maxHeight="-Infinity" minHeight="20" prefHeight="89.0" prefWidth="747.0" styleClass="margin" VBox.vgrow="ALWAYS" />
+          </VBox>
+         <VBox alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="688.0" prefWidth="951.0">
+            <children>
+               <Region maxHeight="178.0" minHeight="0.0" prefHeight="63.0" prefWidth="786.0" styleClass="margin" />
+               <ScrollPane fitToWidth="true" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="451.0" prefWidth="669.0" style="-fx-border-radius: 50px; -fx-background-radius: 55px;">
+                  <content>
+                     <GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="423.0" prefWidth="655.0" styleClass="grid-pane">
+                        <columnConstraints>
+                           <ColumnConstraints hgrow="SOMETIMES" maxWidth="253.0" minWidth="10.0" prefWidth="169.0" />
+                           <ColumnConstraints hgrow="SOMETIMES" maxWidth="402.0" minWidth="10.0" prefWidth="301.0" />
+                           <ColumnConstraints hgrow="SOMETIMES" maxWidth="190.0" minWidth="10.0" prefWidth="190.0" />
+                        </columnConstraints>
+                        <rowConstraints>
+                           <RowConstraints maxHeight="50.0" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
+                           <RowConstraints maxHeight="50.0" minHeight="0.0" prefHeight="6.0" vgrow="SOMETIMES" />
+                           <RowConstraints maxHeight="81.0" minHeight="10.0" prefHeight="32.0" vgrow="SOMETIMES" />
+                           <RowConstraints maxHeight="72.0" minHeight="10.0" prefHeight="34.0" vgrow="SOMETIMES" />
+                           <RowConstraints maxHeight="64.0" minHeight="10.0" prefHeight="37.0" vgrow="SOMETIMES" />
+                           <RowConstraints maxHeight="79.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+                           <RowConstraints maxHeight="70.0" minHeight="10.0" prefHeight="38.0" vgrow="SOMETIMES" />
+                           <RowConstraints maxHeight="62.0" minHeight="10.0" prefHeight="37.0" vgrow="SOMETIMES" />
+                           <RowConstraints maxHeight="57.0" minHeight="10.0" prefHeight="37.0" vgrow="SOMETIMES" />
+                           <RowConstraints maxHeight="49.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+                           <RowConstraints maxHeight="53.0" minHeight="10.0" prefHeight="38.0" vgrow="SOMETIMES" />
+                           <RowConstraints maxHeight="46.0" minHeight="10.0" prefHeight="31.0" vgrow="SOMETIMES" />
+                        </rowConstraints>
+                        <children>
+                           <Label alignment="CENTER" prefHeight="35.0" prefWidth="194.0" style="-fx-font-size: 30px; -fx-font-weight: bold;" text="Position" GridPane.halignment="CENTER" />
+                           <Label alignment="CENTER" prefHeight="35.0" prefWidth="194.0" style="-fx-font-size: 30px; -fx-font-weight: bold;" text="Player name" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
+                           <Label alignment="CENTER" prefHeight="35.0" prefWidth="194.0" style="-fx-font-size: 30px; -fx-font-weight: bold;" text="Score" GridPane.columnIndex="2" GridPane.halignment="CENTER" />
+                           <Line endX="671.2929077148438" endY="0.7928932309150696" startX="-100.0" strokeWidth="2.0" GridPane.rowIndex="1" />
+                           <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="35.0" prefWidth="304.0" style="-fx-font-size: 24px; -fx-background-color: gold;" text="1." GridPane.halignment="CENTER" GridPane.rowIndex="2" />
+                           <Label fx:id="playerLabel1" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="35.0" prefWidth="446.0" style="-fx-font-size: 24px; -fx-background-color: gold;" text="Player X" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+                              <GridPane.margin>
+                                 <Insets />
+                              </GridPane.margin>
+                           </Label>
+                           <Label fx:id="scoreLabel1" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="70.0" prefWidth="257.0" style="-fx-font-size: 24px; -fx-background-color: gold;" text="5000" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
+                           <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="35.0" prefWidth="274.0" style="-fx-font-size: 24px; -fx-background-color: silver;" text="2." GridPane.halignment="CENTER" GridPane.rowIndex="3" />
+                           <Label fx:id="playerLabel2" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="35.0" prefWidth="401.0" style="-fx-font-size: 24px; -fx-background-color: silver;" text="Player Y" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
+                           <Label fx:id="scoreLabel2" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="81.0" prefWidth="257.0" style="-fx-font-size: 24px; -fx-background-color: silver;" text="4970" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
+                           <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="37.0" prefWidth="304.0" style="-fx-font-size: 24px; -fx-background-color: CD7F32;" text="3." GridPane.halignment="CENTER" GridPane.rowIndex="4" />
+                           <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="37.0" prefWidth="421.0" style="-fx-font-size: 24px; -fx-background-color: CD7F32;" text="Player A" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
+                           <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="92.0" prefWidth="257.0" style="-fx-font-size: 24px; -fx-background-color: CD7F32;" text="4965" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
+                           <Label alignment="CENTER" prefHeight="46.0" prefWidth="164.0" style="-fx-font-size: 24px;" text="4." GridPane.halignment="CENTER" GridPane.rowIndex="5" />
+                           <Label alignment="CENTER" prefHeight="46.0" prefWidth="164.0" style="-fx-font-size: 24px;" text="5." GridPane.halignment="CENTER" GridPane.rowIndex="6" />
+                           <Label alignment="CENTER" prefHeight="46.0" prefWidth="164.0" style="-fx-font-size: 24px;" text="6." GridPane.halignment="CENTER" GridPane.rowIndex="7" />
+                           <Label alignment="CENTER" prefHeight="46.0" prefWidth="164.0" style="-fx-font-size: 24px;" text="7." GridPane.halignment="CENTER" GridPane.rowIndex="8" />
+                           <Label alignment="CENTER" prefHeight="46.0" prefWidth="164.0" style="-fx-font-size: 24px;" text="8." GridPane.halignment="CENTER" GridPane.rowIndex="9" />
+                           <Label alignment="CENTER" prefHeight="46.0" prefWidth="164.0" style="-fx-font-size: 24px;" text="9." GridPane.halignment="CENTER" GridPane.rowIndex="10" />
+                           <Label alignment="CENTER" prefHeight="46.0" prefWidth="164.0" style="-fx-font-size: 24px;" text="10." GridPane.halignment="CENTER" GridPane.rowIndex="11" />
+                           <Label alignment="CENTER" prefHeight="35.0" prefWidth="194.0" style="-fx-font-size: 24px;" text="Player B" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="5" />
+                           <Label alignment="CENTER" prefHeight="35.0" prefWidth="194.0" style="-fx-font-size: 24px;" text="Dwight" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="6" />
+                           <Label alignment="CENTER" prefHeight="35.0" prefWidth="194.0" style="-fx-font-size: 24px;" text="Jim" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="7" />
+                           <Label alignment="CENTER" prefHeight="35.0" prefWidth="194.0" style="-fx-font-size: 24px;" text="Oscar" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="8" />
+                           <Label alignment="CENTER" prefHeight="35.0" prefWidth="194.0" style="-fx-font-size: 24px;" text="Andy" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="9" />
+                           <Label alignment="CENTER" prefHeight="35.0" prefWidth="194.0" style="-fx-font-size: 24px;" text="Kevin" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="10" />
+                           <Label alignment="CENTER" prefHeight="35.0" prefWidth="194.0" style="-fx-font-size: 24px;" text="Toby" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="11" />
+                           <Label alignment="CENTER" prefHeight="35.0" prefWidth="194.0" style="-fx-font-size: 24px;" text="4950" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="5" />
+                           <Label alignment="CENTER" prefHeight="35.0" prefWidth="194.0" style="-fx-font-size: 24px;" text="4887" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="6" />
+                           <Label alignment="CENTER" prefHeight="35.0" prefWidth="194.0" style="-fx-font-size: 24px;" text="4886" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="7" />
+                           <Label alignment="CENTER" prefHeight="35.0" prefWidth="194.0" style="-fx-font-size: 24px;" text="4835" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="8" />
+                           <Label alignment="CENTER" prefHeight="35.0" prefWidth="194.0" style="-fx-font-size: 24px;" text="4720" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="9" />
+                           <Label alignment="CENTER" prefHeight="35.0" prefWidth="194.0" style="-fx-font-size: 24px;" text="4690" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="10" />
+                           <Label alignment="CENTER" prefHeight="35.0" prefWidth="194.0" style="-fx-font-size: 24px;" text="4500" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="11" />
+                        </children>
+                     </GridPane>
+                  </content>
+                  <styleClass>
+                     <String fx:value="border" />
+                     <String fx:value="no-padding" />
+                  </styleClass>
+               </ScrollPane>
+               <Region maxHeight="178.0" minHeight="0.0" prefHeight="30.0" prefWidth="841.0" styleClass="margin" />
+               <Button fx:id="refreshButton" alignment="CENTER" mnemonicParsing="false" onAction="#setPlayer" prefHeight="84.0" prefWidth="290.0" style="-fx-border-radius: 1000px;" text="Refresh" textAlignment="CENTER">
+                  <font>
+                     <Font size="40.0" />
+                  </font>
+                  <styleClass>
+                     <String fx:value="functionality-button" />
+                     <String fx:value="rounded" />
+                  </styleClass>
+               </Button>
+            </children>
+         </VBox>
+         <Region maxHeight="178.0" maxWidth="-Infinity" minHeight="0.0" minWidth="-Infinity" prefHeight="178.0" prefWidth="86.0" styleClass="margin" />
+      </children>
+   </HBox>
 
-
-    <VBox alignment="CENTER" maxWidth="747.0" prefHeight="893.0" prefWidth="747.0" stylesheets="@../css/main.css"
-          StackPane.alignment="CENTER">
-        <Text fx:id="titleText" strokeType="OUTSIDE" strokeWidth="0.0" text="Quizzzzzz!" textAlignment="CENTER"
-              wrappingWidth="526.13671875">
-            <font>
-                <Font size="96.0"/>
-            </font>
-        </Text>
-        <Region maxHeight="178.0" minHeight="0.0" prefHeight="28.0" prefWidth="747.0" styleClass="margin"/>
-
-        <Region maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" prefHeight="69.0" prefWidth="747.0"
-                styleClass="margin" VBox.vgrow="ALWAYS"/>
-        <Button fx:id="singleplayerButton" mnemonicParsing="false" onAction="#showUsernameScreenSingle"
-                prefHeight="84.0" prefWidth="290.0" style="-fx-border-radius: 1000px;" styleClass="mainButton, rounded"
-                text="Singleplayer">
-
-            <font>
-                <Font size="40.0"/>
-            </font>
-        </Button>
-        <Region maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="59.0"
-                prefWidth="747.0" styleClass="margin" VBox.vgrow="ALWAYS"/>
-        <Button fx:id="multiplayerButton" mnemonicParsing="false" onAction="#showUsernameScreenMulti" prefHeight="84.0"
-                prefWidth="290.0" style="-fx-border-radius: 1000px;" styleClass="mainButton, rounded"
-                text="Multiplayer">
-            <font>
-                <Font size="40.0"/>
-            </font>
-        </Button>
-        <Region maxHeight="-Infinity" minHeight="20" prefHeight="94.0" prefWidth="747.0" styleClass="margin"
-                VBox.vgrow="ALWAYS"/>
-        <TextField fx:id="inputServerURLField" prefHeight="25.0" prefWidth="416.0" promptText="Room URL"
-                   styleClass="rounded">
-            <VBox.margin>
-                <Insets left="150.0" right="150.0"/>
-            </VBox.margin>
-        </TextField>
-    </VBox>
-
-</StackPane>
+                  </StackPane>

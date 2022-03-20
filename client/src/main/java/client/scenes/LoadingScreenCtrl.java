@@ -24,6 +24,11 @@ public class LoadingScreenCtrl {
     @FXML
     private Label counter;
 
+    /**
+     * Creates a new screen with injections
+     * @param server ServerUtils class
+     * @param mainCtrl Main Controller
+     */
     @Inject
     public LoadingScreenCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
@@ -39,6 +44,11 @@ public class LoadingScreenCtrl {
         counter.setText("3");
     }
 
+    /**
+     * Starts the timer for starting the game
+     * Lasts for 3 seconds
+     * Displays seconds on the screen
+     */
     public void countdown() {
 
         TimerTask task = new TimerTask() {

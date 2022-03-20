@@ -29,6 +29,10 @@ public class Config {
 
     public static String defaultImagePath = "./server/src/main/resources/activity-bank-pictures/";
 
+    /**
+     * Returns a new random object
+     * @return a new java Random object
+     */
     @Bean
     public Random getRandom() {
         return new Random();

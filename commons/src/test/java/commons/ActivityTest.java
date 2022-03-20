@@ -11,6 +11,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ActivityTest {
 
+    /**
+     * Tests Constructor with all parameters
+     */
     @Test
     void constructorTestEmpty() {
         Activity activity = new Activity();
@@ -23,24 +26,36 @@ class ActivityTest {
         assertNotNull(activity);
     }
 
+    /**
+     * Tests constructor with no ID
+     */
     @Test
     void constructorTest2() {
         Activity activity = new Activity("image_a", "a", 10L, "a");
         assertNotNull(activity);
     }
 
+    /**
+     * Tests the toString method
+     */
     @Test
     void readabilityTest() {
         Activity activity = new Activity("image_a", "a", 1L, "a");
         assertEquals("Activity(id=null, image_path=image_a, title=a, consumption_in_wh=1, source=a)", activity.toString());
     }
 
+    /**
+     * tests if object equals itself
+     */
     @Test
     void equalsTest1() {
         Activity activity = new Activity("1L", "image_a", "a", 1L, "a");
         assertEquals(activity, activity);
     }
 
+    /**
+     * Tests if object equals identical object
+     */
     @Test
     void equalsTest2() {
         Activity activity = new Activity("1L", "image_a", "a", 1L, "a");
@@ -48,6 +63,9 @@ class ActivityTest {
         assertEquals(activity, activity2);
     }
 
+    /**
+     * Tests if object doesnt equal different object
+     */
     @Test
     void equalsTest3() {
         Activity activity = new Activity("1L", "image_a", "a", 1L, "a");
@@ -55,12 +73,18 @@ class ActivityTest {
         assertNotEquals(activity, activity2);
     }
 
+    /**
+     * Test for getId
+     */
     @Test
     void getIdTest() {
         Activity activity = new Activity("1L", "image_a", "a", 1L, "a");
         assertEquals("1L", activity.getId());
     }
 
+    /**
+     * Test for setId
+     */
     @Test
     void setIdTest() {
         Activity activity = new Activity("1L", "image_a", "a", 1L, "a");
@@ -68,12 +92,18 @@ class ActivityTest {
         assertEquals("2L", activity.getId());
     }
 
+    /**
+     * Test for getImagePath
+     */
     @Test
     void getImagePathTest() {
         Activity activity = new Activity("1L", "image_a", "a", 1L, "a");
         assertEquals("image_a", activity.getImage_path());
     }
 
+    /**
+     * Test for setImagePath
+     */
     @Test
     void setImagePathTest() {
         Activity activity = new Activity("1L", "image_a", "a", 1L, "a");
@@ -81,12 +111,18 @@ class ActivityTest {
         assertEquals("image_b", activity.getImage_path());
     }
 
+    /**
+     * Test for getTitle
+     */
     @Test
     void getTitleTest() {
         Activity activity = new Activity("1L", "image_a", "a", 1L, "a");
         assertEquals("a", activity.getTitle());
     }
 
+    /**
+     * Test for setTitle
+     */
     @Test
     void setTitleTest() {
         Activity activity = new Activity("1L", "image_a", "a", 1L, "a");
@@ -94,12 +130,18 @@ class ActivityTest {
         assertEquals("b", activity.getTitle());
     }
 
+    /**
+     * Test for getConsumption_in_wh
+     */
     @Test
     void getConsumption_in_whTest() {
         Activity activity = new Activity("1L", "image_a", "a", 1L, "a");
         assertEquals(1, activity.getConsumption_in_wh());
     }
 
+    /**
+     * Test for setConsumption_in_wh
+     */
     @Test
     void setConsumption_in_whTest() {
         Activity activity = new Activity("1L", "image_a", "a", 1L, "a");
@@ -107,12 +149,18 @@ class ActivityTest {
         assertEquals(2, activity.getConsumption_in_wh());
     }
 
+    /**
+     * Test for getSource
+     */
     @Test
     void getSourceTest() {
         Activity activity = new Activity("1L", "image_a", "a", 1L, "a");
         assertEquals("a", activity.getSource());
     }
 
+    /**
+     * Test for setSource
+     */
     @Test
     void setSourceTest() {
         Activity activity = new Activity("1L", "image_a", "a", 1L, "a");

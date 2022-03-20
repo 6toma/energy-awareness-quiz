@@ -34,10 +34,23 @@ public class MyFXML {
 
     private Injector injector;
 
+    /**
+     * MyFXML Constructor
+     * @param injector
+     */
     public MyFXML(Injector injector) {
         this.injector = injector;
     }
 
+    /**
+     * Used to load JavaFX screens
+     *
+     * @param c
+     * @param fxmlPath
+     * @param cssPath
+     * @param <T>
+     * @return Pair of object and parent
+     */
     public <T> Pair<T, Parent> load(Class<T> c, String fxmlPath, String cssPath) {
         try {
             URL fxmlUrl = MyFXML.class.getClassLoader().getResource(fxmlPath);

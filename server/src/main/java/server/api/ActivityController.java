@@ -21,6 +21,11 @@ public class ActivityController {
 
     private final ActivityRepository repo;
 
+    /**
+     * Creates new ActivityController object
+     * Sets repository to repo
+     * @param repo repository to use
+     */
     @Autowired
     public ActivityController(ActivityRepository repo) {
         this.repo = repo;
