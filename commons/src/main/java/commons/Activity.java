@@ -53,6 +53,9 @@ public class Activity {
 
     /**
      * Initializes the image
+     * This method exists because it's not efficient to send images with all requests
+     * Should be called manually in endpoints which should return the image.
+     * 
      * Uses image_path to find the image
      * Sets image to null if no image was found
      */
