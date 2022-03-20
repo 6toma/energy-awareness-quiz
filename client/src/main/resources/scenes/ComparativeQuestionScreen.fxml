@@ -34,6 +34,7 @@
                      <styleClass>
                         <String fx:value="border" />
                         <String fx:value="rounded" />
+                        <String fx:value="game-button" />
                      </styleClass>
                     </Button>
                     <Region maxHeight="20" minHeight="20" styleClass="margin" VBox.vgrow="ALWAYS" />
@@ -44,6 +45,7 @@
                      <styleClass>
                         <String fx:value="border" />
                         <String fx:value="rounded" />
+                        <String fx:value="game-button" />
                      </styleClass>
                     </Button>
                     <Region maxHeight="20" minHeight="20" prefHeight="20.0" prefWidth="697.0" styleClass="margin" />
@@ -54,6 +56,7 @@
                      <styleClass>
                         <String fx:value="border" />
                         <String fx:value="rounded" />
+                        <String fx:value="game-button" />
                      </styleClass>
                     </Button>
                </children>
@@ -69,7 +72,11 @@
     </VBox>
     <StackPane maxHeight="132.0" maxWidth="1.7976931348623157E308" prefHeight="132.0" styleClass="padding, margin" stylesheets="@../css/ComparativeQuestionScreen.css" StackPane.alignment="BOTTOM_CENTER">
       <children>
-           <Button fx:id="exit" onAction="#exit" styleClass="border, rounded" text="Leave" StackPane.alignment="BOTTOM_LEFT" />
+           <Button fx:id="exit" onAction="#exit" text="Leave" StackPane.alignment="BOTTOM_LEFT">
+            <styleClass>
+               <String fx:value="exit" />
+               <String fx:value="rounded" />
+            </styleClass></Button>
          <HBox alignment="BOTTOM_CENTER" maxWidth="-Infinity" prefWidth="600.0" StackPane.alignment="TOP_CENTER">
             <StackPane.margin>
                <Insets />
