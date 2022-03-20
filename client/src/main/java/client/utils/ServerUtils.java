@@ -54,7 +54,7 @@ public class ServerUtils {
             .target(serverURL).path("api/questions/comparative") // the URL path which we HTTP GET for comparative questions
             .request(APPLICATION_JSON) //
             .accept(APPLICATION_JSON) //
-            .get(new GenericType<ComparativeQuestion>() {});
+            .get(new GenericType<>() {});
     }
 
     /**
@@ -96,7 +96,7 @@ public class ServerUtils {
             numberOfTop = getAllPlayers().size();
         }
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(serverURL).path(("api/players/leaderboard/"+numberOfTop))
+                .target(serverURL).path("api/players/leaderboard/"+numberOfTop)
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<>() {
@@ -108,11 +108,11 @@ public class ServerUtils {
      * @return A list of all players
      */
     private List<Player> getAllPlayers(){
-            return ClientBuilder.newClient(new ClientConfig()) //
-                    .target(serverURL).path("api/players/")
-                    .request(APPLICATION_JSON) //
-                    .accept(APPLICATION_JSON) //
-                    .get(new GenericType<>() {
-                    });
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(serverURL).path("api/players/")
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<>() {
+                });
     }
 }
