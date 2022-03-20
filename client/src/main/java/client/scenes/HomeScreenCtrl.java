@@ -27,9 +27,7 @@ public class HomeScreenCtrl {
 
     public boolean isLightMode;
 
-    //0 - still on home screen
-    //1 - reached username screen by pressing SINGLEPLAYER
-    //2 - reached username screen by pressing MULTIPLAYER
+
     @Getter
     public int usernameOriginScreen;
 
@@ -49,6 +47,11 @@ public class HomeScreenCtrl {
     @FXML
     private Label scoreLabel1, scoreLabel2;
 
+    /**
+     * Creates a new screen with injections
+     * @param server ServerUtils class
+     * @param mainCtrl Main Controller
+     */
     @Inject
     public HomeScreenCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
@@ -57,10 +60,19 @@ public class HomeScreenCtrl {
         this.usernameOriginScreen = 0; //still on home screen
     }
 
+    /**
+     * Gets the value of isLightMode
+     * @return false if is in dark mode (??)
+     */
     public boolean getDarkMode() {
         return isLightMode;
     }
 
+    /**
+     * Sets the origin of the username selection screen
+     * @param usernameOriginScreen 1 if going to single player
+     *                             2 if going to multiplayer
+     */
     public void setUsernameOriginScreen(int usernameOriginScreen) {
         if (usernameOriginScreen == 0 ||
                 usernameOriginScreen == 1 ||
@@ -109,7 +121,7 @@ public class HomeScreenCtrl {
     @FXML
     public void showUsernameScreenSingle() {
 
-        mainCtrl.getServer().setServerURL(inputServerURLField.getText());
+        mainCtrl.getServer().setServerURL(mainCtrl.getServerURL());
         try {
             mainCtrl.newSinglePlayerGame();
         } catch (Exception e) {
@@ -118,12 +130,16 @@ public class HomeScreenCtrl {
         }
     }
 
+    /**
+     * Run when pressed multiplayer
+     * Sends you to the username selection screen
+     */
     @FXML
     public void showUsernameScreenMulti() {
 
         // Testing ServerUtils postPlayer functionality
-        System.out.println(inputServerURLField.getText());
-        server.setServerURL(inputServerURLField.getText());
+        System.out.println(mainCtrl.getServerURL());
+        server.setServerURL(mainCtrl.getServerURL());
         Player player = new Player("test", 7357);
         try {
             System.out.println(server.postPlayer(player));
@@ -135,6 +151,9 @@ public class HomeScreenCtrl {
         mainCtrl.showUsernameScreen();
     }
 
+    /**
+     * Shows the help screen
+     */
     @FXML
     public void showHelpScreen() {
         mainCtrl.showHelpScreen();

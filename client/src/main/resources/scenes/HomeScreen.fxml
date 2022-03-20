@@ -20,11 +20,14 @@
     <StackPane prefWidth="1313.0" styleClass="padding, margin" stylesheets="@../css/main.css">
         <Button fx:id="settings" mnemonicParsing="false" onAction="#goToSettings" text="Settings" StackPane.alignment="TOP_RIGHT">
          <styleClass>
-            <String fx:value="border" />
+            <String fx:value="settings" />
+            <String fx:value="rounded" />
+         </styleClass></Button>
+        <Button fx:id="back" onAction="#exitApp" stylesheets="@../css/main.css" text="Exit" StackPane.alignment="TOP_LEFT">
+         <styleClass>
             <String fx:value="exit" />
             <String fx:value="rounded" />
          </styleClass></Button>
-        <Button fx:id="back" onAction="#exitApp" styleClass="border, exit, rounded" stylesheets="@../css/main.css" text="Exit" StackPane.alignment="TOP_LEFT" />
     </StackPane>
    <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="666.0" prefWidth="2154.0">
       <children>
@@ -40,17 +43,25 @@
               <Region maxHeight="178.0" minHeight="0.0" prefHeight="40.0" prefWidth="747.0" styleClass="margin" />
       
                                                                                          <Region maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" prefHeight="55.0" prefWidth="747.0" styleClass="margin" VBox.vgrow="ALWAYS" />
-              <Button fx:id="singleplayerButton" mnemonicParsing="false" onAction="#showUsernameScreenSingle" prefHeight="84.0" prefWidth="290.0" style="-fx-border-radius: 1000px;" styleClass="mainButton, rounded" text="Singleplayer">
+              <Button fx:id="singleplayerButton" mnemonicParsing="false" onAction="#showUsernameScreenSingle" prefHeight="84.0" prefWidth="290.0" style="-fx-border-radius: 1000px;" text="Singleplayer">
       
                                                                                              <font>
                       <Font size="40.0" />
                   </font>
+               <styleClass>
+                  <String fx:value="functionality-button" />
+                  <String fx:value="rounded" />
+               </styleClass>
               </Button>
               <Region maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="33.0" prefWidth="747.0" styleClass="margin" VBox.vgrow="ALWAYS" />
-              <Button fx:id="multiplayerButton" mnemonicParsing="false" onAction="#showUsernameScreenMulti" prefHeight="84.0" prefWidth="290.0" style="-fx-border-radius: 1000px;" styleClass="mainButton, rounded" text="Multiplayer">
+              <Button fx:id="multiplayerButton" mnemonicParsing="false" onAction="#showUsernameScreenMulti" prefHeight="84.0" prefWidth="290.0" style="-fx-border-radius: 1000px;" text="Multiplayer">
                   <font>
                       <Font size="40.0" />
                   </font>
+               <styleClass>
+                  <String fx:value="functionality-button" />
+                  <String fx:value="rounded" />
+               </styleClass>
               </Button>
               <Region maxHeight="-Infinity" minHeight="20" prefHeight="89.0" prefWidth="747.0" styleClass="margin" VBox.vgrow="ALWAYS" />
           </VBox>
@@ -127,10 +138,14 @@
                   </styleClass>
                </ScrollPane>
                <Region maxHeight="178.0" minHeight="0.0" prefHeight="30.0" prefWidth="841.0" styleClass="margin" />
-               <Button fx:id="refreshButton" alignment="CENTER" mnemonicParsing="false" onAction="#setPlayer" prefHeight="84.0" prefWidth="290.0" style="-fx-border-radius: 1000px;" styleClass="mainButton, rounded" text="Refresh" textAlignment="CENTER">
+               <Button fx:id="refreshButton" alignment="CENTER" mnemonicParsing="false" onAction="#setPlayer" prefHeight="84.0" prefWidth="290.0" style="-fx-border-radius: 1000px;" text="Refresh" textAlignment="CENTER">
                   <font>
                      <Font size="40.0" />
                   </font>
+                  <styleClass>
+                     <String fx:value="functionality-button" />
+                     <String fx:value="rounded" />
+                  </styleClass>
                </Button>
             </children>
          </VBox>

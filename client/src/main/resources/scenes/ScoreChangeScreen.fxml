@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
 <?import java.net.URL?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.control.Button?>
 
 <StackPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.ScoreChangeScreenCtrl">
 
@@ -27,7 +28,11 @@
     </StackPane>
     <StackPane maxHeight="132.0" maxWidth="245.0" prefHeight="132.0" prefWidth="245.0" styleClass="padding, margin" stylesheets="@../css/ScoreChangeScreen.css" StackPane.alignment="BOTTOM_LEFT">
         <children>
-            <Button fx:id="leave" onAction="#exit" styleClass="exit, border, rounded" text="Leave" StackPane.alignment="BOTTOM_LEFT" />
+            <Button fx:id="leave" onAction="#exit" text="Leave" StackPane.alignment="BOTTOM_LEFT">
+            <styleClass>
+               <String fx:value="exit" />
+               <String fx:value="rounded" />
+            </styleClass></Button>
         </children>
     </StackPane>
     <stylesheets>
