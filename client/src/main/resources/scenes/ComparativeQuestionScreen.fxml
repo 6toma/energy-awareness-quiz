@@ -73,12 +73,6 @@
                     </Button>
                </children>
             </VBox>
-            <Region layoutX="10.0" layoutY="10.0" maxWidth="-Infinity" minWidth="100.0" prefWidth="100.0" styleClass="margin" />
-            <ImageView fitHeight="260.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../img.png" />
-               </image>
-            </ImageView>
          </children>
       </HBox>
     </VBox>
