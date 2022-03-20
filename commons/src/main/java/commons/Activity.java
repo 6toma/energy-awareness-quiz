@@ -52,17 +52,16 @@ public class Activity {
     }
 
     /**
-     * Initializes the image
-     * This method exists because it's not efficient to send images with all requests
-     * Should be called manually in endpoints which should return the image.
-     * 
-     * Uses image_path to find the image
-     * Sets image to null if no image was found
+     * Initializes the image parameter
+     * Gets file as input, converts that into a byte array which is sent over http
+     * Should be run manually in endpoints which should return activities with their images
+     *
+     * @param imageFile image file to use.
      */
-    public void initializeImage(){
+    public void initializeImage(File imageFile){
         try{
             // Reads the image from the file to a BufferedImage
-            BufferedImage img = ImageIO.read(new File("./server/src/main/resources/activity-bank-pictures/" + this.image_path));
+            BufferedImage img = ImageIO.read(imageFile);
             // Creates a new ByteArrayOutputStream
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             // Writes the image to the output stream. Sending the image gives an error (because it's inefficient and shouldn't be done)
