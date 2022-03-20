@@ -213,7 +213,6 @@ public class MainCtrl {
         checkDarkMode();
     }
 
-    public void showScoreChangeScreen(int pointsGained) {
     /**
      * method for showing the score change screen
      */
