@@ -25,10 +25,10 @@
     </StackPane>
    <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="666.0" prefWidth="2154.0">
       <children>
-         <Region maxHeight="178.0" maxWidth="-Infinity" minHeight="0.0" minWidth="-Infinity" prefHeight="178.0" prefWidth="191.0" styleClass="margin" />
+         <Region maxHeight="178.0" maxWidth="-Infinity" minHeight="0.0" minWidth="-Infinity" prefHeight="178.0" prefWidth="323.0" styleClass="margin" />
       
                                                                                  
-                                                                                     <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="638.0" prefWidth="926.0" stylesheets="@../css/main.css">
+                                                                                     <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="638.0" prefWidth="752.0" stylesheets="@../css/main.css">
               <Text fx:id="titleText" strokeType="OUTSIDE" strokeWidth="0.0" text="Quizzzzzz!" textAlignment="CENTER" wrappingWidth="526.13671875">
                   <font>
                       <Font size="96.0" />
