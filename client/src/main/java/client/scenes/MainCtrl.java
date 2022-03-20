@@ -280,45 +280,6 @@ public class MainCtrl {
         }
     }
 
-//    public void nextQuestionEstimation() {
-//        if (singlePlayerGame != null
-//                && singlePlayerGame.getQuestions().size() > 0
-//                && singlePlayerGame.getQuestionNumber() <= singlePlayerGame.getMaxQuestions()
-//                + estimationScreenCtrl.jokerAdditionalQuestion()) {
-//
-//            Question question = singlePlayerGame.getQuestions().get(singlePlayerGame.getQuestionNumber() - 1);
-//            // check the question type
-//            if (question instanceof EstimationQuestion) {
-//                showEstimationQuestionScreen();
-//                estimationScreenCtrl.setQuestion((EstimationQuestion) question);
-//            } // more question types to be added
-//
-//            // get next question from the server
-//            try {
-//                EstimationQuestion newQuestion = server.getEstmQuestion();
-//                // loop until new question is not already in the list
-//                while (!singlePlayerGame.addQuestion(newQuestion)) {
-//                    newQuestion = server.getEstmQuestion();
-//                }
-//            } catch (Exception e) {
-//                // TODO: error pop-up
-//                Alert alert = new Alert(Alert.AlertType.NONE);
-//                EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
-//                    public void handle(ActionEvent e) {
-//                        // set alert type
-//                        alert.setAlertType(Alert.AlertType.ERROR);
-//                        // set content text
-//                        alert.setContentText("connection failed");
-//                        // show the dialog
-//                        alert.show();
-//                    }
-//                };
-//            }
-//
-//        } else {
-//            endSinglePlayerGame();
-//        }
-//    }
 
     /**
      * Called to end the single player game
