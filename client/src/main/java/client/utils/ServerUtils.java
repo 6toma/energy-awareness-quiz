@@ -16,6 +16,7 @@
 package client.utils;
 
 import commons.ComparativeQuestion;
+import commons.EstimationQuestion;
 import commons.Player;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
@@ -38,18 +39,28 @@ public class ServerUtils {
 
     public ComparativeQuestion getCompQuestion() {
         return ClientBuilder.newClient(new ClientConfig()) //
-            .target(serverURL).path("api/questions/comparative") // the URL path which we HTTP GET for comparative questions
-            .request(APPLICATION_JSON) //
-            .accept(APPLICATION_JSON) //
-            .get(new GenericType<ComparativeQuestion>() {});
+                .target(serverURL).path("api/questions/comparative") // the URL path which we HTTP GET for comparative questions
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<ComparativeQuestion>() {
+                });
     }
 
-    public Player postPlayer(Player player){
+    public EstimationQuestion getEstmQuestion() {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(serverURL).path("api/questions/estimation")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(new GenericType<EstimationQuestion>() {
+                });
+    }
+
+    public Player postPlayer(Player player) {
         return ClientBuilder.newClient(new ClientConfig()) //
-            .target(serverURL).path("api/players/add-one") // the URL path where we HTTP POST for adding high scores
-            .request(APPLICATION_JSON) //
-            .accept(APPLICATION_JSON) //
-            .post(Entity.entity(player, APPLICATION_JSON), Player.class);
+                .target(serverURL).path("api/players/add-one") // the URL path where we HTTP POST for adding high scores
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .post(Entity.entity(player, APPLICATION_JSON), Player.class);
     }
 
 
@@ -64,7 +75,7 @@ public class ServerUtils {
      * @param serverURL
      */
     public void setServerURL(String serverURL) {
-        if(serverURL.length() > 0){
+        if (serverURL.length() > 0) {
             this.serverURL = serverURL;
         } else {
             this.serverURL = defaultURL;

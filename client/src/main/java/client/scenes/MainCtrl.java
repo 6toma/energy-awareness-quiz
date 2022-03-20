@@ -47,6 +47,9 @@ public class MainCtrl {
     private ScoreChangeScreenCtrl scoreChangeScreenCtrl;
     private Parent scoreChangeScreenParent;
 
+    private EstimationQuestionCtrl estimationScreenCtrl;
+    private Parent estimationQuestionParent;
+
     // single player variables
     private SinglePlayerGame singlePlayerGame;
     int singlePlayerGameQuestions = 5;
@@ -66,7 +69,8 @@ public class MainCtrl {
             Pair<UsernameScreenCtrl, Parent> usernameScreen,
             Pair<EndScreenCtrl, Parent> endScreen,
             Pair<HelpScreenCtrl, Parent> helpScreen,
-            Pair<ScoreChangeScreenCtrl, Parent> scoreChangeScreen
+            Pair<ScoreChangeScreenCtrl, Parent> scoreChangeScreen,
+            Pair<EstimationQuestionCtrl, Parent> estimationQuestion
     ) {
         this.primaryStage = primaryStage;
 
@@ -93,6 +97,9 @@ public class MainCtrl {
 
         this.scoreChangeScreenCtrl = scoreChangeScreen.getKey();
         this.scoreChangeScreenParent = scoreChangeScreen.getValue();
+
+        this.estimationScreenCtrl = estimationQuestion.getKey();
+        this.estimationQuestionParent = estimationQuestion.getValue();
 
         // TODO: uncomment to disable the fullscreen popup
         //primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
@@ -140,6 +147,12 @@ public class MainCtrl {
         comparativeQuestionScreenCtrl.countdown();
     }
 
+    public void showEstimationQuestionScreen() {
+        primaryStage.getScene().setRoot(estimationQuestionParent);
+        checkDarkMode();
+        estimationScreenCtrl.countdown();
+    }
+
     public void showEndScreen() {
         primaryStage.getScene().setRoot(endScreenParent);
         checkDarkMode();
@@ -155,7 +168,7 @@ public class MainCtrl {
         checkDarkMode();
     }
 
-    public void showScoreChangeScreen(int pointsGained){
+    public void showScoreChangeScreen(int pointsGained) {
         primaryStage.getScene().setRoot(scoreChangeScreenParent);
         checkDarkMode();
         showScore(pointsGained);
@@ -188,9 +201,11 @@ public class MainCtrl {
      */
     public void newSinglePlayerGame() {
         ComparativeQuestion question = server.getCompQuestion();
+        //EstimationQuestion estimationQuestion = server.getEstmQuestion();
 
         singlePlayerGame = new SinglePlayerGame(singlePlayerGameQuestions);
         singlePlayerGame.addQuestion(question);
+        //singlePlayerGame.addQuestion(estimationQuestion);
 
         setUsernameOriginScreen(1);
         showUsernameScreen();
@@ -198,13 +213,16 @@ public class MainCtrl {
 
     /**
      * Similar to newSinglePlayerGame(), but requires a username
+     *
      * @param username The username, used in the previous game
      */
     public void consecutiveSinglePlayerGame(String username) {
         ComparativeQuestion question = server.getCompQuestion();
+        //EstimationQuestion estimationQuestion = server.getEstmQuestion();
 
         singlePlayerGame = new SinglePlayerGame(singlePlayerGameQuestions, username);
         singlePlayerGame.addQuestion(question);
+        // singlePlayerGame.addQuestion(estimationQuestion);
 
         //skipping over the part where we ask for username
         showLoadingScreen();
@@ -215,14 +233,20 @@ public class MainCtrl {
      * <p>
      * Shows the end screen if next question isn't defined
      */
+    @SuppressWarnings("checkstyle:Indentation")
     public void nextQuestionScreen() {
-        if(singlePlayerGame != null
-            && singlePlayerGame.getQuestions().size() > 0
-            && singlePlayerGame.getQuestionNumber() <= singlePlayerGame.getMaxQuestions()
+        nextQuestionComparative();
+
+    }
+
+
+    public void nextQuestionComparative() {
+        if (singlePlayerGame != null
+                && singlePlayerGame.getQuestions().size() > 0
+                && singlePlayerGame.getQuestionNumber() <= singlePlayerGame.getMaxQuestions()
                 + comparativeQuestionScreenCtrl.jokerAdditionalQuestion()) {
 
             Question question = singlePlayerGame.getQuestions().get(singlePlayerGame.getQuestionNumber() - 1);
-
             // check the question type
             if (question instanceof ComparativeQuestion) {
                 showComparativeQuestionScreen();
@@ -256,6 +280,46 @@ public class MainCtrl {
         }
     }
 
+//    public void nextQuestionEstimation() {
+//        if (singlePlayerGame != null
+//                && singlePlayerGame.getQuestions().size() > 0
+//                && singlePlayerGame.getQuestionNumber() <= singlePlayerGame.getMaxQuestions()
+//                + estimationScreenCtrl.jokerAdditionalQuestion()) {
+//
+//            Question question = singlePlayerGame.getQuestions().get(singlePlayerGame.getQuestionNumber() - 1);
+//            // check the question type
+//            if (question instanceof EstimationQuestion) {
+//                showEstimationQuestionScreen();
+//                estimationScreenCtrl.setQuestion((EstimationQuestion) question);
+//            } // more question types to be added
+//
+//            // get next question from the server
+//            try {
+//                EstimationQuestion newQuestion = server.getEstmQuestion();
+//                // loop until new question is not already in the list
+//                while (!singlePlayerGame.addQuestion(newQuestion)) {
+//                    newQuestion = server.getEstmQuestion();
+//                }
+//            } catch (Exception e) {
+//                // TODO: error pop-up
+//                Alert alert = new Alert(Alert.AlertType.NONE);
+//                EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
+//                    public void handle(ActionEvent e) {
+//                        // set alert type
+//                        alert.setAlertType(Alert.AlertType.ERROR);
+//                        // set content text
+//                        alert.setContentText("connection failed");
+//                        // show the dialog
+//                        alert.show();
+//                    }
+//                };
+//            }
+//
+//        } else {
+//            endSinglePlayerGame();
+//        }
+//    }
+
     /**
      * Called to end the single player game
      * Shows the end screen and sends score to the server
@@ -268,8 +332,11 @@ public class MainCtrl {
         //reset Question screen to prepare it for a new game
         comparativeQuestionScreenCtrl.resetComparativeQuestionScreen();
 
+        //estimationScreenCtrl.resetEstimationQuestion();
+
+
         //store player's end score
-        try{
+        try {
             server.postPlayer(singlePlayerGame.getPlayer());
         } catch (Exception e) {
             e.printStackTrace();

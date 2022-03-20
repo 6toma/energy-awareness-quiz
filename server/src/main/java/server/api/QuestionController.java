@@ -2,6 +2,7 @@ package server.api;
 
 import commons.Activity;
 import commons.ComparativeQuestion;
+import commons.EstimationQuestion;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,4 +45,19 @@ public class QuestionController {
         ComparativeQuestion q = new ComparativeQuestion(activities, isMost);
         return ResponseEntity.ok(q);
     }
+
+    @GetMapping(path = {"/estimation", "/estimation/"})
+    public ResponseEntity<EstimationQuestion> getRandomEstimation() {
+        int limit = 1;
+
+        if (repo.count() <= limit) {
+            return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED).build();
+        }
+
+        List<Activity> activities = repo.getRandomActivities(limit).get();
+        EstimationQuestion q = new EstimationQuestion(activities);
+        return ResponseEntity.ok(q);
+
+    }
+
 }

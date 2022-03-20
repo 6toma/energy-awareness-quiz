@@ -5,10 +5,8 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Font?>
-<?import java.lang.*?>
 <StackPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
-           fx:controller="client.scenes.ComparativeQuestionScreenCtrl">
+           fx:controller="client.scenes.EstimationQuestionCtrl">
     <StackPane prefHeight="607.0" prefWidth="1506.0">
         <ProgressBar fx:id="progressBar" maxHeight="60.0" maxWidth="2000.0" prefHeight="60.0" prefWidth="829.0"
                      progress="0.0" StackPane.alignment="TOP_CENTER"/>
@@ -19,47 +17,16 @@
         <Label fx:id="questionLabel" alignment="CENTER" prefWidth="1191.0"
                style="-fx-font-size: 54; -fx-font-family: Futura PT Medium;" text="Question" wrapText="true"/>
         <Region maxHeight="20" minHeight="20" styleClass="margin" VBox.vgrow="ALWAYS"/>
+
         <HBox prefWidth="200.0">
             <children>
                 <Region minWidth="150.0" styleClass="margin"/>
-                <VBox alignment="TOP_CENTER" prefWidth="700.0">
-                    <children>
-                        <Button fx:id="answer1" mnemonicParsing="false" onAction="#answer1Clicked" styleClass="answer"
-                                text="Answer 1" wrapText="true">
-                            <font>
-                                <Font size="24.0"/>
-                            </font>
-                            <styleClass>
-                                <String fx:value="border"/>
-                                <String fx:value="rounded"/>
-                            </styleClass>
-                        </Button>
-                        <Region maxHeight="20" minHeight="20" styleClass="margin" VBox.vgrow="ALWAYS"/>
-                        <Button fx:id="answer2" mnemonicParsing="false" onAction="#answer2Clicked" styleClass="answer"
-                                text="Answer 2" wrapText="true">
-                            <font>
-                                <Font size="24.0"/>
-                            </font>
-                            <styleClass>
-                                <String fx:value="border"/>
-                                <String fx:value="rounded"/>
-                            </styleClass>
-                        </Button>
-                        <Region maxHeight="20" minHeight="20" prefHeight="20.0" prefWidth="697.0" styleClass="margin"/>
-                        <Button fx:id="answer3" onAction="#answer3Clicked" styleClass="answer" text="Answer 3"
-                                wrapText="true">
-                            <font>
-                                <Font size="24.0"/>
-                            </font>
-                            <styleClass>
-                                <String fx:value="border"/>
-                                <String fx:value="rounded"/>
-                            </styleClass>
-                        </Button>
-                    </children>
-                </VBox>
+
                 <Region layoutX="10.0" layoutY="10.0" maxWidth="-Infinity" minWidth="100.0" prefWidth="100.0"
                         styleClass="margin"/>
+                <TextField alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="355.0" promptText="Input username"
+                           styleClass="rounded"/>
+
                 <ImageView fitHeight="260.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true">
                     <image>
                         <Image url="@/img.png"/>
