@@ -21,7 +21,7 @@ class ActivityTest {
     @Test
     void readabilityTest() {
         Activity activity = new Activity("image_a", "a", 1L, "a");
-        assertEquals("Activity{id=null, image_path='image_a', title='a', consumption_in_wh=1, source='a'}", activity.toString());
+        assertEquals("Activity(id=null, image_path=image_a, title=a, consumption_in_wh=1, source=a)", activity.toString());
     }
 
     @Test
