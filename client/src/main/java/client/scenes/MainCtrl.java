@@ -16,9 +16,11 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Pair;
+import lombok.Getter;
 
 public class MainCtrl {
 
+    @Getter
     private final ServerUtils server;
 
     private Stage primaryStage;
@@ -48,8 +50,9 @@ public class MainCtrl {
     private Parent scoreChangeScreenParent;
 
     // single player variables
+    @Getter
     private SinglePlayerGame singlePlayerGame;
-    int singlePlayerGameQuestions = 5;
+    private int singlePlayerGameQuestions = 5;
 
     @Inject
     public MainCtrl(ServerUtils server) {
@@ -292,14 +295,6 @@ public class MainCtrl {
         int total = singlePlayerGame.getPlayer().getScore();
         int streak = singlePlayerGame.getStreak();
         scoreChangeScreenCtrl.setScoreLabels(gained, total, streak);
-    }
-
-    public SinglePlayerGame getSinglePlayerGame() {
-        return this.singlePlayerGame;
-    }
-
-    public ServerUtils getServer() {
-        return server;
     }
 
     public String getCurrentUsername() {

@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import lombok.Getter;
 
 import java.util.List;
 
@@ -29,6 +30,7 @@ public class HomeScreenCtrl {
     //0 - still on home screen
     //1 - reached username screen by pressing SINGLEPLAYER
     //2 - reached username screen by pressing MULTIPLAYER
+    @Getter
     public int usernameOriginScreen;
 
     // @FXML
@@ -68,10 +70,6 @@ public class HomeScreenCtrl {
 
     public boolean getDarkMode() {
         return isLightMode;
-    }
-
-    public int getUsernameOriginScreen() {
-        return usernameOriginScreen;
     }
 
     public void setUsernameOriginScreen(int usernameOriginScreen) {

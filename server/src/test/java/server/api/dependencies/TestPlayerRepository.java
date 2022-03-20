@@ -1,4 +1,4 @@
-package server.api;
+package server.api.dependencies;
 
 import commons.Player;
 import org.springframework.data.domain.Example;
@@ -185,5 +185,14 @@ public class TestPlayerRepository implements PlayerRepository {
     @Override
     public <S extends Player, R> R findBy(Example<S> example, Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
         return null;
+    }
+
+    @Override
+    public Optional<List<Player>> getTopPlayers(int limit) {
+        List<Player> result = new ArrayList<>();
+        for(int i = 0; i < limit; i++){
+            result.addAll(getTopPlayers(10).get());
+        }
+        return Optional.of(result);
     }
 }

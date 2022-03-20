@@ -1,3 +1,5 @@
+package client;
+
 import client.SinglePlayerGame;
 import commons.Player;
 import commons.Question;
@@ -16,6 +18,30 @@ public class SinglePlayerGameTest {
     public void setup(){
         List<Question> questions = new ArrayList<>();
         singlePlayerGame = new SinglePlayerGame(new Player("a"), questions);
+    }
+
+    @Test
+    public void TestEmptyConstructor() {
+        singlePlayerGame = new SinglePlayerGame();
+        assertNotNull(singlePlayerGame);
+    }
+
+    @Test
+    public void TestConstructorPlayer() {
+        singlePlayerGame = new SinglePlayerGame(new Player("a"));
+        assertNotNull(singlePlayerGame);
+    }
+
+    @Test
+    public void TestConstructorMaxQuestions() {
+        singlePlayerGame = new SinglePlayerGame(1);
+        assertNotNull(singlePlayerGame);
+    }
+
+    @Test
+    public void TestConstructorMaxQuestionsUserName() {
+        singlePlayerGame = new SinglePlayerGame(1, "username");
+        assertNotNull(singlePlayerGame);
     }
 
     @Test
