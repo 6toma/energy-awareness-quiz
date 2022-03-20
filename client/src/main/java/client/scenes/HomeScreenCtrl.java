@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import lombok.Getter;
 
 import java.util.List;
 
@@ -29,6 +30,7 @@ public class HomeScreenCtrl {
     //0 - still on home screen
     //1 - reached username screen by pressing SINGLEPLAYER
     //2 - reached username screen by pressing MULTIPLAYER
+    @Getter
     public int usernameOriginScreen;
 
     // @FXML
@@ -55,23 +57,8 @@ public class HomeScreenCtrl {
         this.usernameOriginScreen = 0; //still on home screen
     }
 
-    @FXML
-    void toggleDarkMode() {
-        isLightMode = !isLightMode;
-        if (!isLightMode)
-            darkMode.setText("Light Mode");
-        else {
-            darkMode.setText("Dark Mode");
-        }
-        mainCtrl.checkDarkMode();
-    }
-
     public boolean getDarkMode() {
         return isLightMode;
-    }
-
-    public int getUsernameOriginScreen() {
-        return usernameOriginScreen;
     }
 
     public void setUsernameOriginScreen(int usernameOriginScreen) {
@@ -79,6 +66,18 @@ public class HomeScreenCtrl {
                 usernameOriginScreen == 1 ||
                 usernameOriginScreen == 2)
             this.usernameOriginScreen = usernameOriginScreen;
+    }
+
+
+    /**
+     * This method transfers the user to the settings screen
+     * where he/she can switch to dark mode, read the help page,
+     * enter the room URL or go to admin panel
+     * @param event
+     */
+    @FXML
+    void goToSettings(ActionEvent event) {
+        mainCtrl.showSettingsScreen();
     }
 
     /**
@@ -98,6 +97,7 @@ public class HomeScreenCtrl {
         Integer randomScore = (int) Math.floor(Math.random() * 250) + 5000;
         scoreLabel1.setText(randomScore.toString());
     }
+
 
     /**
      * Tries to get a question from the server
