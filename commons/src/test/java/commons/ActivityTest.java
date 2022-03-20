@@ -5,13 +5,17 @@ import org.junit.jupiter.api.Test;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class ActivityTest {
+
+    @Test
+    void constructorTestEmpty() {
+        Activity activity = new Activity();
+        assertNotNull(activity);
+    }
 
     @Test
     void constructorTest1() {
