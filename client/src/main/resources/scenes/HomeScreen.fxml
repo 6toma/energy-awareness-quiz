@@ -17,19 +17,18 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
 <StackPane fx:id="parentContainer" prefHeight="907.0" prefWidth="1574.0" stylesheets="@../css/HomeScreen.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.HomeScreenCtrl">
     <StackPane prefWidth="1313.0" styleClass="padding, margin" stylesheets="@../css/main.css">
         <Button fx:id="darkMode" mnemonicParsing="false" onAction="#toggleDarkMode" styleClass="border, dark, rounded" text="Dark mode" StackPane.alignment="TOP_RIGHT" />
         <Button fx:id="back" onAction="#exitApp" styleClass="border, exit, rounded" stylesheets="@../css/main.css" text="Exit" StackPane.alignment="TOP_LEFT" />
         <Button mnemonicParsing="false" onAction="#showHelpScreen" styleClass="exit, rounded" text="Help" StackPane.alignment="BOTTOM_LEFT" />
     </StackPane>
-   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+   <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="666.0" prefWidth="2154.0">
       <children>
          <Region maxHeight="178.0" maxWidth="-Infinity" minHeight="0.0" minWidth="-Infinity" prefHeight="178.0" prefWidth="191.0" styleClass="margin" />
       
                                                                                  
-                                                                                     <VBox alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="907.0" prefWidth="926.0" stylesheets="@../css/main.css">
+                                                                                     <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="638.0" prefWidth="926.0" stylesheets="@../css/main.css">
               <Text fx:id="titleText" strokeType="OUTSIDE" strokeWidth="0.0" text="Quizzzzzz!" textAlignment="CENTER" wrappingWidth="526.13671875">
                   <font>
                       <Font size="96.0" />
@@ -53,12 +52,12 @@
               <Region maxHeight="-Infinity" minHeight="20" prefHeight="89.0" prefWidth="747.0" styleClass="margin" VBox.vgrow="ALWAYS" />
             <TextField fx:id="inputServerURLField" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="50.0" prefWidth="568.0" promptText="Room URL" styleClass="rounded" />
           </VBox>
-         <VBox alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="907.0" prefWidth="951.0">
+         <VBox alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="688.0" prefWidth="951.0">
             <children>
                <Region maxHeight="178.0" minHeight="0.0" prefHeight="63.0" prefWidth="786.0" styleClass="margin" />
                <ScrollPane fitToWidth="true" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="451.0" prefWidth="669.0" style="-fx-border-radius: 50px; -fx-background-radius: 55px;">
                   <content>
-                     <GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="423.0" prefWidth="655.0" styleClass="grid-pane" stylesheets="@../css/HomeLeaderboard.css">
+                     <GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="423.0" prefWidth="655.0" styleClass="grid-pane">
                         <columnConstraints>
                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="253.0" minWidth="10.0" prefWidth="169.0" />
                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="402.0" minWidth="10.0" prefWidth="301.0" />
