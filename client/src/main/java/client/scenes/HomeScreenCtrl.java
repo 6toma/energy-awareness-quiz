@@ -7,8 +7,11 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import lombok.Getter;
+
+import java.util.List;
 
 
 /**
@@ -39,6 +42,12 @@ public class HomeScreenCtrl {
 
     @FXML
     private TextField inputServerURLField;
+
+    @FXML
+    private Label playerLabel1, playerLabel2;
+
+    @FXML
+    private Label scoreLabel1, scoreLabel2;
 
     /**
      * Creates a new screen with injections
@@ -73,16 +82,6 @@ public class HomeScreenCtrl {
             this.usernameOriginScreen = usernameOriginScreen;
     }
 
-    /**
-     * This method exits the app
-     * @param event
-     */
-    @FXML
-    void exitApp(ActionEvent event) {
-        // to fully terminate the client process
-        Platform.exit();
-        System.exit(0);
-    }
 
     /**
      * This method transfers the user to the settings screen
@@ -94,17 +93,25 @@ public class HomeScreenCtrl {
     void goToSettings(ActionEvent event) {
         mainCtrl.showSettingsScreen();
     }
-    /*
+
+    /**
+     * Used to update leaderboard entries
+     * Method is meant to be used paired with
+     * a GET request from the server in order
+     * to get the current top 10 list
+     *
+     * current method body is a placeholder used
+     * to get a feel of the scope of the method
+     */
     @FXML
-    public void showWaitingRoom() {
-        mainCtrl.showWaitingRoom();
+    public void setPlayer() {
+        List<String> list = List.of("Matt", "Coolguy123", "Gamewinner_xX", "he who shall not be named", "bro");
+        int randomName = (int) Math.floor(Math.random() * list.size());
+        playerLabel1.setText(list.get(randomName));
+        Integer randomScore = (int) Math.floor(Math.random() * 250) + 5000;
+        scoreLabel1.setText(randomScore.toString());
     }
 
-    @FXML
-    public void showLoadingScreen() {
-        mainCtrl.showLoadingScreen();
-    }
-    */
 
     /**
      * Tries to get a question from the server
@@ -116,7 +123,7 @@ public class HomeScreenCtrl {
     @FXML
     public void showUsernameScreenSingle() {
 
-        mainCtrl.getServer().setServerURL(inputServerURLField.getText());
+        mainCtrl.getServer().setServerURL(mainCtrl.getServerURL());
         try {
             mainCtrl.newSinglePlayerGame();
         } catch (Exception e) {
@@ -133,8 +140,8 @@ public class HomeScreenCtrl {
     public void showUsernameScreenMulti() {
 
         // Testing ServerUtils postPlayer functionality
-        System.out.println(inputServerURLField.getText());
-        server.setServerURL(inputServerURLField.getText());
+        System.out.println(mainCtrl.getServerURL());
+        server.setServerURL(mainCtrl.getServerURL());
         Player player = new Player("test", 7357);
         try {
             System.out.println(server.postPlayer(player));
@@ -144,5 +151,17 @@ public class HomeScreenCtrl {
 
         mainCtrl.setUsernameOriginScreen(2);
         mainCtrl.showUsernameScreen();
+    }
+
+    @FXML
+    public void showHelpScreen() {
+        mainCtrl.showHelpScreen();
+    }
+
+    @FXML
+    void exitApp(ActionEvent event) {
+        // to fully terminate the client process
+        Platform.exit();
+        System.exit(0);
     }
 }

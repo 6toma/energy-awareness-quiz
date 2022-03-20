@@ -381,5 +381,9 @@ public class MainCtrl {
     public String getCurrentUsername() {
         return this.singlePlayerGame.getPlayer().getName();
     }
+
+    public String getServerURL() {
+        return this.settingsScreenCtrl.getServerURL();
+    }
 }
 
