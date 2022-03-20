@@ -38,4 +38,9 @@ public interface ActivityRepository extends JpaRepository<Activity, String> {
             nativeQuery=true,
             value="SELECT COUNT(DISTINCT CONSUMPTION_IN_WH) FROM Activity")
     int numberDistinctConsumptions();
+
+    @Query(
+            nativeQuery=true,
+            value="SELECT ID FROM (SELECT *, ROW_NUMBER() OVER (PARTITION BY CONSUMPTION_IN_WH) AS temp, FROM (SELECT * FROM Activity ORDER BY random() )) WHERE temp = 1 AND CONSUMPTION_IN_WH < ?3 AND CONSUMPTION_IN_WH > ?2 LIMIT ?1")
+    Optional<List<String>> activitiesWithSpecifiedConsumption(int size, int floor, int ceil);
 }

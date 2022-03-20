@@ -51,25 +51,33 @@ public class QuestionController {
     /**
      * Fetches a number of activities, such that they have distinct consumptions
      *
-     * @param size The number of activities with distinct consumption to be fetched from the database
+     * @param limit The number of activities with distinct consumption to be fetched from the database
      * @return A list of activities
      */
-    private List<Activity> activitiesWithSuitableConsumptions(int size) {
-        //base case
-        if (size == 1) {
-            List<Activity> result = new ArrayList<Activity>();
-            result.add(repo.getRandomActivity().get());
-            return result;
+    private List<Activity> activitiesWithSuitableConsumptions(int limit) {
+        double lowerBound = 0.5;
+        double upperBound = 1.5;
+        List<Activity> result = new ArrayList<>();
+        Optional<List<String>> ids;
+        /* pivot may not be included in final selection
+        it is used just to have an estimate of the consumption the activities should have */
+        Activity pivot = repo.getRandomActivity().get();
+
+
+        do {
+            ids = repo.activitiesWithSpecifiedConsumption(
+                    limit,
+                    (int) Math.floor( lowerBound * pivot.getConsumption_in_wh() ),
+                    (int) Math.ceil( upperBound * pivot.getConsumption_in_wh() )
+            );
+            lowerBound -= 0.05; //it is not a problem for lowerBound to go below 0
+            upperBound += 0.2;
+        } while (ids.isEmpty() || ids.get().size() < limit);
+
+        for(int i = 0; i < ids.get().size(); i++) {
+            result.add(repo.findById(ids.get().get(i)).get());
         }
 
-        List<Activity> result = activitiesWithSuitableConsumptions(size - 1);
-
-        //try to get an activity with a comparable consumption
-        Optional<Activity> addition = getSuitableActivity(result, 100);
-        //if unsuccessful - just get a random one
-        if(addition.isEmpty()) addition = getActivityDistinctConsumption(result);
-
-        result.add(addition.get());
         return result;
     }
 
