@@ -48,17 +48,6 @@ public class HomeScreenCtrl {
         this.usernameOriginScreen = 0; //still on home screen
     }
 
-    @FXML
-    void toggleDarkMode() {
-        isLightMode = !isLightMode;
-        if (!isLightMode)
-            darkMode.setText("Light Mode");
-        else {
-            darkMode.setText("Dark Mode");
-        }
-        mainCtrl.checkDarkMode();
-    }
-
     public boolean getDarkMode() {
         return isLightMode;
     }
@@ -70,6 +59,10 @@ public class HomeScreenCtrl {
             this.usernameOriginScreen = usernameOriginScreen;
     }
 
+    /**
+     * This method exits the app
+     * @param event
+     */
     @FXML
     void exitApp(ActionEvent event) {
         // to fully terminate the client process
@@ -77,6 +70,16 @@ public class HomeScreenCtrl {
         System.exit(0);
     }
 
+    /**
+     * This method transfers the user to the settings screen
+     * where he/she can switch to dark mode, read the help page,
+     * enter the room URL or go to admin panel
+     * @param event
+     */
+    @FXML
+    void goToSettings(ActionEvent event) {
+        mainCtrl.showSettingsScreen();
+    }
     /*
     @FXML
     public void showWaitingRoom() {
@@ -125,8 +128,4 @@ public class HomeScreenCtrl {
         mainCtrl.showUsernameScreen();
     }
 
-    @FXML
-    public void showHelpScreen() {
-        mainCtrl.showHelpScreen();
-    }
 }
