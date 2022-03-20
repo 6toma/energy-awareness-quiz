@@ -63,6 +63,10 @@ public class SettingsScreenCtrl {
         mainCtrl.showHomeScreen();
     }
 
+    /**
+     * Gets the server url from the input field
+     * @return String server url
+     */
     public String getServerURL() {
         return inputServerURLField.getText();
     }

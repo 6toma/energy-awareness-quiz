@@ -382,6 +382,10 @@ public class MainCtrl {
         return this.singlePlayerGame.getPlayer().getName();
     }
 
+    /**
+     * Gets the server url from the settings screen
+     * @return
+     */
     public String getServerURL() {
         return this.settingsScreenCtrl.getServerURL();
     }

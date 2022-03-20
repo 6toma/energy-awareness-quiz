@@ -27,9 +27,7 @@ public class HomeScreenCtrl {
 
     public boolean isLightMode;
 
-    //0 - still on home screen
-    //1 - reached username screen by pressing SINGLEPLAYER
-    //2 - reached username screen by pressing MULTIPLAYER
+
     @Getter
     public int usernameOriginScreen;
 
@@ -153,6 +151,9 @@ public class HomeScreenCtrl {
         mainCtrl.showUsernameScreen();
     }
 
+    /**
+     * Shows the help screen
+     */
     @FXML
     public void showHelpScreen() {
         mainCtrl.showHelpScreen();
