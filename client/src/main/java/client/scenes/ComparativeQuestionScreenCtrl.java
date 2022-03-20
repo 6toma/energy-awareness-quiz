@@ -367,10 +367,11 @@ public class ComparativeQuestionScreenCtrl {
         List<ImageView> images = List.of(image1, image2, image3);
         // This loops through every activity, gets the image and sets the image in the UI
         for(int i = 0; i < question.getActivities().size(); i++){
-            InputStream inputStream = new ByteArrayInputStream(question.getActivities().get(i).getImage());
-            System.out.println(i);
-            if(inputStream != null){
-                images.get(i).setImage(new Image(inputStream));
+            if(question.getActivities().get(i).getImage() != null){
+                InputStream inputStream = new ByteArrayInputStream(question.getActivities().get(i).getImage());
+                if(inputStream != null){
+                    images.get(i).setImage(new Image(inputStream));
+                }
             }
         }
         // It's dumb that we have to set the images to be the width of the vbox here
