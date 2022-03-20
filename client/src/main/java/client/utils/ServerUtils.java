@@ -21,6 +21,7 @@ import commons.Player;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
+import lombok.Getter;
 import org.glassfish.jersey.client.ClientConfig;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
@@ -31,7 +32,9 @@ import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
  */
 public class ServerUtils {
 
+    @Getter
     private static final String defaultURL = "http://localhost:8080/";
+    @Getter
     private String serverURL = defaultURL;
 
     public ServerUtils() {
@@ -61,11 +64,6 @@ public class ServerUtils {
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .post(Entity.entity(player, APPLICATION_JSON), Player.class);
-    }
-
-
-    public String getServerURL() {
-        return serverURL;
     }
 
     /**

@@ -15,11 +15,12 @@
     </StackPane>
     <VBox alignment="CENTER" StackPane.alignment="CENTER">
 
-        <Region layoutX="10.0" layoutY="120.0" maxHeight="20" minHeight="20" styleClass="margin"/>
-        <Label fx:id="questionLabel" alignment="CENTER" prefWidth="1191.0"
-               style="-fx-font-size: 54; -fx-font-family: Futura PT Medium;" text="Question" wrapText="true"/>
-        <Region maxHeight="20" minHeight="20" styleClass="margin" VBox.vgrow="ALWAYS"/>
-        <HBox prefWidth="200.0">
+
+                 <Region layoutX="10.0" layoutY="120.0" maxHeight="20" minHeight="20" styleClass="margin" />
+        <Label fx:id="questionLabel" alignment="CENTER" prefWidth="1191.0" style="-fx-font-size: 54; -fx-font-family: Futura PT Medium;" text="Question" wrapText="true" />
+        <Region maxHeight="20" minHeight="20" styleClass="margin" VBox.vgrow="ALWAYS" />
+      <HBox prefWidth="200.0">
+         
             <children>
                 <Region minWidth="150.0" styleClass="margin"/>
                 <VBox alignment="TOP_CENTER" prefWidth="700.0">

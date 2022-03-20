@@ -16,9 +16,11 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Pair;
+import lombok.Getter;
 
 public class MainCtrl {
 
+    @Getter
     private final ServerUtils server;
 
     private Stage primaryStage;
@@ -47,12 +49,18 @@ public class MainCtrl {
     private ScoreChangeScreenCtrl scoreChangeScreenCtrl;
     private Parent scoreChangeScreenParent;
 
+
     private EstimationQuestionCtrl estimationScreenCtrl;
     private Parent estimationQuestionParent;
 
+    private SettingsScreenCtrl settingsScreenCtrl;
+    private Parent settingsScreenParent;
+
+
     // single player variables
+    @Getter
     private SinglePlayerGame singlePlayerGame;
-    int singlePlayerGameQuestions = 5;
+    private int singlePlayerGameQuestions = 5;
 
     @Inject
     public MainCtrl(ServerUtils server) {
@@ -71,6 +79,7 @@ public class MainCtrl {
             Pair<HelpScreenCtrl, Parent> helpScreen,
             Pair<ScoreChangeScreenCtrl, Parent> scoreChangeScreen,
             Pair<EstimationQuestionCtrl, Parent> estimationQuestion
+            Pair<SettingsScreenCtrl, Parent> settingsScreen
     ) {
         this.primaryStage = primaryStage;
 
@@ -98,8 +107,12 @@ public class MainCtrl {
         this.scoreChangeScreenCtrl = scoreChangeScreen.getKey();
         this.scoreChangeScreenParent = scoreChangeScreen.getValue();
 
+
         this.estimationScreenCtrl = estimationQuestion.getKey();
         this.estimationQuestionParent = estimationQuestion.getValue();
+
+        this.settingsScreenCtrl = settingsScreen.getKey();
+        this.settingsScreenParent =  settingsScreen.getValue();
 
         // TODO: uncomment to disable the fullscreen popup
         //primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
@@ -120,27 +133,50 @@ public class MainCtrl {
         });
     }
 
+    /**
+     * method for showing the home screen
+     */
     public void showHomeScreen() {
         primaryStage.getScene().setRoot(homeScreenParent);
         checkDarkMode();
     }
 
+    /**
+     * method for showing the waiting room
+     */
     public void showWaitingRoom() {
         primaryStage.getScene().setRoot(waitingRoomParent);
         checkDarkMode();
     }
 
+    /**
+     * method for showing the settings screen
+     */
+    public void showSettingsScreen(){
+        primaryStage.getScene().setRoot(settingsScreenParent);
+        checkDarkMode();
+    }
+
+    /**
+     * method for showing the laoding screen
+     */
     public void showLoadingScreen() {
         primaryStage.getScene().setRoot(loadingScreenParent);
         checkDarkMode();
         loadingScreenCtrl.countdown();
     }
 
+    /**
+     * method for showing the username screen
+     */
     public void showUsernameScreen() {
         primaryStage.getScene().setRoot(usernameScreenParent);
         checkDarkMode();
     }
 
+    /**
+     * method for showing the comparative question
+     */
     public void showComparativeQuestionScreen() {
         primaryStage.getScene().setRoot(comparativeQuestionScreenParent);
         checkDarkMode();
@@ -153,35 +189,52 @@ public class MainCtrl {
         estimationScreenCtrl.countdown();
     }
 
+    /**
+     * method for showing the end screen
+     */
     public void showEndScreen() {
         primaryStage.getScene().setRoot(endScreenParent);
         checkDarkMode();
     }
 
+    /**
+     * method for showing the help screen
+     */
     public void showHelpScreen() {
         ((StackPane) primaryStage.getScene().getRoot()).getChildren().add(helpScreenParent);
         checkDarkMode();
     }
 
+    /**
+     * method for hiding the help screen
+     */
     public void hideHelpScreen() {
         ((StackPane) primaryStage.getScene().getRoot()).getChildren().remove(helpScreenParent);
         checkDarkMode();
     }
 
     public void showScoreChangeScreen(int pointsGained) {
+    /**
+     * method for showing the score change screen
+     */
+    public void showScoreChangeScreen(int pointsGained){
         primaryStage.getScene().setRoot(scoreChangeScreenParent);
         checkDarkMode();
         showScore(pointsGained);
         scoreChangeScreenCtrl.countdown();
     }
 
+    /**
+     * method for changing mode to opposite colour
+     */
     public void checkDarkMode() {
-        if (!homeScreenCtrl.getDarkMode()) {
+        if (settingsScreenCtrl.getDarkMode()) {
             primaryStage.getScene().getRoot().setBlendMode(BlendMode.DIFFERENCE);
         } else {
             primaryStage.getScene().getRoot().setBlendMode(null);
         }
     }
+
 
     public int getUsernameOriginScreen() {
         return homeScreenCtrl.getUsernameOriginScreen();
@@ -233,7 +286,6 @@ public class MainCtrl {
      * <p>
      * Shows the end screen if next question isn't defined
      */
-    @SuppressWarnings("checkstyle:Indentation")
     public void nextQuestionScreen() {
         nextQuestionComparative();
 
@@ -322,16 +374,12 @@ public class MainCtrl {
         scoreChangeScreenCtrl.setScoreLabels(gained, total, streak);
     }
 
-    public SinglePlayerGame getSinglePlayerGame() {
-        return this.singlePlayerGame;
-    }
-
-    public ServerUtils getServer() {
-        return server;
-    }
-
     public String getCurrentUsername() {
         return this.singlePlayerGame.getPlayer().getName();
+    }
+
+    public String getServerURL() {
+        return this.settingsScreenCtrl.getServerURL();
     }
 }
 

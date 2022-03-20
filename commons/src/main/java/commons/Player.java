@@ -1,24 +1,32 @@
 package commons;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.util.Objects;
 
 /**
  * Activity class that is stored in the database
  *
  * Stores an activities
  */
+@ToString @EqualsAndHashCode
 @Entity
 public class Player {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Getter @Setter
     private Long id;
 
+    @Getter
     private String name;
+    @Getter
     private Integer score;
 
 
@@ -31,57 +39,26 @@ public class Player {
 
     public Player(String name, Integer score) {
         this.name = name;
-        this.score = score;
+        this.score = score >= 0 ? score : 0; // check if score is smaller than 0
     }
+
     public Player(Long id, String name, Integer score) {
         this.id = id;
         this.name = name;
-        this.score = score;
-    }
-
-    @Override
-    public String toString() {
-        return "Player{" +
-                "ID=" + id + '\'' +
-                "name='" + name + '\'' +
-                ", score=" + score +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Player)) return false;
-        Player player = (Player) o;
-        return Objects.equals(name, player.name) && Objects.equals(score, player.score) && Objects.equals(id, player.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, score);
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+        this.score = score >= 0 ? score : 0; // check if score is smaller than 0
     }
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Integer getScore() {
-        return score;
+        if(name.length() > 0)
+            this.name = name;
+        else throw new IllegalArgumentException("Name cannot be empty");
     }
 
     public void setScore(Integer score) {
         this.score = score;
+        if(score >= 0)
+            this.score = score;
+        else throw new IllegalArgumentException("Score cannot be negative");
     }
 }
