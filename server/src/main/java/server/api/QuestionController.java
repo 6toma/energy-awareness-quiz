@@ -58,12 +58,16 @@ public class QuestionController {
         double lowerBound = 0.5;
         double upperBound = 1.5;
         List<Activity> result = new ArrayList<>();
+        // list of the IDs of the selection of activities returned by the SQL query
         Optional<List<String>> ids;
         /* pivot may not be included in final selection
         it is used just to have an estimate of the consumption the activities should have */
         Activity pivot = repo.getRandomActivity().get();
 
-
+        /* get a list of random activities with consumption in the interval
+        * (lowerBound * pivot.getConsumption_in_wh(), upperBound * pivot.getConsumption_in_wh())
+        *  if the list doesn't have the needed number of activities, increase the range
+        */
         do {
             ids = repo.activitiesWithSpecifiedConsumption(
                     limit,
@@ -73,6 +77,7 @@ public class QuestionController {
             lowerBound -= 0.05; //it is not a problem for lowerBound to go below 0
             upperBound += 0.2;
         } while (ids.isEmpty() || ids.get().size() < limit);
+        //the while condition ensures exactly the needed number of IDs are returned and not less
 
         for(int i = 0; i < ids.get().size(); i++) {
             result.add(repo.findById(ids.get().get(i)).get());
@@ -81,39 +86,4 @@ public class QuestionController {
         return result;
     }
 
-    private Optional<Activity> getSuitableActivity(List<Activity> list, int tries) {
-        Optional<Activity> addition;
-        boolean suitable;
-        int counter = 0;
-
-        do {
-            suitable = true;
-            addition = repo.getRandomActivity();
-            for (Activity activity : list) {
-                if (addition.get().getConsumption_in_wh() == activity.getConsumption_in_wh()
-                        || addition.get().getConsumption_in_wh() < list.get(0).getConsumption_in_wh() * 0.5
-                        || addition.get().getConsumption_in_wh() > list.get(0).getConsumption_in_wh() * 1.5) suitable = false;
-            }
-            counter++;
-        } while (!suitable && counter != tries);
-
-        //if the max number of tries is reached, but no suitable activity is found - return empty
-        if(counter == tries && !suitable) return Optional.empty();
-        return addition;
-    }
-
-    private Optional<Activity> getActivityDistinctConsumption(List<Activity> list) {
-        Optional<Activity> addition;
-        boolean distinct;
-
-        do {
-            distinct = true;
-            addition = repo.getRandomActivity();
-            for (Activity activity : list) {
-                if (addition.get().getConsumption_in_wh() == activity.getConsumption_in_wh()) distinct = false;
-            }
-        } while (!distinct);
-
-        return addition;
-    }
 }
