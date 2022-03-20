@@ -26,28 +26,28 @@
                 <Font size="60.0" />
             </font>
         </Text>
-        <Region maxHeight="120.0" minHeight="0.0" prefHeight="28.0" prefWidth="747.0" styleClass="margin" />
-        <TextField fx:id="inputServerURLField" prefHeight="25.0" prefWidth="416.0" promptText="Room URL" styleClass="rounded">
-            <VBox.margin>
-                <Insets left="150.0" right="150.0" />
-            </VBox.margin>
-        </TextField>
-      <Region maxWidth="-Infinity" minHeight="0.0" prefHeight="60.0" prefWidth="747.0" styleClass="margin" />
+        <Region maxHeight="120.0" minHeight="0.0" prefHeight="30.0" prefWidth="747.0" styleClass="margin" />
         <Button fx:id="darkMode" minWidth="251.0" mnemonicParsing="false" onAction="#toggleDarkMode" text="Dark Mode">
          <styleClass>
             <String fx:value="dark" />
             <String fx:value="rounded" />
          </styleClass>
       </Button>
-        <Region maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0" prefWidth="747.0" styleClass="margin" VBox.vgrow="ALWAYS" />
+        <Region maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" prefHeight="60.0" prefWidth="747.0" styleClass="margin" VBox.vgrow="ALWAYS" />
         <Button minWidth="251.0" mnemonicParsing="false" onAction="#showHelpScreen" styleClass="exit, rounded" text="Help" />
-                                               <Region maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" prefHeight="69.0" prefWidth="747.0" styleClass="margin" VBox.vgrow="ALWAYS" />
+                                               <Region maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" prefHeight="60.0" prefWidth="747.0" styleClass="margin" VBox.vgrow="ALWAYS" />
       <Button mnemonicParsing="false" text="Admin Panel">
          <styleClass>
             <String fx:value="exit" />
             <String fx:value="rounded" />
          </styleClass>
       </Button>
+      <Region maxWidth="-Infinity" minHeight="0.0" prefHeight="60.0" prefWidth="747.0" styleClass="margin" />
+        <TextField fx:id="inputServerURLField" prefHeight="25.0" prefWidth="416.0" promptText="Room URL" styleClass="rounded">
+            <VBox.margin>
+                <Insets left="150.0" right="150.0" />
+            </VBox.margin>
+        </TextField>
         <Region maxHeight="-Infinity" minHeight="20" prefHeight="94.0" prefWidth="747.0" styleClass="margin" VBox.vgrow="ALWAYS" />
     </VBox>
 
