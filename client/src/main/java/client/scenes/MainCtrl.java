@@ -78,7 +78,7 @@ public class MainCtrl {
             Pair<EndScreenCtrl, Parent> endScreen,
             Pair<HelpScreenCtrl, Parent> helpScreen,
             Pair<ScoreChangeScreenCtrl, Parent> scoreChangeScreen,
-            Pair<EstimationQuestionCtrl, Parent> estimationQuestion
+            Pair<EstimationQuestionCtrl, Parent> estimationQuestion,
             Pair<SettingsScreenCtrl, Parent> settingsScreen
     ) {
         this.primaryStage = primaryStage;
