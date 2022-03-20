@@ -26,7 +26,7 @@ public class QuestionController {
 
     /**
      * Generates a random question with 3 random activities
-     *
+     * Initializes the image for the activities
      * @return Comparative question with 3 activities
      */
     @GetMapping(path = {"/comparative", "/comparative/"})
@@ -42,6 +42,9 @@ public class QuestionController {
         int n = (int) random.nextLong();
         boolean isMost = n % 2 == 0; // gets a random true or false
         ComparativeQuestion q = new ComparativeQuestion(activities, isMost);
+        for(Activity a : q.getActivities()){
+            a.initializeImage();
+        }
         return ResponseEntity.ok(q);
     }
 }

@@ -35,6 +35,7 @@ public class ActivityController {
 
     /**
      * API GET ACTIVITY BY ID ENDPOINT
+     * Initializes the image for the activity
      * @param id id of activity to be returned
      * @return activity with specified id. Bad request response entity if invalid id
      */
@@ -43,7 +44,9 @@ public class ActivityController {
         if (!repo.existsById(id)) {
             return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.ok(repo.findById(id).get());
+        Activity activity = repo.findById(id).get();
+        activity.initializeImage();
+        return ResponseEntity.ok(activity);
     }
 
     /**
