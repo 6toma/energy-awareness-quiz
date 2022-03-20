@@ -23,9 +23,11 @@ public class MainCtrl {
     @Getter
     private final ServerUtils server;
 
+    @Getter
     private Stage primaryStage;
 
     private HomeScreenCtrl homeScreenCtrl;
+    @Getter
     private Parent homeScreenParent;
 
     private WaitingRoomCtrl waitingRoomCtrl;

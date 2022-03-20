@@ -6,9 +6,14 @@ import commons.Player;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import lombok.Getter;
 
 import java.util.List;
@@ -38,16 +43,13 @@ public class HomeScreenCtrl {
     // could be used to style the title
 
     @FXML
+    private GridPane leaderboard;
+
+    @FXML
     private Button darkMode;
 
     @FXML
     private TextField inputServerURLField;
-
-    @FXML
-    private Label playerLabel1, playerLabel2;
-
-    @FXML
-    private Label scoreLabel1, scoreLabel2;
 
     @Inject
     public HomeScreenCtrl(ServerUtils server, MainCtrl mainCtrl) {
@@ -81,20 +83,29 @@ public class HomeScreenCtrl {
 
     /**
      * Used to update leaderboard entries
-     * Method is meant to be used paired with
-     * a GET request from the server in order
-     * to get the current top 10 list
-     *
-     * current method body is a placeholder used
-     * to get a feel of the scope of the method
+     * Method adds 10 players with highest score to the leaderbaord grid
+     * If theres not enough players in the repository, it appends
+     * empty players with score 0 to the leaderboard
      */
     @FXML
     public void setPlayer() {
-        List<String> list = List.of("Matt", "Coolguy123", "Gamewinner_xX", "he who shall not be named", "bro");
-        int randomName = (int) Math.floor(Math.random() * list.size());
-        playerLabel1.setText(list.get(randomName));
-        Integer randomScore = (int) Math.floor(Math.random() * 250) + 5000;
-        scoreLabel1.setText(randomScore.toString());
+        List<Player> players = server.getLeaderPlayers(10);
+        if (players.size()<10){
+            for (int i=0; i<(10-players.size());i++){
+                players.add(new Player("",0));
+            }
+        }
+
+        for (int index=0; index< players.size(); index++){
+            Label name = new Label();
+            name.setText(players.get(index).getName());
+            name.setStyle("-fx-font-size: 24px;");
+            Label score = new Label();
+            score.setText(players.get(index).getScore().toString());
+            score.setStyle("-fx-font-size: 24px;");
+            this.leaderboard.add(name,1, index+1);
+            this.leaderboard.add(score,2, index+1);
+        }
     }
 
     /**
