@@ -4,6 +4,8 @@ import commons.Activity;
 import commons.ComparativeQuestion;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import server.api.dependencies.TestActivityRepository;
+import server.api.dependencies.TestRandom;
 
 import java.util.List;
 

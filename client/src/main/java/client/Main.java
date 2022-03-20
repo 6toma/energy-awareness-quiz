@@ -96,9 +96,15 @@ public class Main extends Application {
                 "css/ScoreChangeScreen.css"
         );
 
+        var settingsScreen = FXML.load(
+                SettingsScreenCtrl.class,
+                "scenes/SettingsScreen.fxml",
+                "css/SettingsScreen.css"
+        );
+
         // add more scenes the same way
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
-        mainCtrl.initialize(primaryStage, homeScreen, waitingRoom, loadingScreen, comparativeQuestionScreen, usernameScreen, endScreen, helpScreen, ScoreChangeScreen);
+        mainCtrl.initialize(primaryStage, homeScreen, waitingRoom, loadingScreen, comparativeQuestionScreen, usernameScreen, endScreen, helpScreen, ScoreChangeScreen, settingsScreen);
     }
 }

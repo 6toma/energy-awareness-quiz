@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import lombok.Getter;
 
 import java.util.List;
 
@@ -29,6 +30,7 @@ public class HomeScreenCtrl {
     //0 - still on home screen
     //1 - reached username screen by pressing SINGLEPLAYER
     //2 - reached username screen by pressing MULTIPLAYER
+    @Getter
     public int usernameOriginScreen;
 
     // @FXML
@@ -55,23 +57,8 @@ public class HomeScreenCtrl {
         this.usernameOriginScreen = 0; //still on home screen
     }
 
-    @FXML
-    void toggleDarkMode() {
-        isLightMode = !isLightMode;
-        if (!isLightMode)
-            darkMode.setText("Light Mode");
-        else {
-            darkMode.setText("Dark Mode");
-        }
-        mainCtrl.checkDarkMode();
-    }
-
     public boolean getDarkMode() {
         return isLightMode;
-    }
-
-    public int getUsernameOriginScreen() {
-        return usernameOriginScreen;
     }
 
     public void setUsernameOriginScreen(int usernameOriginScreen) {
@@ -82,21 +69,35 @@ public class HomeScreenCtrl {
     }
 
     /**
-     * Used to update leaderboard entries
-     * Method is meant to be used paired with
-     * a GET request from the server in order
-     * to get the current top 10 list
-     *
-     * current method body is a placeholder used
-     * to get a feel of the scope of the method
+     * This method exits the app
+     * @param event
      */
     @FXML
-    public void setPlayer() {
-        List<String> list = List.of("Matt", "Coolguy123", "Gamewinner_xX", "he who shall not be named", "bro");
-        int randomName = (int) Math.floor(Math.random() * list.size());
-        playerLabel1.setText(list.get(randomName));
-        Integer randomScore = (int) Math.floor(Math.random() * 250) + 5000;
-        scoreLabel1.setText(randomScore.toString());
+    void exitApp(ActionEvent event) {
+        // to fully terminate the client process
+        Platform.exit();
+        System.exit(0);
+    }
+
+    /**
+     * This method transfers the user to the settings screen
+     * where he/she can switch to dark mode, read the help page,
+     * enter the room URL or go to admin panel
+     * @param event
+     */
+    @FXML
+    void goToSettings(ActionEvent event) {
+        mainCtrl.showSettingsScreen();
+    }
+    /*
+    @FXML
+    public void showWaitingRoom() {
+        mainCtrl.showWaitingRoom();
+    }
+
+    @FXML
+    public void showLoadingScreen() {
+        mainCtrl.showLoadingScreen();
     }
 
     /**
