@@ -186,11 +186,6 @@ public class TestActivityRepository implements ActivityRepository {
     }
 
     @Override
-    public Optional<Activity> getRandomActivity() {
-        return Optional.of(findById(String.valueOf( random.nextLong() % activities.size() + 1 )).get());
-    }
-
-    @Override
     public int numberDistinctConsumptions() {
         List<Long> distinctConsumptions = activities
                                         .stream()
