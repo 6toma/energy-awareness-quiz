@@ -47,4 +47,8 @@ public class SettingsScreenCtrl {
     public void exit() {
         mainCtrl.showHomeScreen();
     }
+
+    public String getServerURL() {
+        return inputServerURLField.getText();
+    }
 }

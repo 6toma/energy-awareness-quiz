@@ -109,7 +109,7 @@ public class HomeScreenCtrl {
     @FXML
     public void showUsernameScreenSingle() {
 
-        mainCtrl.getServer().setServerURL(inputServerURLField.getText());
+        mainCtrl.getServer().setServerURL(mainCtrl.getServerURL());
         try {
             mainCtrl.newSinglePlayerGame();
         } catch (Exception e) {
@@ -122,8 +122,8 @@ public class HomeScreenCtrl {
     public void showUsernameScreenMulti() {
 
         // Testing ServerUtils postPlayer functionality
-        System.out.println(inputServerURLField.getText());
-        server.setServerURL(inputServerURLField.getText());
+        System.out.println(mainCtrl.getServerURL());
+        server.setServerURL(mainCtrl.getServerURL());
         Player player = new Player("test", 7357);
         try {
             System.out.println(server.postPlayer(player));
