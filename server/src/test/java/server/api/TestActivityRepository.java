@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.FluentQuery;
 import server.database.ActivityRepository;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -197,5 +198,45 @@ public class TestActivityRepository implements ActivityRepository {
                                         .distinct()
                                         .collect(Collectors.toList());
         return distinctConsumptions.size();
+    }
+
+    @Override
+    public Optional<List<String>> activitiesWithSpecifiedConsumption(int size, int floor, int ceil) {
+        // filter only the activities, whose consumption is within the specified range
+        List<Activity> activitiesSuitableConsumptions = activities
+                .stream()
+                .filter(activity -> activity.getConsumption_in_wh() > floor && activity.getConsumption_in_wh() < ceil)
+                .collect(Collectors.toList());
+
+        //shuffle a copy of the list with activities
+        List<Activity> copy = new ArrayList<>();
+        copy.addAll(activities);
+        Collections.shuffle(copy);
+
+        List<Activity> result = new ArrayList<>();
+        List<Long> consumptionsOfResult = new ArrayList<>();
+        List<String> idsOfResult = new ArrayList<>();
+        int i = 0; //index of the iterated over element in the list with all suitable activities
+        int j = 0; //index of the current last element in the result list
+
+        /* Iterate over the list with all suitable activities and
+         * add a certain activity to the list result unless
+         * there is already an activity of the same consumption.
+         *
+         * Add activities until result is full (max capacity - argument size) or
+         * all activities from copy have been iterated over.
+         */
+        while(j < size && i < copy.size()) {
+            if( consumptionsOfResult.contains(copy.get(i).getConsumption_in_wh()) ) {
+                result.add(copy.get(i));
+                consumptionsOfResult.add(copy.get(i).getConsumption_in_wh());
+                idsOfResult.add(copy.get(i).getId());
+                j++;
+            }
+            i++;
+        }
+
+        if(result.isEmpty()) return Optional.empty();
+        return Optional.of(idsOfResult);
     }
 }
