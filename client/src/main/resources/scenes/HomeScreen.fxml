@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.lang.String?>
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
@@ -70,65 +68,39 @@
                <Region maxHeight="178.0" minHeight="0.0" prefHeight="63.0" prefWidth="786.0" styleClass="margin" />
                <ScrollPane fitToWidth="true" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="451.0" prefWidth="669.0" style="-fx-border-radius: 50px; -fx-background-radius: 55px;">
                   <content>
-                     <GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="423.0" prefWidth="655.0" styleClass="grid-pane">
+                     <GridPane fx:id="leaderboard" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="423.0" prefWidth="655.0" styleClass="grid-pane">
                         <columnConstraints>
                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="253.0" minWidth="10.0" prefWidth="169.0" />
                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="402.0" minWidth="10.0" prefWidth="301.0" />
                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="190.0" minWidth="10.0" prefWidth="190.0" />
                         </columnConstraints>
                         <rowConstraints>
-                           <RowConstraints maxHeight="50.0" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
-                           <RowConstraints maxHeight="50.0" minHeight="0.0" prefHeight="6.0" vgrow="SOMETIMES" />
-                           <RowConstraints maxHeight="81.0" minHeight="10.0" prefHeight="32.0" vgrow="SOMETIMES" />
-                           <RowConstraints maxHeight="72.0" minHeight="10.0" prefHeight="34.0" vgrow="SOMETIMES" />
-                           <RowConstraints maxHeight="64.0" minHeight="10.0" prefHeight="37.0" vgrow="SOMETIMES" />
-                           <RowConstraints maxHeight="79.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
-                           <RowConstraints maxHeight="70.0" minHeight="10.0" prefHeight="38.0" vgrow="SOMETIMES" />
-                           <RowConstraints maxHeight="62.0" minHeight="10.0" prefHeight="37.0" vgrow="SOMETIMES" />
-                           <RowConstraints maxHeight="57.0" minHeight="10.0" prefHeight="37.0" vgrow="SOMETIMES" />
-                           <RowConstraints maxHeight="49.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
-                           <RowConstraints maxHeight="53.0" minHeight="10.0" prefHeight="38.0" vgrow="SOMETIMES" />
-                           <RowConstraints maxHeight="46.0" minHeight="10.0" prefHeight="31.0" vgrow="SOMETIMES" />
+                           <RowConstraints maxHeight="100.0" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
+                           <RowConstraints maxHeight="100.0" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
+                           <RowConstraints maxHeight="100.0" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
+                           <RowConstraints maxHeight="100.0" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
+                           <RowConstraints maxHeight="100.0" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
+                           <RowConstraints maxHeight="100.0" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
+                           <RowConstraints maxHeight="100.0" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
+                           <RowConstraints maxHeight="100.0" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
+                           <RowConstraints maxHeight="100.0" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
+                           <RowConstraints maxHeight="100.0" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
+                           <RowConstraints maxHeight="100.0" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
                         </rowConstraints>
                         <children>
                            <Label alignment="CENTER" prefHeight="35.0" prefWidth="194.0" style="-fx-font-size: 30px; -fx-font-weight: bold;" text="Position" GridPane.halignment="CENTER" />
                            <Label alignment="CENTER" prefHeight="35.0" prefWidth="194.0" style="-fx-font-size: 30px; -fx-font-weight: bold;" text="Player name" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
                            <Label alignment="CENTER" prefHeight="35.0" prefWidth="194.0" style="-fx-font-size: 30px; -fx-font-weight: bold;" text="Score" GridPane.columnIndex="2" GridPane.halignment="CENTER" />
-                           <Line endX="671.2929077148438" endY="0.7928932309150696" startX="-100.0" strokeWidth="2.0" GridPane.rowIndex="1" />
-                           <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="35.0" prefWidth="304.0" style="-fx-font-size: 24px; -fx-background-color: gold;" text="1." GridPane.halignment="CENTER" GridPane.rowIndex="2" />
-                           <Label fx:id="playerLabel1" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="35.0" prefWidth="446.0" style="-fx-font-size: 24px; -fx-background-color: gold;" text="Player X" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2">
-                              <GridPane.margin>
-                                 <Insets />
-                              </GridPane.margin>
-                           </Label>
-                           <Label fx:id="scoreLabel1" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="70.0" prefWidth="257.0" style="-fx-font-size: 24px; -fx-background-color: gold;" text="5000" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
-                           <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="35.0" prefWidth="274.0" style="-fx-font-size: 24px; -fx-background-color: silver;" text="2." GridPane.halignment="CENTER" GridPane.rowIndex="3" />
-                           <Label fx:id="playerLabel2" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="35.0" prefWidth="401.0" style="-fx-font-size: 24px; -fx-background-color: silver;" text="Player Y" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
-                           <Label fx:id="scoreLabel2" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="81.0" prefWidth="257.0" style="-fx-font-size: 24px; -fx-background-color: silver;" text="4970" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
-                           <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="37.0" prefWidth="304.0" style="-fx-font-size: 24px; -fx-background-color: CD7F32;" text="3." GridPane.halignment="CENTER" GridPane.rowIndex="4" />
-                           <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="37.0" prefWidth="421.0" style="-fx-font-size: 24px; -fx-background-color: CD7F32;" text="Player A" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
-                           <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="92.0" prefWidth="257.0" style="-fx-font-size: 24px; -fx-background-color: CD7F32;" text="4965" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
-                           <Label alignment="CENTER" prefHeight="46.0" prefWidth="164.0" style="-fx-font-size: 24px;" text="4." GridPane.halignment="CENTER" GridPane.rowIndex="5" />
-                           <Label alignment="CENTER" prefHeight="46.0" prefWidth="164.0" style="-fx-font-size: 24px;" text="5." GridPane.halignment="CENTER" GridPane.rowIndex="6" />
-                           <Label alignment="CENTER" prefHeight="46.0" prefWidth="164.0" style="-fx-font-size: 24px;" text="6." GridPane.halignment="CENTER" GridPane.rowIndex="7" />
-                           <Label alignment="CENTER" prefHeight="46.0" prefWidth="164.0" style="-fx-font-size: 24px;" text="7." GridPane.halignment="CENTER" GridPane.rowIndex="8" />
-                           <Label alignment="CENTER" prefHeight="46.0" prefWidth="164.0" style="-fx-font-size: 24px;" text="8." GridPane.halignment="CENTER" GridPane.rowIndex="9" />
-                           <Label alignment="CENTER" prefHeight="46.0" prefWidth="164.0" style="-fx-font-size: 24px;" text="9." GridPane.halignment="CENTER" GridPane.rowIndex="10" />
-                           <Label alignment="CENTER" prefHeight="46.0" prefWidth="164.0" style="-fx-font-size: 24px;" text="10." GridPane.halignment="CENTER" GridPane.rowIndex="11" />
-                           <Label alignment="CENTER" prefHeight="35.0" prefWidth="194.0" style="-fx-font-size: 24px;" text="Player B" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="5" />
-                           <Label alignment="CENTER" prefHeight="35.0" prefWidth="194.0" style="-fx-font-size: 24px;" text="Dwight" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="6" />
-                           <Label alignment="CENTER" prefHeight="35.0" prefWidth="194.0" style="-fx-font-size: 24px;" text="Jim" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="7" />
-                           <Label alignment="CENTER" prefHeight="35.0" prefWidth="194.0" style="-fx-font-size: 24px;" text="Oscar" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="8" />
-                           <Label alignment="CENTER" prefHeight="35.0" prefWidth="194.0" style="-fx-font-size: 24px;" text="Andy" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="9" />
-                           <Label alignment="CENTER" prefHeight="35.0" prefWidth="194.0" style="-fx-font-size: 24px;" text="Kevin" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="10" />
-                           <Label alignment="CENTER" prefHeight="35.0" prefWidth="194.0" style="-fx-font-size: 24px;" text="Toby" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="11" />
-                           <Label alignment="CENTER" prefHeight="35.0" prefWidth="194.0" style="-fx-font-size: 24px;" text="4950" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="5" />
-                           <Label alignment="CENTER" prefHeight="35.0" prefWidth="194.0" style="-fx-font-size: 24px;" text="4887" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="6" />
-                           <Label alignment="CENTER" prefHeight="35.0" prefWidth="194.0" style="-fx-font-size: 24px;" text="4886" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="7" />
-                           <Label alignment="CENTER" prefHeight="35.0" prefWidth="194.0" style="-fx-font-size: 24px;" text="4835" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="8" />
-                           <Label alignment="CENTER" prefHeight="35.0" prefWidth="194.0" style="-fx-font-size: 24px;" text="4720" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="9" />
-                           <Label alignment="CENTER" prefHeight="35.0" prefWidth="194.0" style="-fx-font-size: 24px;" text="4690" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="10" />
-                           <Label alignment="CENTER" prefHeight="35.0" prefWidth="194.0" style="-fx-font-size: 24px;" text="4500" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="11" />
+                           <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="35.0" prefWidth="304.0" style="-fx-font-size: 24px; -fx-background-color: gold;" text="1." GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                           <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="35.0" prefWidth="304.0" style="-fx-font-size: 24px; -fx-background-color: silver;" text="2." GridPane.halignment="CENTER" GridPane.rowIndex="2" />
+                           <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="35.0" prefWidth="304.0" style="-fx-font-size: 24px; -fx-background-color: CD7F32;" text="3." GridPane.halignment="CENTER" GridPane.rowIndex="3" />
+                           <Label alignment="CENTER" prefHeight="46.0" prefWidth="164.0" style="-fx-font-size: 24px;" text="4." GridPane.halignment="CENTER" GridPane.rowIndex="4" />
+                           <Label alignment="CENTER" prefHeight="46.0" prefWidth="164.0" style="-fx-font-size: 24px;" text="5." GridPane.halignment="CENTER" GridPane.rowIndex="5" />
+                           <Label alignment="CENTER" prefHeight="46.0" prefWidth="164.0" style="-fx-font-size: 24px;" text="6." GridPane.halignment="CENTER" GridPane.rowIndex="6" />
+                           <Label alignment="CENTER" prefHeight="46.0" prefWidth="164.0" style="-fx-font-size: 24px;" text="7." GridPane.halignment="CENTER" GridPane.rowIndex="7" />
+                           <Label alignment="CENTER" prefHeight="46.0" prefWidth="164.0" style="-fx-font-size: 24px;" text="8." GridPane.halignment="CENTER" GridPane.rowIndex="8" />
+                           <Label alignment="CENTER" prefHeight="46.0" prefWidth="164.0" style="-fx-font-size: 24px;" text="9." GridPane.halignment="CENTER" GridPane.rowIndex="9" />
+                           <Label alignment="CENTER" prefHeight="46.0" prefWidth="164.0" style="-fx-font-size: 24px;" text="10." GridPane.halignment="CENTER" GridPane.rowIndex="10" />
                         </children>
                      </GridPane>
                   </content>

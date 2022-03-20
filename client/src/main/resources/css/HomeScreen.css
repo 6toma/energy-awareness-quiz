@@ -1,1 +1,11 @@
 @import 'main.css';
+
+.grid-Label {
+    -fx-alignment: "CENTER";
+    /*-fx-max-height: "1.7976931348623157E308";*/
+    /*-fx-max-width: "1.7976931348623157E308";*/
+    -fx-pref-height: 50.0;
+    -fx-pref-width: 304.0;
+    -fx-font-size: 24px;
+    -fx-column-halignment: "CENTER";
+}

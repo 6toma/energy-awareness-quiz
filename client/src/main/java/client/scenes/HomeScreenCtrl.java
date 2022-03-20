@@ -6,16 +6,12 @@ import commons.Player;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import lombok.Getter;
-
 import java.util.List;
 
 
@@ -32,6 +28,8 @@ public class HomeScreenCtrl {
 
     public boolean isLightMode;
 
+    @FXML
+    private StackPane parentContainer;
 
     @Getter
     public int usernameOriginScreen;
@@ -112,15 +110,28 @@ public class HomeScreenCtrl {
         for (int index=0; index< players.size(); index++){
             Label name = new Label();
             name.setText(players.get(index).getName());
-            name.setStyle("-fx-font-size: 24px;");
             Label score = new Label();
             score.setText(players.get(index).getScore().toString());
-            score.setStyle("-fx-font-size: 24px;");
+            setGridNodeStyle(name, score,index);
             this.leaderboard.add(name,1, index+1);
             this.leaderboard.add(score,2, index+1);
         }
     }
 
+    private void setGridNodeStyle(Label name, Label score, int index){
+        if (index==0){
+            name.setStyle("-fx-background-color: gold;");
+            score.setStyle("-fx-background-color: gold;");
+        } else if (index==1){
+            name.setStyle("-fx-background-color: silver;");
+            score.setStyle("-fx-background-color: silver;");
+        } else if (index==2){
+            name.setStyle("-fx-background-color: CD7F32;");
+            score.setStyle("-fx-background-color: CD7F32;");
+        }
+        name.getStyleClass().add("grid-Label");
+        score.getStyleClass().add("grid-Label");
+    }
 
     /**
      * Tries to get a question from the server
