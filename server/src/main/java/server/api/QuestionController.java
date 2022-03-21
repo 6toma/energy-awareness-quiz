@@ -7,8 +7,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import server.Config;
 import server.database.ActivityRepository;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -33,7 +35,7 @@ public class QuestionController {
 
     /**
      * Generates a random question with 3 random activities
-     *
+     * Initializes the image for the activities
      * @return Comparative question with 3 activities
      */
     @GetMapping(path = {"/comparative", "/comparative/"})
@@ -50,6 +52,9 @@ public class QuestionController {
         int n = (int) random.nextLong();
         boolean isMost = n % 2 == 0; // gets a random true or false
         ComparativeQuestion q = new ComparativeQuestion(activities, isMost);
+        for(Activity a : q.getActivities()){
+            a.initializeImage(new File(Config.defaultImagePath + a.getImage_path()));
+        }
         return ResponseEntity.ok(q);
     }
 
