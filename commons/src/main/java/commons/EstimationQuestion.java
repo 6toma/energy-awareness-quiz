@@ -8,14 +8,27 @@ public class EstimationQuestion extends Question {
     private List<Activity> activities; // list of activities
     private Long correct_answer; // index of the correct answer in the list
 
+    /**
+     * Constructor
+     */
     public EstimationQuestion() {
     }
 
+    /**
+     * Constructor
+     *
+     * @param activities
+     */
     public EstimationQuestion(List<Activity> activities) {
         this.activities = activities;
         this.correct_answer = generateCorrectAnswer();
     }
 
+    /**
+     * Generates correct answer for the question
+     *
+     * @return
+     */
     private Long generateCorrectAnswer() {
         if (activities == null || activities.size() <= 0) {
             return -1L;
@@ -45,14 +58,29 @@ public class EstimationQuestion extends Question {
         return Objects.hash(activities, correct_answer);
     }
 
+    /**
+     * Getter for activities
+     *
+     * @return
+     */
     public List<Activity> getActivities() {
         return activities;
     }
 
+    /**
+     * Setter for activities
+     *
+     * @param activities
+     */
     public void setActivities(List<Activity> activities) {
         this.activities = activities;
     }
 
+    /**
+     * Getter for correct answer
+     *
+     * @return
+     */
     public Long getCorrect_answer() { // no setter for this because it's generated
         return correct_answer;
     }
