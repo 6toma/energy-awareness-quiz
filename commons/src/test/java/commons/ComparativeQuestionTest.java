@@ -12,6 +12,10 @@ class ComparativeQuestionTest {
 
     List<Activity> activities;
 
+    /**
+     * Run before each test
+     * Creates a list of activities
+     */
     @BeforeEach
     public void setup(){
         activities = List.of(
@@ -21,30 +25,45 @@ class ComparativeQuestionTest {
         );
     }
 
+    /**
+     * Tests if correct answer is generated with most == true
+     */
     @Test
     void generateCorrectAnswerMost() {
         ComparativeQuestion q = new ComparativeQuestion(activities, true);
         assertEquals(2, q.getCorrect_answer());
     }
 
+    /**
+     * Tests if correct answer is generated with most == false
+     */
     @Test
     void generateCorrectAnswerLeast() {
         ComparativeQuestion q = new ComparativeQuestion(activities, false);
         assertEquals(0, q.getCorrect_answer());
     }
 
+    /**
+     * Tests if correct answer is generated with activities being null
+     */
     @Test
     void generateCorrectAnswerNull() {
         ComparativeQuestion q = new ComparativeQuestion(null, true);
         assertEquals(-1, q.getCorrect_answer());
     }
 
+    /**
+     * Tests if correct answer is generated with activities being empty
+     */
     @Test
     void generateCorrectAnswerEmpty() {
         ComparativeQuestion q = new ComparativeQuestion(new ArrayList<Activity>(), true);
         assertEquals(-1, q.getCorrect_answer());
     }
 
+    /**
+     * Checks if correct answer is generated with 1 activity
+     */
     @Test
     void generateCorrectAnswerOne() {
         ComparativeQuestion q = new ComparativeQuestion(List.of(activities.get(0)), true);

@@ -12,6 +12,11 @@ public class SettingsScreenCtrl {
     private final MainCtrl mainCtrl;
     public boolean isLightMode;
 
+    /**
+     * Creates a new screen with injections
+     * @param server ServerUtils class
+     * @param mainCtrl Main Controller
+     */
     @Inject
     public SettingsScreenCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
@@ -35,19 +40,33 @@ public class SettingsScreenCtrl {
         mainCtrl.checkDarkMode();
     }
 
+    /**
+     * Shows the help screen
+     */
     @FXML
     public void showHelpScreen() {
         mainCtrl.showHelpScreen();
     }
 
+    /**
+     * Get dark mode
+     * @return true if is in light mode
+     */
     public boolean getDarkMode() {
         return isLightMode;
     }
 
+    /**
+     * exit back to home screen
+     */
     public void exit() {
         mainCtrl.showHomeScreen();
     }
 
+    /**
+     * Gets the server url from the input field
+     * @return String server url
+     */
     public String getServerURL() {
         return inputServerURLField.getText();
     }

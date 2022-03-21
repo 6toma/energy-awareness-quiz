@@ -19,16 +19,30 @@ public class PlayerController {
 
     private final PlayerRepository repo;
 
+    /**
+     * Creates new ActivityController object
+     * Sets repository to repo
+     * @param repo repository to use
+     */
     @Autowired
     public PlayerController(PlayerRepository repo) {
         this.repo = repo;
     }
 
+    /**
+     * API GET ALL PLAYERS ENDPOINT
+     * @return list of all players in the database
+     */
     @GetMapping(path = {"", "/"})
     public List<Player> getAll() {
         return repo.findAll();
     }
 
+    /**
+     * API GET PLAYER BY ID ENDPOINT
+     * @param id id of player to be returned
+     * @return player with specified id. Bad request response entity if invalid id
+     */
     @GetMapping("/{id}")
     public ResponseEntity<Player> getPlayerById(@PathVariable("id") Long id) {
         if (!repo.existsById(id)) {
@@ -37,6 +51,11 @@ public class PlayerController {
         return ResponseEntity.ok(repo.findById(id).get());
     }
 
+    /**
+     * adds a player to the database
+     * @param player
+     * @return the player which was added, bad request if invalid activity
+     */
     @PostMapping(path = {"/add-one", "/add-one/"})
     public ResponseEntity<Player> addPlayer(@RequestBody Player player) {
 
@@ -66,6 +85,12 @@ public class PlayerController {
         return false;
     }
 
+    /**
+     * API UPDATE player BY ID
+     * @param player Player object with updated parameters
+     * @param id ID of player to be updated
+     * @return updated player if successful, bad request if invalid update activity or invalid id
+     */
     @PostMapping("/update/{id}")
     public ResponseEntity<Player> updateActivity(@RequestBody Player player, @PathVariable("id") Long id) {
 
@@ -88,6 +113,13 @@ public class PlayerController {
         return ResponseEntity.ok(saved); // for some reason I can't return dbPlayer, it throws an internal server error
     }
 
+    /**
+     * API DELETE ENDPOINT
+     * @param id identifier of the player to be deleted
+     * @return  returns a response entity with either a
+     *          200 OK status when deletion is successful
+     *          or a bad request output when it fails
+     */
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Player> deleteActivity(@PathVariable("id") Long id) {
         if(!repo.existsById(id)) {
@@ -97,6 +129,4 @@ public class PlayerController {
         repo.deleteById(id);
         return ResponseEntity.ok(deleted);
     }
-
-
 }

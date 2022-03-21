@@ -63,12 +63,21 @@ public class ComparativeQuestionScreenCtrl {
     @FXML
     private Button joker3;
 
+    /**
+     * Creates a new screen with injections
+     * @param server ServerUtils class
+     * @param mainCtrl Main Controller
+     */
     @Inject
     public ComparativeQuestionScreenCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
     }
 
+    /**
+     * Runs when answer option 1 is clicked
+     * Sets color of the clicked button to yellow, others to default
+     */
     public void answer1Clicked(){
         checkAnswer(0);
         answer1.setStyle("-fx-background-color: #fccf03;");
@@ -76,6 +85,10 @@ public class ComparativeQuestionScreenCtrl {
         answer3.setStyle("");
     }
 
+    /**
+     * Runs when answer option 2 is clicked
+     * Sets color of the clicked button to yellow, others to default
+     */
     public void answer2Clicked(){
         checkAnswer(1);
         answer1.setStyle("");
@@ -83,6 +96,10 @@ public class ComparativeQuestionScreenCtrl {
         answer3.setStyle("");
     }
 
+    /**
+     * Runs when answer option 3 is clicked
+     * Sets color of the clicked button to yellow, others to default
+     */
     public void answer3Clicked(){
         checkAnswer(2);
         answer1.setStyle("");
@@ -90,6 +107,9 @@ public class ComparativeQuestionScreenCtrl {
         answer3.setStyle("-fx-background-color: #fccf03;");
     }
 
+    /**
+     * Exits the screen. Goes back to the home screen
+     */
     public void exit() {
         mainCtrl.showHomeScreen();
         stopTimers();
@@ -120,6 +140,11 @@ public class ComparativeQuestionScreenCtrl {
         questionTimer.play();
     }
 
+    /**
+     * Sets the question object for this screen
+     * Also sets the question label and answer button texts
+     * @param question
+     */
     public void setQuestion(ComparativeQuestion question) {
         this.question = question;
         setQuestionText();
@@ -144,7 +169,8 @@ public class ComparativeQuestionScreenCtrl {
         answer3.setText(this.question.getActivities().get(2).getTitle());
     }
 
-    public void checkAnswer(int answer){
+
+    private void checkAnswer(int answer){
         int correctAnswer = question.getCorrect_answer();
         if(answer != correctAnswer){
             timeWhenAnswered = -1;
@@ -267,6 +293,9 @@ public class ComparativeQuestionScreenCtrl {
         joker3Used = false;
     }
 
+    /**
+     * Resets the comparative question screen
+     */
     public void resetComparativeQuestionScreen() {
         reset();
         resetJokers();
@@ -274,6 +303,7 @@ public class ComparativeQuestionScreenCtrl {
     }
 
     /**
+     * Adds question to game maxquestions (because joker skips a question)
      * @return 1 - If the joker "Change current question" is used,
      *         in order to add a question to the maximum number of questions in the game;
      *         0 - Otherwise.

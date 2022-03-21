@@ -20,6 +20,7 @@ class PlayerControllerTest {
 
     /**
      * Sets up a new activity controller with testing dependencies
+     * Runs before every test
      */
     @BeforeEach
     public void setup(){
@@ -33,18 +34,27 @@ class PlayerControllerTest {
         );
     }
 
+    /**
+     * Test for getAll with many players
+     */
     @Test
     void getAllTest() {
         repo.players.addAll(players);
         assertEquals(players, ply.getAll());
     }
 
+    /**
+     * Test for getAll with no players
+     */
     @Test
     void getAllTestEmpty() {
         List<Player> expected = new ArrayList<>();
         assertEquals(expected, ply.getAll());
     }
 
+    /**
+     * Test for getPlayerById
+     */
     @Test
     void getPlayerByIdTest() {
         repo.players.addAll(players);
@@ -53,11 +63,17 @@ class PlayerControllerTest {
         assertEquals(players.get(2), ply.getPlayerById(3L).getBody());
     }
 
+    /**
+     * Test for getPLayerById with invalid id
+     */
     @Test
     void getPlayerByIdTestInvalid() {
         assertEquals(ResponseEntity.badRequest().build(), ply.getPlayerById(8L));
     }
 
+    /**
+     * Test for adding a player
+     */
     @Test
     void addPlayerTest() {
         Player added = new Player("a", 1);
@@ -66,11 +82,17 @@ class PlayerControllerTest {
         assertEquals(expected, repo.players.get(0));
     }
 
+    /**
+     * Test for adding a null player
+     */
     @Test
     void addPlayerTestNull() {
         assertEquals(ResponseEntity.badRequest().build(), ply.addPlayer(null));
     }
 
+    /**
+     * Test for updateing a player
+     */
     @Test
     void updatePlayerTest() {
         repo.players.addAll(players);
@@ -83,6 +105,9 @@ class PlayerControllerTest {
         assertEquals(expected, repo.players.get(1));
     }
 
+    /**
+     * Test for updating a player with invalid player
+     */
     @Test
     void updatePlayerTestNull() {
         repo.players.addAll(players);
@@ -90,6 +115,9 @@ class PlayerControllerTest {
         assertEquals(players, repo.players);
     }
 
+    /**
+     * Test for updating a player with invalid id
+     */
     @Test
     void updatePlayerTestInvalidId() {
         repo.players.addAll(players);
@@ -98,6 +126,9 @@ class PlayerControllerTest {
         assertEquals(players, repo.players);
     }
 
+    /**
+     * Test for updating a player name
+     */
     @Test
     void updatePlayerTestName() {
         repo.players.addAll(players);
@@ -109,6 +140,9 @@ class PlayerControllerTest {
         assertEquals(expected, repo.players.get(1));
     }
 
+    /**
+     * Test for updating a player score
+     */
     @Test
     void updatePlayerTestScore() {
         repo.players.addAll(players);
@@ -120,6 +154,9 @@ class PlayerControllerTest {
         assertEquals(expected, repo.players.get(1));
     }
 
+    /**
+     * Test for updating a player with empty player
+     */
     @Test
     void updatePlayerTestEmpty() {
         repo.players.addAll(players);
@@ -129,6 +166,9 @@ class PlayerControllerTest {
         assertEquals(players, repo.players);
     }
 
+    /**
+     * Test for deleting a player
+     */
     @Test
     void deletePlayerTest() {
         repo.players.addAll(players);
