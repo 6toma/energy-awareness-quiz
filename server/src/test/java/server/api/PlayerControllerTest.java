@@ -80,7 +80,7 @@ class PlayerControllerTest {
         repo.players.addAll(players);
         List<Player> orderedList = new ArrayList<>(players);
         Collections.sort(orderedList);
-        assertEquals(Optional.of(orderedList),repo.getTopPlayers(3));
+        assertEquals(orderedList,ply.getTopPlayers(3L).getBody());
     }
 
     /**
@@ -92,7 +92,7 @@ class PlayerControllerTest {
         repo.players.addAll(players);
         List<Player> orderedList = new ArrayList<>(players);
         Collections.sort(orderedList);
-        assertEquals(Optional.of(orderedList), repo.getTopPlayers(10));
+        assertEquals(orderedList, ply.getTopPlayers(10L).getBody());
     }
 
     /**
