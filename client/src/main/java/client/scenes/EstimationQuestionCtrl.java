@@ -55,19 +55,30 @@ public class EstimationQuestionCtrl {
     @FXML
     private Button joker3;
 
-
+    /**
+     * Constructor
+     *
+     * @param server
+     * @param mainCtrl
+     */
     @Inject
     public EstimationQuestionCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
     }
 
+    /**
+     * method for exit button
+     */
     public void exit() {
         mainCtrl.showHomeScreen();
         stopTimers();
         resetEstimationQuestion();
     }
 
+    /**
+     * countdown for timer
+     */
     public void countdown() {
 
         // set the progressbar value to be 0 at the beginning of the animation
@@ -87,16 +98,29 @@ public class EstimationQuestionCtrl {
         questionTimer.play();
     }
 
+    /**
+     * Creating a question to display
+     *
+     * @param question
+     */
     public void setQuestion(EstimationQuestion question) {
         this.question = question;
         setQuestionText();
     }
 
+    /**
+     * creating text for question
+     */
     private void setQuestionText() {
         String questionText = "How much energy does " + this.question.getActivities().get(0).getTitle() + " use?";
         this.questionLabel.setText(questionText);
     }
 
+    /**
+     * method for checking the answer
+     *
+     * @param answer
+     */
     public void checkAnswer(Long answer) {
         Long correctAnswer = question.getCorrect_answer();
         if (answer != correctAnswer) {
@@ -106,6 +130,9 @@ public class EstimationQuestionCtrl {
         }
     }
 
+    /**
+     * displaying an answer
+     */
     private void showAnswers() {
 
         // This creates another timeline for the timer for the answerTime. See countdown() for a more in-depth breakdown
@@ -131,6 +158,9 @@ public class EstimationQuestionCtrl {
 
     }
 
+    /**
+     * reseting the screen
+     */
     private void reset() {
         timeWhenAnswered = -1;
 
@@ -140,6 +170,9 @@ public class EstimationQuestionCtrl {
         joker3.setDisable(false);
     }
 
+    /**
+     * ending a question
+     */
     private void endQuestion() {
         reset();
         mainCtrl.showScoreChangeScreen(pointsGainedForQuestion);
@@ -170,6 +203,9 @@ public class EstimationQuestionCtrl {
         joker3.setDisable(true); // disable button
     }
 
+    /**
+     * reseting joker card
+     */
     public void resetJokers() {
         joker1.setDisable(false);
         joker2.setDisable(false);
@@ -179,11 +215,19 @@ public class EstimationQuestionCtrl {
         joker3Used = false;
     }
 
+    /**
+     * reseting estimation question
+     */
     public void resetEstimationQuestion() {
         reset();
         resetJokers();
     }
 
+    /**
+     * power up for skip question
+     *
+     * @return
+     */
     public int jokerAdditionalQuestion() {
         if (joker1Used) {
             return 1;
@@ -191,6 +235,7 @@ public class EstimationQuestionCtrl {
             return 0;
         }
     }
+
 
     private void stopTimers() {
         if (questionTimer != null) {

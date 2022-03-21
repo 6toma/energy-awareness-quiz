@@ -64,6 +64,7 @@ public class MainCtrl {
 
     /**
      * Creates a new MainCtrl with server
+     *
      * @param server ServerUtils object
      */
     @Inject
@@ -73,8 +74,9 @@ public class MainCtrl {
 
     /**
      * Initializes the screen
-     * @param primaryStage The primary stage to use (window)
-     * @param homeScreen Screens that main controller can communicate with
+     *
+     * @param primaryStage              The primary stage to use (window)
+     * @param homeScreen                Screens that main controller can communicate with
      * @param waitingRoom
      * @param loadingScreen
      * @param comparativeQuestionScreen
@@ -127,7 +129,7 @@ public class MainCtrl {
         this.estimationQuestionParent = estimationQuestion.getValue();
 
         this.settingsScreenCtrl = settingsScreen.getKey();
-        this.settingsScreenParent =  settingsScreen.getValue();
+        this.settingsScreenParent = settingsScreen.getValue();
 
         // TODO: uncomment to disable the fullscreen popup
         //primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
@@ -167,7 +169,7 @@ public class MainCtrl {
     /**
      * method for showing the settings screen
      */
-    public void showSettingsScreen(){
+    public void showSettingsScreen() {
         primaryStage.getScene().setRoot(settingsScreenParent);
         checkDarkMode();
     }
@@ -198,6 +200,9 @@ public class MainCtrl {
         comparativeQuestionScreenCtrl.countdown();
     }
 
+    /**
+     * method for showing the estimation question
+     */
     public void showEstimationQuestionScreen() {
         primaryStage.getScene().setRoot(estimationQuestionParent);
         checkDarkMode();
@@ -231,7 +236,7 @@ public class MainCtrl {
     /**
      * method for showing the score change screen
      */
-    public void showScoreChangeScreen(int pointsGained){
+    public void showScoreChangeScreen(int pointsGained) {
         primaryStage.getScene().setRoot(scoreChangeScreenParent);
         checkDarkMode();
         showScore(pointsGained);
@@ -251,6 +256,7 @@ public class MainCtrl {
 
     /**
      * Gets the origin of usernamescreen
+     *
      * @return 1 - Singleplayer, 2 - Multiplayer
      */
     public int getUsernameOriginScreen() {
@@ -259,6 +265,7 @@ public class MainCtrl {
 
     /**
      * Sets the usernameOriginScreen
+     *
      * @param usernameOriginScreen value
      *                             1 - Singleplayer
      *                             2 - Multiplayer
@@ -318,6 +325,9 @@ public class MainCtrl {
     }
 
 
+    /**
+     * Displaying comparative question as next question
+     */
     public void nextQuestionComparative() {
         if (singlePlayerGame != null
                 && singlePlayerGame.getQuestions().size() > 0
@@ -395,6 +405,7 @@ public class MainCtrl {
 
     /**
      * Shows the current score on the score change screen
+     *
      * @param pointsGained number of points to be added to the score
      */
     public void showScore(int pointsGained) {
@@ -406,6 +417,7 @@ public class MainCtrl {
 
     /**
      * Gets the username
+     *
      * @return Username of current player of singlePlayerGame
      */
     public String getCurrentUsername() {
@@ -414,6 +426,7 @@ public class MainCtrl {
 
     /**
      * Gets the server url from the settings screen
+     *
      * @return
      */
     public String getServerURL() {

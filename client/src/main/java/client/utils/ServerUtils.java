@@ -46,6 +46,7 @@ public class ServerUtils {
 
     /**
      * Gets a comparative question from the server
+     *
      * @return Comparative Question if successful
      */
     public ComparativeQuestion getCompQuestion() {
@@ -57,6 +58,11 @@ public class ServerUtils {
                 });
     }
 
+    /**
+     * Gets a estimation question from the server
+     *
+     * @return Estimation Question if successful
+     */
     public EstimationQuestion getEstmQuestion() {
         return ClientBuilder.newClient(new ClientConfig())
                 .target(serverURL).path("api/questions/estimation")
@@ -69,10 +75,11 @@ public class ServerUtils {
 
     /**
      * Posts a Player object to the server
+     *
      * @param player to be posted
      * @return The posted player if successful
      */
-    public Player postPlayer(Player player){
+    public Player postPlayer(Player player) {
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(serverURL).path("api/players/add-one") // the URL path where we HTTP POST for adding high scores
                 .request(APPLICATION_JSON) //
