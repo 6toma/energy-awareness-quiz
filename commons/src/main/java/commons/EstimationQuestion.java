@@ -24,7 +24,11 @@ public class EstimationQuestion extends Question {
         this.activity = activity;
     }
 
-    private Long getCorrectAnswer() {
+    /**
+     * getter for the correct answer
+     * @return
+     */
+    public Long getCorrectAnswer() {
         return activity.getConsumption_in_wh();
     }
 }

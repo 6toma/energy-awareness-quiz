@@ -93,12 +93,12 @@ public class EstimationQuestionCtrl {
     }
 
     private void setQuestionText() {
-        String questionText = "How much energy does " + this.question.getActivities().get(0).getTitle() + " use?";
+        String questionText = "How much energy does " + this.question.getActivity().getTitle() + " use?";
         this.questionLabel.setText(questionText);
     }
 
     public void checkAnswer(Long answer) {
-        Long correctAnswer = question.getCorrect_answer();
+        Long correctAnswer = question.getCorrectAnswer();
         if (answer != correctAnswer) {
             timeWhenAnswered = -1;
         } else {
@@ -124,7 +124,7 @@ public class EstimationQuestionCtrl {
         joker2.setDisable(true);
         joker3.setDisable(true);
 
-        Long correctAnswer = question.getCorrect_answer();
+        Long correctAnswer = question.getCorrectAnswer();
 
         pointsGainedForQuestion = mainCtrl.getSinglePlayerGame().addPoints(timeWhenAnswered, 1.0);
 
