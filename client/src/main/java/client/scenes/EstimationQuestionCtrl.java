@@ -11,7 +11,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.util.Duration;
+import lombok.Data;
 
+@Data
 public class EstimationQuestionCtrl {
 
     private final ServerUtils server;
@@ -55,19 +57,29 @@ public class EstimationQuestionCtrl {
     @FXML
     private Button joker3;
 
-
+    /**
+     * Constructor for the Estimation Question Controller
+     * @param server
+     * @param mainCtrl
+     */
     @Inject
     public EstimationQuestionCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
     }
 
+    /**
+     * Exiting the screen
+     */
     public void exit() {
         mainCtrl.showHomeScreen();
         stopTimers();
         resetEstimationQuestion();
     }
 
+    /**
+     * Function for creating a countdown and a progress bar
+     */
     public void countdown() {
 
         // set the progressbar value to be 0 at the beginning of the animation
@@ -87,16 +99,28 @@ public class EstimationQuestionCtrl {
         questionTimer.play();
     }
 
+    /**
+     *
+     * @param question
+     */
     public void setQuestion(EstimationQuestion question) {
         this.question = question;
         setQuestionText();
     }
 
+    /**
+     * Set textual representation of the question
+     */
     private void setQuestionText() {
         String questionText = "How much energy does " + this.question.getActivity().getTitle() + " use?";
         this.questionLabel.setText(questionText);
     }
 
+    /**
+     * Checking the correctness of the answer
+     * @param answer
+     */
+    //TODO
     public void checkAnswer(Long answer) {
         Long correctAnswer = question.getCorrectAnswer();
         if (answer != correctAnswer) {
@@ -170,6 +194,9 @@ public class EstimationQuestionCtrl {
         joker3.setDisable(true); // disable button
     }
 
+    /**
+     * Reset the states of the jokers. Enable all jokers and set their usage to false.
+     */
     public void resetJokers() {
         joker1.setDisable(false);
         joker2.setDisable(false);
@@ -179,11 +206,19 @@ public class EstimationQuestionCtrl {
         joker3Used = false;
     }
 
+    /**
+     * Reset an estimation question
+     */
     public void resetEstimationQuestion() {
         reset();
         resetJokers();
     }
 
+    /**
+     * Joker for additional question
+     * @return
+     */
+    // TODO
     public int jokerAdditionalQuestion() {
         if (joker1Used) {
             return 1;

@@ -57,7 +57,11 @@ public class ServerUtils {
                 });
     }
 
-    public EstimationQuestion getEstmQuestion() {
+    /**
+     * Gets a estimation question from the server
+     * @return
+     */
+    public EstimationQuestion getEstimationQuestion() {
         return ClientBuilder.newClient(new ClientConfig())
                 .target(serverURL).path("api/questions/estimation")
                 .request(APPLICATION_JSON)

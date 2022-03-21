@@ -198,6 +198,9 @@ public class MainCtrl {
         comparativeQuestionScreenCtrl.countdown();
     }
 
+    /**
+     * method for showing an Estimation question
+     */
     public void showEstimationQuestionScreen() {
         primaryStage.getScene().setRoot(estimationQuestionParent);
         checkDarkMode();
@@ -312,12 +315,15 @@ public class MainCtrl {
      * <p>
      * Shows the end screen if next question isn't defined
      */
+    // TODO: incorporate different types of questions
     public void nextQuestionScreen() {
         nextQuestionComparative();
 
     }
 
-
+    /**
+     * Shows a comparative question
+     */
     public void nextQuestionComparative() {
         if (singlePlayerGame != null
                 && singlePlayerGame.getQuestions().size() > 0
