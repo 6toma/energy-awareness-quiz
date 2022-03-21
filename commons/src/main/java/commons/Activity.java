@@ -85,7 +85,8 @@ public class Activity {
             ImageIO.write(img, "png", outputStream); // jpg would be faster but png supports transparency
             this.image = outputStream.toByteArray();
         } catch (IOException | IllegalArgumentException e){ // Catches an error if an image couldn't be found
-            System.err.println("Couldn't find picture");
+            e.printStackTrace();
+            System.err.println("Couldn't find picture at " + imageFile.toString());
             this.image = null;
         }
     }
