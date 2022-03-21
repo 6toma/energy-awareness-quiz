@@ -92,9 +92,9 @@ public class ServerUtils {
      * @return A list of top numberOfTop players
      */
     public List<Player> getLeaderPlayers(int numberOfTop){
-        if (getAllPlayers().size()<numberOfTop){
+        /*if (getAllPlayers().size()<numberOfTop){
             numberOfTop = getAllPlayers().size();
-        }
+        }*/
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(serverURL).path("api/players/leaderboard/"+numberOfTop)
                 .request(APPLICATION_JSON) //

@@ -61,9 +61,6 @@ public class PlayerController {
      */
     @GetMapping("/leaderboard/{number}")
     public ResponseEntity<List<Player>> getTopPlayers(@PathVariable("number") Long numberOfPlayers) {
-        if (repo.count()<numberOfPlayers) { //count() returns a Long
-            return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED).build();
-        }
         return ResponseEntity.ok(repo.getTopPlayers(numberOfPlayers.intValue()).get());
     }
 

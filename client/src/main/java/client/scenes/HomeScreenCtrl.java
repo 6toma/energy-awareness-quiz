@@ -101,18 +101,22 @@ public class HomeScreenCtrl {
     @FXML
     public void setPlayer() {
         List<Player> players = server.getLeaderPlayers(10);
-        if (players.size()<10){
+        /*if (players.size()<10){
             for (int i=0; i<(10-players.size());i++){
                 players.add(new Player("Empty",0));
             }
+        }*/
+        int childrenSize = this.leaderboard.getChildren().size();
+        if(childrenSize > 13){
+            this.leaderboard.getChildren().remove(13,childrenSize);
         }
-
         for (int index=0; index< players.size(); index++){
             Label name = new Label();
             name.setText(players.get(index).getName());
             Label score = new Label();
             score.setText(players.get(index).getScore().toString());
             setGridNodeStyle(name, score,index);
+
             this.leaderboard.add(name,1, index+1);
             this.leaderboard.add(score,2, index+1);
         }
