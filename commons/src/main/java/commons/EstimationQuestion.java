@@ -1,7 +1,5 @@
 package commons;
 
-import java.util.List;
-
 import lombok.*;
 
 @Data
@@ -10,8 +8,7 @@ import lombok.*;
  * amount of energy
  */
 public class EstimationQuestion extends Question {
-    private List<Activity> activities; // list of activities
-    private Long correct_answer; // index of the correct answer in the list
+    private Activity activity; // activity
 
     /**
      * no args constructor
@@ -21,18 +18,13 @@ public class EstimationQuestion extends Question {
 
     /**
      * constructor with the activities
-     * @param activities list of 3 activities to chose from
+     * @param activity to add to question
      */
-    public EstimationQuestion(List<Activity> activities) {
-        this.activities = activities;
-        this.correct_answer = generateCorrectAnswer();
+    public EstimationQuestion(Activity activity) {
+        this.activity = activity;
     }
 
-    private Long generateCorrectAnswer() {
-        if (activities == null || activities.size() <= 0) {
-            return -1L;
-        }
-        Activity current = activities.get(0);
-        return current.getConsumption_in_wh();
+    private Long getCorrectAnswer() {
+        return activity.getConsumption_in_wh();
     }
 }

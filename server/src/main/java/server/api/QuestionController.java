@@ -55,6 +55,10 @@ public class QuestionController {
         return ResponseEntity.ok(q);
     }
 
+    /**
+     * endpoint for getting an activity for a Estimation question
+     * @return
+     */
     @GetMapping(path = {"/estimation", "/estimation/"})
     public ResponseEntity<EstimationQuestion> getRandomEstimation() {
         int limit = 1;
@@ -63,8 +67,8 @@ public class QuestionController {
             return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED).build();
         }
 
-        List<Activity> activities = repo.getRandomActivities(limit).get();
-        EstimationQuestion q = new EstimationQuestion(activities);
+        var activity = repo.getRandomActivities(limit).get().get(0);
+        EstimationQuestion q = new EstimationQuestion(activity);
         return ResponseEntity.ok(q);
     }
 
