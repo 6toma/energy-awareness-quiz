@@ -1,4 +1,4 @@
-package server.api;
+package server.api.dependencies;
 
 import java.util.Random;
 

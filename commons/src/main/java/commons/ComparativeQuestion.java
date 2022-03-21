@@ -1,7 +1,8 @@
 package commons;
 
+import lombok.Data;
+
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Class for storing Comparative questions in the format:
@@ -10,21 +11,31 @@ import java.util.Objects;
  *          Activity 2
  *          Activity 3
  */
+@Data
 public class ComparativeQuestion extends Question{
 
     private boolean isMost; // true if the question asks for most, false if least energy
     private List<Activity> activities; // list of activities
     private int correct_answer; // index of the correct answer in the list
 
+    /**
+     * Empty constructor
+     * Used by Jackson to create object from JSON
+     */
     public ComparativeQuestion(){} // needed to be able to build object from json
 
+    /**
+     * Constructor which specifies a list of activities and if question isMost
+     * @param activities List of activities (usually 3)
+     * @param isMost If question asks for the most energy consumption
+     */
     public ComparativeQuestion(List<Activity> activities, boolean isMost){
         this.isMost = isMost;
         this.activities = activities;
         this.correct_answer = generateCorrectAnswer();
     }
 
-    public int generateCorrectAnswer() {
+    private int generateCorrectAnswer() {
         if(activities == null || activities.size() <= 0){
             return -1;
         }
@@ -45,47 +56,5 @@ public class ComparativeQuestion extends Question{
         } else {
             return min;
         }
-    }
-
-    @Override
-    public String toString() {
-        return "ComparativeQuestion{" +
-            "isMost=" + isMost +
-            ", activities=" + activities +
-            ", correct_answer=" + correct_answer +
-            '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ComparativeQuestion that = (ComparativeQuestion) o;
-        return isMost == that.isMost && correct_answer == that.correct_answer && Objects.equals(activities, that.activities);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(isMost, activities, correct_answer);
-    }
-
-    public boolean isMost() {
-        return isMost;
-    }
-
-    public void setMost(boolean most) {
-        isMost = most;
-    }
-
-    public List<Activity> getActivities() {
-        return activities;
-    }
-
-    public void setActivities(List<Activity> activities) {
-        this.activities = activities;
-    }
-
-    public int getCorrect_answer() { // no setter for this because it's generated
-        return correct_answer;
     }
 }

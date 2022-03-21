@@ -33,6 +33,13 @@ public class Main extends Application {
     private static final Injector INJECTOR = createInjector(new MyModule()); // dependency injection stuff
     private static final MyFXML FXML = new MyFXML(INJECTOR);
 
+    /**
+     * Java main function. Runs on launch
+     *
+     * @param args
+     * @throws URISyntaxException
+     * @throws IOException
+     */
     public static void main(String[] args) throws URISyntaxException, IOException {
         launch(); //runs start()
     }
@@ -90,10 +97,21 @@ public class Main extends Application {
                 "scenes/HelpScreen.fxml",
                 "css/HelpScreen.css"
         );
+        var ScoreChangeScreen = FXML.load(
+                ScoreChangeScreenCtrl.class,
+                "scenes/ScoreChangeScreen.fxml",
+                "css/ScoreChangeScreen.css"
+        );
+
+        var settingsScreen = FXML.load(
+                SettingsScreenCtrl.class,
+                "scenes/SettingsScreen.fxml",
+                "css/SettingsScreen.css"
+        );
 
         // add more scenes the same way
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
-        mainCtrl.initialize(primaryStage, homeScreen, waitingRoom, loadingScreen, comparativeQuestionScreen, usernameScreen, endScreen, helpScreen);
+        mainCtrl.initialize(primaryStage, homeScreen, waitingRoom, loadingScreen, comparativeQuestionScreen, usernameScreen, endScreen, helpScreen, ScoreChangeScreen, settingsScreen);
     }
 }

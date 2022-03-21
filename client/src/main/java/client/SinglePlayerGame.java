@@ -3,15 +3,16 @@ package client;
 
 import commons.Player;
 import commons.Question;
+import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Single player game class
  * Used for handling a single-player game
  */
+@Data
 public class SinglePlayerGame {
 
     private List<Question> questions;
@@ -20,30 +21,57 @@ public class SinglePlayerGame {
     private int questionNumber = 1;
     private int maxQuestions;
 
+    /**
+     * Empty constructor
+     * Used by Jackson to initialize object from JSON
+     */
     public SinglePlayerGame() {}
 
+    /**
+     * Creates a new game with specified amount of questions
+     * @param maxQuestions Number of questions in the game
+     */
     public SinglePlayerGame(int maxQuestions) {
         this.player = new Player();
         this.questions = new ArrayList<>();
         this.maxQuestions = maxQuestions;
     }
 
+    /**
+     * Creates a new game with specified amount of questions and a username
+     * @param maxQuestions Number of questions in the game
+     * @param username Creates new player with given username
+     */
     public SinglePlayerGame(int maxQuestions, String username) {
         this.player = new Player(username);
         this.questions = new ArrayList<>();
         this.maxQuestions = maxQuestions;
     }
 
+    /**
+     * Creates a new game with specific player
+     * @param player
+     */
     public SinglePlayerGame(Player player) {
         this.player = player;
         this.questions = new ArrayList<>();
     }
 
+    /**
+     * Creates a new game with specific player and a list of questions
+     * @param player
+     * @param questions
+     */
     public SinglePlayerGame(Player player, List<Question> questions) {
         this.player = player;
         this.questions = questions;
     }
 
+    /**
+     * Adds a question to the list. Checks for duplicates
+     * @param question to be added
+     * @return true if question was added, false otherwise
+     */
     public boolean addQuestion(Question question){
         // TODO: Make this comparison actually do something, right now it uses Object's equals method. Probably should use a set or something
         for(int i = 0; i < questions.size(); i++) {
@@ -61,18 +89,20 @@ public class SinglePlayerGame {
      * @param guessQuestionRate for every other question than a guess question this will be set to 1.0
      *                          for the guess question this will be set to a percentage how good the guess was
      */
-    public void addPoints(int timeWhenAnswered, double guessQuestionRate){
+    public int addPoints(int timeWhenAnswered, double guessQuestionRate){
         if(timeWhenAnswered == -1){
             resetStreak();
             nextQuestion();
-            return;
+            return 0;
         }
         incrementStreak();
         int currentScore = getPlayer().getScore();
         int pointsToBeAdded = (int)Math.round(guessQuestionRate * getPointsToBeAdded(timeWhenAnswered));
         player.setScore( currentScore + pointsToBeAdded );
         nextQuestion();
+        return pointsToBeAdded;
     }
+
 
 
     /**
@@ -89,63 +119,17 @@ public class SinglePlayerGame {
     }
 
     /**
-     * Methods for manipulating streak and question numbers
+     * Increments questionNumber
      */
     public void nextQuestion(){ questionNumber++;}
 
+    /**
+     * resets streak to 0
+     */
     public void resetStreak() { streak = 0;}
 
+    /**
+     * Increments streak
+     */
     public void incrementStreak() { streak++;}
-
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof SinglePlayerGame)) return false;
-        SinglePlayerGame that = (SinglePlayerGame) o;
-        return getStreak() == that.getStreak() && getQuestionNumber() == that.getQuestionNumber() && Objects.equals(questions, that.questions) && Objects.equals(getPlayer(), that.getPlayer());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(questions, getPlayer(), getStreak(), getQuestionNumber());
-    }
-
-    public Player getPlayer() {
-        return player;
-    }
-
-    public int getStreak() {
-        return streak;
-    }
-
-    public List<Question> getQuestions() {
-        return questions;
-    }
-
-    public void setQuestions(List<Question> questions) {
-        this.questions = questions;
-    }
-
-    public int getQuestionNumber() { return questionNumber; }
-
-    public void setPlayer(Player player) {
-        this.player = player;
-    }
-
-    public void setStreak(int streak) {
-        this.streak = streak;
-    }
-
-    public void setQuestionNumber(int questionNumber) {
-        this.questionNumber = questionNumber;
-    }
-
-    public int getMaxQuestions() {
-        return maxQuestions;
-    }
-
-    public void setMaxQuestions(int maxQuestions) {
-        this.maxQuestions = maxQuestions;
-    }
 }

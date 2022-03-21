@@ -20,6 +20,7 @@ import commons.Player;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
+import lombok.Getter;
 import org.glassfish.jersey.client.ClientConfig;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
@@ -30,12 +31,22 @@ import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
  */
 public class ServerUtils {
 
+    @Getter
     private static final String defaultURL = "http://localhost:8080/";
+    @Getter
     private String serverURL = defaultURL;
 
+    /**
+     * Constructor for ServerUtils
+     * No need to specifiy any fields
+     */
     public ServerUtils() {
     }
 
+    /**
+     * Gets a comparative question from the server
+     * @return Comparative Question if successful
+     */
     public ComparativeQuestion getCompQuestion() {
         return ClientBuilder.newClient(new ClientConfig()) //
             .target(serverURL).path("api/questions/comparative") // the URL path which we HTTP GET for comparative questions
@@ -44,17 +55,17 @@ public class ServerUtils {
             .get(new GenericType<ComparativeQuestion>() {});
     }
 
+    /**
+     * Posts a Player object to the server
+     * @param player to be posted
+     * @return The posted player if successful
+     */
     public Player postPlayer(Player player){
         return ClientBuilder.newClient(new ClientConfig()) //
             .target(serverURL).path("api/players/add-one") // the URL path where we HTTP POST for adding high scores
             .request(APPLICATION_JSON) //
             .accept(APPLICATION_JSON) //
             .post(Entity.entity(player, APPLICATION_JSON), Player.class);
-    }
-
-
-    public String getServerURL() {
-        return serverURL;
     }
 
     /**

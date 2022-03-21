@@ -3,7 +3,6 @@ package client.scenes;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -11,18 +10,21 @@ import javafx.scene.control.Label;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class LoadingScreenCtrl {
+public class ScoreChangeScreenCtrl {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
+    @FXML
+    private Label scoreGained;
+    @FXML
+    private Label scoreTotal;
+    @FXML
+    private Label scoreStreak;
+    @FXML
+    private Button leave;
+
     private Timer timer = new Timer();
-
-    @FXML
-    private Button back;
-
-    @FXML
-    private Label counter;
 
     /**
      * Creates a new screen with injections
@@ -30,29 +32,38 @@ public class LoadingScreenCtrl {
      * @param mainCtrl Main Controller
      */
     @Inject
-    public LoadingScreenCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public ScoreChangeScreenCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
     }
 
-    @FXML
-    void back(ActionEvent event) {
-        mainCtrl.resetUserText();
-        mainCtrl.showHomeScreen();
-        timer.cancel();
-        timer = new Timer();
-        counter.setText("3");
+    /**
+     * Sets score change labels
+     * @param gained Number of points gained
+     * @param total Number of total points
+     * @param streak How many questions in a row were correct
+     */
+    public void setScoreLabels(int gained, int total, int streak ){
+        scoreGained.setText("+" + gained);
+        scoreTotal.setText("Score: " + total);
+        scoreStreak.setText("Streak: " + streak);
     }
 
     /**
-     * Starts the timer for starting the game
-     * Lasts for 3 seconds
-     * Displays seconds on the screen
+     * Goes back to the home screen
+     */
+    public void exit() {
+        mainCtrl.showHomeScreen();
+        timer.cancel();
+        timer = new Timer();
+    }
+
+    /**
+     * Starts the countdown to move to the next screen
      */
     public void countdown() {
 
         TimerTask task = new TimerTask() {
-            int second = 2;
 
             @Override
             public void run() {
@@ -60,20 +71,15 @@ public class LoadingScreenCtrl {
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
-                        if(second == 0) {
-                            cancel();
-                            mainCtrl.nextQuestionScreen();
-                            counter.setText("3");
-                        } else {
-                            counter.setText(String.valueOf(second--));
-                        }
+                        cancel();
+                        mainCtrl.nextQuestionScreen();
                     }
                 });
             }
         };
 
-        timer.schedule(task, 1000, 1000);
+        timer.schedule(task, 3000);
     }
 
-}
 
+}

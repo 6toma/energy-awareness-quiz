@@ -1,27 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.layout.*?>
-<StackPane maxHeight="Infinity" maxWidth="Infinity" xmlns="http://javafx.com/javafx/17"
-           xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.WaitingRoomCtrl">
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<StackPane maxHeight="Infinity" maxWidth="Infinity" prefHeight="802.0" prefWidth="1290.0" stylesheets="@../../../../build/resources/main/css/main.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.WaitingRoomCtrl">
     <StackPane styleClass="padding">
-        <Button fx:id="back" onAction="#back" styleClass="border, exit, rounded" text="Back"
-                StackPane.alignment="TOP_LEFT"/>
+        <Button fx:id="back" onAction="#back" stylesheets="@../css/main.css" text="Back" StackPane.alignment="TOP_LEFT">
+         <styleClass>
+            <String fx:value="exit" />
+            <String fx:value="rounded" />
+         </styleClass></Button>
     </StackPane>
 
     <VBox alignment="CENTER" maxWidth="900.0" prefHeight="1080.0" prefWidth="1000.0" StackPane.alignment="CENTER">
-        <Region maxHeight="20" minHeight="20" VBox.vgrow="ALWAYS"/>
-        <Label alignment="CENTER" prefHeight="80.0" prefWidth="386.0" styleClass="wait" text="Waiting Area"/>
-        <Region maxHeight="20" minHeight="20" VBox.vgrow="ALWAYS"/>
-        <ScrollPane fitToWidth="true" styleClass="border, rounded, no-padding" VBox.vgrow="ALWAYS">
+        <Region maxHeight="20" minHeight="20" VBox.vgrow="ALWAYS" />
+        <Label alignment="CENTER" prefHeight="80.0" prefWidth="386.0" styleClass="wait" text="Waiting Area" />
+        <Region maxHeight="20" minHeight="20" VBox.vgrow="ALWAYS" />
+        <ScrollPane fitToWidth="true" stylesheets="@../css/main.css" VBox.vgrow="ALWAYS">
             <VBox fx:id="listOfPlayers" maxWidth="Infinity" styleClass="transparent">
                 <!-- Here will be displayed a list of current players in the room -->
             </VBox>
+         <styleClass>
+            <String fx:value="rounded" />
+            <String fx:value="no-padding" />
+            <String fx:value="border" />
+         </styleClass>
         </ScrollPane>
-        <Region maxHeight="20" minHeight="20" VBox.vgrow="ALWAYS"/>
-        <Button styleClass="mainButton, border, rounded" text="Start"/>
-        <Region maxHeight="20" minHeight="20" styleClass="margin" VBox.vgrow="ALWAYS"/>
+        <Region maxHeight="20" minHeight="20" VBox.vgrow="ALWAYS" />
+        <Button prefHeight="76.0" prefWidth="182.0" stylesheets="@../css/main.css" text="Ready">
+         <styleClass>
+            <String fx:value="rounded" />
+            <String fx:value="functionality-button" />
+         </styleClass></Button>
+        <Region maxHeight="20" minHeight="20" styleClass="margin" VBox.vgrow="ALWAYS" />
     </VBox>
 </StackPane>

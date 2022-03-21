@@ -16,9 +16,11 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Pair;
+import lombok.Getter;
 
 public class MainCtrl {
 
+    @Getter
     private final ServerUtils server;
 
     private Stage primaryStage;
@@ -44,16 +46,38 @@ public class MainCtrl {
     private HelpScreenCtrl helpScreenCtrl;
     private Parent helpScreenParent;
 
-    // single player variables
-    private SinglePlayerGame singlePlayerGame;
-    int singlePlayerGameQuestions = 5;
+    private ScoreChangeScreenCtrl scoreChangeScreenCtrl;
+    private Parent scoreChangeScreenParent;
 
+    private SettingsScreenCtrl settingsScreenCtrl;
+    private Parent settingsScreenParent;
+
+    // single player variables
+    @Getter
+    private SinglePlayerGame singlePlayerGame;
+    private int singlePlayerGameQuestions = 5;
+
+    /**
+     * Creates a new MainCtrl with server
+     * @param server ServerUtils object
+     */
     @Inject
     public MainCtrl(ServerUtils server) {
         this.server = server;
     }
 
-    // default initializing code
+    /**
+     * Initializes the screen
+     * @param primaryStage The primary stage to use (window)
+     * @param homeScreen Screens that main controller can communicate with
+     * @param waitingRoom
+     * @param loadingScreen
+     * @param comparativeQuestionScreen
+     * @param usernameScreen
+     * @param endScreen
+     * @param helpScreen
+     * @param scoreChangeScreen
+     */
     public void initialize(
             Stage primaryStage,
             Pair<HomeScreenCtrl, Parent> homeScreen,
@@ -62,7 +86,9 @@ public class MainCtrl {
             Pair<ComparativeQuestionScreenCtrl, Parent> comparativeQuestionScreen,
             Pair<UsernameScreenCtrl, Parent> usernameScreen,
             Pair<EndScreenCtrl, Parent> endScreen,
-            Pair<HelpScreenCtrl, Parent> helpScreen
+            Pair<HelpScreenCtrl, Parent> helpScreen,
+            Pair<ScoreChangeScreenCtrl, Parent> scoreChangeScreen,
+            Pair<SettingsScreenCtrl, Parent> settingsScreen
     ) {
         this.primaryStage = primaryStage;
 
@@ -87,6 +113,12 @@ public class MainCtrl {
         this.helpScreenCtrl = helpScreen.getKey();
         this.helpScreenParent = helpScreen.getValue();
 
+        this.scoreChangeScreenCtrl = scoreChangeScreen.getKey();
+        this.scoreChangeScreenParent = scoreChangeScreen.getValue();
+
+        this.settingsScreenCtrl = settingsScreen.getKey();
+        this.settingsScreenParent =  settingsScreen.getValue();
+
         // TODO: uncomment to disable the fullscreen popup
         //primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
 
@@ -106,64 +138,122 @@ public class MainCtrl {
         });
     }
 
+    /**
+     * method for showing the home screen
+     */
     public void showHomeScreen() {
         primaryStage.getScene().setRoot(homeScreenParent);
         checkDarkMode();
     }
 
+    /**
+     * method for showing the waiting room
+     */
     public void showWaitingRoom() {
         primaryStage.getScene().setRoot(waitingRoomParent);
         checkDarkMode();
     }
 
+    /**
+     * method for showing the settings screen
+     */
+    public void showSettingsScreen(){
+        primaryStage.getScene().setRoot(settingsScreenParent);
+        checkDarkMode();
+    }
+
+    /**
+     * method for showing the laoding screen
+     */
     public void showLoadingScreen() {
         primaryStage.getScene().setRoot(loadingScreenParent);
         checkDarkMode();
         loadingScreenCtrl.countdown();
     }
 
+    /**
+     * method for showing the username screen
+     */
     public void showUsernameScreen() {
         primaryStage.getScene().setRoot(usernameScreenParent);
         checkDarkMode();
     }
 
+    /**
+     * method for showing the comparative question
+     */
     public void showComparativeQuestionScreen() {
         primaryStage.getScene().setRoot(comparativeQuestionScreenParent);
         checkDarkMode();
         comparativeQuestionScreenCtrl.countdown();
     }
 
+    /**
+     * method for showing the end screen
+     */
     public void showEndScreen() {
         primaryStage.getScene().setRoot(endScreenParent);
         checkDarkMode();
     }
 
+    /**
+     * method for showing the help screen
+     */
     public void showHelpScreen() {
         ((StackPane) primaryStage.getScene().getRoot()).getChildren().add(helpScreenParent);
         checkDarkMode();
     }
 
+    /**
+     * method for hiding the help screen
+     */
     public void hideHelpScreen() {
         ((StackPane) primaryStage.getScene().getRoot()).getChildren().remove(helpScreenParent);
         checkDarkMode();
     }
 
+    /**
+     * method for showing the score change screen
+     */
+    public void showScoreChangeScreen(int pointsGained){
+        primaryStage.getScene().setRoot(scoreChangeScreenParent);
+        checkDarkMode();
+        showScore(pointsGained);
+        scoreChangeScreenCtrl.countdown();
+    }
+
+    /**
+     * method for changing mode to opposite colour
+     */
     public void checkDarkMode() {
-        if (!homeScreenCtrl.getDarkMode()) {
+        if (settingsScreenCtrl.getDarkMode()) {
             primaryStage.getScene().getRoot().setBlendMode(BlendMode.DIFFERENCE);
         } else {
             primaryStage.getScene().getRoot().setBlendMode(null);
         }
     }
 
+    /**
+     * Gets the origin of usernamescreen
+     * @return 1 - Singleplayer, 2 - Multiplayer
+     */
     public int getUsernameOriginScreen() {
         return homeScreenCtrl.getUsernameOriginScreen();
     }
 
+    /**
+     * Sets the usernameOriginScreen
+     * @param usernameOriginScreen value
+     *                             1 - Singleplayer
+     *                             2 - Multiplayer
+     */
     public void setUsernameOriginScreen(int usernameOriginScreen) {
         homeScreenCtrl.setUsernameOriginScreen(usernameOriginScreen);
     }
 
+    /**
+     * Resets the username text in usernamescreen
+     */
     public void resetUserText() {
         usernameScreenCtrl.resetUserText();
     }
@@ -273,16 +363,31 @@ public class MainCtrl {
         }
     }
 
-    public SinglePlayerGame getSinglePlayerGame() {
-        return this.singlePlayerGame;
+    /**
+     * Shows the current score on the score change screen
+     * @param pointsGained number of points to be added to the score
+     */
+    public void showScore(int pointsGained) {
+        int gained = pointsGained;
+        int total = singlePlayerGame.getPlayer().getScore();
+        int streak = singlePlayerGame.getStreak();
+        scoreChangeScreenCtrl.setScoreLabels(gained, total, streak);
     }
 
-    public ServerUtils getServer() {
-        return server;
-    }
-
+    /**
+     * Gets the username
+     * @return Username of current player of singlePlayerGame
+     */
     public String getCurrentUsername() {
         return this.singlePlayerGame.getPlayer().getName();
+    }
+
+    /**
+     * Gets the server url from the settings screen
+     * @return
+     */
+    public String getServerURL() {
+        return this.settingsScreenCtrl.getServerURL();
     }
 }
 
