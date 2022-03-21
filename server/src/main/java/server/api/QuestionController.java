@@ -24,8 +24,9 @@ public class QuestionController {
 
     /**
      * Creates new QuestionController object
+     *
      * @param random Random bean from config
-     * @param repo repository to use
+     * @param repo   repository to use
      */
     public QuestionController(Random random, ActivityRepository repo) {
         this.random = random;
@@ -65,7 +66,7 @@ public class QuestionController {
         List<Activity> activities = repo.getRandomActivities(limit).get();
         EstimationQuestion q = new EstimationQuestion(activities);
         return ResponseEntity.ok(q);
-
+    }
 
     /**
      * Fetches a number of activities, such that they have distinct consumptions
@@ -84,21 +85,21 @@ public class QuestionController {
         Activity pivot = repo.getRandomActivities(1).get().get(0);
 
         /* get a list of random activities with consumption in the interval
-        * (lowerBound * pivot.getConsumption_in_wh(), upperBound * pivot.getConsumption_in_wh())
-        *  if the list doesn't have the needed number of activities, increase the range
-        */
+         * (lowerBound * pivot.getConsumption_in_wh(), upperBound * pivot.getConsumption_in_wh())
+         *  if the list doesn't have the needed number of activities, increase the range
+         */
         do {
             ids = repo.activitiesWithSpecifiedConsumption(
                     limit,
-                    (int) Math.floor( lowerBound * pivot.getConsumption_in_wh() ),
-                    (int) Math.ceil( upperBound * pivot.getConsumption_in_wh() )
+                    (int) Math.floor(lowerBound * pivot.getConsumption_in_wh()),
+                    (int) Math.ceil(upperBound * pivot.getConsumption_in_wh())
             );
             lowerBound -= 0.05; //it is not a problem for lowerBound to go below 0
             upperBound += 0.2;
         } while (ids.isEmpty() || ids.get().size() < limit);
         //the while condition ensures exactly the needed number of IDs are returned and not less
 
-        for(int i = 0; i < ids.get().size(); i++) {
+        for (int i = 0; i < ids.get().size(); i++) {
             result.add(repo.findById(ids.get().get(i)).get());
         }
 
