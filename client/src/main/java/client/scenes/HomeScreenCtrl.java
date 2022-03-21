@@ -101,11 +101,6 @@ public class HomeScreenCtrl {
     @FXML
     public void setPlayer() {
         List<Player> players = server.getLeaderPlayers(10);
-        /*if (players.size()<10){
-            for (int i=0; i<(10-players.size());i++){
-                players.add(new Player("Empty",0));
-            }
-        }*/
         int childrenSize = this.leaderboard.getChildren().size();
         if(childrenSize > 13){
             this.leaderboard.getChildren().remove(13,childrenSize);

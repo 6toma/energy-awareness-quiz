@@ -92,24 +92,8 @@ public class ServerUtils {
      * @return A list of top numberOfTop players
      */
     public List<Player> getLeaderPlayers(int numberOfTop){
-        /*if (getAllPlayers().size()<numberOfTop){
-            numberOfTop = getAllPlayers().size();
-        }*/
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(serverURL).path("api/players/leaderboard/"+numberOfTop)
-                .request(APPLICATION_JSON) //
-                .accept(APPLICATION_JSON) //
-                .get(new GenericType<>() {
-                });
-    }
-    /**
-     * Returns a list of all players
-     *
-     * @return A list of all players
-     */
-    private List<Player> getAllPlayers(){
-        return ClientBuilder.newClient(new ClientConfig())
-                .target(serverURL).path("api/players/")
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<>() {
