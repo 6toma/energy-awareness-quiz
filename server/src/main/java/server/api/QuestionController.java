@@ -55,6 +55,11 @@ public class QuestionController {
         return ResponseEntity.ok(q);
     }
 
+    /**
+     * Generates random estimation question
+     *
+     * @return
+     */
     @GetMapping(path = {"/estimation", "/estimation/"})
     public ResponseEntity<EstimationQuestion> getRandomEstimation() {
         int limit = 1;
