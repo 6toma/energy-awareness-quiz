@@ -10,7 +10,14 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.VBox;
 import javafx.util.Duration;
+
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.util.List;
 
 public class ComparativeQuestionScreenCtrl {
 
@@ -62,6 +69,24 @@ public class ComparativeQuestionScreenCtrl {
 
     @FXML
     private Button joker3;
+
+    @FXML
+    private ImageView image1;
+
+    @FXML
+    private ImageView image2;
+
+    @FXML
+    private ImageView image3;
+
+    @FXML
+    private VBox questionBox1;
+
+    @FXML
+    private VBox questionBox2;
+
+    @FXML
+    private VBox questionBox3;
 
     /**
      * Creates a new screen with injections
@@ -149,6 +174,7 @@ public class ComparativeQuestionScreenCtrl {
         this.question = question;
         setQuestionText();
         setAnswerTexts();
+        setImages();
     }
 
     private void setQuestionText(){
@@ -330,5 +356,28 @@ public class ComparativeQuestionScreenCtrl {
             answerTimer.stop();
             answerTimer = null;
         }
+    }
+
+    /**
+     * Sets the images to the ones stored in the activities.
+     * Also sets the images to be the same width as the question
+     */
+    private void setImages(){
+        // Adding the images to a list to avoid duplicate code
+        List<ImageView> images = List.of(image1, image2, image3);
+        // This loops through every activity, gets the image and sets the image in the UI
+        for(int i = 0; i < question.getActivities().size(); i++){
+            if(question.getActivities().get(i).getImage() != null){
+                InputStream inputStream = new ByteArrayInputStream(question.getActivities().get(i).getImage());
+                if(inputStream != null){
+                    images.get(i).setImage(new Image(inputStream));
+                }
+            }
+        }
+        // It's dumb that we have to set the images to be the width of the vbox here
+        // A true javafx moment
+        image1.fitWidthProperty().bind(questionBox1.widthProperty());
+        image2.fitWidthProperty().bind(questionBox2.widthProperty());
+        image3.fitWidthProperty().bind(questionBox3.widthProperty());
     }
 }
