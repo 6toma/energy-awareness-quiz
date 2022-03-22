@@ -6,9 +6,7 @@ import commons.Player;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import lombok.Getter;
@@ -41,12 +39,6 @@ public class HomeScreenCtrl {
     @FXML
     private GridPane leaderboard;
 
-    @FXML
-    private Button darkMode;
-
-    @FXML
-    private TextField inputServerURLField;
-
     /**
      * Creates a new screen with injections
      * @param server ServerUtils class
@@ -58,14 +50,6 @@ public class HomeScreenCtrl {
         this.server = server;
         this.isLightMode = true;
         this.usernameOriginScreen = 0; //still on home screen
-    }
-
-    /**
-     * Gets the value of isLightMode
-     * @return false if is in dark mode (??)
-     */
-    public boolean getDarkMode() {
-        return isLightMode;
     }
 
     /**
@@ -170,14 +154,6 @@ public class HomeScreenCtrl {
 
         mainCtrl.setUsernameOriginScreen(2);
         mainCtrl.showUsernameScreen();
-    }
-
-    /**
-     * Shows the help screen
-     */
-    @FXML
-    public void showHelpScreen() {
-        mainCtrl.showHelpScreen();
     }
 
     @FXML
