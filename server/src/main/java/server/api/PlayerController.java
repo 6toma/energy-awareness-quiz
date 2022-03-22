@@ -52,6 +52,18 @@ public class PlayerController {
     }
 
     /**
+     * Returns a list of players with the highest scores
+     * List returned should be ordered in descending order unless some magic
+     *
+     * @param numberOfPlayers determines how many players in list
+     * @return A list of top numberOfTop players
+     */
+    @GetMapping("/leaderboard/{number}")
+    public ResponseEntity<List<Player>> getTopPlayers(@PathVariable("number") Long numberOfPlayers) {
+        return ResponseEntity.ok(repo.getTopPlayers(numberOfPlayers.intValue()).get());
+    }
+
+    /**
      * adds a player to the database
      * @param player
      * @return the player which was added, bad request if invalid activity

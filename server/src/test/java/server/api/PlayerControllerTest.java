@@ -5,8 +5,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.ResponseEntity;
 import server.api.dependencies.TestPlayerRepository;
-
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -69,6 +69,29 @@ class PlayerControllerTest {
     @Test
     void getPlayerByIdTestInvalid() {
         assertEquals(ResponseEntity.badRequest().build(), ply.getPlayerById(8L));
+    }
+
+    /**
+     * Test for getTopPlayers
+     */
+    @Test
+    void getTopPlayersTest() {
+        repo.players.addAll(players);
+        List<Player> orderedList = new ArrayList<>(players);
+        Collections.sort(orderedList);
+        assertEquals(orderedList,ply.getTopPlayers(3L).getBody());
+    }
+
+    /**
+     * Test for getTopPlayers with number of players larger than repo size
+     * Should return the same as for correct value
+     */
+    @Test
+    void getTopPlayersTestInvalidNumber() {
+        repo.players.addAll(players);
+        List<Player> orderedList = new ArrayList<>(players);
+        Collections.sort(orderedList);
+        assertEquals(orderedList, ply.getTopPlayers(10L).getBody());
     }
 
     /**
