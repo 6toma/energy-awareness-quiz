@@ -124,7 +124,7 @@ class PlayerControllerTest {
         update.setScore(4);
 
         Player expected = new Player(2L, "d", 4);
-        assertEquals(expected, ply.updateActivity(update, 2L).getBody());
+        assertEquals(expected, ply.updatePlayer(update, 2L).getBody());
         assertEquals(expected, repo.players.get(1));
     }
 
@@ -134,7 +134,7 @@ class PlayerControllerTest {
     @Test
     void updatePlayerTestNull() {
         repo.players.addAll(players);
-        assertEquals(ResponseEntity.badRequest().build(), ply.updateActivity(null, 2L));
+        assertEquals(ResponseEntity.badRequest().build(), ply.updatePlayer(null, 2L));
         assertEquals(players, repo.players);
     }
 
@@ -145,7 +145,7 @@ class PlayerControllerTest {
     void updatePlayerTestInvalidId() {
         repo.players.addAll(players);
         Player update = new Player();
-        assertEquals(ResponseEntity.badRequest().build(), ply.updateActivity(update, 8L));
+        assertEquals(ResponseEntity.badRequest().build(), ply.updatePlayer(update, 8L));
         assertEquals(players, repo.players);
     }
 
@@ -159,7 +159,7 @@ class PlayerControllerTest {
         update.setName("d");
 
         Player expected = new Player(2L, "d", 2);
-        assertEquals(expected, ply.updateActivity(update, 2L).getBody());
+        assertEquals(expected, ply.updatePlayer(update, 2L).getBody());
         assertEquals(expected, repo.players.get(1));
     }
 
@@ -173,7 +173,7 @@ class PlayerControllerTest {
         update.setScore(4);
 
         Player expected = new Player(2L, "b", 4);
-        assertEquals(expected, ply.updateActivity(update, 2L).getBody());
+        assertEquals(expected, ply.updatePlayer(update, 2L).getBody());
         assertEquals(expected, repo.players.get(1));
     }
 
@@ -185,7 +185,7 @@ class PlayerControllerTest {
         repo.players.addAll(players);
         Player update = new Player();
 
-        assertEquals(ResponseEntity.badRequest().build(), ply.updateActivity(update, 2L));
+        assertEquals(ResponseEntity.badRequest().build(), ply.updatePlayer(update, 2L));
         assertEquals(players, repo.players);
     }
 
@@ -195,7 +195,7 @@ class PlayerControllerTest {
     @Test
     void deletePlayerTest() {
         repo.players.addAll(players);
-        assertEquals(players.get(1), ply.deleteActivity(2L).getBody());
+        assertEquals(players.get(1), ply.deletePlayer(2L).getBody());
         assertEquals(List.of(players.get(0), players.get(2)), repo.players);
     }
 }
