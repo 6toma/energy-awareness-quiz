@@ -5,8 +5,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.ResponseEntity;
 import server.api.dependencies.TestPlayerRepository;
-
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -72,6 +72,29 @@ class PlayerControllerTest {
     }
 
     /**
+     * Test for getTopPlayers
+     */
+    @Test
+    void getTopPlayersTest() {
+        repo.players.addAll(players);
+        List<Player> orderedList = new ArrayList<>(players);
+        Collections.sort(orderedList);
+        assertEquals(orderedList,ply.getTopPlayers(3L).getBody());
+    }
+
+    /**
+     * Test for getTopPlayers with number of players larger than repo size
+     * Should return the same as for correct value
+     */
+    @Test
+    void getTopPlayersTestInvalidNumber() {
+        repo.players.addAll(players);
+        List<Player> orderedList = new ArrayList<>(players);
+        Collections.sort(orderedList);
+        assertEquals(orderedList, ply.getTopPlayers(10L).getBody());
+    }
+
+    /**
      * Test for adding a player
      */
     @Test
@@ -101,7 +124,7 @@ class PlayerControllerTest {
         update.setScore(4);
 
         Player expected = new Player(2L, "d", 4);
-        assertEquals(expected, ply.updateActivity(update, 2L).getBody());
+        assertEquals(expected, ply.updatePlayer(update, 2L).getBody());
         assertEquals(expected, repo.players.get(1));
     }
 
@@ -111,7 +134,7 @@ class PlayerControllerTest {
     @Test
     void updatePlayerTestNull() {
         repo.players.addAll(players);
-        assertEquals(ResponseEntity.badRequest().build(), ply.updateActivity(null, 2L));
+        assertEquals(ResponseEntity.badRequest().build(), ply.updatePlayer(null, 2L));
         assertEquals(players, repo.players);
     }
 
@@ -122,7 +145,7 @@ class PlayerControllerTest {
     void updatePlayerTestInvalidId() {
         repo.players.addAll(players);
         Player update = new Player();
-        assertEquals(ResponseEntity.badRequest().build(), ply.updateActivity(update, 8L));
+        assertEquals(ResponseEntity.badRequest().build(), ply.updatePlayer(update, 8L));
         assertEquals(players, repo.players);
     }
 
@@ -136,7 +159,7 @@ class PlayerControllerTest {
         update.setName("d");
 
         Player expected = new Player(2L, "d", 2);
-        assertEquals(expected, ply.updateActivity(update, 2L).getBody());
+        assertEquals(expected, ply.updatePlayer(update, 2L).getBody());
         assertEquals(expected, repo.players.get(1));
     }
 
@@ -150,7 +173,7 @@ class PlayerControllerTest {
         update.setScore(4);
 
         Player expected = new Player(2L, "b", 4);
-        assertEquals(expected, ply.updateActivity(update, 2L).getBody());
+        assertEquals(expected, ply.updatePlayer(update, 2L).getBody());
         assertEquals(expected, repo.players.get(1));
     }
 
@@ -162,7 +185,7 @@ class PlayerControllerTest {
         repo.players.addAll(players);
         Player update = new Player();
 
-        assertEquals(ResponseEntity.badRequest().build(), ply.updateActivity(update, 2L));
+        assertEquals(ResponseEntity.badRequest().build(), ply.updatePlayer(update, 2L));
         assertEquals(players, repo.players);
     }
 
@@ -172,7 +195,7 @@ class PlayerControllerTest {
     @Test
     void deletePlayerTest() {
         repo.players.addAll(players);
-        assertEquals(players.get(1), ply.deleteActivity(2L).getBody());
+        assertEquals(players.get(1), ply.deletePlayer(2L).getBody());
         assertEquals(List.of(players.get(0), players.get(2)), repo.players);
     }
 }

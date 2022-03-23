@@ -323,4 +323,15 @@ public class PlayerTest {
         assertEquals("Player(id=null, name=null, score=null)", player.toString());
     }
 
+    @Test
+    void compareToTest() {
+        Player a = new Player(1L,"a",5);
+        Player b = new Player(2L, "b", 6);
+        Player c = new Player(3L, "c", 6);
+        assertEquals(1,a.compareTo(b));
+        assertEquals(-1,b.compareTo(a));
+        assertEquals(0,b.compareTo(c));
+        assertEquals(0,c.compareTo(b));
+    }
+
 }

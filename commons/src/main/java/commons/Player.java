@@ -17,7 +17,7 @@ import javax.persistence.Id;
  */
 @ToString @EqualsAndHashCode
 @Entity
-public class Player {
+public class Player implements Comparable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -90,4 +90,15 @@ public class Player {
             this.score = score;
         else throw new IllegalArgumentException("Score cannot be negative");
     }
+
+    /**
+     * Comparator for PLayer in descending order
+     * @param otherPlayer
+     */
+    @Override
+    public int compareTo(Object otherPlayer) {
+        int compareScore = ((Player) otherPlayer).getScore();
+        return compareScore - this.score;
+    }
 }
+

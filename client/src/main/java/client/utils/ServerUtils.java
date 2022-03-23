@@ -24,6 +24,8 @@ import jakarta.ws.rs.core.GenericType;
 import lombok.Getter;
 import org.glassfish.jersey.client.ClientConfig;
 
+import java.util.List;
+
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 /**
@@ -50,11 +52,10 @@ public class ServerUtils {
      */
     public ComparativeQuestion getCompQuestion() {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(serverURL).path("api/questions/comparative") // the URL path which we HTTP GET for comparative questions
-                .request(APPLICATION_JSON) //
-                .accept(APPLICATION_JSON) //
-                .get(new GenericType<ComparativeQuestion>() {
-                });
+            .target(serverURL).path("api/questions/comparative") // the URL path which we HTTP GET for comparative questions
+            .request(APPLICATION_JSON) //
+            .accept(APPLICATION_JSON) //
+            .get(new GenericType<>() {});
     }
 
     /**
@@ -96,5 +97,21 @@ public class ServerUtils {
         } else {
             this.serverURL = defaultURL;
         }
+    }
+
+    /**
+     * Returns a list of players with the highest scores
+     * List returned should be ordered in descending order unless some magic
+     *
+     * @param numberOfTop determines how many players in list
+     * @return A list of top numberOfTop players
+     */
+    public List<Player> getLeaderPlayers(int numberOfTop){
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(serverURL).path("api/players/leaderboard/"+numberOfTop)
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<>() {
+                });
     }
 }
