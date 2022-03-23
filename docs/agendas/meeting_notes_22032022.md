@@ -5,7 +5,7 @@
 
 ## Schedule
 - Have tasks divided on Wednesday
-- Meeting on Saturday evening to discuss and checkout other peoples work
+- Meeting on Saturday evening to discuss and check out other people's work
 - Have everything merged on Sunday
 
 ## Merge Requests general remarks
@@ -17,4 +17,4 @@
 - Clarify things in the Code of Conduct
 - Focus on more features and then on polishing existing ones
 - Assign categories to previous issues
-- People who have not worked on backend should do it now :)
+- People who have not worked on the backend should do it now :)
