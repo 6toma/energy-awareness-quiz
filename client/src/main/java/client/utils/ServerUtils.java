@@ -156,7 +156,7 @@ public class ServerUtils {
      * Used to sync up scenes with Server
      * @return
      */
-    public int getCurrentScene(){
+    public String getCurrentScene(){
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(serverURL).path("")
                 .request(APPLICATION_JSON) //

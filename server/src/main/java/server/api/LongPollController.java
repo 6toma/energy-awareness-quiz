@@ -32,6 +32,11 @@ public class LongPollController {
     }
      */
 
+    @GetMapping("CurrentScreen")
+    public ResponseEntity<String> getCurrentScreen(){
+        return ResponseEntity.ok(null)
+    }
+
     private Map<Object, Consumer<Integer>> listeners = new HashMap<>();
 
     /**
@@ -53,7 +58,10 @@ public class LongPollController {
     }
 
     /**
-     *
+     * Returns a number that's 2^x which describes what is
+     * different compared to what the client sent
+     * so the client can request for those specific objects
+     * instead of the whole game object
      * @param change
      * @return
      */
@@ -65,6 +73,7 @@ public class LongPollController {
 
     /**
      * Cool piece of code found, it redirects so it keeps polling
+     * obsolete right now but could be used in the future
      * @param input
      * @return
      * @throws InterruptedException
