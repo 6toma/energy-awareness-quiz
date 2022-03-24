@@ -22,6 +22,10 @@ public class ChangesMessage {
      */
     public ChangesMessage(){ }
 
+    /**
+     * Declaration
+     * @param changeType
+     */
     public ChangesMessage(int changeType){
         this.serverChangeType = changeType;
     }
