@@ -246,6 +246,9 @@ public class MultiPlayerGameTest {
         assertEquals(6, multiPlayerGame.getQuestionNumber());
     }
 
+    /**
+     * Test the player list hasher method
+     */
     @Test
     public void TestPlayerListHasher() {
         assertEquals(Objects.hash(multiPlayerGame.getPlayers()), multiPlayerGame.playerListHash());
@@ -342,9 +345,7 @@ public class MultiPlayerGameTest {
         multiPlayerGame.setCurrentScreen("ENDSCREEN");
         assertEquals("ENDSCREEN", multiPlayerGame.getCurrentScreen());
 
-        assertThrows(IllegalArgumentException.class, () -> {
-            multiPlayerGame.setCurrentScreen("LITERALLY ANYTHING OTHER THAN THOSE");
-            }, "Not a valid screen");
+        assertThrows(IllegalArgumentException.class, () -> multiPlayerGame.setCurrentScreen("LITERALLY ANYTHING OTHER THAN THOSE"), "Not a valid screen");
     }
 
 }
