@@ -103,14 +103,6 @@ public class SinglePlayerGame {
     }
 
     /**
-     * used for testing
-     * @return the player of this game
-     */
-    public Player getPlayer() {
-        return this.player;
-    }
-
-    /**
      * The points achievable for a single question are from 950 to 1050 depending on the number of seconds it took the user to select an answer
      * Each second subtracts 5 points from the added score
      * The score is then multiplied by (100 + streak)% and added to the score of a player
