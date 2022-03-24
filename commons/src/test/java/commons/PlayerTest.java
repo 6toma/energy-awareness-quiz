@@ -293,7 +293,7 @@ public class PlayerTest {
     @Test
     public void toStringTest1() {
         Player player = new Player(1L, "p1", 1200);
-        assertEquals("Player(id=1, name=p1, score=1200)", player.toString());
+        assertEquals("Player(id=1, name=p1, score=1200, streak=0)", player.toString());
     }
 
     /**
@@ -302,7 +302,7 @@ public class PlayerTest {
     @Test
     public void toStringTest2() {
         Player player = new Player("p1", 1200);
-        assertEquals("Player(id=null, name=p1, score=1200)", player.toString());
+        assertEquals("Player(id=null, name=p1, score=1200, streak=0)", player.toString());
     }
 
     /**
@@ -311,7 +311,7 @@ public class PlayerTest {
     @Test
     public void toStringTest3() {
         Player player = new Player("p1");
-        assertEquals("Player(id=null, name=p1, score=0)", player.toString());
+        assertEquals("Player(id=null, name=p1, score=0, streak=0)", player.toString());
     }
 
     /**
@@ -320,7 +320,7 @@ public class PlayerTest {
     @Test
     public void toStringTest4() {
         Player player = new Player();
-        assertEquals("Player(id=null, name=null, score=null)", player.toString());
+        assertEquals("Player(id=null, name=null, score=null, streak=0)", player.toString());
     }
 
     @Test
@@ -332,6 +332,50 @@ public class PlayerTest {
         assertEquals(-1,b.compareTo(a));
         assertEquals(0,b.compareTo(c));
         assertEquals(0,c.compareTo(b));
+    }
+
+    /**
+     * Test for setStreak
+     */
+    @Test
+    public void TestStreakSetter() {
+        Player a = new Player(1L,"a",5);
+        a.setStreak(3);
+        assertEquals(3, a.getStreak());
+    }
+
+    /**
+     * Test for getStreak
+     */
+    @Test
+    public void TestStreakGetter() {
+        Player a = new Player(1L,"a",5);
+        assertEquals(0, a.getStreak());
+        a.setStreak(3);
+        assertEquals(3, a.getStreak());
+    }
+
+    /**
+     * Tests the resetStreak method
+     */
+    @Test
+    public void TestResetSteak() {
+        Player a = new Player(1L,"a",5);
+        a.setStreak(5);
+        a.resetStreak();
+        assertEquals(0, a.getStreak());
+    }
+
+    /**
+     * Tests the incrementStreak method
+     */
+    @Test
+    public void TestStreakIncrement() {
+        Player a = new Player(1L,"a",5);
+        for(int i = 0; i < 6; i++){
+            a.incrementStreak();
+        }
+        assertEquals(6, a.getStreak());
     }
 
 }

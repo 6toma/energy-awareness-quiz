@@ -5,10 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * Activity class that is stored in the database
@@ -28,6 +25,9 @@ public class Player implements Comparable{
     private String name;
     @Getter
     private Integer score;
+    @Getter
+    @Transient
+    private int streak = 0; // streak field for getting more points when you answer questions correctly in a row
 
 
     /**
@@ -100,5 +100,27 @@ public class Player implements Comparable{
         int compareScore = ((Player) otherPlayer).getScore();
         return compareScore - this.score;
     }
+
+    /**
+     * Sets streak
+     * @param streak
+     * @throws IllegalArgumentException if streak is negative
+     */
+    public void setStreak(int streak) {
+        this.streak = streak;
+        if(streak >= 0)
+            this.streak = streak;
+        else throw new IllegalArgumentException("Streak cannot be negative");
+    }
+
+    /**
+     * resets streak to 0
+     */
+    public void resetStreak() { streak = 0;}
+
+    /**
+     * Increments streak
+     */
+    public void incrementStreak() { streak++;}
 }
 
