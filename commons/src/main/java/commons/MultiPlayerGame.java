@@ -45,9 +45,8 @@ public class MultiPlayerGame {
      */
     public boolean addQuestion(Question question){
         // TODO: Make this comparison actually do something, right now it uses Object's equals method. Probably should use a set or something
-        for(int i = 0; i < questions.size(); i++) {
-            if (question.equals(questions.get(i))) return false;
-        }
+        if(questions.contains(question))
+            return false;
         questions.add(question);
         return true;
     }
@@ -71,7 +70,7 @@ public class MultiPlayerGame {
      * A particular formula for the points has been developed.
      * parsing an int equal to -1 will be qualified as answering the question wrongly
      * @param timeWhenAnswered time in seconds how long it took a user to answer a question
-     * @param guessQuestionRate for every other question than a estimation question this will be set to 1.0
+     * @param guessQuestionRate for every other question than an estimation question this will be set to 1.0
      *                          for the estimation question this will be set to a percentage how good the guess was
      */
     public int addPointsForPlayer(int timeWhenAnswered, double guessQuestionRate, Player player){
@@ -91,8 +90,9 @@ public class MultiPlayerGame {
      * The points achievable for a single question are from 950 to 1050 depending on the number of seconds it took the user to select an answer
      * Each second subtracts 5 points from the added score
      * The score is then multiplied by (100 + streak)% and added to the score of a player
-     * @param time
-     * @return
+     * @param time time it took the player to answer the question
+     * @param player player whose score is being calculated
+     * @return the points that have to be added to the player's score
      */
     public int getPointsToBeAdded(int time, Player player) {
         double streakFactor = (100.0 + player.getStreak()) / 100.0;
