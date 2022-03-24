@@ -2,7 +2,6 @@ package commons;
 
 import lombok.Data;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -12,10 +11,10 @@ import java.util.List;
 @Data
 public class MultiPlayerGame {
 
+    private int gameID;
     private List<Question> questions;
     private List<Player> players;
     private int questionNumber = 1;
-    private int maxQuestions;
 
     // for synchronization of client with server
     // can be "LOADING SCREEN", "QUESTION", "LEADERBOARD", "ENDSCREEN"
@@ -30,31 +29,10 @@ public class MultiPlayerGame {
     /**
      * Creates a new game with specified amount of questions
      * @param players list of players
-     * @param maxQuestions Number of questions in the game
-     */
-    public MultiPlayerGame(List<Player> players, int maxQuestions) {
-        this.currentScreen = "LOADING SCREEN";
-        this.players = players;
-        this.questions = new ArrayList<>();
-        this.maxQuestions = maxQuestions;
-    }
-
-    /**
-     * Creates a new game with specified amount of questions
-     * @param players list of players
-     */
-    public MultiPlayerGame(List<Player> players) {
-        this.currentScreen = "LOADING SCREEN";
-        this.players = players;
-        this.questions = new ArrayList<>();
-    }
-
-    /**
-     * Creates a new game with specified amount of questions
-     * @param players list of players
      * @param questions list of questions for the game
      */
-    public MultiPlayerGame(List<Player> players, List<Question> questions) {
+    public MultiPlayerGame(int gameID, List<Player> players, List<Question> questions) {
+        this.gameID = gameID;
         this.currentScreen = "LOADING SCREEN";
         this.players = players;
         this.questions = questions;
@@ -75,14 +53,28 @@ public class MultiPlayerGame {
     }
 
     /**
+     * This method adds points to the scores of every player
+     * @param answerTimes a list containing the time measured in seconds each player
+     *                    took to answer a question
+     * @param guessQuestionRates a list containing the rates on how good the guess was.
+     *                           for all other questions besides the estimation one, this will
+     *                           be set to 1.0
+     */
+    public void addPointsForEveryone(List<Integer> answerTimes, List<Double> guessQuestionRates) {
+        for(int i = 0; i < players.size(); i++) {
+            addPointsForPlayer(answerTimes.get(i), guessQuestionRates.get(i), players.get(i));
+        }
+    }
+
+    /**
      * This method adds points to a score of a player
      * A particular formula for the points has been developed.
      * parsing an int equal to -1 will be qualified as answering the question wrongly
      * @param timeWhenAnswered time in seconds how long it took a user to answer a question
-     * @param guessQuestionRate for every other question than a guess question this will be set to 1.0
-     *                          for the guess question this will be set to a percentage how good the guess was
+     * @param guessQuestionRate for every other question than a estimation question this will be set to 1.0
+     *                          for the estimation question this will be set to a percentage how good the guess was
      */
-    public int addPoints(int timeWhenAnswered, double guessQuestionRate, Player player){
+    public int addPointsForPlayer(int timeWhenAnswered, double guessQuestionRate, Player player){
         if(timeWhenAnswered == -1){
             player.resetStreak();
             nextQuestion();
@@ -92,7 +84,6 @@ public class MultiPlayerGame {
         int currentScore = player.getScore();
         int pointsToBeAdded = (int)Math.round(guessQuestionRate * getPointsToBeAdded(timeWhenAnswered, player));
         player.setScore( currentScore + pointsToBeAdded );
-        nextQuestion();
         return pointsToBeAdded;
     }
 
@@ -110,8 +101,27 @@ public class MultiPlayerGame {
     }
 
     /**
+     * Set the current screen
+     * @param screen the screen to be set
+     */
+    public void setCurrentScreen(String screen) {
+        switch (screen) {
+            case "ENDSCREEN":
+            case "LEADERBOARD":
+            case "LOADING SCREEN":
+            case "QUESTION":
+                this.currentScreen = screen;
+                break;
+            default:
+                System.out.println("Not valid screen");
+        }
+    }
+
+    /**
      * Increments questionNumber
      */
-    public void nextQuestion(){ questionNumber++;}
+    public void nextQuestion() {
+        questionNumber++;
+    }
 
 }
