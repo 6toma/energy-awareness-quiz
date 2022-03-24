@@ -334,4 +334,48 @@ public class PlayerTest {
         assertEquals(0,c.compareTo(b));
     }
 
+    /**
+     * Test for setStreak
+     */
+    @Test
+    public void TestStreakSetter() {
+        Player a = new Player(1L,"a",5);
+        a.setStreak(3);
+        assertEquals(3, a.getStreak());
+    }
+
+    /**
+     * Test for getStreak
+     */
+    @Test
+    public void TestStreakGetter() {
+        Player a = new Player(1L,"a",5);
+        assertEquals(0, a.getStreak());
+        a.setStreak(3);
+        assertEquals(3, a.getStreak());
+    }
+
+    /**
+     * Tests the resetStreak method
+     */
+    @Test
+    public void TestResetSteak() {
+        Player a = new Player(1L,"a",5);
+        a.setStreak(5);
+        a.resetStreak();
+        assertEquals(0, a.getStreak());
+    }
+
+    /**
+     * Tests the incrementStreak method
+     */
+    @Test
+    public void TestStreakIncrement() {
+        Player a = new Player(1L,"a",5);
+        for(int i = 0; i < 6; i++){
+            a.incrementStreak();
+        }
+        assertEquals(6, a.getStreak());
+    }
+
 }
