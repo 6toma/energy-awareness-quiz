@@ -82,12 +82,12 @@ public class SinglePlayerGameTest {
      */
     @Test
     public void TestGetPointsToBeAdded() {
-        singlePlayerGame.setStreak(5);
+        singlePlayerGame.getPlayer().setStreak(5);
         assertEquals(1050, singlePlayerGame.getPointsToBeAdded(10));
-        singlePlayerGame.setStreak(1);
+        singlePlayerGame.getPlayer().setStreak(1);
         assertEquals(1010, singlePlayerGame.getPointsToBeAdded(10));
         assertEquals(1015, singlePlayerGame.getPointsToBeAdded(9));
-        singlePlayerGame.setStreak(3);
+        singlePlayerGame.getPlayer().setStreak(3);
         assertEquals(1056, singlePlayerGame.getPointsToBeAdded(5));
     }
 
@@ -96,7 +96,7 @@ public class SinglePlayerGameTest {
      */
     @Test
     public void TestAddPointsRegularQuestion() {
-        singlePlayerGame.setStreak(3); // once the question is answered the streak is incremented and the score calculated (actual streak will be 4)
+        singlePlayerGame.getPlayer().setStreak(3); // once the question is answered the streak is incremented and the score calculated (actual streak will be 4)
         singlePlayerGame.addPoints(5, 1.0);
         assertEquals(1066, singlePlayerGame.getPlayer().getScore());
     }
@@ -116,20 +116,11 @@ public class SinglePlayerGameTest {
      */
     @Test
     public void TestAddPointsGuessQuestion() {
-        singlePlayerGame.setStreak(3); // once the question is answered the streak is incremented and the score calculated (actual streak will be 4)
+        singlePlayerGame.getPlayer().setStreak(3); // once the question is answered the streak is incremented and the score calculated (actual streak will be 4)
         singlePlayerGame.addPoints(7, 0.49);
         assertEquals(517, singlePlayerGame.getPlayer().getScore());
     }
 
-    /**
-     * Tests the resetStreak method
-     */
-    @Test
-    public void TestResetSteak() {
-        singlePlayerGame.setStreak(5);
-        singlePlayerGame.resetStreak();
-        assertEquals(0, singlePlayerGame.getStreak());
-    }
 
     /**
      * Tests the nextQuestion method
@@ -142,16 +133,6 @@ public class SinglePlayerGameTest {
         assertEquals(6, singlePlayerGame.getQuestionNumber());
     }
 
-    /**
-     * Tests the incrementStreak method
-     */
-    @Test
-    public void TestStreakIncrement() {
-        for(int i = 0; i < 6; i++){
-            singlePlayerGame.incrementStreak();
-        }
-        assertEquals(6, singlePlayerGame.getStreak());
-    }
 
     /**
      * Tests if the streak is reset after a wrong answer
@@ -159,7 +140,7 @@ public class SinglePlayerGameTest {
     @Test
     public void TestStreakAfterWrongAnswer() {
         singlePlayerGame.addPoints(-1, 1.0);
-        assertEquals(0, singlePlayerGame.getStreak());
+        assertEquals(0, singlePlayerGame.getPlayer().getStreak());
     }
 
     /**
@@ -172,15 +153,6 @@ public class SinglePlayerGameTest {
         assertEquals(p, singlePlayerGame.getPlayer());
     }
 
-    /**
-     * Test for getStreak
-     */
-    @Test
-    public void TestStreakGetter() {
-        assertEquals(0, singlePlayerGame.getStreak());
-        singlePlayerGame.setStreak(3);
-        assertEquals(3, singlePlayerGame.getStreak());
-    }
 
     /**
      * Tests if question gets added
@@ -235,14 +207,6 @@ public class SinglePlayerGameTest {
         assertEquals(p, singlePlayerGame.getPlayer());
     }
 
-    /**
-     * Test for setStreak
-     */
-    @Test
-    public void TestStreakSetter() {
-        singlePlayerGame.setStreak(3);
-        assertEquals(3, singlePlayerGame.getStreak());
-    }
 
     /**
      * Test for setQuestionNumber
