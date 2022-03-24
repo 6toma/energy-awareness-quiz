@@ -1,6 +1,5 @@
 package server.api;
 
-import commons.ChangesMessage;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +18,7 @@ public class LongPollController {
      * List of everything thats different from last poll
      * For each thing in list we send another request for the body of that change
      */
-    private static final List<ChangesMessage> changesMessageList = new ArrayList<>();
+    private static final List<Integer> changesMessageList = new ArrayList<>();
 
     /**
     private MultiplayerGameObject multiplayerGame;
@@ -36,10 +35,10 @@ public class LongPollController {
      * @return
      * @throws InterruptedException
      */
-    private ResponseEntity<List<ChangesMessage>> keepPolling(ChangesMessage input) throws InterruptedException {
+    private ResponseEntity<List<Integer>> keepPolling(Integer input) throws InterruptedException {
         Thread.sleep(5000);
         HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(URI.create("/getMessages?id=" + input.getId() + "&type=" + input.getServerChangeType()));
+        headers.setLocation(URI.create("/getMessages?id=" + input + "&type=" + input));
         return new ResponseEntity<>(headers, HttpStatus.TEMPORARY_REDIRECT);
     }
 

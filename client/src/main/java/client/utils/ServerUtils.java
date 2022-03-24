@@ -15,7 +15,6 @@
  */
 package client.utils;
 
-import commons.ChangesMessage;
 import commons.ComparativeQuestion;
 import commons.Player;
 import jakarta.ws.rs.client.ClientBuilder;
@@ -129,7 +128,7 @@ public class ServerUtils {
      * and then based on that change number we send another
      * request but for the body fo the change
      */
-    public void registerUpdates(Consumer<ChangesMessage> consumer) {
+    public void registerUpdates(Consumer<Integer> consumer) {
         EXEC.submit(() -> {
             while (!Thread.interrupted()) {
                 var res = ClientBuilder.newClient(new ClientConfig())
@@ -140,7 +139,7 @@ public class ServerUtils {
                 if (res.getStatus() == 204){
                     continue;
                 }
-                var c = res.readEntity(ChangesMessage.class);
+                var c = res.readEntity(Integer.class);
                 consumer.accept(c);
             }
         });
