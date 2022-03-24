@@ -15,6 +15,7 @@
  */
 package server;
 
+import commons.MultiPlayerGame;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import java.util.Random;
@@ -36,5 +37,14 @@ public class Config {
     @Bean
     public Random getRandom() {
         return new Random();
+    }
+
+    /**
+     * Returns a new multiplayer object
+     * @return new multiplayer object
+     */
+    @Bean
+    public MultiPlayerGame getMultiplayerGame(){
+        return new MultiPlayerGame();
     }
 }

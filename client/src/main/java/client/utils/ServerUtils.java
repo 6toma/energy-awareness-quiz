@@ -16,6 +16,7 @@
 package client.utils;
 
 import commons.ComparativeQuestion;
+import commons.MultiPlayerGame;
 import commons.Player;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
@@ -78,7 +79,7 @@ public class ServerUtils {
      * Sets the server URL
      * If input invalid sets url to default
      *
-     * @param serverURL
+     * @param serverURL url to the server to connect to
      */
     public void setServerURL(String serverURL) {
         if(serverURL.length() > 0){
@@ -103,22 +104,6 @@ public class ServerUtils {
                 .get(new GenericType<>() {
                 });
     }
-    /**
-     * Gets all the changes that happened
-     * it will be a list of numbers that correspond to certain actions to be taken
-     * eg. 1 == we on a different question now, 2 == score of players have changed
-     * @return
-
-    public List<ChangesMessage> getGameChanges(){
-        return ClientBuilder.newClient(new ClientConfig()) //
-                .target(serverURL).path("")
-                .request(APPLICATION_JSON) //
-                .accept(APPLICATION_JSON) //
-                .get(new GenericType<>() {
-                });
-    }
-    */
-
 
 
     private static final ExecutorService EXEC = Executors.newSingleThreadExecutor();
@@ -153,8 +138,21 @@ public class ServerUtils {
     }
 
     /**
-     * Used to sync up scenes with Server
+     *
      * @return
+     */
+    public Integer postChange(){
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(serverURL).path("")
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<>() {
+                });
+    }
+
+    /**
+     * Used to sync up scenes with Server
+     * @return String name of the screen
      */
     public String getCurrentScene(){
         return ClientBuilder.newClient(new ClientConfig()) //
@@ -167,7 +165,7 @@ public class ServerUtils {
 
     /**
      * Used to sync up "which question we are on" with server
-     * @return
+     * @return Integer of the current question
      */
     public int getCurrentQuestionNumber(){
         return ClientBuilder.newClient(new ClientConfig()) //
@@ -180,8 +178,9 @@ public class ServerUtils {
 
     /**
      * Used to send your score to the Server Multplayer Game Object
-     * @param player
-     * @return
+     * @param player player object containing name and score
+     * @return the Player that has been posted
+     * dont know why this returns anything
      */
     public Player postScore(Player player){
         return ClientBuilder.newClient(new ClientConfig()) //
@@ -194,25 +193,10 @@ public class ServerUtils {
     /**
      * When the toilet is flushed we get the whole game object where
      * we take the questions and players from
-     * @return
-
-    public MultiplayerGame getMultiplayerGame(){
-        return ClientBuilder.newClient(new ClientConfig()) //
-                .target(serverURL).path("")
-                .request(APPLICATION_JSON) //
-                .accept(APPLICATION_JSON) //
-                .get(new GenericType<>() {
-                });
-    }
-    */
-
-    /**
-     * Gets the Game id
-     * Dont know why
-     * Its in the diagram that was created
-     * @return
+     * this should only be done once at the start
+     * @return instance of multiplayer game
      */
-    public Long getGameID(){
+    public MultiPlayerGame getMultiplayerGame(){
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(serverURL).path("")
                 .request(APPLICATION_JSON) //
@@ -224,7 +208,7 @@ public class ServerUtils {
     /**
      * Gets all players so you can display their names and score
      * on the leaderboard
-     * @return
+     * @return list of players
      */
     public List<Player> getPlayerChanges(){
         return ClientBuilder.newClient(new ClientConfig()) //
