@@ -5,10 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * Activity class that is stored in the database
@@ -29,6 +26,7 @@ public class Player implements Comparable{
     @Getter
     private Integer score;
     @Getter
+    @Transient
     private int streak = 0; // streak field for getting more points when you answer questions correctly in a row
 
 
