@@ -15,15 +15,20 @@
  */
 package client.utils;
 
+import commons.ChangesMessage;
 import commons.ComparativeQuestion;
 import commons.Player;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
+import jakarta.ws.rs.core.Response;
 import lombok.Getter;
 import org.glassfish.jersey.client.ClientConfig;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.function.Consumer;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
@@ -94,6 +99,137 @@ public class ServerUtils {
     public List<Player> getLeaderPlayers(int numberOfTop){
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(serverURL).path("api/players/leaderboard/"+numberOfTop)
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<>() {
+                });
+    }
+    /**
+     * Gets all the changes that happened
+     * it will be a list of numbers that correspond to certain actions to be taken
+     * eg. 1 == we on a different question now, 2 == score of players have changed
+     * @return
+
+    public List<ChangesMessage> getGameChanges(){
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(serverURL).path("")
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<>() {
+                });
+    }
+    */
+
+
+
+    private static final ExecutorService EXEC = Executors.newSingleThreadExecutor();
+    /**
+     * Dont know what this does but apparently
+     * its meant to get a change that happened on the server
+     * and then based on that change number we send another
+     * request but for the body fo the change
+     */
+    public void registerUpdates(Consumer<ChangesMessage> consumer) {
+        EXEC.submit(() -> {
+            while (!Thread.interrupted()) {
+                var res = ClientBuilder.newClient(new ClientConfig())
+                        .target(serverURL).path("")
+                        .request(APPLICATION_JSON) //
+                        .accept(APPLICATION_JSON) //
+                        .get(Response.class);
+                if (res.getStatus() == 204){
+                    continue;
+                }
+                var c = res.readEntity(ChangesMessage.class);
+                consumer.accept(c);
+            }
+        });
+    }
+
+    /**
+     * Closes the Thread
+     */
+    public void stop(){
+        EXEC.shutdownNow();
+    }
+
+    /**
+     * Used to sync up scenes with Server
+     * @return
+     */
+    public int getCurrentScene(){
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(serverURL).path("")
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<>() {
+                });
+    }
+
+    /**
+     * Used to sync up "which question we are on" with server
+     * @return
+     */
+    public int getCurrentQuestionNumber(){
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(serverURL).path("")
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<>() {
+                });
+    }
+
+    /**
+     * Used to send your score to the Server Multplayer Game Object
+     * @param player
+     * @return
+     */
+    public Player postScore(Player player){
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(serverURL).path("") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .post(Entity.entity(player, APPLICATION_JSON), Player.class);
+    }
+
+    /**
+     * When the toilet is flushed we get the whole game object where
+     * we take the questions and players from
+     * @return
+
+    public MultiplayerGame getMultiplayerGame(){
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(serverURL).path("")
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<>() {
+                });
+    }
+    */
+
+    /**
+     * Gets the Game id
+     * Dont know why
+     * Its in the diagram that was created
+     * @return
+     */
+    public Long getGameID(){
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(serverURL).path("")
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<>() {
+                });
+    }
+
+    /**
+     * Gets all players so you can display their names and score
+     * on the leaderboard
+     * @return
+     */
+    public List<Player> getPlayerChanges(){
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(serverURL).path("")
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<>() {
