@@ -372,7 +372,7 @@ public class MainCtrl {
     public void showScore(int pointsGained) {
         int gained = pointsGained;
         int total = singlePlayerGame.getPlayer().getScore();
-        int streak = singlePlayerGame.getStreak();
+        int streak = singlePlayerGame.getPlayer().getStreak();
         scoreChangeScreenCtrl.setScoreLabels(gained, total, streak);
     }
 
