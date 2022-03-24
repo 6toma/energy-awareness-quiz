@@ -2,6 +2,8 @@ package commons;
 
 import lombok.*;
 
+import javax.persistence.Transient;
+
 @Data
 /**
  * Class for estimation questions. A player is supposed to estimate which question uses similar
@@ -22,13 +24,5 @@ public class EstimationQuestion extends Question {
      */
     public EstimationQuestion(Activity activity) {
         this.activity = activity;
-    }
-
-    /**
-     * getter for the correct answer
-     * @return
-     */
-    public Long getCorrectAnswer() {
-        return activity.getConsumption_in_wh();
     }
 }
