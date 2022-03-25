@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
@@ -39,7 +40,11 @@
     </VBox>
     <StackPane maxHeight="132.0" maxWidth="1.7976931348623157E308" prefHeight="132.0" styleClass="padding, margin" stylesheets="@../css/ComparativeQuestionScreen.css" StackPane.alignment="BOTTOM_CENTER">
         <children>
-            <Button fx:id="exit" onAction="#exit" styleClass="border, rounded" text="Leave" StackPane.alignment="BOTTOM_LEFT" />
+            <Button fx:id="exit" onAction="#exit" text="Leave" StackPane.alignment="BOTTOM_LEFT">
+            <styleClass>
+               <String fx:value="exit" />
+               <String fx:value="rounded" />
+            </styleClass></Button>
             <HBox alignment="BOTTOM_CENTER" maxWidth="-Infinity" prefWidth="600.0" StackPane.alignment="TOP_CENTER">
                 <StackPane.margin>
                     <Insets />
