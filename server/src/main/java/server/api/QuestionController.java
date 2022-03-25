@@ -3,6 +3,7 @@ package server.api;
 import commons.Activity;
 import commons.ComparativeQuestion;
 import commons.EstimationQuestion;
+import commons.Question;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -73,6 +74,7 @@ public class QuestionController {
         }
 
         var activity = repo.getRandomActivities(limit).get().get(0);
+        activity.initializeImage(new File(Config.defaultImagePath + activity.getImage_path()));
         EstimationQuestion q = new EstimationQuestion(activity);
         return ResponseEntity.ok(q);
     }
