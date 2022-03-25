@@ -36,13 +36,18 @@ public class QuestionController {
         this.repo = repo;
     }
 
+    /**
+     * Generates a random number, uses it to get a random question type
+     * @return either:
+     *         - ResponseEntity precondition failed
+     *         - ComparativeQuestion
+     *         - EstimationQuestion
+     */
     @GetMapping(path = {"/random", "/random/"})
     public ResponseEntity<Question> getRandomQuestion() {
 
         int randomInt = random.nextInt();
         int numberOfQuestions = 2;
-
-        System.out.println(randomInt);
 
         // To add more question types increment numberOfQuestions and add another if statement
         // e.g. else if(randomInt % numberOfQuestions == 1) return ...
