@@ -3,6 +3,7 @@ package server.api;
 import commons.Activity;
 import commons.ComparativeQuestion;
 import commons.EstimationQuestion;
+import commons.Question;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,13 +36,30 @@ public class QuestionController {
         this.repo = repo;
     }
 
+    @GetMapping(path = {"/random", "/random/"})
+    public ResponseEntity<Question> getRandomQuestion() {
+
+        int randomInt = random.nextInt();
+        int numberOfQuestions = 2;
+
+        System.out.println(randomInt);
+
+        // To add more question types increment numberOfQuestions and add another if statement
+        // e.g. else if(randomInt % numberOfQuestions == 1) return ...
+        if(randomInt % numberOfQuestions == 0){
+            return getRandomComparative();
+        } else {
+            return getRandomEstimation();
+        }
+    }
+
     /**
      * Generates a random question with 3 random activities
      * Initializes the image for the activities
      * @return Comparative question with 3 activities
      */
     @GetMapping(path = {"/comparative", "/comparative/"})
-    public ResponseEntity<ComparativeQuestion> getRandomComparative() {
+    public ResponseEntity<Question> getRandomComparative() {
 
         int limit = 3; // how many activities are included in the question
 
@@ -65,7 +83,7 @@ public class QuestionController {
      * @return
      */
     @GetMapping(path = {"/estimation", "/estimation/"})
-    public ResponseEntity<EstimationQuestion> getRandomEstimation() {
+    public ResponseEntity<Question> getRandomEstimation() {
         int limit = 1;
 
         if (repo.count() <= limit) {

@@ -49,47 +49,17 @@ public class ServerUtils {
     }
 
     /**
-     * Generates a random number and requests a question based on that
+     * Gets a random question from the server
      * @return either:
      *         - ComparativeQuestion
      *         - EstimationQuestion
      */
     public Question getRandomQuestion() {
-        int randomInt = new Random().nextInt();
-        int numberOfQuestions = 2;
-
-        // To add more question types increment numberOfQuestions and add another if statement
-        // e.g. else if(randomInt % numberOfQuestions == 1) return ...
-        if(randomInt % numberOfQuestions == 0){
-            return getCompQuestion();
-        } else {
-            return getEstimationQuestion();
-        }
-    }
-
-    /**
-     * Gets a comparative question from the server
-     * @return Comparative Question if successful
-     */
-    public ComparativeQuestion getCompQuestion() {
         return ClientBuilder.newClient(new ClientConfig()) //
-            .target(serverURL).path("api/questions/comparative") // the URL path which we HTTP GET for comparative questions
+            .target(serverURL).path("api/questions/random") // the URL path which we HTTP GET for comparative questions
             .request(APPLICATION_JSON) //
             .accept(APPLICATION_JSON) //
             .get(new GenericType<>() {});
-    }
-
-    /**
-     * Gets a estimation question from the server
-     * @return
-     */
-    public EstimationQuestion getEstimationQuestion() {
-        return ClientBuilder.newClient(new ClientConfig())
-                .target(serverURL).path("api/questions/estimation")
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .get(new GenericType<EstimationQuestion>() {
-                });
     }
 
 
