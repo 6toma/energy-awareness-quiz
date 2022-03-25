@@ -1,9 +1,12 @@
 package server.api;
 
 import commons.Activity;
-//import commons.ComparativeQuestion;
+import commons.ComparativeQuestion;
+import commons.EstimationQuestion;
 import org.junit.jupiter.api.BeforeEach;
-//import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import server.api.dependencies.TestActivityRepository;
 import server.api.dependencies.TestRandom;
 
@@ -38,24 +41,40 @@ class QuestionControllerTest {
             new Activity("6", "image_f","f", 6L, "f"),
             new Activity("7", "image_g","g", 7L, "g")
         );
-
-        repo.activities.addAll(activities);
     }
-
-    //commented out imports as well
 
     /**
      * Test for getting a random comparative question
      * Uses TestRandom implementation so random is predictable
      */
-    /*@Test //repo and que have different TestRandom objects!
+    @Test //repo and que have different TestRandom objects!
     void getRandomComparativeTest() {
+        repo.activities.addAll(activities);
+
         List<Activity> e1_list = List.of(activities.get(0), activities.get(1), activities.get(2));
         ComparativeQuestion expected1 = new ComparativeQuestion(e1_list, true);
         assertEquals(expected1, que.getRandomComparative().getBody());
 
-        List<Activity> e2_list = List.of(activities.get(3), activities.get(4), activities.get(5));
+        List<Activity> e2_list = List.of(activities.get(0), activities.get(1), activities.get(2));
         ComparativeQuestion expected2 = new ComparativeQuestion(e2_list, false);
         assertEquals(expected2, que.getRandomComparative().getBody());
-    }*/
+    }
+
+    @Test
+    void getRandomComparativeTestNoActivities() {
+        assertEquals(ResponseEntity.status(HttpStatus.PRECONDITION_FAILED).build(), que.getRandomComparative());
+    }
+
+    @Test
+    void getRandomEstimationTest() {
+        repo.activities.addAll(activities);
+
+        EstimationQuestion expected = new EstimationQuestion(activities.get(0));
+        assertEquals(expected, que.getRandomEstimation().getBody());
+    }
+
+    @Test
+    void getRandomEstimationTestNoActivities() {
+        assertEquals(ResponseEntity.status(HttpStatus.PRECONDITION_FAILED).build(), que.getRandomEstimation());
+    }
 }
