@@ -1,5 +1,6 @@
 package client;
 
+import commons.Activity;
 import commons.ComparativeQuestion;
 import commons.Player;
 import commons.Question;
@@ -188,7 +189,7 @@ public class SinglePlayerGameTest {
     @Test
     public void TestQuestionGetter() {
         singlePlayerGame.addQuestion(new ComparativeQuestion());
-        singlePlayerGame.addQuestion(new ComparativeQuestion());
+        singlePlayerGame.addQuestion(new ComparativeQuestion(new ArrayList<Activity>(), true));
         assertEquals(2, singlePlayerGame.getQuestions().size());
     }
 

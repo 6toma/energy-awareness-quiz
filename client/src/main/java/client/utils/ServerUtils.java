@@ -15,8 +15,6 @@
  */
 package client.utils;
 
-import commons.ComparativeQuestion;
-import commons.EstimationQuestion;
 import commons.Player;
 import commons.Question;
 import jakarta.ws.rs.client.ClientBuilder;
@@ -26,7 +24,6 @@ import lombok.Getter;
 import org.glassfish.jersey.client.ClientConfig;
 
 import java.util.List;
-import java.util.Random;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
