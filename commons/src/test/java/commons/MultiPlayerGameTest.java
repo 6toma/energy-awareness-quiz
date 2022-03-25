@@ -12,6 +12,8 @@ import static org.junit.jupiter.api.Assertions.*;
 public class MultiPlayerGameTest {
 
     MultiPlayerGame multiPlayerGame;
+    Activity a1;
+    Activity a2;
 
     /**
      * Creates a new multiplayer game with an empty list of questions
@@ -22,6 +24,8 @@ public class MultiPlayerGameTest {
         List<Question> questions = new ArrayList<>();
         List<Player> players = new ArrayList<>();
         multiPlayerGame = new MultiPlayerGame(1, players, questions);
+        a1 = new Activity("1L", "image_a", "a", 1L, "a");
+        a2 = new Activity("2L", "image_b", "b", 2L, "b");
     }
 
     /**
@@ -53,9 +57,9 @@ public class MultiPlayerGameTest {
         players.add(b);
         players.add(c);
 
-        Question q1 = new Question();
-        Question q2 = new Question();
-        Question q3 = new Question();
+        ComparativeQuestion q1 = new ComparativeQuestion(List.of(a1, a2), true);
+        EstimationQuestion q2 = new EstimationQuestion(a2);
+        ComparativeQuestion q3 = new ComparativeQuestion(null, false);
         ArrayList<Question> questions = new ArrayList<>();
         questions.add(q1);
         questions.add(q2);
@@ -73,11 +77,11 @@ public class MultiPlayerGameTest {
      */
     @Test
     public void testAddQuestion() {
-        assertTrue(multiPlayerGame.addQuestion(new Question()));
+        assertTrue(multiPlayerGame.addQuestion(new ComparativeQuestion(null, false)));
 
         assertEquals(1, multiPlayerGame.getQuestions().size());
 
-        Question q = new Question();
+        Question q = new ComparativeQuestion(null, true);
         assertTrue(multiPlayerGame.addQuestion(q));
 
         assertEquals(2, multiPlayerGame.getQuestions().size());
@@ -89,14 +93,14 @@ public class MultiPlayerGameTest {
      */
     @Test
     public void addManyQuestions() {
-        multiPlayerGame.addQuestion(new Question());
-        multiPlayerGame.addQuestion(new Question());
-        multiPlayerGame.addQuestion(new Question());
-        multiPlayerGame.addQuestion(new Question());
+        multiPlayerGame.addQuestion(new ComparativeQuestion(null, true));
+        multiPlayerGame.addQuestion(new EstimationQuestion(a1));
+        multiPlayerGame.addQuestion(new ComparativeQuestion(null, false));
+        multiPlayerGame.addQuestion(new EstimationQuestion(a2));
 
         assertEquals(4, multiPlayerGame.getQuestions().size());
 
-        Question q1 = new Question();
+        Question q1 = new ComparativeQuestion(List.of(a1, a2), false);
         assertTrue(multiPlayerGame.addQuestion(q1));
 
         assertEquals(5, multiPlayerGame.getQuestions().size());
@@ -438,7 +442,7 @@ public class MultiPlayerGameTest {
      */
     @Test
     public void TestQuestionListSetter() {
-        List<Question> questions = List.of(new Question(), new Question(), new Question());
+        List<Question> questions = List.of(new EstimationQuestion(a1), new EstimationQuestion(a2), new ComparativeQuestion(List.of(a1, a2), true));
         multiPlayerGame.setQuestions(questions);
 
         assertEquals(questions, multiPlayerGame.getQuestions());
