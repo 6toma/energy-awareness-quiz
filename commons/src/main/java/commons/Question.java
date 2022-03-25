@@ -1,10 +1,12 @@
 package commons;
 
-public class Question {
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
-    /**
-     * Creates a new Question object
-     */
-    public Question() {
-    }
+@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS)
+@JsonSubTypes({
+    @JsonSubTypes.Type(value = ComparativeQuestion.class),
+    @JsonSubTypes.Type(value = EstimationQuestion.class),
+})
+public interface Question {
 }

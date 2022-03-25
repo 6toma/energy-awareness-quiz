@@ -102,6 +102,11 @@ public class Main extends Application {
                 "scenes/ScoreChangeScreen.fxml",
                 "css/ScoreChangeScreen.css"
         );
+        var EstimationQuestionScreen = FXML.load(
+                EstimationQuestionCtrl.class,
+                "scenes/EstimationQuestion.fxml",
+                "css/EstimationQuestion.css"
+        );
 
         var settingsScreen = FXML.load(
                 SettingsScreenCtrl.class,
@@ -112,6 +117,6 @@ public class Main extends Application {
         // add more scenes the same way
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
-        mainCtrl.initialize(primaryStage, homeScreen, waitingRoom, loadingScreen, comparativeQuestionScreen, usernameScreen, endScreen, helpScreen, ScoreChangeScreen, settingsScreen);
+        mainCtrl.initialize(primaryStage, homeScreen, waitingRoom, loadingScreen, comparativeQuestionScreen, usernameScreen, endScreen, helpScreen, ScoreChangeScreen, EstimationQuestionScreen, settingsScreen);
     }
 }

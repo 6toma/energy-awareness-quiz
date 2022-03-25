@@ -1,5 +1,8 @@
 package server.api.dependencies;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.Random;
 
 
@@ -9,10 +12,15 @@ import java.util.Random;
  */
 public class TestRandom extends Random {
 
+    @Setter
+    @Getter
     long count = 0;
 
     @Override
     public long nextLong(){
         return count++;
     }
+
+    @Override
+    public int nextInt() { return (int) count++; }
 }

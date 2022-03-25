@@ -2,6 +2,8 @@ package server.api;
 
 import commons.Activity;
 import commons.ComparativeQuestion;
+import commons.EstimationQuestion;
+import commons.Question;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,12 +27,35 @@ public class QuestionController {
 
     /**
      * Creates new QuestionController object
+     *
      * @param random Random bean from config
-     * @param repo repository to use
+     * @param repo   repository to use
      */
     public QuestionController(Random random, ActivityRepository repo) {
         this.random = random;
         this.repo = repo;
+    }
+
+    /**
+     * Generates a random number, uses it to get a random question type
+     * @return either:
+     *         - ResponseEntity precondition failed
+     *         - ComparativeQuestion
+     *         - EstimationQuestion
+     */
+    @GetMapping(path = {"/random", "/random/"})
+    public ResponseEntity<Question> getRandomQuestion() {
+
+        int randomInt = random.nextInt();
+        int numberOfQuestions = 2;
+
+        // To add more question types increment numberOfQuestions and add another if statement
+        // e.g. else if(randomInt % numberOfQuestions == 1) return ...
+        if(randomInt % numberOfQuestions == 0){
+            return getRandomComparative();
+        } else {
+            return getRandomEstimation();
+        }
     }
 
     /**
@@ -39,7 +64,7 @@ public class QuestionController {
      * @return Comparative question with 3 activities
      */
     @GetMapping(path = {"/comparative", "/comparative/"})
-    public ResponseEntity<ComparativeQuestion> getRandomComparative() {
+    public ResponseEntity<Question> getRandomComparative() {
 
         int limit = 3; // how many activities are included in the question
 
@@ -55,6 +80,24 @@ public class QuestionController {
         for(Activity a : q.getActivities()){
             a.initializeImage(new File(Config.defaultImagePath + a.getImage_path()));
         }
+        return ResponseEntity.ok(q);
+    }
+
+    /**
+     * endpoint for getting an activity for a Estimation question
+     * @return
+     */
+    @GetMapping(path = {"/estimation", "/estimation/"})
+    public ResponseEntity<Question> getRandomEstimation() {
+        int limit = 1;
+
+        if (repo.count() <= limit) {
+            return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED).build();
+        }
+
+        var activity = repo.getRandomActivities(limit).get().get(0);
+        activity.initializeImage(new File(Config.defaultImagePath + activity.getImage_path()));
+        EstimationQuestion q = new EstimationQuestion(activity);
         return ResponseEntity.ok(q);
     }
 
@@ -75,21 +118,21 @@ public class QuestionController {
         Activity pivot = repo.getRandomActivities(1).get().get(0);
 
         /* get a list of random activities with consumption in the interval
-        * (lowerBound * pivot.getConsumption_in_wh(), upperBound * pivot.getConsumption_in_wh())
-        *  if the list doesn't have the needed number of activities, increase the range
-        */
+         * (lowerBound * pivot.getConsumption_in_wh(), upperBound * pivot.getConsumption_in_wh())
+         *  if the list doesn't have the needed number of activities, increase the range
+         */
         do {
             ids = repo.activitiesWithSpecifiedConsumption(
                     limit,
-                    (int) Math.floor( lowerBound * pivot.getConsumption_in_wh() ),
-                    (int) Math.ceil( upperBound * pivot.getConsumption_in_wh() )
+                    (int) Math.floor(lowerBound * pivot.getConsumption_in_wh()),
+                    (int) Math.ceil(upperBound * pivot.getConsumption_in_wh())
             );
             lowerBound -= 0.05; //it is not a problem for lowerBound to go below 0
             upperBound += 0.2;
         } while (ids.isEmpty() || ids.get().size() < limit);
         //the while condition ensures exactly the needed number of IDs are returned and not less
 
-        for(int i = 0; i < ids.get().size(); i++) {
+        for (int i = 0; i < ids.get().size(); i++) {
             result.add(repo.findById(ids.get().get(i)).get());
         }
 
