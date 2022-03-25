@@ -10,8 +10,17 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.HBox;
 import javafx.util.Duration;
 import lombok.Data;
+
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 
 @Data
 public class EstimationQuestionCtrl {
@@ -26,6 +35,7 @@ public class EstimationQuestionCtrl {
     private double answerTime = 4.0;
 
     private int timeWhenAnswered = -1;
+    private double guessAccuracy = 1.0;
     private int currentTime = (int) questionTime;
     private int pointsGainedForQuestion = 0;
 
@@ -38,6 +48,12 @@ public class EstimationQuestionCtrl {
     private Timeline questionTimer;
     private Timeline answerTimer;
 
+
+    @FXML
+    private TextField answerField;
+
+    @FXML
+    private ImageView image;
 
     @FXML
     private Label questionLabel;
@@ -56,6 +72,9 @@ public class EstimationQuestionCtrl {
 
     @FXML
     private Button joker3;
+
+    @FXML
+    private HBox questionBox;
 
     /**
      * Constructor for the Estimation Question Controller
@@ -106,6 +125,9 @@ public class EstimationQuestionCtrl {
     public void setQuestion(EstimationQuestion question) {
         this.question = question;
         setQuestionText();
+        // Sets a formatter for the input field to only accept numbers
+        answerField.setTextFormatter(new TextFormatter<>(change -> change.getControlNewText().matches("[0-9]*") ? change : null));
+        setImage();
     }
 
     /**
@@ -120,10 +142,15 @@ public class EstimationQuestionCtrl {
      * Checking the correctness of the answer
      * @param answer
      */
-    //TODO
     public void checkAnswer(Long answer) {
-        Long correctAnswer = question.getCorrectAnswer();
-        if (answer != correctAnswer) {
+        guessAccuracy = (double) answer / question.getActivity().getConsumption_in_wh();
+        // convert to accuracy value of < 1. for example 1.04 -> 0.96
+        if(guessAccuracy > 1.0){
+            guessAccuracy = 1 - 2 * (guessAccuracy - 1);
+        }
+        // set a lower limit to the guess accuracy
+        if(guessAccuracy < 0.2){
+            guessAccuracy = 0;
             timeWhenAnswered = -1;
         } else {
             timeWhenAnswered = (int) (progressBar.getProgress() * questionTime);
@@ -141,18 +168,16 @@ public class EstimationQuestionCtrl {
         answerTimer.setCycleCount(1);
         answerTimer.play();
 
-        //answer.setDisable(true);
+        answerField.setDisable(true);
         // disable joker buttons, so they can't be clicked while
         // answers are being shown
         joker1.setDisable(true);
         joker2.setDisable(true);
         joker3.setDisable(true);
 
-        Long correctAnswer = question.getCorrectAnswer();
+        questionLabel.setText(questionLabel.getText() + " - " + question.getActivity().getConsumption_in_wh() + " Wh");
 
-        pointsGainedForQuestion = mainCtrl.getSinglePlayerGame().addPoints(timeWhenAnswered, 1.0);
-
-
+        pointsGainedForQuestion = mainCtrl.getSinglePlayerGame().addPoints(timeWhenAnswered, guessAccuracy);
     }
 
     private void reset() {
@@ -162,11 +187,25 @@ public class EstimationQuestionCtrl {
         joker1.setDisable(false);
         joker2.setDisable(false);
         joker3.setDisable(false);
+
+        // reset answerField text and status
+        answerField.setText("");
+        answerField.setDisable(false);
     }
 
     private void endQuestion() {
         reset();
         mainCtrl.showScoreChangeScreen(pointsGainedForQuestion);
+    }
+
+    @FXML
+    void answerTextChanged(KeyEvent event) {
+        // try-catch block needed to check for errors when parsing string
+        try {
+            Long answer = Long.parseLong(answerField.getText());
+            checkAnswer(answer);
+        } catch(NumberFormatException e){
+        }
     }
 
     @FXML
@@ -238,5 +277,17 @@ public class EstimationQuestionCtrl {
         }
     }
 
-
+    /**
+     * Sets the images to the ones stored in the activities.
+     * Also sets the images to be the same width as the question
+     */
+    private void setImage(){
+        if(question.getActivity().getImage() != null){
+            InputStream inputStream = new ByteArrayInputStream(question.getActivity().getImage());
+            if(inputStream != null){
+                image.setImage(new Image(inputStream));
+            }
+        }
+        image.fitHeightProperty().bind(questionBox.heightProperty());
+    }
 }
