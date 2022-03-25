@@ -77,4 +77,23 @@ class QuestionControllerTest {
     void getRandomEstimationTestNoActivities() {
         assertEquals(ResponseEntity.status(HttpStatus.PRECONDITION_FAILED).build(), que.getRandomEstimation());
     }
+
+    @Test
+    void getRandomQuestionTestComparative() {
+        repo.activities.addAll(activities);
+
+        ComparativeQuestion expected = new ComparativeQuestion(List.of(activities.get(0), activities.get(1), activities.get(2)), false);
+
+        que.getRandomComparative(); // to move TestRandom to next number so it would return a comparative question
+        assertEquals(expected, que.getRandomQuestion().getBody());
+    }
+
+    @Test
+    void getRandomQuestionTestEstimation() {
+        repo.activities.addAll(activities);
+
+        EstimationQuestion expected = new EstimationQuestion(activities.get(0));
+
+        assertEquals(expected, que.getRandomQuestion().getBody());
+    }
 }
