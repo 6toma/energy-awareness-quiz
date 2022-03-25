@@ -7,7 +7,7 @@ import lombok.*;
  * Class for estimation questions. A player is supposed to estimate which question uses similar
  * amount of energy
  */
-public class EstimationQuestion extends Question {
+public class EstimationQuestion implements Question {
     private Activity activity; // activity
 
     /**
