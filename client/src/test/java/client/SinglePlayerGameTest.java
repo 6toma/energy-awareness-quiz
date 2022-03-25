@@ -1,6 +1,6 @@
 package client;
 
-import client.SinglePlayerGame;
+import commons.ComparativeQuestion;
 import commons.Player;
 import commons.Question;
 import org.junit.jupiter.api.BeforeEach;
@@ -73,7 +73,7 @@ public class SinglePlayerGameTest {
      */
     @Test
     public void TestAddQuestion(){
-        singlePlayerGame.addQuestion(new Question());
+        singlePlayerGame.addQuestion(new ComparativeQuestion());
         assertEquals(1, singlePlayerGame.getQuestions().size());
     }
 
@@ -187,8 +187,8 @@ public class SinglePlayerGameTest {
      */
     @Test
     public void TestQuestionGetter() {
-        singlePlayerGame.addQuestion(new Question());
-        singlePlayerGame.addQuestion(new Question());
+        singlePlayerGame.addQuestion(new ComparativeQuestion());
+        singlePlayerGame.addQuestion(new ComparativeQuestion());
         assertEquals(2, singlePlayerGame.getQuestions().size());
     }
 
@@ -197,8 +197,8 @@ public class SinglePlayerGameTest {
      */
     @Test
     public void TestQuestionGetterNotNull() {
-        singlePlayerGame.addQuestion(new Question());
-        singlePlayerGame.addQuestion(new Question());
+        singlePlayerGame.addQuestion(new ComparativeQuestion());
+        singlePlayerGame.addQuestion(new ComparativeQuestion());
         assertNotNull(singlePlayerGame.getQuestions().get(0));
     }
 
@@ -208,8 +208,8 @@ public class SinglePlayerGameTest {
     @Test
     public void TestQuestionSetter() {
         List<Question> questions = new ArrayList<>();
-        questions.add(new Question());
-        questions.add(new Question());
+        questions.add(new ComparativeQuestion());
+        questions.add(new ComparativeQuestion());
         singlePlayerGame.setQuestions(questions);
         assertEquals(2, singlePlayerGame.getQuestions().size());
     }
