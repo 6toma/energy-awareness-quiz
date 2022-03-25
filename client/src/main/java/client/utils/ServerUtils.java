@@ -18,6 +18,7 @@ package client.utils;
 import commons.ComparativeQuestion;
 import commons.EstimationQuestion;
 import commons.Player;
+import commons.Question;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
@@ -25,6 +26,7 @@ import lombok.Getter;
 import org.glassfish.jersey.client.ClientConfig;
 
 import java.util.List;
+import java.util.Random;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
@@ -44,6 +46,25 @@ public class ServerUtils {
      * No need to specifiy any fields
      */
     public ServerUtils() {
+    }
+
+    /**
+     * Generates a random number and requests a question based on that
+     * @return either:
+     *         - ComparativeQuestion
+     *         - EstimationQuestion
+     */
+    public Question getRandomQuestion() {
+        int randomInt = new Random().nextInt();
+        int numberOfQuestions = 2;
+
+        // To add more question types increment numberOfQuestions and add another if statement
+        // e.g. else if(randomInt % numberOfQuestions == 1) return ...
+        if(randomInt % numberOfQuestions == 0){
+            return getCompQuestion();
+        } else {
+            return getEstimationQuestion();
+        }
     }
 
     /**
