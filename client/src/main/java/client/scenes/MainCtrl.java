@@ -4,6 +4,7 @@ import client.SinglePlayerGame;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.ComparativeQuestion;
+import commons.EstimationQuestion;
 import commons.Question;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -50,7 +51,6 @@ public class MainCtrl {
 
     private ScoreChangeScreenCtrl scoreChangeScreenCtrl;
     private Parent scoreChangeScreenParent;
-
 
     private EstimationQuestionCtrl estimationScreenCtrl;
     private Parent estimationQuestionParent;
@@ -284,12 +284,10 @@ public class MainCtrl {
      * Creates a new game with some number of questions
      */
     public void newSinglePlayerGame() {
-        ComparativeQuestion question = server.getCompQuestion();
-        //EstimationQuestion estimationQuestion = server.getEstmQuestion();
+        Question question = server.getRandomQuestion();
 
         singlePlayerGame = new SinglePlayerGame(singlePlayerGameQuestions);
         singlePlayerGame.addQuestion(question);
-        //singlePlayerGame.addQuestion(estimationQuestion);
 
         setUsernameOriginScreen(1);
         showUsernameScreen();
@@ -301,12 +299,10 @@ public class MainCtrl {
      * @param username The username, used in the previous game
      */
     public void consecutiveSinglePlayerGame(String username) {
-        ComparativeQuestion question = server.getCompQuestion();
-        //EstimationQuestion estimationQuestion = server.getEstmQuestion();
+        Question question = server.getRandomQuestion();
 
         singlePlayerGame = new SinglePlayerGame(singlePlayerGameQuestions, username);
         singlePlayerGame.addQuestion(question);
-        // singlePlayerGame.addQuestion(estimationQuestion);
 
         //skipping over the part where we ask for username
         showLoadingScreen();
@@ -317,16 +313,8 @@ public class MainCtrl {
      * <p>
      * Shows the end screen if next question isn't defined
      */
-    // TODO: incorporate different types of questions
     public void nextQuestionScreen() {
-        nextQuestionComparative();
-
-    }
-
-    /**
-     * Shows a comparative question
-     */
-    public void nextQuestionComparative() {
+        // check if there's a next question to show
         if (singlePlayerGame != null
                 && singlePlayerGame.getQuestions().size() > 0
                 && singlePlayerGame.getQuestionNumber() <= singlePlayerGame.getMaxQuestions()
@@ -337,16 +325,20 @@ public class MainCtrl {
             if (question instanceof ComparativeQuestion) {
                 showComparativeQuestionScreen();
                 comparativeQuestionScreenCtrl.setQuestion((ComparativeQuestion) question);
-            } // more question types to be added
+            } else if (question instanceof EstimationQuestion) {
+                showEstimationQuestionScreen();
+                estimationScreenCtrl.setQuestion((EstimationQuestion) question);
+            }
 
             // get next question from the server
             try {
-                ComparativeQuestion newQuestion = server.getCompQuestion();
+                Question newQuestion = server.getRandomQuestion();
                 // loop until new question is not already in the list
                 while (!singlePlayerGame.addQuestion(newQuestion)) {
-                    newQuestion = server.getCompQuestion();
+                    newQuestion = server.getRandomQuestion();
                 }
             } catch (Exception e) {
+                e.printStackTrace();
                 // TODO: error pop-up
                 Alert alert = new Alert(Alert.AlertType.NONE);
                 EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
@@ -361,7 +353,7 @@ public class MainCtrl {
                 };
             }
 
-        } else {
+        } else { // if no question to show display end screen
             endSinglePlayerGame();
         }
     }
@@ -378,8 +370,7 @@ public class MainCtrl {
 
         //reset Question screen to prepare it for a new game
         comparativeQuestionScreenCtrl.resetComparativeQuestionScreen();
-
-        //estimationScreenCtrl.resetEstimationQuestion();
+        estimationScreenCtrl.resetEstimationQuestion();
 
 
         //store player's end score
