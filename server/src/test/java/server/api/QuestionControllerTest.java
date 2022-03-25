@@ -80,17 +80,18 @@ class QuestionControllerTest {
 
     @Test
     void getRandomQuestionTestComparative() {
+        random.setCount(0); // sets the random to start from 0
         repo.activities.addAll(activities);
 
         ComparativeQuestion expected = new ComparativeQuestion(List.of(activities.get(0), activities.get(1), activities.get(2)), false);
 
-        que.getRandomComparative(); // to move TestRandom to next number so it would return a comparative question
         assertEquals(expected, que.getRandomQuestion().getBody());
     }
 
     @Test
     void getRandomQuestionTestEstimation() {
         repo.activities.addAll(activities);
+        random.setCount(1); // sets the random to start from 1
 
         EstimationQuestion expected = new EstimationQuestion(activities.get(0));
 
