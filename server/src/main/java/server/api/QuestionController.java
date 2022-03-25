@@ -3,7 +3,6 @@ package server.api;
 import commons.Activity;
 import commons.ComparativeQuestion;
 import commons.EstimationQuestion;
-import commons.Question;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

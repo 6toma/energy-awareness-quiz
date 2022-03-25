@@ -2,8 +2,6 @@ package commons;
 
 import lombok.*;
 
-import javax.persistence.Transient;
-
 @Data
 /**
  * Class for estimation questions. A player is supposed to estimate which question uses similar
