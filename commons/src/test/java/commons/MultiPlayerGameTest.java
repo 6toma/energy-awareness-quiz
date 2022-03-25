@@ -40,6 +40,32 @@ public class MultiPlayerGameTest {
     @Test
     public void normalConstructorTest() {
         assertNotNull(multiPlayerGame);
+
+        MultiPlayerGame m = new MultiPlayerGame(14, new ArrayList<>(), new ArrayList<>());
+
+        assertNotNull(m);
+
+        Player a = new Player(1L,"a",5);
+        Player b = new Player(2L,"b",5);
+        Player c = new Player(3L,"c",5);
+        ArrayList<Player> players = new ArrayList<>();
+        players.add(a);
+        players.add(b);
+        players.add(c);
+
+        Question q1 = new Question();
+        Question q2 = new Question();
+        Question q3 = new Question();
+        ArrayList<Question> questions = new ArrayList<>();
+        questions.add(q1);
+        questions.add(q2);
+        questions.add(q3);
+
+        MultiPlayerGame m2 = new MultiPlayerGame(50, players, questions);
+        assertNotNull(m2);
+
+        MultiPlayerGame m3 = new MultiPlayerGame(5, null, null);
+        assertNotNull(m3);
     }
 
     /**
@@ -47,9 +73,14 @@ public class MultiPlayerGameTest {
      */
     @Test
     public void testAddQuestion() {
-        multiPlayerGame.addQuestion(new Question());
+        assertTrue(multiPlayerGame.addQuestion(new Question()));
 
         assertEquals(1, multiPlayerGame.getQuestions().size());
+
+        Question q = new Question();
+        assertTrue(multiPlayerGame.addQuestion(q));
+
+        assertEquals(2, multiPlayerGame.getQuestions().size());
     }
 
     /**
@@ -64,6 +95,19 @@ public class MultiPlayerGameTest {
         multiPlayerGame.addQuestion(new Question());
 
         assertEquals(4, multiPlayerGame.getQuestions().size());
+
+        Question q1 = new Question();
+        assertTrue(multiPlayerGame.addQuestion(q1));
+
+        assertEquals(5, multiPlayerGame.getQuestions().size());
+
+        assertFalse(multiPlayerGame.addQuestion(q1));
+
+        assertEquals(5, multiPlayerGame.getQuestions().size());
+
+        assertFalse(multiPlayerGame.addQuestion(null));
+
+        assertEquals(5, multiPlayerGame.getQuestions().size());
     }
 
     /**
@@ -80,9 +124,32 @@ public class MultiPlayerGameTest {
         players.add(b);
         players.add(c);
         multiPlayerGame.setPlayers(players);
-        multiPlayerGame.removePlayer(b);
+        assertEquals(3, multiPlayerGame.getPlayers().size());
+
+        assertTrue(multiPlayerGame.removePlayer(b));
 
         assertEquals(2, multiPlayerGame.getPlayers().size());
+
+        players.add(b);
+        multiPlayerGame.setPlayers(players);
+        assertEquals(3, multiPlayerGame.getPlayers().size());
+
+        assertTrue(multiPlayerGame.removePlayer(b));
+        assertTrue(multiPlayerGame.removePlayer(c));
+
+        assertEquals(1, multiPlayerGame.getPlayers().size());
+
+        assertFalse(multiPlayerGame.removePlayer(b));   // remove already removed player
+        assertFalse(multiPlayerGame.removePlayer(c));   // remove already removed player
+
+        Player d = new Player(4L,"d",4350);
+        assertFalse(multiPlayerGame.removePlayer(d));   // remove player that was never in the list
+
+        assertEquals(1, multiPlayerGame.getPlayers().size());
+
+        assertTrue(multiPlayerGame.removePlayer(a));
+
+        assertEquals(0, multiPlayerGame.getPlayers().size());
     }
 
     /**
@@ -169,7 +236,7 @@ public class MultiPlayerGameTest {
         assertEquals(1066, multiPlayerGame.getPlayers().get(2).getScore());
         // of course we can use "a", "b", "c" instead of
         // multiPlayerGame.getPlayers().get(x) but I think that writing it like this
-        // feels more natural/obvious
+        // feels more natural/obvious for this test
     }
 
     /**
@@ -239,6 +306,8 @@ public class MultiPlayerGameTest {
      */
     @Test
     public void TestNextQuestion() {
+        assertEquals(1, multiPlayerGame.getQuestionNumber());
+
         for(int i = 0; i < 5; i++){
             multiPlayerGame.nextQuestion();
         }
@@ -251,6 +320,28 @@ public class MultiPlayerGameTest {
      */
     @Test
     public void TestPlayerListHasher() {
+        assertEquals(Objects.hash(multiPlayerGame.getPlayers()), multiPlayerGame.playerListHash());
+
+        Player a = new Player("a", 200);
+        Player b = new Player("b", 100);
+        Player c = new Player("c");
+        Player d = new Player("d", 100);
+        List<Player> players = new ArrayList<>();
+        players.add(a);
+        players.add(b);
+        players.add(c);
+        players.add(d);
+        multiPlayerGame.setPlayers(players);
+
+        assertEquals(Objects.hash(multiPlayerGame.getPlayers()), multiPlayerGame.playerListHash());
+
+        multiPlayerGame.removePlayer(a);
+
+        assertEquals(Objects.hash(multiPlayerGame.getPlayers()), multiPlayerGame.playerListHash());
+
+        multiPlayerGame.removePlayer(b);
+        multiPlayerGame.removePlayer(c);
+
         assertEquals(Objects.hash(multiPlayerGame.getPlayers()), multiPlayerGame.playerListHash());
     }
 
@@ -301,8 +392,30 @@ public class MultiPlayerGameTest {
      */
     @Test
     public void TestGameIDSetter() {
+        assertEquals(1, multiPlayerGame.getGameID());
+
         multiPlayerGame.setGameID(10);
         assertEquals(10, multiPlayerGame.getGameID());
+
+        multiPlayerGame.setGameID(5000);
+        assertEquals(5000, multiPlayerGame.getGameID());
+
+        multiPlayerGame.setGameID(Integer.MAX_VALUE);
+        assertEquals(Integer.MAX_VALUE, multiPlayerGame.getGameID());
+
+        multiPlayerGame.setGameID(5000);
+        multiPlayerGame.setGameID(132);
+        multiPlayerGame.setGameID(7);
+        assertEquals(7, multiPlayerGame.getGameID());
+
+        multiPlayerGame.setGameID(-1);
+        assertEquals(0, multiPlayerGame.getGameID());
+
+        multiPlayerGame.setGameID(0);
+        assertEquals(0, multiPlayerGame.getGameID());
+
+        multiPlayerGame.setGameID(Integer.MIN_VALUE);
+        assertEquals(0, multiPlayerGame.getGameID());
     }
 
     /**

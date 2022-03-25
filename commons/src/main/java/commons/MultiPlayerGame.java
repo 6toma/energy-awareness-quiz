@@ -134,6 +134,19 @@ public class MultiPlayerGame {
     }
 
     /**
+     * Set the game ID
+     * @param gameID the ID that will be set
+     *               this parameter cannot be negative
+     */
+    public void setGameID(int gameID) {
+        if(gameID < 0) {
+            this.gameID = 0;
+        } else {
+            this.gameID = gameID;
+        }
+    }
+
+    /**
      * Increments questionNumber
      */
     public void nextQuestion() {
