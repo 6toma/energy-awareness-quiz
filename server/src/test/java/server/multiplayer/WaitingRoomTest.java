@@ -78,7 +78,7 @@ public class WaitingRoomTest {
         Player p1 = new Player("a");
         waitingRoom.addPlayerToWaitingRoom(p1);
         assertFalse(waitingRoom.addPlayerToWaitingRoom(p1));
-        assertEquals(0, waitingRoom.getPlayers().size());
+        assertEquals(1, waitingRoom.getPlayers().size());
     }
 
     /**
