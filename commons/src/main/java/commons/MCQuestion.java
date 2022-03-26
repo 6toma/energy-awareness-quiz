@@ -28,8 +28,8 @@ public class MCQuestion {
      */
     public MCQuestion(List<Activity> activities) {
         this.activities = activities;
-        this.correct_answer = Math.toIntExact(chosen.getConsumption_in_wh());
         this.chosen = chooseActivity();
+        this.correct_answer = Math.toIntExact(chosen.getConsumption_in_wh());
     }
 
 
