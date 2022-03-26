@@ -3,17 +3,19 @@ package commons;
 import lombok.Data;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Multiplayer game class
  * Handles a list of players instead of just one
  */
 @Data
+//@ToString @EqualsAndHashCode
 public class MultiPlayerGame {
 
     private int gameID;
-    private List<Question> questions;
     private List<Player> players;
+    private List<Question> questions;
     private int questionNumber = 1;
 
     // for synchronization of client with server
@@ -45,10 +47,22 @@ public class MultiPlayerGame {
      */
     public boolean addQuestion(Question question){
         // TODO: Make this comparison actually do something, right now it uses Object's equals method. Probably should use a set or something
-        if(questions.contains(question))
+        if(questions.contains(question) || question == null)
             return false;
         questions.add(question);
         return true;
+    }
+
+    /**
+     * This method is used in case a player leaves the game
+     * and the player list has to reflect this change
+     * @param player player to be removed
+     * @return true if the player was removed successfully
+     *          false if the player could not be removed or
+     *          the player was not in the player list
+     */
+    public boolean removePlayer(Player player) {
+        return this.players.remove(player);
     }
 
     /**
@@ -102,6 +116,8 @@ public class MultiPlayerGame {
 
     /**
      * Set the current screen
+     * for synchronization of client with server
+     * can be "LOADING SCREEN", "QUESTION", "LEADERBOARD", "ENDSCREEN"
      * @param screen the screen to be set
      */
     public void setCurrentScreen(String screen) {
@@ -113,7 +129,20 @@ public class MultiPlayerGame {
                 this.currentScreen = screen;
                 break;
             default:
-                System.out.println("Not valid screen");
+                throw new IllegalArgumentException("Not a valid screen");
+        }
+    }
+
+    /**
+     * Set the game ID
+     * @param gameID the ID that will be set
+     *               this parameter cannot be negative
+     */
+    public void setGameID(int gameID) {
+        if(gameID < 0) {
+            this.gameID = 0;
+        } else {
+            this.gameID = gameID;
         }
     }
 
@@ -122,6 +151,14 @@ public class MultiPlayerGame {
      */
     public void nextQuestion() {
         questionNumber++;
+    }
+
+    /**
+     * Hash of the player list
+     * @return the hashed player list
+     */
+    public int playerListHash() {
+        return Objects.hash(players);
     }
 
 }

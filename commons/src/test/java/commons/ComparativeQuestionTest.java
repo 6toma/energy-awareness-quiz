@@ -25,6 +25,12 @@ class ComparativeQuestionTest {
         );
     }
 
+    @Test
+    void noArgsConstructorTest(){
+        ComparativeQuestion q = new ComparativeQuestion();
+        assertNotNull(q);
+    }
+
     /**
      * Tests if correct answer is generated with most == true
      */
@@ -32,6 +38,17 @@ class ComparativeQuestionTest {
     void generateCorrectAnswerMost() {
         ComparativeQuestion q = new ComparativeQuestion(activities, true);
         assertEquals(2, q.getCorrect_answer());
+    }
+
+    /**
+     * Tests if correct answer is generated with most == true
+     * Reverses the order of activities to get more lines covered
+     */
+    @Test
+    void generateCorrectAnswerMost2() {
+        List<Activity> reverseActs = List.of(activities.get(2), activities.get(1), activities.get(0));
+        ComparativeQuestion q = new ComparativeQuestion(reverseActs, true);
+        assertEquals(0, q.getCorrect_answer());
     }
 
     /**

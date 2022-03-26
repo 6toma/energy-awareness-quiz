@@ -18,6 +18,7 @@ package client.utils;
 import commons.ComparativeQuestion;
 import commons.MultiPlayerGame;
 import commons.Player;
+import commons.Question;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
@@ -51,16 +52,19 @@ public class ServerUtils {
     }
 
     /**
-     * Gets a comparative question from the server
-     * @return Comparative Question if successful
+     * Gets a random question from the server
+     * @return either:
+     *         - ComparativeQuestion
+     *         - EstimationQuestion
      */
-    public ComparativeQuestion getCompQuestion() {
+    public Question getRandomQuestion() {
         return ClientBuilder.newClient(new ClientConfig()) //
-            .target(serverURL).path("api/questions/comparative") // the URL path which we HTTP GET for comparative questions
+            .target(serverURL).path("api/questions/random") // the URL path which we HTTP GET for comparative questions
             .request(APPLICATION_JSON) //
             .accept(APPLICATION_JSON) //
             .get(new GenericType<>() {});
     }
+
 
     /**
      * Posts a Player object to the server
@@ -69,10 +73,10 @@ public class ServerUtils {
      */
     public Player postPlayer(Player player){
         return ClientBuilder.newClient(new ClientConfig()) //
-            .target(serverURL).path("api/players/add-one") // the URL path where we HTTP POST for adding high scores
-            .request(APPLICATION_JSON) //
-            .accept(APPLICATION_JSON) //
-            .post(Entity.entity(player, APPLICATION_JSON), Player.class);
+                .target(serverURL).path("api/players/add-one") // the URL path where we HTTP POST for adding high scores
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .post(Entity.entity(player, APPLICATION_JSON), Player.class);
     }
 
     /**
@@ -82,7 +86,7 @@ public class ServerUtils {
      * @param serverURL url to the server to connect to
      */
     public void setServerURL(String serverURL) {
-        if(serverURL.length() > 0){
+        if (serverURL.length() > 0) {
             this.serverURL = serverURL;
         } else {
             this.serverURL = defaultURL;

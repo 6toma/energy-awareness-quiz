@@ -12,7 +12,7 @@ import java.util.List;
  *          Activity 3
  */
 @Data
-public class ComparativeQuestion extends Question{
+public class ComparativeQuestion implements Question{
 
     private boolean isMost; // true if the question asks for most, false if least energy
     private List<Activity> activities; // list of activities
