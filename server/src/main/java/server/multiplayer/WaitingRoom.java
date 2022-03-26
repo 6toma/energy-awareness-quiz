@@ -44,7 +44,7 @@ public class WaitingRoom {
      * @return true if question was added, false otherwise
      */
     public boolean addQuestion(Question question){
-        // TODO: Make this comparison actually do something, right now it uses Object's equals method. Probably should use a set or something
+        if(question == null) return false;
         for(int i = 0; i < questions.size(); i++) {
             if (question.equals(questions.get(i))) return false;
         }
@@ -52,11 +52,11 @@ public class WaitingRoom {
         return true;
     }
 
-    /**
+    /*
      * generating a new set of questions
-     */
+     *
     private List<Question> generateNewQuestions() {
-        //TODO Once the question types are implemented we can generate the questions properly
+        //TODO Transfer this method to the controller
         List<Question> result = new ArrayList<>();
         int count = maxNumberOfQuestions;
         while (count > 0){
@@ -64,6 +64,7 @@ public class WaitingRoom {
         }
         return result;
     }
+    */
 
     /**
      * Adding a player to a waiting room
@@ -95,13 +96,12 @@ public class WaitingRoom {
 
     /**
      * Flushing a WaitingRoom. This will transfer all the players to a MultiplayerGame class
-     *
+     * and a ll the players
+     * @return new Multiplayer game with an Id and ist of players and question
      */
-    //TODO Make the class return a MultiplayerGame class once it is created
     public MultiPlayerGame flushWaitingRoom(){
         MultiPlayerGame game = new MultiPlayerGame(waitingRoomId, players, questions);
         questions = new ArrayList<>();
-        generateNewQuestions();
         players = new ArrayList<>();
         waitingRoomId++;
         return game;

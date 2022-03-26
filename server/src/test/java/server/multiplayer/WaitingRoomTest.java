@@ -1,9 +1,7 @@
 package server.multiplayer;
 
 
-import commons.Activity;
-import commons.Player;
-import commons.Question;
+import commons.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
@@ -101,4 +99,57 @@ public class WaitingRoomTest {
         assertFalse(waitingRoom.removePlayerFromWaitingRoom(p1));
     }
 
+    /**
+     * Tests if a question is added successfully
+     */
+    @Test
+    public void testAddQuestion() {
+        assertTrue(waitingRoom.addQuestion(new ComparativeQuestion(null, false)));
+
+        assertEquals(1, waitingRoom.getQuestions().size());
+
+        Question q = new ComparativeQuestion(null, true);
+        assertTrue(waitingRoom.addQuestion(q));
+        assertEquals(2, waitingRoom.getQuestions().size());
+    }
+
+    /**
+     * Tests if many questions are added successfully
+     * in a row
+     */
+    @Test
+    public void addManyQuestions() {
+        waitingRoom.addQuestion(new ComparativeQuestion(null, true));
+        waitingRoom.addQuestion(new EstimationQuestion(a1));
+        waitingRoom.addQuestion(new ComparativeQuestion(null, false));
+        waitingRoom.addQuestion(new EstimationQuestion(a2));
+
+        assertEquals(4, waitingRoom.getQuestions().size());
+
+        Question q1 = new ComparativeQuestion(List.of(a1, a2), false);
+        assertTrue(waitingRoom.addQuestion(q1));
+
+        assertEquals(5, waitingRoom.getQuestions().size());
+
+        assertFalse(waitingRoom.addQuestion(q1));
+
+        assertEquals(5, waitingRoom.getQuestions().size());
+
+        assertFalse(waitingRoom.addQuestion(null));
+
+        assertEquals(5, waitingRoom.getQuestions().size());
+    }
+
+    @Test
+    void FlushWaitingRoom1(){
+        MultiPlayerGame m = waitingRoom.flushWaitingRoom();
+        assertNotNull(m);
+    }
+
+    @Test
+    void FlushWaitingRoom2(){
+        MultiPlayerGame m = waitingRoom.flushWaitingRoom();
+        assertEquals(0, m.getGameID());
+        assertEquals(1, waitingRoom.getWaitingRoomId());
+    }
 }
