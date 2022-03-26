@@ -19,7 +19,6 @@ public class WaitingRoom {
     private List<Player> players;       // list of players
     private List<Question> questions;   // list of questions
     private int maxNumberOfQuestions;   // maximal number of questions
-
     /**
      * no args constructor
      */
