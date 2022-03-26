@@ -1,5 +1,6 @@
 package server.multiplayer;
 
+import commons.MultiPlayerGame;
 import commons.Player;
 import commons.Question;
 import lombok.Data;
@@ -29,9 +30,9 @@ public class WaitingRoom {
      * @param maxNumberOfQuestions maximal number of questions
      * @param waitingRoomId id of the waiting room
      */
-    public WaitingRoom(int waitingRoomId, int maxNumberOfQuestions){
-        this.players = new ArrayList<>();
-        this.questions = new ArrayList<>();
+    public WaitingRoom(int waitingRoomId, List<Player> players,  List<Question> questions, int maxNumberOfQuestions){
+        this.players = players;
+        this.questions = questions;
         this.waitingRoomId = waitingRoomId;
         this.maxNumberOfQuestions = maxNumberOfQuestions;
     }
@@ -54,33 +55,56 @@ public class WaitingRoom {
     /**
      * generating a new set of questions
      */
-    private void generateNewQuestions() {
+    private List<Question> generateNewQuestions() {
         //TODO Once the question types are implemented we can generate the questions properly
+        List<Question> result = new ArrayList<>();
         int count = maxNumberOfQuestions;
         while (count > 0){
          //if(addQuestion(server.getCompQuestion())){ count-- }
         }
+        return result;
     }
 
     /**
-     * Adding a player to a Waiting room
+     * Adding a player to a waiting room
+     * @return true if a players name is unique else returns false
      * @param player player to be added
      */
-    public void addToWaitingRoom(Player player){
+    public boolean addPlayerToWaitingRoom(Player player){
+        if(player.getName() == null) return false;
+        for(var p : players){
+            if (p.equals(player)) {
+                return false;
+            }
+        }
         players.add(player);
+        return true;
     }
 
     /**
-     * Flushing a WaitingRoom. This will transfer all the players to a waiting room class with a set of questions and a.
+     * This method is used in case a player leaves the waiting room
+     * and the player list has to reflect this change
+     * @param player player to be removed
+     * @return true if the player was removed successfully
+     *          false if the player could not be removed or
+     *          the player was not in the player list
+     */
+    public boolean removePlayerFromWaitingRoom(Player player) {
+        return this.players.remove(player);
+    }
+
+    /**
+     * Flushing a WaitingRoom. This will transfer all the players to a MultiplayerGame class
+     *
      */
     //TODO Make the class return a MultiplayerGame class once it is created
-    public void flushWaitingRoom(){
-        // MultiplayerGame game = new MultiplayerGame(waitingRoomId, players, questions);
+    public MultiPlayerGame flushWaitingRoom(){
+        MultiPlayerGame game = new MultiPlayerGame(waitingRoomId, players, questions);
         questions = new ArrayList<>();
         generateNewQuestions();
         players = new ArrayList<>();
         waitingRoomId++;
-        // return game
+        return game;
     }
 
 
