@@ -52,20 +52,6 @@ public class WaitingRoom {
         return true;
     }
 
-    /*
-     * generating a new set of questions
-     *
-    private List<Question> generateNewQuestions() {
-        //TODO Transfer this method to the controller
-        List<Question> result = new ArrayList<>();
-        int count = maxNumberOfQuestions;
-        while (count > 0){
-         //if(addQuestion(server.getCompQuestion())){ count-- }
-        }
-        return result;
-    }
-    */
-
     /**
      * Adding a player to a waiting room
      * @return true if a players name is unique else returns false
@@ -106,7 +92,5 @@ public class WaitingRoom {
         waitingRoomId++;
         return game;
     }
-
-
 
 }
