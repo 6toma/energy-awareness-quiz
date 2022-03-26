@@ -15,7 +15,6 @@
  */
 package client.utils;
 
-import commons.ComparativeQuestion;
 import commons.MultiPlayerGame;
 import commons.Player;
 import commons.Question;
@@ -121,7 +120,7 @@ public class ServerUtils {
         EXEC.submit(() -> {
             while (!Thread.interrupted()) {
                 var res = ClientBuilder.newClient(new ClientConfig())
-                        .target(serverURL).path("")
+                        .target(serverURL).path("api/poll/update")
                         .request(APPLICATION_JSON) //
                         .accept(APPLICATION_JSON) //
                         .get(Response.class);
@@ -145,9 +144,9 @@ public class ServerUtils {
      *
      * @return
      */
-    public Integer postChange(){
+    public Integer postChange(Integer change){
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(serverURL).path("")
+                .target(serverURL).path("api/poll/give-update/"+change)
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<>() {
@@ -160,7 +159,7 @@ public class ServerUtils {
      */
     public String getCurrentScene(){
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(serverURL).path("")
+                .target(serverURL).path("api/poll/CurrentScreen")
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<>() {
@@ -173,7 +172,7 @@ public class ServerUtils {
      */
     public int getCurrentQuestionNumber(){
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(serverURL).path("")
+                .target(serverURL).path("api/poll/CurrentQuestionNumber")
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<>() {
@@ -188,7 +187,7 @@ public class ServerUtils {
      */
     public Player postScore(Player player){
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(serverURL).path("") //
+                .target(serverURL).path("api/poll/SendScore") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .post(Entity.entity(player, APPLICATION_JSON), Player.class);
@@ -202,7 +201,7 @@ public class ServerUtils {
      */
     public MultiPlayerGame getMultiplayerGame(){
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(serverURL).path("")
+                .target(serverURL).path("api/poll/MultiplayerGame")
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<>() {
@@ -210,13 +209,13 @@ public class ServerUtils {
     }
 
     /**
-     * Gets all players so you can display their names and score
+     * Gets all players, so you can display their names and score
      * on the leaderboard
      * @return list of players
      */
-    public List<Player> getPlayerChanges(){
+    public List<Player> getPlayersMultiplayer(){
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(serverURL).path("")
+                .target(serverURL).path("api/poll/players")
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<>() {

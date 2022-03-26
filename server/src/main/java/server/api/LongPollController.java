@@ -37,6 +37,15 @@ public class LongPollController {
     }
 
     /**
+     * Returns the instance of the game to the client
+     * @return Multiplayer Game object
+     */
+    @GetMapping("MultiplayerGame")
+    public ResponseEntity<MultiPlayerGame> getGame(){
+        return ResponseEntity.ok(multiplayerGame);
+    }
+
+    /**
      * gets the name of the current screen of the server
      * "LOADING SCREEN", "QUESTION", "LEADERBOARD", "ENDSCREEN"
      * @return the name of current screen
@@ -66,6 +75,19 @@ public class LongPollController {
         return ResponseEntity.ok(multiplayerGame.getPlayers());
     }
 
+    /**
+     * //ToDo: change this depending on needs and multiplayegame class implementation
+     * Depending on implementation of MultiPlayerGame class this might be obsolete
+     * Server updates the score of the player
+     * @param player The player that had its score changed
+     * @return the same player with updated score
+     */
+    @PostMapping(path = {"SendScore"})
+    public ResponseEntity<Player> postScore(@RequestBody Player player){
+        int indexPlayer = multiplayerGame.getPlayers().indexOf(player);
+        multiplayerGame.getPlayers().get(indexPlayer).setScore(player.getScore());
+        return ResponseEntity.ok(player);
+    }
 
     private Map<Object, Consumer<Integer>> listeners = new HashMap<>();
     /**
