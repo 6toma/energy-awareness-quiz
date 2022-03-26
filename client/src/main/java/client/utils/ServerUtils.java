@@ -15,15 +15,20 @@
  */
 package client.utils;
 
+import commons.MultiPlayerGame;
 import commons.Player;
 import commons.Question;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
+import jakarta.ws.rs.core.Response;
 import lombok.Getter;
 import org.glassfish.jersey.client.ClientConfig;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.function.Consumer;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
@@ -77,7 +82,7 @@ public class ServerUtils {
      * Sets the server URL
      * If input invalid sets url to default
      *
-     * @param serverURL
+     * @param serverURL url to the server to connect to
      */
     public void setServerURL(String serverURL) {
         if (serverURL.length() > 0) {
@@ -101,5 +106,120 @@ public class ServerUtils {
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<>() {
                 });
+    }
+
+
+    private static final ExecutorService EXEC = Executors.newSingleThreadExecutor();
+    /**
+     * Dont know what this does but apparently
+     * its meant to get a change that happened on the server
+     * and then based on that change number we send another
+     * request but for the body fo the change
+     */
+    public void registerUpdates(Consumer<Integer> consumer) {
+        EXEC.submit(() -> {
+            while (!Thread.interrupted()) {
+                var res = ClientBuilder.newClient(new ClientConfig())
+                        .target(serverURL).path("api/poll/update")
+                        .request(APPLICATION_JSON) //
+                        .accept(APPLICATION_JSON) //
+                        .get(Response.class);
+                if (res.getStatus() == 204){
+                    continue;
+                }
+                var c = res.readEntity(Integer.class);
+                consumer.accept(c);
+            }
+        });
+    }
+
+    /**
+     * Closes the Thread
+     */
+    public void stop(){
+        EXEC.shutdownNow();
+    }
+
+
+    /**
+     * Used to sync up scenes with Server
+     * @return String name of the screen
+     */
+    public String getCurrentScene(){
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(serverURL).path("api/poll/CurrentScreen")
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<>() {
+                });
+    }
+
+    /**
+     * Used to sync up "which question we are on" with server
+     * @return Integer of the current question
+     */
+    public int getCurrentQuestionNumber(){
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(serverURL).path("api/poll/CurrentQuestionNumber")
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<>() {
+                });
+    }
+
+    /**
+     * Used to send your score to the Server Multplayer Game Object
+     * @param player player object containing name and score
+     * @return the Player that has been posted
+     * dont know why this returns anything
+     */
+    public Player postScore(Player player){
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(serverURL).path("api/poll/SendScore") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .post(Entity.entity(player, APPLICATION_JSON), Player.class);
+    }
+
+    /**
+     * When the toilet is flushed we get the whole game object where
+     * we take the questions and players from
+     * this should only be done once at the start
+     * @return instance of multiplayer game
+     */
+    public MultiPlayerGame getMultiplayerGame(){
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(serverURL).path("api/poll/MultiplayerGame")
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<>() {
+                });
+    }
+
+    /**
+     * Gets all players, so you can display their names and score
+     * on the leaderboard
+     * @return list of players
+     */
+    public List<Player> getPlayersMultiplayer(){
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(serverURL).path("api/poll/players")
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<>() {
+                });
+    }
+
+    /**
+     * Adds player to the Multiplayer game
+     * @param player player to add
+     * @return player that was added
+     */
+    public Player addPlayerMultiplayer(Player player){
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(serverURL).path("api/poll/add-player")
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .post(Entity.entity(player, APPLICATION_JSON), Player.class);
     }
 }
