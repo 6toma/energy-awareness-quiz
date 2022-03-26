@@ -76,6 +76,18 @@ public class LongPollController {
     }
 
     /**
+     * Adds the player to the list of players in the instance of MultiplayerGame
+     * @param player player to be added to the game
+     * @return player that was added
+     */
+    @PostMapping(path={"add-player"})
+    public ResponseEntity<Player> postPlayers(@RequestBody Player player){
+        List<Player> players = multiplayerGame.getPlayers();
+        players.add(player);
+        return ResponseEntity.ok(players.get(players.size()-1));
+    }
+
+    /**
      * //ToDo: change this depending on needs and multiplayegame class implementation
      * Depending on implementation of MultiPlayerGame class this might be obsolete
      * Server updates the score of the player
@@ -83,8 +95,11 @@ public class LongPollController {
      * @return the same player with updated score
      */
     @PostMapping(path = {"SendScore"})
-    public ResponseEntity<Player> postScore(@RequestBody Player player){
+    public ResponseEntity<Player> updateScore(@RequestBody Player player){
         int indexPlayer = multiplayerGame.getPlayers().indexOf(player);
+        if (indexPlayer==-1){
+            return ResponseEntity.badRequest().build();
+        }
         multiplayerGame.getPlayers().get(indexPlayer).setScore(player.getScore());
         return ResponseEntity.ok(player);
     }

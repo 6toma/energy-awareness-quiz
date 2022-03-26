@@ -149,8 +149,7 @@ public class ServerUtils {
                 .target(serverURL).path("api/poll/give-update/"+change)
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
-                .get(new GenericType<>() {
-                });
+                .post(Entity.entity(change, APPLICATION_JSON), Integer.class);
     }
 
     /**
@@ -220,5 +219,18 @@ public class ServerUtils {
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<>() {
                 });
+    }
+
+    /**
+     * Adds player to the Multiplayer game
+     * @param player player to add
+     * @return player that was added
+     */
+    public Player addPlayerMultiplayer(Player player){
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(serverURL).path("api/poll/add-player")
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .post(Entity.entity(player, APPLICATION_JSON), Player.class);
     }
 }
