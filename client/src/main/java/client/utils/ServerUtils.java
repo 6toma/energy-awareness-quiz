@@ -140,17 +140,6 @@ public class ServerUtils {
         EXEC.shutdownNow();
     }
 
-    /**
-     *
-     * @return
-     */
-    public Integer postChange(Integer change){
-        return ClientBuilder.newClient(new ClientConfig()) //
-                .target(serverURL).path("api/poll/give-update/"+change)
-                .request(APPLICATION_JSON) //
-                .accept(APPLICATION_JSON) //
-                .post(Entity.entity(change, APPLICATION_JSON), Integer.class);
-    }
 
     /**
      * Used to sync up scenes with Server

@@ -77,14 +77,17 @@ public class LongPollController {
 
     /**
      * Adds the player to the list of players in the instance of MultiplayerGame
+     * updates listener to accept number 1. 1 meaning the number of players changed
      * @param player player to be added to the game
      * @return player that was added
      */
     @PostMapping(path={"add-player"})
     public ResponseEntity<Player> postPlayers(@RequestBody Player player){
+        listeners.forEach((k,l) -> l.accept(1));
         List<Player> players = multiplayerGame.getPlayers();
         players.add(player);
-        return ResponseEntity.ok(players.get(players.size()-1));
+        return ResponseEntity.ok(player);
+        //s.get(players.size()-1)
     }
 
     /**
@@ -124,6 +127,7 @@ public class LongPollController {
     }
 
     /**
+     * Currently obsolete but give undesrtanting of how it will work
      * Returns a number that's 2^x which describes what is
      * different compared to what the client sent
      * so the client can request for those specific objects

@@ -144,6 +144,7 @@ public class MainCtrl {
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent t) {
+                waitingRoomCtrl.stop();
                 Platform.exit();
                 System.exit(0);
             }
@@ -163,6 +164,7 @@ public class MainCtrl {
      */
     public void showWaitingRoom() {
         primaryStage.getScene().setRoot(waitingRoomParent);
+        waitingRoomCtrl.startListening();
         checkDarkMode();
     }
 
