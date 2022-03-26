@@ -18,6 +18,7 @@ public class WaitingRoom {
     private int waitingRoomId;          // a waiting room id which is incremented every time a new game is started (flush count)
     private List<Player> players;       // list of players
     private List<Question> questions;   // list of questions
+    private int maxNumberOfQuestions;   // maximal number of questions
 
     /**
      * no args constructor
@@ -26,12 +27,14 @@ public class WaitingRoom {
 
     /**
      * constructor with a set id (it should be set to zero)
-     * @param waitingRoomId
+     * @param maxNumberOfQuestions maximal number of questions
+     * @param waitingRoomId id of the waiting room
      */
-    public WaitingRoom(int waitingRoomId){
-        players = new ArrayList<>();
-        questions = new ArrayList<>();
+    public WaitingRoom(int waitingRoomId, int maxNumberOfQuestions){
+        this.players = new ArrayList<>();
+        this.questions = new ArrayList<>();
         this.waitingRoomId = waitingRoomId;
+        this.maxNumberOfQuestions = maxNumberOfQuestions;
     }
 
 
@@ -54,9 +57,9 @@ public class WaitingRoom {
      */
     private void generateNewQuestions() {
         //TODO Once the question types are implemented we can generate the questions properly
-        int count = 0;
-        while(count < 20){
-        //  if(addQuestion(addRandomQuestion()))
+        int count = maxNumberOfQuestions;
+        while (count > 0){
+         //if(addQuestion(server.getCompQuestion())){ count-- }
         }
     }
 
