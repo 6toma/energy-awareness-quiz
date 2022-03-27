@@ -3,6 +3,7 @@ package server.api;
 import commons.Activity;
 import commons.questions.ComparativeQuestion;
 import commons.questions.EstimationQuestion;
+import commons.questions.MCQuestion;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
@@ -73,8 +74,23 @@ class QuestionControllerTest {
         assertEquals(expected, que.getRandomEstimation().getBody());
     }
 
+    @Test //repo and que have different TestRandom objects!
+    void getRandomMCTest() {
+        repo.activities.addAll(activities);
+
+        List<Long> e1_list = List.of(activities.get(1).getConsumption_in_wh(), activities.get(2).getConsumption_in_wh());
+        MCQuestion expected1 = new MCQuestion(activities.get(0), e1_list);
+        assertEquals(expected1, que.getRandomMCQuestion().getBody());
+    }
+
+    @Test
+    void getRandomMCTestNoActivities() {
+        assertEquals(ResponseEntity.status(HttpStatus.PRECONDITION_FAILED).build(), que.getRandomMCQuestion());
+    }
+
     @Test
     void getRandomEstimationTestNoActivities() {
+        repo.activities.add(activities.get(0));
         assertEquals(ResponseEntity.status(HttpStatus.PRECONDITION_FAILED).build(), que.getRandomEstimation());
     }
 
@@ -94,6 +110,17 @@ class QuestionControllerTest {
         random.setCount(1); // sets the random to start from 1
 
         EstimationQuestion expected = new EstimationQuestion(activities.get(0));
+
+        assertEquals(expected, que.getRandomQuestion().getBody());
+    }
+
+    @Test
+    void getRandomQuestionTestMC() {
+        random.setCount(2); // sets the random to start from 2
+        repo.activities.addAll(activities);
+
+        List<Long> e1_list = List.of(activities.get(1).getConsumption_in_wh(), activities.get(2).getConsumption_in_wh());
+        MCQuestion expected = new MCQuestion(activities.get(0), e1_list);
 
         assertEquals(expected, que.getRandomQuestion().getBody());
     }
