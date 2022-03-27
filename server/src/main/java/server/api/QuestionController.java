@@ -2,6 +2,7 @@ package server.api;
 
 import commons.*;
 import commons.questions.ComparativeQuestion;
+import commons.questions.EqualityQuestion;
 import commons.questions.EstimationQuestion;
 import commons.questions.MCQuestion;
 import commons.questions.Question;
@@ -144,35 +145,60 @@ public class QuestionController {
      */
     @GetMapping(path = {"/equality", "/equality/"})
     public ResponseEntity<Question> getRandomEquality() {
-        int limit = 2;
-        if (repo.count() <= limit) {
+
+        int limit = 4; // we need at least 4 activities to have this question without all having distinct consumptions
+        if (repo.count() <= limit || repo.numberDistinctConsumptions() == repo.count()) {
             return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED).build();
         }
-        List<Activity> activities = activitiesWithSuitableConsumptions(limit); // gets 3 random activities
 
-        EqualityQuestion q = new EqualityQuestion(activities);
-        for (Activity a : q.getActivities()) {
+        // Gets a random activity which doesn't have a unique consumption
+        Activity chosen = repo.nonUniqueActivities(1).get().get(0);
+        // Gets a random activity different from chosen which has the same consumption as chosen
+        Activity correct = repo.sameConsumptionActivities(chosen.getConsumption_in_wh(), chosen.getId(), 1).get().get(0);
+
+        List<Activity> activities = activitiesWithSuitableConsumptionsGenerator(2, correct); // gets 2 random activities
+
+        // Creates a new question with a chosen, correct and list of wrong activities. Specifies the position of correct in the list of options
+        // Randomizing needs to be done here for testing
+        EqualityQuestion q = new EqualityQuestion(chosen, correct, activities, Math.abs(random.nextInt() % 3));
+        // Initialize images for the answer options
+        /*for (Activity a : q.getActivities()) {
             a.initializeImage(new File(Config.defaultImagePath + a.getImage_path()));
-        }
+        }*/
         return ResponseEntity.ok(q);
 
     }
 
     /**
      * Fetches a number of activities, such that they have distinct consumptions
+     * Generates a pivot to be used in the generation of such activities
+     *
+     * Split into 2 methods to input specific pivot to the generator
      *
      * @param limit The number of activities with distinct consumption to be fetched from the database
      * @return A list of activities
      */
     private List<Activity> activitiesWithSuitableConsumptions(int limit) {
+
+        /* pivot may not be included in final selection
+        it is used just to have an estimate of the consumption the activities should have */
+        Activity pivot = repo.getRandomActivities(1).get().get(0);
+        return activitiesWithSuitableConsumptionsGenerator(limit, pivot);
+    }
+
+    /**
+     * Fetches a number of activities, such that they have distinct consumptions
+     *
+     * @param limit The number of activities with distinct consumption to be fetched from the database
+     * @param pivot Pivot that the result list has close consumptions to
+     * @return A list of activities
+     */
+    private List<Activity> activitiesWithSuitableConsumptionsGenerator(int limit, Activity pivot){
         double lowerBound = 0.5;
         double upperBound = 1.5;
         List<Activity> result = new ArrayList<>();
         // list of the IDs of the selection of activities returned by the SQL query
         Optional<List<String>> ids;
-        /* pivot may not be included in final selection
-        it is used just to have an estimate of the consumption the activities should have */
-        Activity pivot = repo.getRandomActivities(1).get().get(0);
 
         /* get a list of random activities with consumption in the interval
          * (lowerBound * pivot.getConsumption_in_wh(), upperBound * pivot.getConsumption_in_wh())
@@ -180,9 +206,10 @@ public class QuestionController {
          */
         do {
             ids = repo.activitiesWithSpecifiedConsumption(
-                    limit,
-                    (int) Math.floor(lowerBound * pivot.getConsumption_in_wh()),
-                    (int) Math.ceil(upperBound * pivot.getConsumption_in_wh())
+                limit,
+                (int) Math.floor(lowerBound * pivot.getConsumption_in_wh()),
+                (int) Math.ceil(upperBound * pivot.getConsumption_in_wh()),
+                pivot.getConsumption_in_wh()
             );
             lowerBound -= 0.05; //it is not a problem for lowerBound to go below 0
             upperBound += 0.2;
