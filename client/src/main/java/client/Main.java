@@ -113,11 +113,7 @@ public class Main extends Application {
                 "scenes/SettingsScreen.fxml",
                 "css/SettingsScreen.css"
         );
-        var equalityQuestionScreen = FXML.load(
-                EqualityQuestionScreenCtrl.class,
-                "scenes/EqualityQuestionScreen.fxml",
-                "css/EqualityQuestion.css"
-        );
+
 
         // add more scenes the same way
 
@@ -132,7 +128,6 @@ public class Main extends Application {
                 helpScreen,
                 ScoreChangeScreen,
                 EstimationQuestionScreen,
-                settingsScreen,
-                equalityQuestionScreen);
+                settingsScreen);
     }
 }

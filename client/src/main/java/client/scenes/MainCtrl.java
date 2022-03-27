@@ -58,8 +58,6 @@ public class MainCtrl {
     private SettingsScreenCtrl settingsScreenCtrl;
     private Parent settingsScreenParent;
 
-    private EqualityQuestionScreenCtrl equalityQuestionScreenCtrl;
-    private Parent equalityQuestionParent;
 
 
     // single player variables
@@ -89,7 +87,6 @@ public class MainCtrl {
      * @param endScreen
      * @param helpScreen
      * @param scoreChangeScreen
-     * @param equalityQuestionScreen
      */
     public void initialize(
             Stage primaryStage,
@@ -103,7 +100,6 @@ public class MainCtrl {
             Pair<ScoreChangeScreenCtrl, Parent> scoreChangeScreen,
             Pair<EstimationQuestionCtrl, Parent> estimationQuestion,
             Pair<SettingsScreenCtrl, Parent> settingsScreen,
-            Pair<EqualityQuestionScreenCtrl, Parent> equalityQuestionScreen
     ) {
         this.primaryStage = primaryStage;
 
@@ -138,8 +134,6 @@ public class MainCtrl {
         this.settingsScreenCtrl = settingsScreen.getKey();
         this.settingsScreenParent = settingsScreen.getValue();
 
-        this.equalityQuestionScreenCtrl = equalityQuestionScreen.getKey();
-        this.equalityQuestionParent = equalityQuestionScreen.getValue();
 
         // TODO: uncomment to disable the fullscreen popup
         //primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
@@ -219,14 +213,6 @@ public class MainCtrl {
         estimationScreenCtrl.countdown();
     }
 
-    /**
-     * method for showing the equality question
-     */
-    public void showEqualityQuestionScreen() {
-        primaryStage.getScene().setRoot(equalityQuestionParent);
-        checkDarkMode();
-        equalityQuestionScreenCtrl.countdown();
-    }
 
     /**
      * method for showing the end screen
@@ -392,7 +378,6 @@ public class MainCtrl {
         //reset Question screen to prepare it for a new game
         comparativeQuestionScreenCtrl.resetComparativeQuestionScreen();
         estimationScreenCtrl.resetEstimationQuestion();
-        equalityQuestionScreenCtrl.resetEqualityQuestion();
 
 
         //store player's end score
