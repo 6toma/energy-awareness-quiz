@@ -49,14 +49,16 @@ public class QuestionController {
     public ResponseEntity<Question> getRandomQuestion() {
 
         int randomInt = random.nextInt();
-        int numberOfQuestions = 2;
+        int numberOfQuestions = 3;
 
         // To add more question types increment numberOfQuestions and add another if statement
         // e.g. else if(randomInt % numberOfQuestions == 1) return ...
         if (randomInt % numberOfQuestions == 0) {
             return getRandomComparative();
-        } else {
+        } else if(randomInt % numberOfQuestions == 1) {
             return getRandomEstimation();
+        } else {
+            return getRandomMCQuestion();
         }
     }
 
@@ -88,22 +90,29 @@ public class QuestionController {
 
     /**
      * Generates a random question with 3 energy values
+     * Gets 3 random activities with similar consumptions
+     * Selects one of those, uses the other activities' consumptions
+     *      We use other activities for consumptions to make the numbers feel more natural than randomly generated ones
      * Initializes the image for the activity
      *
      * @return MC Question with 3 values
      */
     @GetMapping(path = {"/mc", "/mc/"})
-    public ResponseEntity<MCQuestion> getRandomMCQuestion() {
+    public ResponseEntity<Question> getRandomMCQuestion() {
         int limit = 3;
 
         if (repo.numberDistinctConsumptions() <= limit) {
             return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED).build();
         }
-        List<Activity> activities = activitiesWithSuitableConsumptions(limit);
-        MCQuestion q = new MCQuestion(activities);
-        for (Activity a : q.getActivities()) {
-            a.initializeImage(new File(Config.defaultImagePath + a.getImage_path()));
-        }
+        List<Activity> activities = activitiesWithSuitableConsumptions(limit); // gets 3 random activities
+        // Chooses the first activity as the correct answer
+        Activity activity = activities.get(0);
+        // Make a list of the other activities' consumptions
+        List<Long> options = List.of(activities.get(1).getConsumption_in_wh(), activities.get(2).getConsumption_in_wh());
+
+        activity.initializeImage(new File(Config.defaultImagePath + activity.getImage_path()));
+
+        Question q = new MCQuestion(activity, options);
         return ResponseEntity.ok(q);
     }
 
