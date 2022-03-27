@@ -1,11 +1,14 @@
 package commons;
 
+import lombok.Data;
+
 import java.util.List;
 import java.util.Random;
 
 /**
  * Class for creating Equality Question
  */
+@Data
 public class EqualityQuestion implements Question {
 
     private List<Activity> activities;
