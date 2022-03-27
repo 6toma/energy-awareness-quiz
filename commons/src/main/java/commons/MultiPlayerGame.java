@@ -46,11 +46,9 @@ public class MultiPlayerGame {
      * @return true if question was added, false otherwise
      */
     public boolean addQuestion(Question question){
-        // TODO: Make this comparison actually do something, right now it uses Object's equals method. Probably should use a set or something
         if(questions.contains(question) || question == null)
             return false;
-        questions.add(question);
-        return true;
+        return questions.add(question);
     }
 
     /**
@@ -139,11 +137,7 @@ public class MultiPlayerGame {
      *               this parameter cannot be negative
      */
     public void setGameID(int gameID) {
-        if(gameID < 0) {
-            this.gameID = 0;
-        } else {
-            this.gameID = gameID;
-        }
+        this.gameID = Math.max(gameID, 0);
     }
 
     /**
