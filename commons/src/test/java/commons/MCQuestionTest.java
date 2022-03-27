@@ -1,5 +1,6 @@
 package commons;
 
+import commons.questions.MCQuestion;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -32,7 +33,7 @@ public class MCQuestionTest {
 
     @Test
     void ConstructorTest() {
-        MCQuestion q = new MCQuestion(activities);
+        MCQuestion q = new MCQuestion(activities.get(0), List.of(activities.get(1).getConsumption_in_wh(), activities.get(2).getConsumption_in_wh()));
         assertNotNull(q);
     }
 }

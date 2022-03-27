@@ -1,5 +1,6 @@
-package commons;
+package commons.questions;
 
+import commons.Activity;
 import lombok.Data;
 
 import java.util.List;

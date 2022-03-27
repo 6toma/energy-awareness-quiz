@@ -1,5 +1,6 @@
 package commons;
 
+import commons.questions.EstimationQuestion;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

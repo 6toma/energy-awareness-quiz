@@ -1,6 +1,11 @@
 package server.api;
 
 import commons.*;
+import commons.questions.ComparativeQuestion;
+import commons.questions.EqualityQuestion;
+import commons.questions.EstimationQuestion;
+import commons.questions.MCQuestion;
+import commons.questions.Question;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,14 +50,18 @@ public class QuestionController {
     public ResponseEntity<Question> getRandomQuestion() {
 
         int randomInt = random.nextInt();
-        int numberOfQuestions = 2;
+        int numberOfQuestions = 4;
 
         // To add more question types increment numberOfQuestions and add another if statement
         // e.g. else if(randomInt % numberOfQuestions == 1) return ...
         if (randomInt % numberOfQuestions == 0) {
             return getRandomComparative();
-        } else {
+        } else if(randomInt % numberOfQuestions == 1) {
             return getRandomEstimation();
+        } else if(randomInt % numberOfQuestions == 2){
+            return getRandomMCQuestion();
+        } else {
+            return getRandomEquality();
         }
     }
 
@@ -84,22 +93,29 @@ public class QuestionController {
 
     /**
      * Generates a random question with 3 energy values
+     * Gets 3 random activities with similar consumptions
+     * Selects one of those, uses the other activities' consumptions
+     *      We use other activities for consumptions to make the numbers feel more natural than randomly generated ones
      * Initializes the image for the activity
      *
      * @return MC Question with 3 values
      */
     @GetMapping(path = {"/mc", "/mc/"})
-    public ResponseEntity<MCQuestion> getRandomMCQuestion() {
+    public ResponseEntity<Question> getRandomMCQuestion() {
         int limit = 3;
 
         if (repo.numberDistinctConsumptions() <= limit) {
             return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED).build();
         }
-        List<Activity> activities = activitiesWithSuitableConsumptions(limit);
-        MCQuestion q = new MCQuestion(activities);
-        for (Activity a : q.getActivities()) {
-            a.initializeImage(new File(Config.defaultImagePath + a.getImage_path()));
-        }
+        List<Activity> activities = activitiesWithSuitableConsumptions(limit); // gets 3 random activities
+        // Chooses the first activity as the correct answer
+        Activity activity = activities.get(0);
+        // Make a list of the other activities' consumptions
+        List<Long> options = List.of(activities.get(1).getConsumption_in_wh(), activities.get(2).getConsumption_in_wh());
+
+        activity.initializeImage(new File(Config.defaultImagePath + activity.getImage_path()));
+
+        Question q = new MCQuestion(activity, options);
         return ResponseEntity.ok(q);
     }
 
@@ -131,13 +147,23 @@ public class QuestionController {
      */
     @GetMapping(path = {"/equality", "/equality/"})
     public ResponseEntity<Question> getRandomEquality() {
-        int limit = 2;
-        if (repo.count() <= limit) {
+
+        int limit = 4; // we need at least 4 activities to have this question without all having distinct consumptions
+        if (repo.count() <= limit || repo.numberDistinctConsumptions() == repo.count()) {
             return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED).build();
         }
-        List<Activity> activities = activitiesWithSuitableConsumptions(limit); // gets 3 random activities
 
-        EqualityQuestion q = new EqualityQuestion(activities);
+        // Gets a random activity which doesn't have a unique consumption
+        Activity chosen = repo.nonUniqueActivities(1).get().get(0);
+        // Gets a random activity different from chosen which has the same consumption as chosen
+        Activity correct = repo.sameConsumptionActivities(chosen.getConsumption_in_wh(), chosen.getId(), 1).get().get(0);
+
+        List<Activity> activities = activitiesWithSuitableConsumptionsGenerator(2, correct); // gets 2 random activities
+
+        // Creates a new question with a chosen, correct and list of wrong activities. Specifies the position of correct in the list of options
+        // Randomizing needs to be done here for testing
+        EqualityQuestion q = new EqualityQuestion(chosen, correct, activities, Math.abs(random.nextInt() % 3));
+        // Initialize images for the answer options
         for (Activity a : q.getActivities()) {
             a.initializeImage(new File(Config.defaultImagePath + a.getImage_path()));
         }
@@ -147,19 +173,34 @@ public class QuestionController {
 
     /**
      * Fetches a number of activities, such that they have distinct consumptions
+     * Generates a pivot to be used in the generation of such activities
+     *
+     * Split into 2 methods to input specific pivot to the generator
      *
      * @param limit The number of activities with distinct consumption to be fetched from the database
      * @return A list of activities
      */
     private List<Activity> activitiesWithSuitableConsumptions(int limit) {
+
+        /* pivot may not be included in final selection
+        it is used just to have an estimate of the consumption the activities should have */
+        Activity pivot = repo.getRandomActivities(1).get().get(0);
+        return activitiesWithSuitableConsumptionsGenerator(limit, pivot);
+    }
+
+    /**
+     * Fetches a number of activities, such that they have distinct consumptions
+     *
+     * @param limit The number of activities with distinct consumption to be fetched from the database
+     * @param pivot Pivot that the result list has close consumptions to
+     * @return A list of activities
+     */
+    private List<Activity> activitiesWithSuitableConsumptionsGenerator(int limit, Activity pivot){
         double lowerBound = 0.5;
         double upperBound = 1.5;
         List<Activity> result = new ArrayList<>();
         // list of the IDs of the selection of activities returned by the SQL query
         Optional<List<String>> ids;
-        /* pivot may not be included in final selection
-        it is used just to have an estimate of the consumption the activities should have */
-        Activity pivot = repo.getRandomActivities(1).get().get(0);
 
         /* get a list of random activities with consumption in the interval
          * (lowerBound * pivot.getConsumption_in_wh(), upperBound * pivot.getConsumption_in_wh())
@@ -167,9 +208,10 @@ public class QuestionController {
          */
         do {
             ids = repo.activitiesWithSpecifiedConsumption(
-                    limit,
-                    (int) Math.floor(lowerBound * pivot.getConsumption_in_wh()),
-                    (int) Math.ceil(upperBound * pivot.getConsumption_in_wh())
+                limit,
+                (int) Math.floor(lowerBound * pivot.getConsumption_in_wh()),
+                (int) Math.ceil(upperBound * pivot.getConsumption_in_wh()),
+                pivot.getConsumption_in_wh()
             );
             lowerBound -= 0.05; //it is not a problem for lowerBound to go below 0
             upperBound += 0.2;

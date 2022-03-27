@@ -2,7 +2,10 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
-import commons.ComparativeQuestion;
+import commons.questions.ComparativeQuestion;
+import commons.questions.EqualityQuestion;
+import commons.questions.MCQuestion;
+import commons.questions.Question;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -24,7 +27,17 @@ public class ComparativeQuestionScreenCtrl {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
+    /**
+     * Integer to set the question mode
+     * 0 - ComparativeQuestion
+     * 1 - MCQuestion
+     * 2 - EqualityQuestion
+     */
+    private int questionMode = 0;
+
     private ComparativeQuestion question;
+    private MCQuestion mcQuestion;
+    private EqualityQuestion equalityQuestion;
 
     // for how long to show question and answer
     private double questionTime = 15.0;
@@ -132,6 +145,153 @@ public class ComparativeQuestionScreenCtrl {
         answer3.setStyle("-fx-background-color: #fccf03;");
     }
 
+    private void checkAnswer(int answer){
+        int correctAnswer = -1;
+        if(questionMode == 0){
+            correctAnswer = question.getCorrect_answer();
+        } else if(questionMode == 1){
+            correctAnswer = mcQuestion.getCorrect_answer();
+        } else if(questionMode == 2){
+            correctAnswer = equalityQuestion.getCorrect_answer();
+        }
+
+        if(answer != correctAnswer){
+            timeWhenAnswered = -1;
+        } else {
+            timeWhenAnswered = (int) (progressBar.getProgress() * questionTime);
+        }
+    }
+
+    /**
+     * Sets the question object for this screen
+     * Also sets the question label and answer button texts
+     * @param question
+     */
+    public void setQuestion(Question question) {
+        if(question instanceof ComparativeQuestion){
+            this.question = (ComparativeQuestion) question;
+            this.questionMode = 0;
+            setQuestionText();
+            setAnswerTexts();
+            setImages();
+        } else if(question instanceof MCQuestion){
+            this.mcQuestion = (MCQuestion) question;
+            this.questionMode = 1;
+            setMCQuestionText();
+            setMCAnswerTexts();
+            setMCImages();
+        } else if(question instanceof EqualityQuestion){
+            this.equalityQuestion = (EqualityQuestion) question;
+            this.questionMode = 2;
+            setEqualityText();
+            setEqualityAnswerTexts();
+            setEqualityImages();
+        }
+
+    }
+
+    private void setQuestionText(){
+        // Strings used to construct the question text
+        String mostOrLeast;
+        if(this.question.isMost()){
+            mostOrLeast = "most";
+        } else {
+            mostOrLeast = "least";
+        }
+        String questionText = "Which activity uses the " + mostOrLeast + " amount of energy?";
+        this.questionLabel.setText(questionText);
+    }
+
+    private void setAnswerTexts(){
+        answer1.setText(this.question.getActivities().get(0).getTitle());
+        answer2.setText(this.question.getActivities().get(1).getTitle());
+        answer3.setText(this.question.getActivities().get(2).getTitle());
+    }
+
+    /**
+     * Sets the images to the ones stored in the activities.
+     * Also sets the images to be the same width as the question
+     */
+    private void setImages(){
+        // Adding the images to a list to avoid duplicate code
+        List<ImageView> images = List.of(image1, image2, image3);
+        // This loops through every activity, gets the image and sets the image in the UI
+        for(int i = 0; i < question.getActivities().size(); i++){
+            if(question.getActivities().get(i).getImage() != null){
+                InputStream inputStream = new ByteArrayInputStream(question.getActivities().get(i).getImage());
+                if(inputStream != null){
+                    images.get(i).setImage(new Image(inputStream));
+                }
+            }
+        }
+        // It's dumb that we have to set the images to be the width of the vbox here
+        // A true javafx moment
+        image1.fitWidthProperty().bind(questionBox1.widthProperty());
+        image2.fitWidthProperty().bind(questionBox2.widthProperty());
+        image3.fitWidthProperty().bind(questionBox3.widthProperty());
+    }
+
+    private void setMCQuestionText(){
+        String questionText = "How much energy does " + this.mcQuestion.getActivity().getTitle() + " use?";
+        this.questionLabel.setText(questionText);
+    }
+
+    private void setMCAnswerTexts(){
+        answer1.setText(this.mcQuestion.getOptions().get(0) + " Wh");
+        answer2.setText(this.mcQuestion.getOptions().get(1) + " Wh");
+        answer3.setText(this.mcQuestion.getOptions().get(2) + " Wh");
+    }
+
+    /**
+     * Sets the image to the one stored in the activity.
+     * Also sets the image to be the same width as the question
+     */
+    private void setMCImages(){
+        // This loops through every activity, gets the image and sets the image in the UI
+        if(mcQuestion.getActivity().getImage() != null){
+            InputStream inputStream = new ByteArrayInputStream(mcQuestion.getActivity().getImage());
+            if(inputStream != null){
+                image2.setImage(new Image(inputStream));
+            }
+        }
+        // set the images to be the width of the vbox
+        image2.fitWidthProperty().bind(questionBox2.widthProperty());
+    }
+
+    private void setEqualityText(){
+        String questionText = "Instead of " + equalityQuestion.getChosen().getTitle() + " you could ...";
+        this.questionLabel.setText(questionText);
+    }
+
+    private void setEqualityAnswerTexts(){
+        answer1.setText(this.equalityQuestion.getActivities().get(0).getTitle());
+        answer2.setText(this.equalityQuestion.getActivities().get(1).getTitle());
+        answer3.setText(this.equalityQuestion.getActivities().get(2).getTitle());
+    }
+
+    /**
+     * Sets the images to the ones stored in the activities.
+     * Also sets the images to be the same width as the question
+     */
+    private void setEqualityImages(){
+        // Adding the images to a list to avoid duplicate code
+        List<ImageView> images = List.of(image1, image2, image3);
+        // This loops through every activity, gets the image and sets the image in the UI
+        for(int i = 0; i < equalityQuestion.getActivities().size(); i++){
+            if(equalityQuestion.getActivities().get(i).getImage() != null){
+                InputStream inputStream = new ByteArrayInputStream(equalityQuestion.getActivities().get(i).getImage());
+                if(inputStream != null){
+                    images.get(i).setImage(new Image(inputStream));
+                }
+            }
+        }
+        // It's dumb that we have to set the images to be the width of the vbox here
+        // A true javafx moment
+        image1.fitWidthProperty().bind(questionBox1.widthProperty());
+        image2.fitWidthProperty().bind(questionBox2.widthProperty());
+        image3.fitWidthProperty().bind(questionBox3.widthProperty());
+    }
+
     /**
      * Exits the screen. Goes back to the home screen
      */
@@ -165,46 +325,6 @@ public class ComparativeQuestionScreenCtrl {
         questionTimer.play();
     }
 
-    /**
-     * Sets the question object for this screen
-     * Also sets the question label and answer button texts
-     * @param question
-     */
-    public void setQuestion(ComparativeQuestion question) {
-        this.question = question;
-        setQuestionText();
-        setAnswerTexts();
-        setImages();
-    }
-
-    private void setQuestionText(){
-        // Strings used to construct the question text
-        String mostOrLeast;
-        if(this.question.isMost()){
-            mostOrLeast = "most";
-        } else {
-            mostOrLeast = "least";
-        }
-        String questionText = "Which activity uses the " + mostOrLeast + " amount of energy?";
-        this.questionLabel.setText(questionText);
-    }
-
-    private void setAnswerTexts(){
-        answer1.setText(this.question.getActivities().get(0).getTitle());
-        answer2.setText(this.question.getActivities().get(1).getTitle());
-        answer3.setText(this.question.getActivities().get(2).getTitle());
-    }
-
-
-    private void checkAnswer(int answer){
-        int correctAnswer = question.getCorrect_answer();
-        if(answer != correctAnswer){
-            timeWhenAnswered = -1;
-        } else {
-            timeWhenAnswered = (int) (progressBar.getProgress() * questionTime);
-        }
-    }
-
     private void showAnswers(){
 
         // This creates another timeline for the timer for the answerTime. See countdown() for a more in-depth breakdown
@@ -228,7 +348,14 @@ public class ComparativeQuestionScreenCtrl {
         joker2.setDisable(true);
         joker3.setDisable(true);
 
-        int correctAnswer = question.getCorrect_answer();
+        int correctAnswer = -1;
+        if(questionMode == 0){
+            correctAnswer = question.getCorrect_answer();
+        } else if(questionMode == 1){
+            correctAnswer = mcQuestion.getCorrect_answer();
+        } else if(questionMode == 2){
+            correctAnswer = equalityQuestion.getCorrect_answer();
+        }
 
         pointsGainedForQuestion = mainCtrl.getSinglePlayerGame().addPoints(timeWhenAnswered, 1.0);
         // highlight correct answer
@@ -241,18 +368,33 @@ public class ComparativeQuestionScreenCtrl {
         }
 
         // make it so that answers also show the respective consumptions
-        answer1.setText(
+        if(questionMode == 0){
+            answer1.setText(
                 this.question.getActivities().get(0).getTitle()
-                        + " - " + this.question.getActivities().get(0).getConsumption_in_wh()
-                        + " Wh");
-        answer2.setText(
+                    + " - " + this.question.getActivities().get(0).getConsumption_in_wh()
+                    + " Wh");
+            answer2.setText(
                 this.question.getActivities().get(1).getTitle()
-                        + " - " + this.question.getActivities().get(1).getConsumption_in_wh()
-                        + " Wh");
-        answer3.setText(
+                    + " - " + this.question.getActivities().get(1).getConsumption_in_wh()
+                    + " Wh");
+            answer3.setText(
                 this.question.getActivities().get(2).getTitle()
-                        + " - " + this.question.getActivities().get(2).getConsumption_in_wh()
-                        + " Wh");
+                    + " - " + this.question.getActivities().get(2).getConsumption_in_wh()
+                    + " Wh");
+        } else if(questionMode == 2){
+            answer1.setText(
+                this.equalityQuestion.getActivities().get(0).getTitle()
+                    + " - " + this.equalityQuestion.getActivities().get(0).getConsumption_in_wh()
+                    + " Wh");
+            answer2.setText(
+                this.equalityQuestion.getActivities().get(1).getTitle()
+                    + " - " + this.equalityQuestion.getActivities().get(1).getConsumption_in_wh()
+                    + " Wh");
+            answer3.setText(
+                this.equalityQuestion.getActivities().get(2).getTitle()
+                    + " - " + this.equalityQuestion.getActivities().get(2).getConsumption_in_wh()
+                    + " Wh");
+        }
     }
 
     // reset attributes to default
@@ -268,9 +410,13 @@ public class ComparativeQuestionScreenCtrl {
         answer3.setDisable(false);
 
         // re-enable jokers
-        joker1.setDisable(false);
-        joker2.setDisable(false);
-        joker3.setDisable(false);
+        resetJokers();
+
+        // reset images
+        image1.setImage(null);
+        image2.setImage(null);
+        image3.setImage(null);
+        this.questionMode = 0;
     }
 
     private void endQuestion(){
@@ -356,28 +502,5 @@ public class ComparativeQuestionScreenCtrl {
             answerTimer.stop();
             answerTimer = null;
         }
-    }
-
-    /**
-     * Sets the images to the ones stored in the activities.
-     * Also sets the images to be the same width as the question
-     */
-    private void setImages(){
-        // Adding the images to a list to avoid duplicate code
-        List<ImageView> images = List.of(image1, image2, image3);
-        // This loops through every activity, gets the image and sets the image in the UI
-        for(int i = 0; i < question.getActivities().size(); i++){
-            if(question.getActivities().get(i).getImage() != null){
-                InputStream inputStream = new ByteArrayInputStream(question.getActivities().get(i).getImage());
-                if(inputStream != null){
-                    images.get(i).setImage(new Image(inputStream));
-                }
-            }
-        }
-        // It's dumb that we have to set the images to be the width of the vbox here
-        // A true javafx moment
-        image1.fitWidthProperty().bind(questionBox1.widthProperty());
-        image2.fitWidthProperty().bind(questionBox2.widthProperty());
-        image3.fitWidthProperty().bind(questionBox3.widthProperty());
     }
 }
