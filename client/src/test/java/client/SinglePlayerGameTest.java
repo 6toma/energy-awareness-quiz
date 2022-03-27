@@ -1,9 +1,9 @@
 package client;
 
 import commons.Activity;
-import commons.ComparativeQuestion;
+import commons.questions.ComparativeQuestion;
 import commons.Player;
-import commons.Question;
+import commons.questions.Question;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

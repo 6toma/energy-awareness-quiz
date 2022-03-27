@@ -1,6 +1,10 @@
 package server.api;
 
 import commons.*;
+import commons.questions.ComparativeQuestion;
+import commons.questions.EstimationQuestion;
+import commons.questions.MCQuestion;
+import commons.questions.Question;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

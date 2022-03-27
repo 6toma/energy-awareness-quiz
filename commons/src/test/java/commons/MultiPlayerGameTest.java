@@ -1,5 +1,8 @@
 package commons;
 
+import commons.questions.ComparativeQuestion;
+import commons.questions.EstimationQuestion;
+import commons.questions.Question;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

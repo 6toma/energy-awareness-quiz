@@ -2,7 +2,7 @@ package client;
 
 
 import commons.Player;
-import commons.Question;
+import commons.questions.Question;
 import lombok.Data;
 
 import java.util.ArrayList;

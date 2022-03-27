@@ -1,8 +1,8 @@
 package server.api;
 
 import commons.Activity;
-import commons.ComparativeQuestion;
-import commons.EstimationQuestion;
+import commons.questions.ComparativeQuestion;
+import commons.questions.EstimationQuestion;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;

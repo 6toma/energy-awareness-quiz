@@ -17,7 +17,7 @@ package client.utils;
 
 import commons.MultiPlayerGame;
 import commons.Player;
-import commons.Question;
+import commons.questions.Question;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;

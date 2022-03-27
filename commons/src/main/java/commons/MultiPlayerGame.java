@@ -1,5 +1,6 @@
 package commons;
 
+import commons.questions.Question;
 import lombok.Data;
 
 import java.util.List;

@@ -1,5 +1,6 @@
 package commons;
 
+import commons.questions.MCQuestion;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
