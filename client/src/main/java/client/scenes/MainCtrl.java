@@ -58,6 +58,9 @@ public class MainCtrl {
     private SettingsScreenCtrl settingsScreenCtrl;
     private Parent settingsScreenParent;
 
+    private EqualityQuestionScreenCtrl equalityQuestionScreenCtrl;
+    private Parent equalityQuestionParent;
+
 
     // single player variables
     @Getter
@@ -66,6 +69,7 @@ public class MainCtrl {
 
     /**
      * Creates a new MainCtrl with server
+     *
      * @param server ServerUtils object
      */
     @Inject
@@ -75,8 +79,9 @@ public class MainCtrl {
 
     /**
      * Initializes the screen
-     * @param primaryStage The primary stage to use (window)
-     * @param homeScreen Screens that main controller can communicate with
+     *
+     * @param primaryStage              The primary stage to use (window)
+     * @param homeScreen                Screens that main controller can communicate with
      * @param waitingRoom
      * @param loadingScreen
      * @param comparativeQuestionScreen
@@ -84,6 +89,7 @@ public class MainCtrl {
      * @param endScreen
      * @param helpScreen
      * @param scoreChangeScreen
+     * @param equalityQuestionScreen
      */
     public void initialize(
             Stage primaryStage,
@@ -96,7 +102,8 @@ public class MainCtrl {
             Pair<HelpScreenCtrl, Parent> helpScreen,
             Pair<ScoreChangeScreenCtrl, Parent> scoreChangeScreen,
             Pair<EstimationQuestionCtrl, Parent> estimationQuestion,
-            Pair<SettingsScreenCtrl, Parent> settingsScreen
+            Pair<SettingsScreenCtrl, Parent> settingsScreen,
+            Pair<EqualityQuestionScreenCtrl, Parent> equalityQuestionScreen
     ) {
         this.primaryStage = primaryStage;
 
@@ -129,7 +136,10 @@ public class MainCtrl {
         this.estimationQuestionParent = estimationQuestion.getValue();
 
         this.settingsScreenCtrl = settingsScreen.getKey();
-        this.settingsScreenParent =  settingsScreen.getValue();
+        this.settingsScreenParent = settingsScreen.getValue();
+
+        this.equalityQuestionScreenCtrl = equalityQuestionScreen.getKey();
+        this.equalityQuestionParent = equalityQuestionScreen.getValue();
 
         // TODO: uncomment to disable the fullscreen popup
         //primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
@@ -169,7 +179,7 @@ public class MainCtrl {
     /**
      * method for showing the settings screen
      */
-    public void showSettingsScreen(){
+    public void showSettingsScreen() {
         primaryStage.getScene().setRoot(settingsScreenParent);
         checkDarkMode();
     }
@@ -210,6 +220,15 @@ public class MainCtrl {
     }
 
     /**
+     * method for showing the equality question
+     */
+    public void showEqualityQuestionScreen() {
+        primaryStage.getScene().setRoot(equalityQuestionParent);
+        checkDarkMode();
+        equalityQuestionScreenCtrl.countdown();
+    }
+
+    /**
      * method for showing the end screen
      */
     public void showEndScreen() {
@@ -236,7 +255,7 @@ public class MainCtrl {
     /**
      * method for showing the score change screen
      */
-    public void showScoreChangeScreen(int pointsGained){
+    public void showScoreChangeScreen(int pointsGained) {
         primaryStage.getScene().setRoot(scoreChangeScreenParent);
         checkDarkMode();
         showScore(pointsGained);
@@ -256,6 +275,7 @@ public class MainCtrl {
 
     /**
      * Gets the origin of usernamescreen
+     *
      * @return 1 - Singleplayer, 2 - Multiplayer
      */
     public int getUsernameOriginScreen() {
@@ -264,6 +284,7 @@ public class MainCtrl {
 
     /**
      * Sets the usernameOriginScreen
+     *
      * @param usernameOriginScreen value
      *                             1 - Singleplayer
      *                             2 - Multiplayer
@@ -371,6 +392,7 @@ public class MainCtrl {
         //reset Question screen to prepare it for a new game
         comparativeQuestionScreenCtrl.resetComparativeQuestionScreen();
         estimationScreenCtrl.resetEstimationQuestion();
+        equalityQuestionScreenCtrl.resetEqualityQuestion();
 
 
         //store player's end score
@@ -394,6 +416,7 @@ public class MainCtrl {
 
     /**
      * Shows the current score on the score change screen
+     *
      * @param pointsGained number of points to be added to the score
      */
     public void showScore(int pointsGained) {
@@ -405,6 +428,7 @@ public class MainCtrl {
 
     /**
      * Gets the username
+     *
      * @return Username of current player of singlePlayerGame
      */
     public String getCurrentUsername() {
@@ -413,6 +437,7 @@ public class MainCtrl {
 
     /**
      * Gets the server url from the settings screen
+     *
      * @return
      */
     public String getServerURL() {

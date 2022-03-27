@@ -1,9 +1,6 @@
 package server.api;
 
-import commons.Activity;
-import commons.ComparativeQuestion;
-import commons.EstimationQuestion;
-import commons.Question;
+import commons.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,10 +35,11 @@ public class QuestionController {
 
     /**
      * Generates a random number, uses it to get a random question type
+     *
      * @return either:
-     *         - ResponseEntity precondition failed
-     *         - ComparativeQuestion
-     *         - EstimationQuestion
+     * - ResponseEntity precondition failed
+     * - ComparativeQuestion
+     * - EstimationQuestion
      */
     @GetMapping(path = {"/random", "/random/"})
     public ResponseEntity<Question> getRandomQuestion() {
@@ -51,7 +49,7 @@ public class QuestionController {
 
         // To add more question types increment numberOfQuestions and add another if statement
         // e.g. else if(randomInt % numberOfQuestions == 1) return ...
-        if(randomInt % numberOfQuestions == 0){
+        if (randomInt % numberOfQuestions == 0) {
             return getRandomComparative();
         } else {
             return getRandomEstimation();
@@ -61,6 +59,7 @@ public class QuestionController {
     /**
      * Generates a random question with 3 random activities
      * Initializes the image for the activities
+     *
      * @return Comparative question with 3 activities
      */
     @GetMapping(path = {"/comparative", "/comparative/"})
@@ -77,7 +76,7 @@ public class QuestionController {
         int n = (int) random.nextLong();
         boolean isMost = n % 2 == 0; // gets a random true or false
         ComparativeQuestion q = new ComparativeQuestion(activities, isMost);
-        for(Activity a : q.getActivities()){
+        for (Activity a : q.getActivities()) {
             a.initializeImage(new File(Config.defaultImagePath + a.getImage_path()));
         }
         return ResponseEntity.ok(q);
@@ -85,6 +84,7 @@ public class QuestionController {
 
     /**
      * endpoint for getting an activity for a Estimation question
+     *
      * @return
      */
     @GetMapping(path = {"/estimation", "/estimation/"})
@@ -99,6 +99,29 @@ public class QuestionController {
         activity.initializeImage(new File(Config.defaultImagePath + activity.getImage_path()));
         EstimationQuestion q = new EstimationQuestion(activity);
         return ResponseEntity.ok(q);
+    }
+
+
+    /**
+     * Generates a random equality question
+     * Initializes the image for the activities
+     *
+     * @return Equality Question considering 2 activities
+     */
+    @GetMapping(path = {"/equality", "/equality/"})
+    public ResponseEntity<Question> getRandomEquality() {
+        int limit = 2;
+        if (repo.count() <= limit) {
+            return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED).build();
+        }
+        List<Activity> activities = activitiesWithSuitableConsumptions(limit); // gets 3 random activities
+
+        EqualityQuestion q = new EqualityQuestion(activities);
+        for (Activity a : q.getActivities()) {
+            a.initializeImage(new File(Config.defaultImagePath + a.getImage_path()));
+        }
+        return ResponseEntity.ok(q);
+
     }
 
     /**
