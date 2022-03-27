@@ -3,6 +3,7 @@ package client.scenes;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.questions.ComparativeQuestion;
+import commons.questions.EqualityQuestion;
 import commons.questions.MCQuestion;
 import commons.questions.Question;
 import javafx.animation.KeyFrame;
@@ -30,11 +31,13 @@ public class ComparativeQuestionScreenCtrl {
      * Integer to set the question mode
      * 0 - ComparativeQuestion
      * 1 - MCQuestion
+     * 2 - EqualityQuestion
      */
     private int questionMode = 0;
 
     private ComparativeQuestion question;
     private MCQuestion mcQuestion;
+    private EqualityQuestion equalityQuestion;
 
     // for how long to show question and answer
     private double questionTime = 15.0;
@@ -148,6 +151,8 @@ public class ComparativeQuestionScreenCtrl {
             correctAnswer = question.getCorrect_answer();
         } else if(questionMode == 1){
             correctAnswer = mcQuestion.getCorrect_answer();
+        } else if(questionMode == 2){
+            correctAnswer = equalityQuestion.getCorrect_answer();
         }
 
         if(answer != correctAnswer){
@@ -175,6 +180,12 @@ public class ComparativeQuestionScreenCtrl {
             setMCQuestionText();
             setMCAnswerTexts();
             setMCImages();
+        } else if(question instanceof EqualityQuestion){
+            this.equalityQuestion = (EqualityQuestion) question;
+            this.questionMode = 2;
+            setEqualityText();
+            setEqualityAnswerTexts();
+            setEqualityImages();
         }
 
     }
@@ -247,6 +258,40 @@ public class ComparativeQuestionScreenCtrl {
         image2.fitWidthProperty().bind(questionBox2.widthProperty());
     }
 
+    private void setEqualityText(){
+        String questionText = "Instead of " + equalityQuestion.getChosen().getTitle() + " you could ...";
+        this.questionLabel.setText(questionText);
+    }
+
+    private void setEqualityAnswerTexts(){
+        answer1.setText(this.equalityQuestion.getActivities().get(0).getTitle());
+        answer2.setText(this.equalityQuestion.getActivities().get(1).getTitle());
+        answer3.setText(this.equalityQuestion.getActivities().get(2).getTitle());
+    }
+
+    /**
+     * Sets the images to the ones stored in the activities.
+     * Also sets the images to be the same width as the question
+     */
+    private void setEqualityImages(){
+        // Adding the images to a list to avoid duplicate code
+        List<ImageView> images = List.of(image1, image2, image3);
+        // This loops through every activity, gets the image and sets the image in the UI
+        for(int i = 0; i < equalityQuestion.getActivities().size(); i++){
+            if(equalityQuestion.getActivities().get(i).getImage() != null){
+                InputStream inputStream = new ByteArrayInputStream(equalityQuestion.getActivities().get(i).getImage());
+                if(inputStream != null){
+                    images.get(i).setImage(new Image(inputStream));
+                }
+            }
+        }
+        // It's dumb that we have to set the images to be the width of the vbox here
+        // A true javafx moment
+        image1.fitWidthProperty().bind(questionBox1.widthProperty());
+        image2.fitWidthProperty().bind(questionBox2.widthProperty());
+        image3.fitWidthProperty().bind(questionBox3.widthProperty());
+    }
+
     /**
      * Exits the screen. Goes back to the home screen
      */
@@ -308,8 +353,9 @@ public class ComparativeQuestionScreenCtrl {
             correctAnswer = question.getCorrect_answer();
         } else if(questionMode == 1){
             correctAnswer = mcQuestion.getCorrect_answer();
+        } else if(questionMode == 2){
+            correctAnswer = equalityQuestion.getCorrect_answer();
         }
-
 
         pointsGainedForQuestion = mainCtrl.getSinglePlayerGame().addPoints(timeWhenAnswered, 1.0);
         // highlight correct answer
@@ -334,6 +380,19 @@ public class ComparativeQuestionScreenCtrl {
             answer3.setText(
                 this.question.getActivities().get(2).getTitle()
                     + " - " + this.question.getActivities().get(2).getConsumption_in_wh()
+                    + " Wh");
+        } else if(questionMode == 2){
+            answer1.setText(
+                this.equalityQuestion.getActivities().get(0).getTitle()
+                    + " - " + this.equalityQuestion.getActivities().get(0).getConsumption_in_wh()
+                    + " Wh");
+            answer2.setText(
+                this.equalityQuestion.getActivities().get(1).getTitle()
+                    + " - " + this.equalityQuestion.getActivities().get(1).getConsumption_in_wh()
+                    + " Wh");
+            answer3.setText(
+                this.equalityQuestion.getActivities().get(2).getTitle()
+                    + " - " + this.equalityQuestion.getActivities().get(2).getConsumption_in_wh()
                     + " Wh");
         }
     }
