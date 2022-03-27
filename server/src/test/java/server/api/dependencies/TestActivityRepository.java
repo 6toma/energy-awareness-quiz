@@ -194,17 +194,50 @@ public class TestActivityRepository implements ActivityRepository {
     }
 
     @Override
-    public Optional<List<String>> activitiesWithSpecifiedConsumption(int size, int floor, int ceil) {
+    public Optional<List<String>> activitiesWithSpecifiedConsumption(int size, int floor, int ceil, long pivotConsumption) {
         // filter only the activities, whose consumption is within the specified range
         List<Activity> activitiesSuitableConsumptions = activities
                 .stream()
-                .filter(activity -> activity.getConsumption_in_wh() > floor && activity.getConsumption_in_wh() < ceil)
+                .filter(activity -> activity.getConsumption_in_wh() > floor && activity.getConsumption_in_wh() < ceil && activity.getConsumption_in_wh() != pivotConsumption)
                 .collect(Collectors.toList());
 
         if(activitiesSuitableConsumptions.isEmpty()) return Optional.empty();
         List<String> result = new ArrayList<>();
         for(Activity a : activitiesSuitableConsumptions){
             result.add(a.getId());
+        }
+        return Optional.of(result);
+    }
+
+    @Override
+    public Optional<List<Activity>> nonUniqueActivities(int limit){
+        List<Activity> result = new ArrayList<>();
+        for(Activity a : activities){
+            for(Activity b : activities){
+                if(!a.equals(b)){
+                    result.add(a);
+                }
+                if(result.size() >= limit){
+                    break;
+                }
+            }
+            if(result.size() >= limit){
+                break;
+            }
+        }
+        return Optional.of(result);
+    }
+
+    @Override
+    public Optional<List<Activity>> sameConsumptionActivities(long consumption, String id, int limit){
+        List<Activity> result = new ArrayList<>();
+        for(Activity a : activities){
+            if(a.getConsumption_in_wh() == consumption && !a.getId().equals(id)){
+                result.add(a);
+            }
+            if(result.size() >= limit){
+                break;
+            }
         }
         return Optional.of(result);
     }
