@@ -158,4 +158,18 @@ class QuestionControllerTest {
 
         assertEquals(expected, que.getRandomQuestion().getBody());
     }
+
+    @Test
+    void getRandomQuestionTestEquality() {
+        random.setCount(3); // sets the random to start from 3
+
+        Activity similar = new Activity("8", "image_h","h", 1L, "h");
+        repo.activities.addAll(activities);
+        repo.activities.add(similar);
+
+        List<Activity> expectedList = List.of(activities.get(1), activities.get(2));
+        EqualityQuestion expected = new EqualityQuestion(activities.get(0), similar, expectedList, 1);
+
+        assertEquals(expected, que.getRandomQuestion().getBody());
+    }
 }

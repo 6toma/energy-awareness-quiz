@@ -50,7 +50,7 @@ public class QuestionController {
     public ResponseEntity<Question> getRandomQuestion() {
 
         int randomInt = random.nextInt();
-        int numberOfQuestions = 3;
+        int numberOfQuestions = 4;
 
         // To add more question types increment numberOfQuestions and add another if statement
         // e.g. else if(randomInt % numberOfQuestions == 1) return ...
@@ -58,8 +58,10 @@ public class QuestionController {
             return getRandomComparative();
         } else if(randomInt % numberOfQuestions == 1) {
             return getRandomEstimation();
-        } else {
+        } else if(randomInt % numberOfQuestions == 2){
             return getRandomMCQuestion();
+        } else {
+            return getRandomEquality();
         }
     }
 
@@ -162,9 +164,9 @@ public class QuestionController {
         // Randomizing needs to be done here for testing
         EqualityQuestion q = new EqualityQuestion(chosen, correct, activities, Math.abs(random.nextInt() % 3));
         // Initialize images for the answer options
-        /*for (Activity a : q.getActivities()) {
+        for (Activity a : q.getActivities()) {
             a.initializeImage(new File(Config.defaultImagePath + a.getImage_path()));
-        }*/
+        }
         return ResponseEntity.ok(q);
 
     }
