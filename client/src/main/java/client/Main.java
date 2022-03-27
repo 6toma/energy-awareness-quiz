@@ -115,6 +115,7 @@ public class Main extends Application {
         );
         
 
+
         // add more scenes the same way
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);

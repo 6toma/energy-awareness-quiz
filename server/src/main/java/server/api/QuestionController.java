@@ -135,6 +135,29 @@ public class QuestionController {
         return ResponseEntity.ok(q);
     }
 
+
+    /**
+     * Generates a random equality question
+     * Initializes the image for the activities
+     *
+     * @return Equality Question considering 2 activities
+     */
+    @GetMapping(path = {"/equality", "/equality/"})
+    public ResponseEntity<Question> getRandomEquality() {
+        int limit = 2;
+        if (repo.count() <= limit) {
+            return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED).build();
+        }
+        List<Activity> activities = activitiesWithSuitableConsumptions(limit); // gets 3 random activities
+
+        EqualityQuestion q = new EqualityQuestion(activities);
+        for (Activity a : q.getActivities()) {
+            a.initializeImage(new File(Config.defaultImagePath + a.getImage_path()));
+        }
+        return ResponseEntity.ok(q);
+
+    }
+
     /**
      * Fetches a number of activities, such that they have distinct consumptions
      *

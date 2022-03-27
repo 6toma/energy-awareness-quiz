@@ -215,6 +215,7 @@ public class MainCtrl {
         estimationScreenCtrl.countdown();
     }
 
+
     /**
      * method for showing the end screen
      */
