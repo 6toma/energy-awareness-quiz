@@ -35,10 +35,7 @@ public class EqualityQuestion implements Question {
 
     private Activity chooseActivity() {
         Random rand = new Random();
-        int upperbound = 2;
-        int int_random = rand.nextInt(upperbound);
-
-        Activity chosen = activities.get(int_random);
+        Activity chosen = activities.get(rand.nextInt(2));
         return chosen;
     }
 
