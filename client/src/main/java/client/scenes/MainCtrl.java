@@ -59,7 +59,6 @@ public class MainCtrl {
     private Parent settingsScreenParent;
 
 
-
     // single player variables
     @Getter
     private SinglePlayerGame singlePlayerGame;
@@ -99,8 +98,7 @@ public class MainCtrl {
             Pair<HelpScreenCtrl, Parent> helpScreen,
             Pair<ScoreChangeScreenCtrl, Parent> scoreChangeScreen,
             Pair<EstimationQuestionCtrl, Parent> estimationQuestion,
-            Pair<SettingsScreenCtrl, Parent> settingsScreen,
-    ) {
+            Pair<SettingsScreenCtrl, Parent> settingsScreen) {
         this.primaryStage = primaryStage;
 
         this.homeScreenCtrl = homeScreen.getKey();
