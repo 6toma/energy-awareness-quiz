@@ -5,6 +5,7 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.questions.ComparativeQuestion;
 import commons.questions.EstimationQuestion;
+import commons.questions.MCQuestion;
 import commons.questions.Question;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -332,10 +333,13 @@ public class MainCtrl {
             // check the question type
             if (question instanceof ComparativeQuestion) {
                 showComparativeQuestionScreen();
-                comparativeQuestionScreenCtrl.setQuestion((ComparativeQuestion) question);
+                comparativeQuestionScreenCtrl.setQuestion(question);
             } else if (question instanceof EstimationQuestion) {
                 showEstimationQuestionScreen();
                 estimationScreenCtrl.setQuestion((EstimationQuestion) question);
+            } else if (question instanceof MCQuestion) {
+                showComparativeQuestionScreen();
+                comparativeQuestionScreenCtrl.setQuestion(question);
             }
 
             // get next question from the server
