@@ -16,7 +16,7 @@ import java.util.List;
  */
 @Data
 public class WaitingRoom {
-    private int waitingRoomId;          // a waiting room id which is incremented every time a new game is started (flush count)
+    private int multiplayerGameID;      // a waiting room id which is incremented every time a new game is started (flush count)
     private List<Player> players;       // list of players
     private List<Question> questions;   // list of questions
     private int maxNumberOfQuestions;   // maximal number of questions
@@ -28,15 +28,46 @@ public class WaitingRoom {
     /**
      * constructor with a set id (it should be set to zero)
      * @param maxNumberOfQuestions maximal number of questions
-     * @param waitingRoomId id of the waiting room
+     * @param players list of players
+     * @param questions list of questions generated for multiplayer games
      */
-    public WaitingRoom(int waitingRoomId, List<Player> players,  List<Question> questions, int maxNumberOfQuestions){
+    public WaitingRoom(List<Player> players,  List<Question> questions, int maxNumberOfQuestions){
         this.players = players;
         this.questions = questions;
-        this.waitingRoomId = waitingRoomId;
-        this.maxNumberOfQuestions = maxNumberOfQuestions;
+        this.multiplayerGameID = 0;
+        this.maxNumberOfQuestions = Math.min(Math.max(maxNumberOfQuestions, 5), 25); // make min number of questions 5, max number 25
     }
 
+    /**
+     * @param maxNumberOfQuestions maximal number of questions
+     * @param questions list of questions generated for multiplayer games
+     */
+    public WaitingRoom(List<Question> questions, int maxNumberOfQuestions){
+        this.players = new ArrayList<>();
+        this.questions = questions;
+        this.multiplayerGameID = 0;
+        this.maxNumberOfQuestions = Math.min(Math.max(maxNumberOfQuestions, 5), 25); // make min number of questions 5, max number 25
+    }
+
+    /**
+     * Set the ID of the next multiplayer game
+     * @param multiplayerGameID the ID that will be set
+     *               this parameter cannot be negative
+     */
+    public void setMultiplayerGameID(int multiplayerGameID) {
+        this.multiplayerGameID = Math.max(multiplayerGameID, 0);
+    }
+
+    /**
+     * Set the maximum number of questions for the
+     * next multiplayer game
+     * @param maxNumberOfQuestions the maximum
+     *                             number of questions
+     *                             to be set for next game
+     */
+    public void setMaxNumberOfQuestions(int maxNumberOfQuestions) {
+        this.maxNumberOfQuestions = Math.min(Math.max(maxNumberOfQuestions, 5), 25); // make min number of questions 5, max number 25
+    }
 
     /**
      * Adds a question to the list. Checks for duplicates
@@ -44,12 +75,9 @@ public class WaitingRoom {
      * @return true if question was added, false otherwise
      */
     public boolean addQuestion(Question question){
-        if(question == null) return false;
-        for(int i = 0; i < questions.size(); i++) {
-            if (question.equals(questions.get(i))) return false;
-        }
-        questions.add(question);
-        return true;
+        if(questions.contains(question) || question == null)
+            return false;
+        return questions.add(question);
     }
 
     /**
@@ -58,14 +86,11 @@ public class WaitingRoom {
      * @param player player to be added
      */
     public boolean addPlayerToWaitingRoom(Player player){
-        if(player.getName() == null) return false;
-        for(var p : players){
-            if (p.equals(player)) {
-                return false;
-            }
-        }
-        players.add(player);
-        return true;
+        if(player == null
+            || player.getName() == null
+            || player.getName().isEmpty()
+            || this.players.contains(player)) return false;
+        return this.players.add(player);
     }
 
     /**
@@ -81,15 +106,23 @@ public class WaitingRoom {
     }
 
     /**
+     * Gets the number of players in the waiting room
+     * @return the size of the list of players
+     */
+    public int getNumberOfPlayers() {
+        return this.players.size();
+    }
+
+    /**
      * Flushing a WaitingRoom. This will transfer all the players to a MultiplayerGame class
      * and a ll the players
-     * @return new Multiplayer game with an Id and ist of players and question
+     * @return new Multiplayer game with an ID and ist of players and question
      */
     public MultiPlayerGame flushWaitingRoom(){
-        MultiPlayerGame game = new MultiPlayerGame(waitingRoomId, players, questions);
+        MultiPlayerGame game = new MultiPlayerGame(multiplayerGameID, players, questions);
         questions = new ArrayList<>();
         players = new ArrayList<>();
-        waitingRoomId++;
+        multiplayerGameID++;
         return game;
     }
 
