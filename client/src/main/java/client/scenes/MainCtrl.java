@@ -40,9 +40,6 @@ public class MainCtrl {
     private ComparativeQuestionScreenCtrl comparativeQuestionScreenCtrl;
     private Parent comparativeQuestionScreenParent;
 
-    private MCQuestionScreenCtrl mcQuestionScreenCtrl;
-    private Parent mcQuestionScreenParent;
-
     private UsernameScreenCtrl usernameScreenCtrl;
     private Parent usernameScreenParent;
 
@@ -89,7 +86,6 @@ public class MainCtrl {
      * @param endScreen
      * @param helpScreen
      * @param scoreChangeScreen
-     * @param mcQuestionScreen
      */
     public void initialize(
             Stage primaryStage,
@@ -102,7 +98,6 @@ public class MainCtrl {
             Pair<HelpScreenCtrl, Parent> helpScreen,
             Pair<ScoreChangeScreenCtrl, Parent> scoreChangeScreen,
             Pair<SettingsScreenCtrl, Parent> settingsScreen,
-            Pair<MCQuestionScreenCtrl, Parent> mcQuestionScreen,
             Pair<EstimationQuestionCtrl, Parent> estimationQuestion
     ) {
         this.primaryStage = primaryStage;
@@ -138,8 +133,6 @@ public class MainCtrl {
         this.settingsScreenCtrl = settingsScreen.getKey();
         this.settingsScreenParent = settingsScreen.getValue();
 
-        this.mcQuestionScreenCtrl = mcQuestionScreen.getKey();
-        this.mcQuestionScreenParent = mcQuestionScreen.getValue();
 
         // TODO: uncomment to disable the fullscreen popup
         //primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
@@ -253,14 +246,6 @@ public class MainCtrl {
         scoreChangeScreenCtrl.countdown();
     }
 
-    /**
-     * method for displaying MC Question type screen
-     */
-    public void showMCQuestionScreen() {
-        primaryStage.getScene().setRoot(mcQuestionScreenParent);
-        checkDarkMode();
-        mcQuestionScreenCtrl.countdown();
-    }
 
     /**
      * method for changing mode to opposite colour
@@ -392,7 +377,6 @@ public class MainCtrl {
         //reset Question screen to prepare it for a new game
         comparativeQuestionScreenCtrl.resetComparativeQuestionScreen();
         estimationScreenCtrl.resetEstimationQuestion();
-        mcQuestionScreenCtrl.resetMCQuestionScreen();
 
         //store player's end score
         try {

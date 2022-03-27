@@ -113,12 +113,7 @@ public class Main extends Application {
                 "scenes/SettingsScreen.fxml",
                 "css/SettingsScreen.css"
         );
-
-        var mcQuestionScreen = FXML.load(
-                MCQuestionScreenCtrl.class,
-                "scenes/MCQuestionScreen.fxml",
-                "css/MCQuestionScreen.css"
-        );
+        
 
         // add more scenes the same way
 
@@ -135,7 +130,6 @@ public class Main extends Application {
                 helpScreen,
                 scoreChangeScreen,
                 settingsScreen,
-                mcQuestionScreen,
                 estimationQuestionScreen
         );
     }
