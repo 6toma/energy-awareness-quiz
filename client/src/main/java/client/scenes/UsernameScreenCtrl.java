@@ -66,10 +66,12 @@ public class UsernameScreenCtrl {
     @FXML
     void showNextScreen(ActionEvent event) {
         if(mainCtrl.getUsernameOriginScreen() == 1) {
-
             mainCtrl.getSinglePlayerGame().setPlayer(new Player(inputUsernameField.getText()));
             mainCtrl.showLoadingScreen();
         } else {
+            //send player to multiplayer game object
+            Player newPlayer = server.addPlayerMultiplayer(new Player(inputUsernameField.getText()));
+            System.out.println(newPlayer);
             mainCtrl.showWaitingRoom();
         }
         resetUserText();

@@ -37,5 +37,22 @@ public class WaitingRoomCtrl {
         mainCtrl.showHomeScreen();
     }
 
+    /**
+     * start listening for updates
+     */
+    public void startListening(){
+        server.registerUpdates(c -> {
+            System.out.println("object identity: "+c+" has changed");
+            System.out.println(server.getPlayersMultiplayer().get(0));
+        });
+    }
+
+    /**
+     * stops the thread used for long polling
+     */
+    public void stop(){
+        server.stop();
+    }
+
 
 }

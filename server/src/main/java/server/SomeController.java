@@ -19,6 +19,6 @@ public class SomeController {
     @GetMapping("/") // Execute index() on HTTP GET with path "/"
     @ResponseBody
     public String index() {
-        return "Hello world!";
+        return "Hello there General Kenobi!";
     }
 }

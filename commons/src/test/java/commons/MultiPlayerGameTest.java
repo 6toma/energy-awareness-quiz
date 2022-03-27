@@ -465,4 +465,24 @@ public class MultiPlayerGameTest {
         assertThrows(IllegalArgumentException.class, () -> multiPlayerGame.setCurrentScreen("LITERALLY ANYTHING OTHER THAN THOSE"), "Not a valid screen");
     }
 
+    /**
+     * Test the getter of a GameUpdatesPacket
+     */
+    @Test
+    public void getGameStatusTest() {
+        Player a = new Player("a");
+        Player b = new Player("b");
+        List<Player> players = new ArrayList<>();
+        players.add(a);
+        players.add(b);
+        multiPlayerGame.setPlayers(players);
+        multiPlayerGame.setCurrentScreen("QUESTION");
+
+        GameUpdatesPacket updates = new GameUpdatesPacket(Objects.hash(players), "QUESTION", 1);
+        assertEquals(multiPlayerGame.getGameStatus(), updates);
+
+        multiPlayerGame.removePlayer(a);
+        assertNotEquals(multiPlayerGame.getGameStatus(), updates);
+    }
+
 }

@@ -83,6 +83,27 @@ public class QuestionController {
     }
 
     /**
+     * Generates a random question with 3 energy values
+     * Initializes the image for the activity
+     *
+     * @return MC Question with 3 values
+     */
+    @GetMapping(path = {"/mc", "/mc/"})
+    public ResponseEntity<MCQuestion> getRandomMCQuestion() {
+        int limit = 3;
+
+        if (repo.numberDistinctConsumptions() <= limit) {
+            return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED).build();
+        }
+        List<Activity> activities = activitiesWithSuitableConsumptions(limit);
+        MCQuestion q = new MCQuestion(activities);
+        for (Activity a : q.getActivities()) {
+            a.initializeImage(new File(Config.defaultImagePath + a.getImage_path()));
+        }
+        return ResponseEntity.ok(q);
+    }
+
+    /**
      * endpoint for getting an activity for a Estimation question
      *
      * @return

@@ -97,8 +97,9 @@ public class MainCtrl {
             Pair<EndScreenCtrl, Parent> endScreen,
             Pair<HelpScreenCtrl, Parent> helpScreen,
             Pair<ScoreChangeScreenCtrl, Parent> scoreChangeScreen,
-            Pair<EstimationQuestionCtrl, Parent> estimationQuestion,
-            Pair<SettingsScreenCtrl, Parent> settingsScreen) {
+            Pair<SettingsScreenCtrl, Parent> settingsScreen,
+            Pair<EstimationQuestionCtrl, Parent> estimationQuestion
+    ) {
         this.primaryStage = primaryStage;
 
         this.homeScreenCtrl = homeScreen.getKey();
@@ -146,6 +147,7 @@ public class MainCtrl {
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent t) {
+                waitingRoomCtrl.stop();
                 Platform.exit();
                 System.exit(0);
             }
@@ -165,6 +167,7 @@ public class MainCtrl {
      */
     public void showWaitingRoom() {
         primaryStage.getScene().setRoot(waitingRoomParent);
+        waitingRoomCtrl.startListening();
         checkDarkMode();
     }
 
@@ -245,6 +248,7 @@ public class MainCtrl {
         showScore(pointsGained);
         scoreChangeScreenCtrl.countdown();
     }
+
 
     /**
      * method for changing mode to opposite colour
@@ -376,7 +380,6 @@ public class MainCtrl {
         //reset Question screen to prepare it for a new game
         comparativeQuestionScreenCtrl.resetComparativeQuestionScreen();
         estimationScreenCtrl.resetEstimationQuestion();
-
 
         //store player's end score
         try {
