@@ -10,7 +10,7 @@ import java.util.Optional;
 
 
 /**
- * Activity endpoints go in this controller
+ * Player endpoints go in this controller
  */
 
 @RestController
@@ -20,7 +20,7 @@ public class PlayerController {
     private final PlayerRepository repo;
 
     /**
-     * Creates new ActivityController object
+     * Creates new PlayerController object
      * Sets repository to repo
      * @param repo repository to use
      */
@@ -52,9 +52,21 @@ public class PlayerController {
     }
 
     /**
+     * Returns a list of players with the highest scores
+     * List returned should be ordered in descending order unless some magic
+     *
+     * @param numberOfPlayers determines how many players in list
+     * @return A list of top numberOfTop players
+     */
+    @GetMapping("/leaderboard/{number}")
+    public ResponseEntity<List<Player>> getTopPlayers(@PathVariable("number") Long numberOfPlayers) {
+        return ResponseEntity.ok(repo.getTopPlayers(numberOfPlayers.intValue()).get());
+    }
+
+    /**
      * adds a player to the database
      * @param player
-     * @return the player which was added, bad request if invalid activity
+     * @return the player which was added, bad request if invalid player
      */
     @PostMapping(path = {"/add-one", "/add-one/"})
     public ResponseEntity<Player> addPlayer(@RequestBody Player player) {
@@ -89,10 +101,10 @@ public class PlayerController {
      * API UPDATE player BY ID
      * @param player Player object with updated parameters
      * @param id ID of player to be updated
-     * @return updated player if successful, bad request if invalid update activity or invalid id
+     * @return updated player if successful, bad request if invalid update player or invalid id
      */
     @PostMapping("/update/{id}")
-    public ResponseEntity<Player> updateActivity(@RequestBody Player player, @PathVariable("id") Long id) {
+    public ResponseEntity<Player> updatePlayer(@RequestBody Player player, @PathVariable("id") Long id) {
 
         Optional<Player> dbPlayerOpt = repo.findById(id); // get the player from the database
 
@@ -121,7 +133,7 @@ public class PlayerController {
      *          or a bad request output when it fails
      */
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Player> deleteActivity(@PathVariable("id") Long id) {
+    public ResponseEntity<Player> deletePlayer(@PathVariable("id") Long id) {
         if(!repo.existsById(id)) {
             return ResponseEntity.badRequest().build();
         }

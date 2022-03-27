@@ -2,7 +2,7 @@ package client;
 
 
 import commons.Player;
-import commons.Question;
+import commons.questions.Question;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -17,7 +17,6 @@ public class SinglePlayerGame {
 
     private List<Question> questions;
     private Player player;
-    private int streak = 0; // streak field for getting more points when you answer questions correctly in a row
     private int questionNumber = 1;
     private int maxQuestions;
 
@@ -91,19 +90,17 @@ public class SinglePlayerGame {
      */
     public int addPoints(int timeWhenAnswered, double guessQuestionRate){
         if(timeWhenAnswered == -1){
-            resetStreak();
+            player.resetStreak();
             nextQuestion();
             return 0;
         }
-        incrementStreak();
+        player.incrementStreak();
         int currentScore = getPlayer().getScore();
         int pointsToBeAdded = (int)Math.round(guessQuestionRate * getPointsToBeAdded(timeWhenAnswered));
         player.setScore( currentScore + pointsToBeAdded );
         nextQuestion();
         return pointsToBeAdded;
     }
-
-
 
     /**
      * The points achievable for a single question are from 950 to 1050 depending on the number of seconds it took the user to select an answer
@@ -113,7 +110,7 @@ public class SinglePlayerGame {
      * @return
      */
     public int getPointsToBeAdded(int time) {
-        double streakFactor = (100.0 + streak) / 100.0;
+        double streakFactor = (100.0 + player.getStreak()) / 100.0;
         var points = Math.round(streakFactor * (1050 - 5 * time));
         return (int)points;
     }
@@ -122,14 +119,4 @@ public class SinglePlayerGame {
      * Increments questionNumber
      */
     public void nextQuestion(){ questionNumber++;}
-
-    /**
-     * resets streak to 0
-     */
-    public void resetStreak() { streak = 0;}
-
-    /**
-     * Increments streak
-     */
-    public void incrementStreak() { streak++;}
 }

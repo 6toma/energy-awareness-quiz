@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.FluentQuery;
 import server.database.PlayerRepository;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -185,5 +186,19 @@ public class TestPlayerRepository implements PlayerRepository {
     @Override
     public <S extends Player, R> R findBy(Example<S> example, Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
         return null;
+    }
+
+    @Override
+    public Optional<List<Player>> getTopPlayers(int limit) {
+        List<Player> result = new ArrayList<>(players);
+        Collections.sort(result);
+        if (limit > result.size()){
+            return Optional.of(result);
+        }
+        List<Player> resultLimit = new ArrayList<>();
+        for(int i = 0; i < limit; i++){
+            resultLimit.add(result.get(i));
+        }
+        return Optional.of(resultLimit);
     }
 }

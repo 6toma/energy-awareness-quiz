@@ -4,8 +4,10 @@ import commons.Activity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import server.Config;
 import server.database.ActivityRepository;
 
+import java.io.File;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,6 +42,7 @@ public class ActivityController {
 
     /**
      * API GET ACTIVITY BY ID ENDPOINT
+     * Initializes the image for the activity
      * @param id id of activity to be returned
      * @return activity with specified id. Bad request response entity if invalid id
      */
@@ -48,7 +51,9 @@ public class ActivityController {
         if (!repo.existsById(id)) {
             return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.ok(repo.findById(id).get());
+        Activity activity = repo.findById(id).get();
+        activity.initializeImage(new File(Config.defaultImagePath + activity.getImage_path()));
+        return ResponseEntity.ok(activity);
     }
 
     /**

@@ -2,6 +2,11 @@ package commons;
 
 import org.junit.jupiter.api.Test;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class ActivityTest {
@@ -9,6 +14,12 @@ class ActivityTest {
     /**
      * Tests Constructor with all parameters
      */
+    @Test
+    void constructorTestEmpty() {
+        Activity activity = new Activity();
+        assertNotNull(activity);
+    }
+
     @Test
     void constructorTest1() {
         Activity activity = new Activity("1L", "image_a", "a", 1L, "a");
@@ -157,4 +168,35 @@ class ActivityTest {
         assertEquals("c", activity.getSource());
     }
 
+    /**
+     * Tests that image is not set after inputting an invalid image
+     */
+    @Test
+    void initializeImageTestNoImage(){
+        Activity activity = new Activity("1L", "image_a", "a", 1L, "a");
+        activity.initializeImage(new File("asd"));
+        assertNull(activity.getImage());
+    }
+
+    /**
+     * Tests that there is an image after inputting a valid image
+     */
+    @Test
+    void initializeImageTest(){
+        Activity activity = new Activity("1L", "image_a", "a", 1L, "a");
+        try {
+            // Create new temporary file
+            File temp = File.createTempFile("test", ".png");
+            // Create a new image with width = 1, height = 1, type = RGB
+            BufferedImage bf = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB);
+            // write image to the temp file
+            ImageIO.write(bf, "jpg", temp);
+            // set temp to delete on exit
+            temp.deleteOnExit();
+
+            activity.initializeImage(temp);
+            assertNotNull(activity.getImage());
+        } catch (IOException e) {
+        }
+    }
 }

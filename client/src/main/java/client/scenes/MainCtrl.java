@@ -3,8 +3,11 @@ package client.scenes;
 import client.SinglePlayerGame;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
-import commons.ComparativeQuestion;
-import commons.Question;
+import commons.questions.ComparativeQuestion;
+import commons.questions.EqualityQuestion;
+import commons.questions.EstimationQuestion;
+import commons.questions.MCQuestion;
+import commons.questions.Question;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -23,9 +26,11 @@ public class MainCtrl {
     @Getter
     private final ServerUtils server;
 
+    @Getter
     private Stage primaryStage;
 
     private HomeScreenCtrl homeScreenCtrl;
+    @Getter
     private Parent homeScreenParent;
 
     private WaitingRoomCtrl waitingRoomCtrl;
@@ -49,8 +54,12 @@ public class MainCtrl {
     private ScoreChangeScreenCtrl scoreChangeScreenCtrl;
     private Parent scoreChangeScreenParent;
 
+    private EstimationQuestionCtrl estimationScreenCtrl;
+    private Parent estimationQuestionParent;
+
     private SettingsScreenCtrl settingsScreenCtrl;
     private Parent settingsScreenParent;
+
 
     // single player variables
     @Getter
@@ -59,6 +68,7 @@ public class MainCtrl {
 
     /**
      * Creates a new MainCtrl with server
+     *
      * @param server ServerUtils object
      */
     @Inject
@@ -68,8 +78,9 @@ public class MainCtrl {
 
     /**
      * Initializes the screen
-     * @param primaryStage The primary stage to use (window)
-     * @param homeScreen Screens that main controller can communicate with
+     *
+     * @param primaryStage              The primary stage to use (window)
+     * @param homeScreen                Screens that main controller can communicate with
      * @param waitingRoom
      * @param loadingScreen
      * @param comparativeQuestionScreen
@@ -88,7 +99,8 @@ public class MainCtrl {
             Pair<EndScreenCtrl, Parent> endScreen,
             Pair<HelpScreenCtrl, Parent> helpScreen,
             Pair<ScoreChangeScreenCtrl, Parent> scoreChangeScreen,
-            Pair<SettingsScreenCtrl, Parent> settingsScreen
+            Pair<SettingsScreenCtrl, Parent> settingsScreen,
+            Pair<EstimationQuestionCtrl, Parent> estimationQuestion
     ) {
         this.primaryStage = primaryStage;
 
@@ -116,8 +128,13 @@ public class MainCtrl {
         this.scoreChangeScreenCtrl = scoreChangeScreen.getKey();
         this.scoreChangeScreenParent = scoreChangeScreen.getValue();
 
+
+        this.estimationScreenCtrl = estimationQuestion.getKey();
+        this.estimationQuestionParent = estimationQuestion.getValue();
+
         this.settingsScreenCtrl = settingsScreen.getKey();
-        this.settingsScreenParent =  settingsScreen.getValue();
+        this.settingsScreenParent = settingsScreen.getValue();
+
 
         // TODO: uncomment to disable the fullscreen popup
         //primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
@@ -132,6 +149,7 @@ public class MainCtrl {
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent t) {
+                waitingRoomCtrl.stop();
                 Platform.exit();
                 System.exit(0);
             }
@@ -151,13 +169,14 @@ public class MainCtrl {
      */
     public void showWaitingRoom() {
         primaryStage.getScene().setRoot(waitingRoomParent);
+        waitingRoomCtrl.startListening();
         checkDarkMode();
     }
 
     /**
      * method for showing the settings screen
      */
-    public void showSettingsScreen(){
+    public void showSettingsScreen() {
         primaryStage.getScene().setRoot(settingsScreenParent);
         checkDarkMode();
     }
@@ -189,6 +208,16 @@ public class MainCtrl {
     }
 
     /**
+     * method for showing an Estimation question
+     */
+    public void showEstimationQuestionScreen() {
+        primaryStage.getScene().setRoot(estimationQuestionParent);
+        checkDarkMode();
+        estimationScreenCtrl.countdown();
+    }
+
+
+    /**
      * method for showing the end screen
      */
     public void showEndScreen() {
@@ -215,12 +244,13 @@ public class MainCtrl {
     /**
      * method for showing the score change screen
      */
-    public void showScoreChangeScreen(int pointsGained){
+    public void showScoreChangeScreen(int pointsGained) {
         primaryStage.getScene().setRoot(scoreChangeScreenParent);
         checkDarkMode();
         showScore(pointsGained);
         scoreChangeScreenCtrl.countdown();
     }
+
 
     /**
      * method for changing mode to opposite colour
@@ -235,6 +265,7 @@ public class MainCtrl {
 
     /**
      * Gets the origin of usernamescreen
+     *
      * @return 1 - Singleplayer, 2 - Multiplayer
      */
     public int getUsernameOriginScreen() {
@@ -243,6 +274,7 @@ public class MainCtrl {
 
     /**
      * Sets the usernameOriginScreen
+     *
      * @param usernameOriginScreen value
      *                             1 - Singleplayer
      *                             2 - Multiplayer
@@ -263,7 +295,7 @@ public class MainCtrl {
      * Creates a new game with some number of questions
      */
     public void newSinglePlayerGame() {
-        ComparativeQuestion question = server.getCompQuestion();
+        Question question = server.getRandomQuestion();
 
         singlePlayerGame = new SinglePlayerGame(singlePlayerGameQuestions);
         singlePlayerGame.addQuestion(question);
@@ -274,10 +306,11 @@ public class MainCtrl {
 
     /**
      * Similar to newSinglePlayerGame(), but requires a username
+     *
      * @param username The username, used in the previous game
      */
     public void consecutiveSinglePlayerGame(String username) {
-        ComparativeQuestion question = server.getCompQuestion();
+        Question question = server.getRandomQuestion();
 
         singlePlayerGame = new SinglePlayerGame(singlePlayerGameQuestions, username);
         singlePlayerGame.addQuestion(question);
@@ -292,27 +325,34 @@ public class MainCtrl {
      * Shows the end screen if next question isn't defined
      */
     public void nextQuestionScreen() {
-        if(singlePlayerGame != null
-            && singlePlayerGame.getQuestions().size() > 0
-            && singlePlayerGame.getQuestionNumber() <= singlePlayerGame.getMaxQuestions()
+        // check if there's a next question to show
+        if (singlePlayerGame != null
+                && singlePlayerGame.getQuestions().size() > 0
+                && singlePlayerGame.getQuestionNumber() <= singlePlayerGame.getMaxQuestions()
                 + comparativeQuestionScreenCtrl.jokerAdditionalQuestion()) {
 
             Question question = singlePlayerGame.getQuestions().get(singlePlayerGame.getQuestionNumber() - 1);
-
             // check the question type
-            if (question instanceof ComparativeQuestion) {
+            if (question instanceof ComparativeQuestion
+                || question instanceof MCQuestion
+                || question instanceof EqualityQuestion) {
+
                 showComparativeQuestionScreen();
-                comparativeQuestionScreenCtrl.setQuestion((ComparativeQuestion) question);
-            } // more question types to be added
+                comparativeQuestionScreenCtrl.setQuestion(question);
+            } else if (question instanceof EstimationQuestion) {
+                showEstimationQuestionScreen();
+                estimationScreenCtrl.setQuestion((EstimationQuestion) question);
+            }
 
             // get next question from the server
             try {
-                ComparativeQuestion newQuestion = server.getCompQuestion();
+                Question newQuestion = server.getRandomQuestion();
                 // loop until new question is not already in the list
                 while (!singlePlayerGame.addQuestion(newQuestion)) {
-                    newQuestion = server.getCompQuestion();
+                    newQuestion = server.getRandomQuestion();
                 }
             } catch (Exception e) {
+                e.printStackTrace();
                 // TODO: error pop-up
                 Alert alert = new Alert(Alert.AlertType.NONE);
                 EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
@@ -327,10 +367,11 @@ public class MainCtrl {
                 };
             }
 
-        } else {
+        } else { // if no question to show display end screen
             endSinglePlayerGame();
         }
     }
+
 
     /**
      * Called to end the single player game
@@ -343,9 +384,10 @@ public class MainCtrl {
 
         //reset Question screen to prepare it for a new game
         comparativeQuestionScreenCtrl.resetComparativeQuestionScreen();
+        estimationScreenCtrl.resetEstimationQuestion();
 
         //store player's end score
-        try{
+        try {
             server.postPlayer(singlePlayerGame.getPlayer());
         } catch (Exception e) {
             e.printStackTrace();
@@ -365,17 +407,19 @@ public class MainCtrl {
 
     /**
      * Shows the current score on the score change screen
+     *
      * @param pointsGained number of points to be added to the score
      */
     public void showScore(int pointsGained) {
         int gained = pointsGained;
         int total = singlePlayerGame.getPlayer().getScore();
-        int streak = singlePlayerGame.getStreak();
+        int streak = singlePlayerGame.getPlayer().getStreak();
         scoreChangeScreenCtrl.setScoreLabels(gained, total, streak);
     }
 
     /**
      * Gets the username
+     *
      * @return Username of current player of singlePlayerGame
      */
     public String getCurrentUsername() {
@@ -384,6 +428,7 @@ public class MainCtrl {
 
     /**
      * Gets the server url from the settings screen
+     *
      * @return
      */
     public String getServerURL() {

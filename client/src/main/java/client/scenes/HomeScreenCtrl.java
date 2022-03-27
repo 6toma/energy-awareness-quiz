@@ -6,11 +6,10 @@ import commons.Player;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import lombok.Getter;
-
 import java.util.List;
 
 
@@ -27,6 +26,8 @@ public class HomeScreenCtrl {
 
     public boolean isLightMode;
 
+    @FXML
+    private StackPane parentContainer;
 
     @Getter
     public int usernameOriginScreen;
@@ -36,16 +37,7 @@ public class HomeScreenCtrl {
     // could be used to style the title
 
     @FXML
-    private Button darkMode;
-
-    @FXML
-    private TextField inputServerURLField;
-
-    @FXML
-    private Label playerLabel1, playerLabel2;
-
-    @FXML
-    private Label scoreLabel1, scoreLabel2;
+    private GridPane leaderboard;
 
     /**
      * Creates a new screen with injections
@@ -58,14 +50,6 @@ public class HomeScreenCtrl {
         this.server = server;
         this.isLightMode = true;
         this.usernameOriginScreen = 0; //still on home screen
-    }
-
-    /**
-     * Gets the value of isLightMode
-     * @return false if is in dark mode (??)
-     */
-    public boolean getDarkMode() {
-        return isLightMode;
     }
 
     /**
@@ -94,22 +78,43 @@ public class HomeScreenCtrl {
 
     /**
      * Used to update leaderboard entries
-     * Method is meant to be used paired with
-     * a GET request from the server in order
-     * to get the current top 10 list
-     *
-     * current method body is a placeholder used
-     * to get a feel of the scope of the method
+     * Method adds 10 players with highest score to the leaderbaord grid
+     * If theres not enough players in the repository, it appends
+     * empty players with score 0 to the leaderboard
      */
     @FXML
     public void setPlayer() {
-        List<String> list = List.of("Matt", "Coolguy123", "Gamewinner_xX", "he who shall not be named", "bro");
-        int randomName = (int) Math.floor(Math.random() * list.size());
-        playerLabel1.setText(list.get(randomName));
-        Integer randomScore = (int) Math.floor(Math.random() * 250) + 5000;
-        scoreLabel1.setText(randomScore.toString());
+        List<Player> players = server.getLeaderPlayers(10);
+        int childrenSize = this.leaderboard.getChildren().size();
+        if(childrenSize > 13){
+            this.leaderboard.getChildren().remove(13,childrenSize);
+        }
+        for (int index=0; index< players.size(); index++){
+            Label name = new Label();
+            name.setText(players.get(index).getName());
+            Label score = new Label();
+            score.setText(players.get(index).getScore().toString());
+            setGridNodeStyle(name, score,index);
+
+            this.leaderboard.add(name,1, index+1);
+            this.leaderboard.add(score,2, index+1);
+        }
     }
 
+    private void setGridNodeStyle(Label name, Label score, int index){
+        if (index==0){
+            name.setStyle("-fx-background-color: gold;");
+            score.setStyle("-fx-background-color: gold;");
+        } else if (index==1){
+            name.setStyle("-fx-background-color: silver;");
+            score.setStyle("-fx-background-color: silver;");
+        } else if (index==2){
+            name.setStyle("-fx-background-color: CD7F32;");
+            score.setStyle("-fx-background-color: CD7F32;");
+        }
+        name.getStyleClass().add("grid-Label");
+        score.getStyleClass().add("grid-Label");
+    }
 
     /**
      * Tries to get a question from the server
@@ -149,14 +154,6 @@ public class HomeScreenCtrl {
 
         mainCtrl.setUsernameOriginScreen(2);
         mainCtrl.showUsernameScreen();
-    }
-
-    /**
-     * Shows the help screen
-     */
-    @FXML
-    public void showHelpScreen() {
-        mainCtrl.showHelpScreen();
     }
 
     @FXML

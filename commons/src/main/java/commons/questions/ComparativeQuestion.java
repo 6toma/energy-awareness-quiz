@@ -1,5 +1,6 @@
-package commons;
+package commons.questions;
 
+import commons.Activity;
 import lombok.Data;
 
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.List;
  *          Activity 3
  */
 @Data
-public class ComparativeQuestion extends Question{
+public class ComparativeQuestion implements Question{
 
     private boolean isMost; // true if the question asks for most, false if least energy
     private List<Activity> activities; // list of activities
