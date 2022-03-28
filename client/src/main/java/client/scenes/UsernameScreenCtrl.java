@@ -23,6 +23,12 @@ public class UsernameScreenCtrl {
     @FXML
     private Button continueButton;
 
+    // The point of this field is to check whether
+    // a player has pressed the CONTINUE button in
+    // the username screen, so that their name
+    // gets saved, so they don't have to input it again
+    private boolean usernameInUse = false;
+
     /**
      * Creates a new screen with injections
      * @param server ServerUtils class
@@ -74,16 +80,20 @@ public class UsernameScreenCtrl {
             System.out.println(newPlayer);
             mainCtrl.showWaitingRoom();
         }
-        resetUserText();
+        // CONTINUE button has been pressed
+        // so a username is now in use
+        this.usernameInUse = true;
     }
 
     /**
      * Resets the text in the username field
      */
     public void resetUserText() {
-        usernameField.setText("Please input your username!");
-        inputUsernameField.clear();
-        continueButton.setDisable(true);
+        if(!usernameInUse) {
+            usernameField.setText("Please input your username!");
+            inputUsernameField.clear();
+            continueButton.setDisable(true);
+        }
     }
 
 }
