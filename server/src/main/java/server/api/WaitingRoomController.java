@@ -1,53 +1,46 @@
 package server.api;
 
-import commons.questions.Question;
+import commons.Player;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.springframework.web.bind.annotation.*;
+import server.multiplayer.WaitingRoom;
 
 /**
- * Endpoints and methods for the waiting
+ * Endpoints and methods for the waiting room
  */
 
 @RestController
-@RequestMapping("/api/waitingroom")
+@RequestMapping("/api/waiting-room")
 public class WaitingRoomController {
 
-    /**
-     *
-     */
-    public WaitingRoomController() {};
+    private WaitingRoom waitingRoom;
 
     /**
-     * Endpoint for checking whether a waiting room is created
+     * Creates a WaitingRoomController
+     * @param waitingRoom injected instance of MultiPlayerGame
      */
-    @GetMapping(path = {"/exists", "/exists/"})
-    public ResponseEntity<Boolean> doesWaitingRoomExist() {
-        return ResponseEntity.ok(true);
-    }
-
-    /**
-     * generating a new set of questions
-     */
-    private List<Question> generateNewQuestions(int maxNumberOfQuestions) {
-        List<Question> result = new ArrayList<>();
-        int count = maxNumberOfQuestions;
-        while (count > 0){
-            //if(result.add(getRandomQuestion()) { count--; }
-        }
-        return result;
+    @Autowired
+    public WaitingRoomController(WaitingRoom waitingRoom) {
+        this.waitingRoom = waitingRoom;
     }
 
     /**
      * Endpoint for checking whether a player with a username already exists
+     * @return True iff hte username exists, then the player has to supply a new one
+     *         otherwise false
      */
-    @GetMapping(path = {"/username/{username}", "/username/{username}/"})
-    public ResponseEntity<Boolean> doesUsernameExist(@PathVariable("username") String username) {
-        return ResponseEntity.ok(true);
+    @PostMapping(path = {"username"})
+    public ResponseEntity<Player> isValidUsername(@RequestBody Player player) {
+        for(var p : waitingRoom.getPlayers()){
+            if(p.getName().equals(player.getName())) {
+                System.out.println("bad username");
+                return ResponseEntity.ok(null);
+            }
+        }
+        waitingRoom.addPlayerToWaitingRoom(player);
+        System.out.println("good username");
+        return ResponseEntity.ok(player);
     }
 }
+

@@ -9,6 +9,7 @@ import commons.questions.Question;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import server.Config;
@@ -39,12 +40,33 @@ public class QuestionController {
     }
 
     /**
+     * A endpoint for getting a list of unique random questions
+     * @return a list of questions to be used by the waiting room
+     */
+    @GetMapping(path = {"/list/{number}", "/list/{number}/"})
+    public ResponseEntity<List<Question>> getListOfQuestions(@PathVariable("number") int number) {
+        List<Question> questions = new ArrayList<>();
+        int count = 0;
+        while(count < number){
+            Question q = (Question) getRandomQuestion();
+            if(!questions.contains(q)){
+                questions.add(q);
+                count++;
+            }
+        }
+        return ResponseEntity.ok(questions);
+    }
+
+
+    /**
      * Generates a random number, uses it to get a random question type
      *
      * @return either:
      * - ResponseEntity precondition failed
      * - ComparativeQuestion
      * - EstimationQuestion
+     * - MC question
+     * - Equality question
      */
     @GetMapping(path = {"/random", "/random/"})
     public ResponseEntity<Question> getRandomQuestion() {

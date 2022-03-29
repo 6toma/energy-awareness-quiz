@@ -76,9 +76,14 @@ public class UsernameScreenCtrl {
             mainCtrl.showLoadingScreen();
         } else {
             //send player to multiplayer game object
-            Player newPlayer = server.addPlayerMultiplayer(new Player(inputUsernameField.getText()));
-            System.out.println(newPlayer);
-            mainCtrl.showWaitingRoom();
+            Player newPlayer = server.addPlayerWaitingRoom(new Player(inputUsernameField.getText()));
+            if(newPlayer == null){
+                usernameField.setText("Please select another username");
+            }
+            else {
+                System.out.println(newPlayer);
+                mainCtrl.showWaitingRoom();
+            }
         }
         // CONTINUE button has been pressed
         // so a username is now in use

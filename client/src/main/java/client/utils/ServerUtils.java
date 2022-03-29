@@ -211,13 +211,26 @@ public class ServerUtils {
     }
 
     /**
-     * Adds player to the Multiplayer game
+     * Adds player to the WaitingRoom game
      * @param player player to add
      * @return player that was added
      */
-    public Player addPlayerMultiplayer(Player player){
+    public Player addPlayerWaitingRoom(Player player){
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(serverURL).path("api/poll/add-player")
+                .target(serverURL).path("api/waiting-room/username")
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .post(Entity.entity(player, APPLICATION_JSON), Player.class);
+    }
+    //TODO make it work
+    /**
+     * Removes a player from waiting room
+     * @param player player to be removed
+     * @return player that was removed
+     */
+    public Player removePlayerWaitingRoom(Player player){
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(serverURL).path("api/waiting-room/username")
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .post(Entity.entity(player, APPLICATION_JSON), Player.class);
