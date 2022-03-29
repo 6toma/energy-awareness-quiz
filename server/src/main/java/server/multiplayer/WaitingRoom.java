@@ -88,6 +88,7 @@ public class WaitingRoom {
     public boolean addPlayerToWaitingRoom(Player player){
         if(player == null
             || player.getName() == null
+            || player.getName().isEmpty()
             || this.players.contains(player)) return false;
         return this.players.add(player);
     }
