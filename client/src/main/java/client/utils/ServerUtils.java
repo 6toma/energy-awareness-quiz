@@ -236,17 +236,17 @@ public class ServerUtils {
                 .post(Entity.entity(player, APPLICATION_JSON), Player.class);
     }
 
-//    //TODO make it work
-//    /**
-//     * Removes a player from waiting room
-//     * @param player player to be removed
-//     * @return player that was removed
-//     */
-//    public Player removePlayerWaitingRoom(Player player){
-//        return ClientBuilder.newClient(new ClientConfig()) //
-//                .target(serverURL).path("api/waiting-room/username")
-//                .request(APPLICATION_JSON) //
-//                .accept(APPLICATION_JSON) //
-//                .post(Entity.entity(player, APPLICATION_JSON), Player.class);
-//    }
+    //TODO make it work
+    /**
+     * Removes a player from waiting room
+     * @param player player to be removed
+     * @return player that was removed
+     */
+    public Player removePlayerWaitingRoom(Player player){
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(serverURL).path("api/waiting-room/username")
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .post(Entity.entity(player, APPLICATION_JSON), Player.class);
+    }
 }
