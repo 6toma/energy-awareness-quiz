@@ -143,7 +143,11 @@ public class MainCtrl {
         primaryStage.setScene(new Scene(homeScreenParent));
         primaryStage.show();
         primaryStage.setFullScreen(true);
-        homeScreenCtrl.refresh();
+        try {
+            homeScreenCtrl.refresh();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         checkDarkMode();
 
         // Sets proper exit code to window close request
