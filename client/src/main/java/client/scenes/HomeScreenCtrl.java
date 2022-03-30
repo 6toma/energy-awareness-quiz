@@ -4,13 +4,21 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Player;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import lombok.Getter;
+
+import java.net.URL;
 import java.util.List;
+import java.util.ResourceBundle;
 
 
 /**
@@ -19,25 +27,15 @@ import java.util.List;
  * <p>
  * CURRENTLY, USED FOR HOME SCREEN/SCENE ONLY
  */
-public class HomeScreenCtrl {
+public class HomeScreenCtrl implements Initializable {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
     public boolean isLightMode;
 
-    @FXML
-    private StackPane parentContainer;
-
     @Getter
     public int usernameOriginScreen;
-
-    // @FXML
-    // private Text titleText;
-    // could be used to style the title
-
-    @FXML
-    private GridPane leaderboard;
 
     /**
      * Creates a new screen with injections
@@ -76,30 +74,6 @@ public class HomeScreenCtrl {
         mainCtrl.showSettingsScreen();
     }
 
-    /**
-     * Used to update leaderboard entries
-     * Method adds 10 players with highest score to the leaderbaord grid
-     * If theres not enough players in the repository, it appends
-     * empty players with score 0 to the leaderboard
-     */
-    @FXML
-    public void setPlayer() {
-        List<Player> players = server.getLeaderPlayers(10);
-        int childrenSize = this.leaderboard.getChildren().size();
-        if(childrenSize > 13){
-            this.leaderboard.getChildren().remove(13,childrenSize);
-        }
-        for (int index=0; index< players.size(); index++){
-            Label name = new Label();
-            name.setText(players.get(index).getName());
-            Label score = new Label();
-            score.setText(players.get(index).getScore().toString());
-            setGridNodeStyle(name, score,index);
-
-            this.leaderboard.add(name,1, index+1);
-            this.leaderboard.add(score,2, index+1);
-        }
-    }
 
     private void setGridNodeStyle(Label name, Label score, int index){
         if (index==0){
@@ -162,4 +136,113 @@ public class HomeScreenCtrl {
         Platform.exit();
         System.exit(0);
     }
+
+
+    private ObservableList<Player> players;
+
+    @FXML
+    private TableView<Player> leaderboard;
+    @FXML
+    private TableColumn<Player, String> playerPosition;
+    @FXML
+    private TableColumn<Player, String> playerUsername;
+    @FXML
+    private TableColumn<Player, String> playerScore;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        playerUsername.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getName()));
+        playerUsername.setCellFactory(e -> new TableCell<Player, String>() {
+            @Override
+            public void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if(item == null || empty)
+                    setText(null);
+                else
+                    setText(item);
+                switch (getIndex()) {
+                    case 0:
+                        this.setStyle("-fx-background-color: gold;");
+                        break;
+                    case 1:
+                        this.setStyle("-fx-background-color: silver;");
+                        break;
+                    case 2:
+                        this.setStyle("-fx-background-color: CD7F32;");
+                        break;
+                    default:
+                }
+            }
+        });
+
+        playerScore.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getScore().toString()));
+        playerScore.setCellFactory(e -> new TableCell<Player, String>() {
+            @Override
+            public void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if(item == null || empty)
+                    setText(null);
+                else
+                    setText(item);
+                switch (getIndex()) {
+                    case 0:
+                        this.setStyle("-fx-background-color: gold;");
+                        break;
+                    case 1:
+                        this.setStyle("-fx-background-color: silver;");
+                        break;
+                    case 2:
+                        this.setStyle("-fx-background-color: CD7F32;");
+                        break;
+                    default:
+                }
+            }
+        });
+
+        playerPosition.setCellFactory(position -> new TableCell<Player, String>() {
+            @Override
+            public void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(String.valueOf(getIndex() + 1));
+                switch (getIndex()) {
+                    case 0:
+                        this.setStyle("-fx-background-color: gold;");
+                        break;
+                    case 1:
+                        this.setStyle("-fx-background-color: silver;");
+                        break;
+                    case 2:
+                        this.setStyle("-fx-background-color: CD7F32;");
+                        break;
+                    default:
+                }
+            }
+        });
+
+        // To not allow users to resize column widths
+        // or reorder columns (switch column places)
+        playerPosition.setReorderable(false);
+        playerPosition.setResizable(false);
+
+        playerUsername.setReorderable(false);
+        playerUsername.setResizable(false);
+
+        playerScore.setReorderable(false);
+        playerScore.setResizable(false);
+
+    }
+
+    /**
+     * Used to refresh the leaderboard entries
+     */
+    @FXML
+    public void refresh() {
+        // because of the getLeaderPlayers(10) method, the
+        // leaderboard needs no sorting, as the list of players
+        // is returned already sorted through the query
+        List<Player> playerList = server.getLeaderPlayers(10);
+        players = FXCollections.observableList(playerList);
+        leaderboard.setItems(players);
+    }
+
 }
