@@ -211,28 +211,42 @@ public class ServerUtils {
     }
 
     /**
-     * Adds player to the WaitingRoom game
-     * @param player player to add
+     * Checks whether a username is valid i.e. has not been previously used
+     * @param username of a player to be added
+     * @return True iff can be added else return False
+     */
+    public Boolean checkValidityOfUsername(String username){
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(serverURL).path("api/waiting-room/username")
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .post(Entity.entity(username, APPLICATION_JSON), Boolean.class);
+    }
+
+    /**
+     * Adds player to the WaitingRoom
+     * @param player player to be added
      * @return player that was added
      */
     public Player addPlayerWaitingRoom(Player player){
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(serverURL).path("api/waiting-room/username")
+                .target(serverURL).path("api/waiting-room/player")
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .post(Entity.entity(player, APPLICATION_JSON), Player.class);
     }
-    //TODO make it work
-    /**
-     * Removes a player from waiting room
-     * @param player player to be removed
-     * @return player that was removed
-     */
-    public Player removePlayerWaitingRoom(Player player){
-        return ClientBuilder.newClient(new ClientConfig()) //
-                .target(serverURL).path("api/waiting-room/username")
-                .request(APPLICATION_JSON) //
-                .accept(APPLICATION_JSON) //
-                .post(Entity.entity(player, APPLICATION_JSON), Player.class);
-    }
+
+//    //TODO make it work
+//    /**
+//     * Removes a player from waiting room
+//     * @param player player to be removed
+//     * @return player that was removed
+//     */
+//    public Player removePlayerWaitingRoom(Player player){
+//        return ClientBuilder.newClient(new ClientConfig()) //
+//                .target(serverURL).path("api/waiting-room/username")
+//                .request(APPLICATION_JSON) //
+//                .accept(APPLICATION_JSON) //
+//                .post(Entity.entity(player, APPLICATION_JSON), Player.class);
+//    }
 }

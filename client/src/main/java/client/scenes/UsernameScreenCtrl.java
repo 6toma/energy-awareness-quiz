@@ -52,9 +52,16 @@ public class UsernameScreenCtrl {
     @FXML
     void setUsernameButtonClicked(ActionEvent event) {
         String newUser = inputUsernameField.getText();
-        if (newUser.length() > 0) { // in the future to be replaced with a isValidUsername(newUser) type function
+
+        // checking whether username is already in waiting room
+        boolean isValidUsername = (Boolean) server.checkValidityOfUsername(newUser);
+        if (isValidUsername) {
             continueButton.setDisable(false);
             usernameField.setText("Hello, " + newUser + "!");
+        }
+        else {
+            continueButton.setDisable(true);
+            usernameField.setText("Please select a different username!");
         }
     }
 
@@ -65,6 +72,7 @@ public class UsernameScreenCtrl {
 
     @FXML
     void back(ActionEvent event) {
+        continueButton.setDisable(true);
         resetUserText();
         mainCtrl.showHomeScreen();
     }
@@ -78,7 +86,7 @@ public class UsernameScreenCtrl {
             //send player to multiplayer game object
             Player newPlayer = server.addPlayerWaitingRoom(new Player(inputUsernameField.getText()));
             if(newPlayer == null){
-                usernameField.setText("Please select another username");
+                usernameField.setText("Please select a different username!");
             }
             else {
                 System.out.println(newPlayer);
