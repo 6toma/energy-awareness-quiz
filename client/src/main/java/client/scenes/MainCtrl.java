@@ -172,6 +172,7 @@ public class MainCtrl {
     public void showWaitingRoom() {
         primaryStage.getScene().setRoot(waitingRoomParent);
         waitingRoomCtrl.startListening();
+        waitingRoomCtrl.refresh();
         checkDarkMode();
     }
 
