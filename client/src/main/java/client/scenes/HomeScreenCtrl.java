@@ -237,12 +237,16 @@ public class HomeScreenCtrl implements Initializable {
      */
     @FXML
     public void refresh() {
-        // because of the getLeaderPlayers(10) method, the
-        // leaderboard needs no sorting, as the list of players
-        // is returned already sorted through the query
-        List<Player> playerList = server.getLeaderPlayers(10);
-        players = FXCollections.observableList(playerList);
-        leaderboard.setItems(players);
+        try {
+            // because of the getLeaderPlayers(10) method, the
+            // leaderboard needs no sorting, as the list of players
+            // is returned already sorted through the query
+            List<Player> playerList = server.getLeaderPlayers(10);
+            players = FXCollections.observableList(playerList);
+            leaderboard.setItems(players);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }
