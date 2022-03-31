@@ -90,11 +90,12 @@ public class UsernameScreenCtrl {
                 usernameField.setText("Please select a different username!");
             }
             else {
+                if(!server.areQuestionsGenerated()){
+                    System.out.println("questions are not generated I will generate them");;
+                }
+                else System.out.println("questions are generated");
                 System.out.println(newPlayer);
                 mainCtrl.showWaitingRoom();
-                if(!server.areQuestionsGenerated()){
-                    System.out.println("generate them ffs");;
-                }
             }
 
         }

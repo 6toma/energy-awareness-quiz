@@ -237,10 +237,12 @@ public class ServerUtils {
     }
 
     /**
-     * checks whether a list of questions has been generated
+     * checks whether a list of questions has been generated,
+     * generates a new list if the list is empty
      * @return player that was added
      */
     public Boolean areQuestionsGenerated(){
+        System.out.println("chuuuuuuj");
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(serverURL).path("api/waiting-room/are-generated")
                 .request(APPLICATION_JSON) //
