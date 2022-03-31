@@ -225,6 +225,8 @@ public class ServerUtils {
 
     /**
      * Adds player to the WaitingRoom
+     * This is needed because the user can change the name in the input field
+     * and click continue and without that there could be multiple players with the same name
      * @param player player to be added
      * @return player that was added
      */
@@ -242,7 +244,6 @@ public class ServerUtils {
      * @return player that was added
      */
     public Boolean areQuestionsGenerated(){
-        System.out.println("chuuuuuuj");
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(serverURL).path("api/waiting-room/are-generated")
                 .request(APPLICATION_JSON) //
