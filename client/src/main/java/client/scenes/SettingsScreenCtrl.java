@@ -65,6 +65,9 @@ public class SettingsScreenCtrl {
         mainCtrl.showHomeScreen();
     }
 
+    /**
+     * Show admin screen
+     */
     public void showAdminScreen() {
         mainCtrl.showAdminScreen();
     }
