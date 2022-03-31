@@ -9,7 +9,6 @@ import commons.questions.EstimationQuestion;
 import commons.questions.MCQuestion;
 import commons.questions.Question;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
