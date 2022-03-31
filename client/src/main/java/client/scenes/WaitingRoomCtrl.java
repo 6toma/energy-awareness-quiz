@@ -35,6 +35,7 @@ public class WaitingRoomCtrl {
     public void back() {
         mainCtrl.resetUserText();
         mainCtrl.showHomeScreen();
+        stop();
     }
 
     /**
@@ -42,8 +43,8 @@ public class WaitingRoomCtrl {
      */
     public void startListening(){
         server.registerUpdates(c -> {
-            System.out.println("object identity: "+c+" has changed");
-            System.out.println(server.getPlayersMultiplayer().get(0));
+            System.out.println("object identity: " + c + " has changed");
+            System.out.println(server.getPlayersMultiplayer());
         });
     }
 

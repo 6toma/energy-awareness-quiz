@@ -29,7 +29,7 @@
     </StackPane>
    <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="666.0" prefWidth="2154.0">
       <children>
-         <Region maxHeight="178.0" maxWidth="-Infinity" minHeight="0.0" minWidth="-Infinity" prefHeight="178.0" prefWidth="323.0" styleClass="margin" />
+         <Region maxHeight="178.0" maxWidth="-Infinity" minHeight="0.0" prefHeight="178.0" prefWidth="323.0" styleClass="margin" />
       
                                                                                  
                                                                                      <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="638.0" prefWidth="752.0" stylesheets="@../css/main.css">
@@ -63,12 +63,12 @@
               </Button>
               <Region maxHeight="-Infinity" minHeight="20" prefHeight="89.0" prefWidth="747.0" styleClass="margin" VBox.vgrow="ALWAYS" />
           </VBox>
-         <VBox alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="688.0" prefWidth="951.0">
+         <VBox alignment="CENTER" prefHeight="688.0" prefWidth="951.0">
             <children>
                <Region maxHeight="178.0" minHeight="0.0" prefHeight="63.0" prefWidth="786.0" styleClass="margin" />
-               <ScrollPane fitToWidth="true" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="451.0" prefWidth="669.0" style="-fx-border-radius: 50px; -fx-background-radius: 55px;">
+               <ScrollPane fitToWidth="true" maxHeight="-Infinity" maxWidth="-Infinity" style="-fx-border-radius: 50px; -fx-background-radius: 55px;">
                   <content>
-                     <GridPane fx:id="leaderboard" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="423.0" prefWidth="655.0" styleClass="grid-pane">
+                     <GridPane fx:id="leaderboard" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="423.0" prefWidth="655.0" styleClass="grid-pane">
                         <columnConstraints>
                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="253.0" minWidth="10.0" prefWidth="169.0" />
                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="402.0" minWidth="10.0" prefWidth="301.0" />
@@ -121,7 +121,7 @@
                </Button>
             </children>
          </VBox>
-         <Region maxHeight="178.0" maxWidth="-Infinity" minHeight="0.0" minWidth="-Infinity" prefHeight="178.0" prefWidth="86.0" styleClass="margin" />
+         <Region maxHeight="178.0" maxWidth="-Infinity" minHeight="0.0" prefHeight="178.0" prefWidth="86.0" styleClass="margin" />
       </children>
    </HBox>
 
