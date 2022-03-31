@@ -2,13 +2,10 @@
 
 <?import java.lang.String?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
-<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
@@ -27,7 +24,7 @@
             <String fx:value="rounded" />
          </styleClass></Button>
     </StackPane>
-   <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="666.0" prefWidth="2154.0">
+   <HBox alignment="CENTER" maxHeight="-Infinity" prefHeight="666.0" prefWidth="2154.0">
       <children>
          <Region maxHeight="178.0" maxWidth="-Infinity" minHeight="0.0" prefHeight="178.0" prefWidth="323.0" styleClass="margin" />
       
@@ -110,7 +107,7 @@
                   </styleClass>
                </ScrollPane>
                <Region maxHeight="178.0" minHeight="0.0" prefHeight="30.0" prefWidth="841.0" styleClass="margin" />
-               <Button fx:id="refreshButton" alignment="CENTER" mnemonicParsing="false" onAction="#setPlayer" prefHeight="84.0" prefWidth="290.0" style="-fx-border-radius: 1000px;" text="Refresh" textAlignment="CENTER">
+               <Button fx:id="refreshButton" alignment="CENTER" mnemonicParsing="false" onAction="#refresh" prefHeight="84.0" prefWidth="290.0" style="-fx-border-radius: 1000px;" text="Refresh" textAlignment="CENTER">
                   <font>
                      <Font size="40.0" />
                   </font>

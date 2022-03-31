@@ -2,11 +2,23 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import commons.Player;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.layout.VBox;
 
-public class WaitingRoomCtrl {
+import java.net.URL;
+import java.util.List;
+import java.util.ResourceBundle;
+
+public class WaitingRoomCtrl implements Initializable {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
@@ -53,6 +65,63 @@ public class WaitingRoomCtrl {
      */
     public void stop(){
         server.stop();
+    }
+
+    private ObservableList<Player> players;
+
+    @FXML
+    private TableView<Player> playerTable;
+    @FXML
+    private TableColumn<Player, String> position;
+    @FXML
+    private TableColumn<Player, String> name;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        name.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getName()));
+        name.setCellFactory(e -> new TableCell<Player, String>() {
+            @Override
+            public void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if(item == null || empty)
+                    setText(null);
+                else
+                    setText(item);
+            }
+        });
+
+        position.setCellFactory(position -> new TableCell<Player, String>() {
+            @Override
+            public void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(String.valueOf(getIndex() + 1));
+            }
+        });
+
+        // To not allow users to resize column widths
+        // or reorder columns (switch column places)
+        position.setReorderable(false);
+        position.setResizable(false);
+
+        name.setReorderable(false);
+        name.setResizable(false);
+    }
+
+    /**
+     * Used to refresh the leaderboard entries
+     */
+    @FXML
+    public void refresh() {
+        try {
+            // because of the getLeaderPlayers(10) method, the
+            // leaderboard needs no sorting, as the list of players
+            // is returned already sorted through the query
+            List<Player> playerList = server.getPlayersMultiplayer();
+            players = FXCollections.observableList(playerList);
+            playerTable.setItems(players);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 

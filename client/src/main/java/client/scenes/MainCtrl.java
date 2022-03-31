@@ -3,6 +3,8 @@ package client.scenes;
 import client.SinglePlayerGame;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import commons.MultiPlayerGame;
+import commons.Player;
 import commons.questions.ComparativeQuestion;
 import commons.questions.EqualityQuestion;
 import commons.questions.EstimationQuestion;
@@ -20,6 +22,7 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Pair;
 import lombok.Getter;
+import lombok.Setter;
 
 public class MainCtrl {
 
@@ -59,6 +62,7 @@ public class MainCtrl {
 
     private SettingsScreenCtrl settingsScreenCtrl;
     private Parent settingsScreenParent;
+
 
 
     // single player variables
@@ -143,6 +147,7 @@ public class MainCtrl {
         primaryStage.setScene(new Scene(homeScreenParent));
         primaryStage.show();
         primaryStage.setFullScreen(true);
+        homeScreenCtrl.refresh();
         checkDarkMode();
 
         // Sets proper exit code to window close request
@@ -161,6 +166,7 @@ public class MainCtrl {
      */
     public void showHomeScreen() {
         primaryStage.getScene().setRoot(homeScreenParent);
+        homeScreenCtrl.refresh();
         checkDarkMode();
     }
 
@@ -170,6 +176,7 @@ public class MainCtrl {
     public void showWaitingRoom() {
         primaryStage.getScene().setRoot(waitingRoomParent);
         waitingRoomCtrl.startListening();
+        waitingRoomCtrl.refresh();
         checkDarkMode();
     }
 
@@ -201,18 +208,20 @@ public class MainCtrl {
     /**
      * method for showing the comparative question
      */
-    public void showComparativeQuestionScreen() {
+    public void showComparativeQuestionScreen(boolean multiplayer) {
         primaryStage.getScene().setRoot(comparativeQuestionScreenParent);
         checkDarkMode();
+        comparativeQuestionScreenCtrl.setMultiplayer(multiplayer);
         comparativeQuestionScreenCtrl.countdown();
     }
 
     /**
      * method for showing an Estimation question
      */
-    public void showEstimationQuestionScreen() {
+    public void showEstimationQuestionScreen(boolean multiplayer) {
         primaryStage.getScene().setRoot(estimationQuestionParent);
         checkDarkMode();
+        estimationScreenCtrl.setMultiplayer(multiplayer);
         estimationScreenCtrl.countdown();
     }
 
@@ -337,10 +346,10 @@ public class MainCtrl {
                 || question instanceof MCQuestion
                 || question instanceof EqualityQuestion) {
 
-                showComparativeQuestionScreen();
+                showComparativeQuestionScreen(false);
                 comparativeQuestionScreenCtrl.setQuestion(question);
             } else if (question instanceof EstimationQuestion) {
-                showEstimationQuestionScreen();
+                showEstimationQuestionScreen(false);
                 estimationScreenCtrl.setQuestion((EstimationQuestion) question);
             }
 
@@ -433,6 +442,64 @@ public class MainCtrl {
      */
     public String getServerURL() {
         return this.settingsScreenCtrl.getServerURL();
+    }
+
+
+    private MultiPlayerGame multiPlayerGame;
+    private int currentQuestionNum;
+    private String currentScreen;
+    @Getter @Setter
+    private Player player;
+
+
+
+    /**
+     * starts the multiplayer game
+     */
+    public void startMultiplayer(){
+        MultiPlayerGame multiPlayerGame = server.getMultiplayerGame();
+        player = new Player("name");
+        currentQuestionNum=0;
+        currentScreen="";
+        startListening();
+
+    }
+
+    /**
+     * TODO: pass multiplayer boolean value
+     */
+    public void showQuestionMultiplayer(){
+        Question question = multiPlayerGame.getQuestions().get(currentQuestionNum);
+        // check the question type
+        if (question instanceof ComparativeQuestion
+                || question instanceof MCQuestion
+                || question instanceof EqualityQuestion) {
+
+            showComparativeQuestionScreen(true);
+            comparativeQuestionScreenCtrl.setQuestion(question);
+        } else if (question instanceof EstimationQuestion) {
+            showEstimationQuestionScreen(true);
+            estimationScreenCtrl.setQuestion((EstimationQuestion) question);
+        }
+
+    }
+
+    /**
+     * start listening for updates
+     */
+    public void startListening(){
+        server.registerUpdates(c -> {
+            if (c.getQuestionNumber()!=currentQuestionNum && c.getCurrentScreen()!= currentScreen){
+                //TODO: reset so it mathces
+                ////changeScreen(c.getCurrentScreen);
+            } else if (c.getQuestionNumber()!=currentQuestionNum && c.getCurrentScreen()== currentScreen){
+                //TODO: change questions on screen
+                //nextQuestion(c.getQuestionNumber);
+            } else if (c.getQuestionNumber()==currentQuestionNum && c.getCurrentScreen()!= currentScreen){
+                //TODO: most likely leaderboard
+                //changeScreen(c.getCurrentScreen);
+            }
+        });
     }
 }
 
