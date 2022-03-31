@@ -3,6 +3,7 @@ package commons;
 import commons.questions.Question;
 import lombok.Data;
 
+import javax.persistence.Transient;
 import java.util.List;
 import java.util.Objects;
 
@@ -17,7 +18,10 @@ public class MultiPlayerGame {
     private int gameID;
     private List<Player> players;
     private List<Question> questions;
-    private int questionNumber = 1;
+    private int questionNumber = 0;
+    private boolean started = false;
+    @Transient
+    private GameUpdatesPacket gameStatus;
 
     // for synchronization of client with server
     // can be "LOADING SCREEN", "QUESTION", "LEADERBOARD", "ENDSCREEN"
@@ -36,7 +40,7 @@ public class MultiPlayerGame {
      */
     public MultiPlayerGame(int gameID, List<Player> players, List<Question> questions) {
         this.gameID = gameID;
-        this.currentScreen = "LOADING SCREEN";
+        this.currentScreen = "ENDSCREEN";
         this.players = players;
         this.questions = questions;
     }
@@ -158,7 +162,7 @@ public class MultiPlayerGame {
 
     /**
      * Gets the hashcode of the list of players, the name of the current screen and the number of the current question
-     * @return A GameUpdatesPacket object, which contains compact information about the game
+     * @return GameUpdatesPacket object, which contains compact information about the game
      */
     public GameUpdatesPacket getGameStatus() {
         return new GameUpdatesPacket(Objects.hash(players), currentScreen, questionNumber);

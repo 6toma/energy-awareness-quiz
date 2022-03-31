@@ -184,6 +184,19 @@ public class ServerUtils {
     }
 
     /**
+     * tells server to start game
+     * @param bool
+     * @return
+     */
+    public Boolean startGame(Boolean bool){
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(serverURL).path("api/poll/StartGame") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .post(Entity.entity(bool, APPLICATION_JSON), Boolean.class);
+    }
+
+    /**
      * When the toilet is flushed we get the whole game object where
      * we take the questions and players from
      * this should only be done once at the start
@@ -224,4 +237,5 @@ public class ServerUtils {
                 .accept(APPLICATION_JSON) //
                 .post(Entity.entity(player, APPLICATION_JSON), Player.class);
     }
+
 }
