@@ -14,7 +14,8 @@ public class SettingsScreenCtrl {
 
     /**
      * Creates a new screen with injections
-     * @param server ServerUtils class
+     *
+     * @param server   ServerUtils class
      * @param mainCtrl Main Controller
      */
     @Inject
@@ -50,6 +51,7 @@ public class SettingsScreenCtrl {
 
     /**
      * Get dark mode
+     *
      * @return true if is in light mode
      */
     public boolean getDarkMode() {
@@ -63,8 +65,13 @@ public class SettingsScreenCtrl {
         mainCtrl.showHomeScreen();
     }
 
+    public void showAdminScreen() {
+        mainCtrl.showAdminScreen();
+    }
+
     /**
      * Gets the server url from the input field
+     *
      * @return String server url
      */
     public String getServerURL() {

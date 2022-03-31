@@ -3,11 +3,7 @@ package client.scenes;
 import client.SinglePlayerGame;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
-import commons.questions.ComparativeQuestion;
-import commons.questions.EqualityQuestion;
-import commons.questions.EstimationQuestion;
-import commons.questions.MCQuestion;
-import commons.questions.Question;
+import commons.questions.*;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -60,6 +56,9 @@ public class MainCtrl {
     private SettingsScreenCtrl settingsScreenCtrl;
     private Parent settingsScreenParent;
 
+    private AdminScreenCtrl adminScreenCtrl;
+    private Parent adminScreenParent;
+
 
     // single player variables
     @Getter
@@ -88,6 +87,7 @@ public class MainCtrl {
      * @param endScreen
      * @param helpScreen
      * @param scoreChangeScreen
+     * @param adminScreen
      */
     public void initialize(
             Stage primaryStage,
@@ -100,7 +100,8 @@ public class MainCtrl {
             Pair<HelpScreenCtrl, Parent> helpScreen,
             Pair<ScoreChangeScreenCtrl, Parent> scoreChangeScreen,
             Pair<SettingsScreenCtrl, Parent> settingsScreen,
-            Pair<EstimationQuestionCtrl, Parent> estimationQuestion
+            Pair<EstimationQuestionCtrl, Parent> estimationQuestion,
+            Pair<AdminScreenCtrl, Parent> adminScreen
     ) {
         this.primaryStage = primaryStage;
 
@@ -134,6 +135,9 @@ public class MainCtrl {
 
         this.settingsScreenCtrl = settingsScreen.getKey();
         this.settingsScreenParent = settingsScreen.getValue();
+
+        this.adminScreenCtrl = adminScreen.getKey();
+        this.adminScreenParent = adminScreen.getValue();
 
 
         // TODO: uncomment to disable the fullscreen popup
@@ -255,6 +259,14 @@ public class MainCtrl {
         scoreChangeScreenCtrl.countdown();
     }
 
+    /**
+     * method for showing the admin screen
+     */
+    public void showAdminScreen() {
+        primaryStage.getScene().setRoot(adminScreenParent);
+        checkDarkMode();
+    }
+
 
     /**
      * method for changing mode to opposite colour
@@ -338,8 +350,8 @@ public class MainCtrl {
             Question question = singlePlayerGame.getQuestions().get(singlePlayerGame.getQuestionNumber() - 1);
             // check the question type
             if (question instanceof ComparativeQuestion
-                || question instanceof MCQuestion
-                || question instanceof EqualityQuestion) {
+                    || question instanceof MCQuestion
+                    || question instanceof EqualityQuestion) {
 
                 showComparativeQuestionScreen();
                 comparativeQuestionScreenCtrl.setQuestion(question);
