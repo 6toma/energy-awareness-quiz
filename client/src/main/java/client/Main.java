@@ -116,7 +116,7 @@ public class Main extends Application {
 
         var ScoreMultiplayerScreen = FXML.load(
                 ScoreChangeMultiplayerCtrl.class,
-                "scenes/ScoreChangeMultiplayer.fxml",
+                "scenes/ScoreChangeMultiplayerCtrl.fxml",
                 "css/ScoreChangeMultiplayer.css"
         );
         
