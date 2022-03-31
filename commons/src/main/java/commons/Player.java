@@ -29,6 +29,7 @@ public class Player implements Comparable{
     @Transient
     private int streak = 0; // streak field for getting more points when you answer questions correctly in a row
     @Getter @Setter
+    @Transient
     private int scoreGained = 0;
 
 
