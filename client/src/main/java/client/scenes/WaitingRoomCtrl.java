@@ -25,9 +25,12 @@ public class WaitingRoomCtrl implements Initializable {
 
     @FXML
     private VBox listOfPlayers;
+
     @FXML
     private Button back;
 
+    @FXML
+    private Button startGame;
     /**
      * Creates a new screen with injections
      * @param server ServerUtils class
@@ -124,5 +127,10 @@ public class WaitingRoomCtrl implements Initializable {
         }
     }
 
-
+    /**
+     * Starts the gam when you click start
+     */
+    public void startGame() {
+        mainCtrl.startMultiplayer();
+    }
 }
