@@ -198,6 +198,7 @@ public class MainCtrl {
      */
     public void showUsernameScreen() {
         primaryStage.getScene().setRoot(usernameScreenParent);
+        usernameScreenCtrl.setButtonText();
         checkDarkMode();
     }
 
