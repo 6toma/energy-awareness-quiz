@@ -108,6 +108,17 @@ public class LongPollController {
         return ResponseEntity.ok(player);
     }
 
+    /**
+     * tells server to start game
+     * @return ok sign idk
+     */
+    @PostMapping(path = {"StartGame"})
+    public ResponseEntity<Boolean> startGame(@RequestBody Boolean bool){
+        multiplayerGame.setStarted(bool);
+        multiplayerGame.startGame();
+        return ResponseEntity.ok(true);
+    }
+
     private Map<Object, Consumer<GameUpdatesPacket>> listeners = new HashMap<>();
     /**
      * Gets a number that corresponds to what has changed

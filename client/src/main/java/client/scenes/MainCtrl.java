@@ -467,9 +467,11 @@ public class MainCtrl {
      */
     public void startMultiplayer(){
         multiPlayerGame = server.getMultiplayerGame();
+        System.out.println(multiPlayerGame);
         player = new Player("name");
         currentQuestionNum=0;
         currentScreen="";
+        server.startGame(true);
         startListening();
 
     }
@@ -508,6 +510,7 @@ public class MainCtrl {
      * if current screen is wrong is forces the player to the correct screen
      */
     public void startListening(){
+        System.out.println("started listenening");
         server.registerUpdates(c -> {
             if (c.getQuestionNumber()!=currentQuestionNum && c.getCurrentScreen()!= currentScreen){
                 currentQuestionNum = c.getQuestionNumber();
