@@ -46,6 +46,7 @@ public class ComparativeQuestionScreenCtrl {
     private int timeWhenAnswered = -1;
     private int currentTime = (int) questionTime;
     private int pointsGainedForQuestion = 0;
+    private double additionalPoints = 1.0; // if joker "double points" is used, it is set to 2.0
 
     // Timeline objects used for animating the progressbar
     // Global objects because they need to be accessed from different methods
@@ -353,7 +354,10 @@ public class ComparativeQuestionScreenCtrl {
             correctAnswer = equalityQuestion.getCorrect_answer();
         }
 
-        pointsGainedForQuestion = mainCtrl.getSinglePlayerGame().addPoints(timeWhenAnswered, 1.0);
+        // calculate points to be added
+        pointsGainedForQuestion = mainCtrl.getSinglePlayerGame().addPoints(timeWhenAnswered, additionalPoints * 1.0);
+        additionalPoints = 1.0;
+
         // highlight correct answer
         if(correctAnswer == 0){
             answer1.setStyle("-fx-background-color: #00ff00;");
@@ -443,9 +447,10 @@ public class ComparativeQuestionScreenCtrl {
 
     @FXML
     private void joker3() {
-        //implementation for joker
         joker3.setDisable(true); // disable button
         mainCtrl.getSinglePlayerGame().useJokerDoublePoints();
+
+        additionalPoints = 2.0; // points will be double only for the current question
     }
 
     /**

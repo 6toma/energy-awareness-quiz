@@ -38,6 +38,7 @@ public class EstimationQuestionCtrl {
     private double guessAccuracy = 1.0;
     private int currentTime = (int) questionTime;
     private int pointsGainedForQuestion = 0;
+    private double additionalPoints = 1.0; // if joker "double points" is used, it is set to 2.0
 
     // Timeline objects used for animating the progressbar
     // Global objects because they need to be accessed from different methods
@@ -175,7 +176,9 @@ public class EstimationQuestionCtrl {
 
         questionLabel.setText(questionLabel.getText() + " - " + question.getActivity().getConsumption_in_wh() + " Wh");
 
-        pointsGainedForQuestion = mainCtrl.getSinglePlayerGame().addPoints(timeWhenAnswered, guessAccuracy);
+        // calculate points to be added
+        pointsGainedForQuestion = mainCtrl.getSinglePlayerGame().addPoints(timeWhenAnswered, additionalPoints * guessAccuracy);
+        additionalPoints = 1.0;
     }
 
     private void reset() {
@@ -227,9 +230,10 @@ public class EstimationQuestionCtrl {
 
     @FXML
     private void joker3() {
-        //implementation for joker
         joker3.setDisable(true); // disable button
         mainCtrl.getSinglePlayerGame().useJokerDoublePoints();
+
+        additionalPoints = 2.0; // points will be double only for the current question
     }
 
     /**
