@@ -77,6 +77,13 @@ public class UsernameScreenCtrl {
         mainCtrl.showHomeScreen();
     }
 
+    void setButtonText() {
+        if(mainCtrl.getUsernameOriginScreen() == 1)
+            continueButton.setText("Start");
+        else if(mainCtrl.getUsernameOriginScreen() == 2)
+            continueButton.setText("Continue");
+    }
+
     @FXML
     void showNextScreen(ActionEvent event) {
         if(mainCtrl.getUsernameOriginScreen() == 1) {

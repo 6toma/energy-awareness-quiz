@@ -143,6 +143,7 @@ public class MainCtrl {
         primaryStage.setScene(new Scene(homeScreenParent));
         primaryStage.show();
         primaryStage.setFullScreen(true);
+        homeScreenCtrl.refresh();
         checkDarkMode();
 
         // Sets proper exit code to window close request
@@ -161,6 +162,7 @@ public class MainCtrl {
      */
     public void showHomeScreen() {
         primaryStage.getScene().setRoot(homeScreenParent);
+        homeScreenCtrl.refresh();
         checkDarkMode();
     }
 
@@ -170,6 +172,7 @@ public class MainCtrl {
     public void showWaitingRoom() {
         primaryStage.getScene().setRoot(waitingRoomParent);
         waitingRoomCtrl.startListening();
+        waitingRoomCtrl.refresh();
         checkDarkMode();
     }
 
@@ -195,6 +198,7 @@ public class MainCtrl {
      */
     public void showUsernameScreen() {
         primaryStage.getScene().setRoot(usernameScreenParent);
+        usernameScreenCtrl.setButtonText();
         checkDarkMode();
     }
 

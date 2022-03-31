@@ -15,6 +15,7 @@
  */
 package client.utils;
 
+import commons.GameUpdatesPacket;
 import commons.MultiPlayerGame;
 import commons.Player;
 import commons.questions.Question;
@@ -116,7 +117,7 @@ public class ServerUtils {
      * and then based on that change number we send another
      * request but for the body fo the change
      */
-    public void registerUpdates(Consumer<Integer> consumer) {
+    public void registerUpdates(Consumer<GameUpdatesPacket> consumer) {
         EXEC.submit(() -> {
             while (!Thread.interrupted()) {
                 var res = ClientBuilder.newClient(new ClientConfig())
@@ -125,9 +126,10 @@ public class ServerUtils {
                         .accept(APPLICATION_JSON) //
                         .get(Response.class);
                 if (res.getStatus() == 204){
+                    System.out.println();
                     continue;
                 }
-                var c = res.readEntity(Integer.class);
+                var c = res.readEntity(GameUpdatesPacket.class);
                 consumer.accept(c);
             }
         });
