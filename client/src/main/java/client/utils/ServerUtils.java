@@ -236,6 +236,19 @@ public class ServerUtils {
                 .post(Entity.entity(player, APPLICATION_JSON), Player.class);
     }
 
+    /**
+     * checks whether a list of questions has been generated
+     * @return player that was added
+     */
+    public Boolean areQuestionsGenerated(){
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(serverURL).path("api/waiting-room/are-generated")
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<>() {});
+    }
+
+
     //TODO make it work
     /**
      * Removes a player from waiting room
@@ -249,4 +262,6 @@ public class ServerUtils {
                 .accept(APPLICATION_JSON) //
                 .post(Entity.entity(player, APPLICATION_JSON), Player.class);
     }
+
+
 }

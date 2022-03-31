@@ -83,6 +83,7 @@ public class UsernameScreenCtrl {
             mainCtrl.getSinglePlayerGame().setPlayer(new Player(inputUsernameField.getText()));
             mainCtrl.showLoadingScreen();
         } else {
+
             //send player to multiplayer game object
             Player newPlayer = server.addPlayerWaitingRoom(new Player(inputUsernameField.getText()));
             if(newPlayer == null){
@@ -91,7 +92,11 @@ public class UsernameScreenCtrl {
             else {
                 System.out.println(newPlayer);
                 mainCtrl.showWaitingRoom();
+                if(!server.areQuestionsGenerated()){
+                    System.out.println("generate them ffs");;
+                }
             }
+
         }
         // CONTINUE button has been pressed
         // so a username is now in use

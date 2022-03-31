@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.multiplayer.WaitingRoom;
+import server.Config;
 
 /**
  * Endpoints and methods for the waiting room
@@ -27,7 +28,7 @@ public class WaitingRoomController {
 
     /**
      * Endpoint for adding a player to a waiting room
-     * @return The player added iff the username is unique
+     * @return The player is added iff the username is unique
      *         otherwise return null which means that a player with such username exists
      */
     @PostMapping(path = {"player"})
@@ -65,5 +66,25 @@ public class WaitingRoomController {
         System.out.println("good username");
         return ResponseEntity.ok(true);
     }
+
+    /**
+     * endpoint for checking whether a list of questions has been genarated
+     * @return true if the questions have already been generated
+     *         false if have not yet been generated
+     */
+    @GetMapping(path = {"are-generated"})
+    public ResponseEntity<Boolean> areQuestionsGenerated() {
+        if(waitingRoom.getQuestions().size() != Config.numberOfQuestions){
+            System.out.println("NOT GENERATED");
+            int count = Config.numberOfQuestions;
+            //  while(count > 0){
+            //      var Questions =
+            //  }
+            return ResponseEntity.ok(false);
+        }
+        System.out.println("GENERATED");
+        return ResponseEntity.ok(true);
+    }
+
 }
 

@@ -33,6 +33,7 @@ import java.util.Random;
 public class Config {
 
     public static String defaultImagePath = "./server/src/main/resources/activity-bank-pictures/";
+    public static int numberOfQuestions = 20;
 
     /**
      * Returns a new random object
@@ -49,7 +50,7 @@ public class Config {
      */
     @Bean
     public WaitingRoom getWaitingRoom() {
-        WaitingRoom waitingRoom = new WaitingRoom(new ArrayList<>(), new ArrayList<>(), 20);
+        WaitingRoom waitingRoom = new WaitingRoom(new ArrayList<>(), new ArrayList<>(), numberOfQuestions);
         return waitingRoom;
     }
     /**
