@@ -183,7 +183,7 @@ public class MainCtrl {
      */
     public void showWaitingRoom() {
         primaryStage.getScene().setRoot(waitingRoomParent);
-        waitingRoomCtrl.startListening();
+        //waitingRoomCtrl.startListening();
         waitingRoomCtrl.refresh();
         checkDarkMode();
     }
@@ -512,6 +512,7 @@ public class MainCtrl {
     public void startListening(){
         System.out.println("started listenening");
         server.registerUpdates(c -> {
+            System.out.println("got update: "+ c);
             if (c.getQuestionNumber()!=currentQuestionNum && c.getCurrentScreen()!= currentScreen){
                 currentQuestionNum = c.getQuestionNumber();
                 changeScreenMultiplayer(c);

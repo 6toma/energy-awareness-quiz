@@ -190,7 +190,7 @@ public class ServerUtils {
      */
     public Boolean startGame(Boolean bool){
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(serverURL).path("api/poll/SendScore") //
+                .target(serverURL).path("api/poll/StartGame") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .post(Entity.entity(bool, APPLICATION_JSON), Boolean.class);
@@ -237,4 +237,5 @@ public class ServerUtils {
                 .accept(APPLICATION_JSON) //
                 .post(Entity.entity(player, APPLICATION_JSON), Player.class);
     }
+
 }

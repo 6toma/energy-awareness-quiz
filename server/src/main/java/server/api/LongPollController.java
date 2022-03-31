@@ -11,9 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
 
 import java.net.URI;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Consumer;
 
 
@@ -108,6 +106,7 @@ public class LongPollController {
         return ResponseEntity.ok(player);
     }
 
+
     /**
      * tells server to start game
      * @return ok sign idk
@@ -115,9 +114,34 @@ public class LongPollController {
     @PostMapping(path = {"StartGame"})
     public ResponseEntity<Boolean> startGame(@RequestBody Boolean bool){
         multiplayerGame.setStarted(bool);
-        multiplayerGame.startGame();
+        startQuestions();
         return ResponseEntity.ok(true);
     }
+
+    /**
+     * this doesnt work
+     */
+    public void startQuestions(){
+        Timer timer = new Timer();
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                System.out.println("hi");
+                if(multiplayerGame.getQuestionNumber()==20){
+                    System.out.print(multiplayerGame.getQuestionNumber());
+                    cancel();
+                }
+                multiplayerGame.setCurrentScreen("QUESTION");
+                int currentQ = multiplayerGame.getQuestionNumber();
+                multiplayerGame.setQuestionNumber(currentQ+1);
+                listeners.forEach((k,l) -> l.accept(multiplayerGame.getGameStatus()));
+            }
+        };
+
+        timer.schedule(task, 500, 6*1000);
+        timer.cancel();
+    }
+
 
     private Map<Object, Consumer<GameUpdatesPacket>> listeners = new HashMap<>();
     /**

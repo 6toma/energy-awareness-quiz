@@ -6,8 +6,6 @@ import lombok.Data;
 import javax.persistence.Transient;
 import java.util.List;
 import java.util.Objects;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * Multiplayer game class
@@ -20,7 +18,7 @@ public class MultiPlayerGame {
     private int gameID;
     private List<Player> players;
     private List<Question> questions;
-    private int questionNumber = 1;
+    private int questionNumber = 0;
     private boolean started = false;
     @Transient
     private GameUpdatesPacket gameStatus;
@@ -168,15 +166,6 @@ public class MultiPlayerGame {
      */
     public GameUpdatesPacket getGameStatus() {
         return new GameUpdatesPacket(Objects.hash(players), currentScreen, questionNumber);
-    }
-
-
-
-    /**
-     * Serverside game logic
-     */
-    public void startGame(){
-
     }
 
 }
