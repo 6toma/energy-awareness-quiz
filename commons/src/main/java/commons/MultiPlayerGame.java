@@ -18,7 +18,7 @@ public class MultiPlayerGame {
     private int gameID;
     private List<Player> players;
     private List<Question> questions;
-    private int questionNumber = 0;
+    private int questionNumber = 1;
     private boolean started = false;
     @Transient
     private GameUpdatesPacket gameStatus;
@@ -40,7 +40,7 @@ public class MultiPlayerGame {
      */
     public MultiPlayerGame(int gameID, List<Player> players, List<Question> questions) {
         this.gameID = gameID;
-        this.currentScreen = "ENDSCREEN";
+        this.currentScreen = "LOADING SCREEN";
         this.players = players;
         this.questions = questions;
     }
