@@ -47,10 +47,6 @@ public class ComparativeQuestionScreenCtrl {
     private int currentTime = (int) questionTime;
     private int pointsGainedForQuestion = 0;
 
-    private boolean joker1Used = false;
-    private boolean joker2Used = false;
-    private boolean joker3Used = false;
-
     // Timeline objects used for animating the progressbar
     // Global objects because they need to be accessed from different methods
     private Timeline questionTimer;
@@ -187,7 +183,7 @@ public class ComparativeQuestionScreenCtrl {
             setEqualityAnswerTexts();
             setEqualityImages();
         }
-
+        setJokers();
     }
 
     private void setQuestionText(){
@@ -344,9 +340,9 @@ public class ComparativeQuestionScreenCtrl {
 
         // disable joker buttons, so they can't be clicked while
         // answers are being shown
-        joker1.setDisable(true);
-        joker2.setDisable(true);
-        joker3.setDisable(true);
+        joker1.setMouseTransparent(true);
+        joker2.setMouseTransparent(true);
+        joker3.setMouseTransparent(true);
 
         int correctAnswer = -1;
         if(questionMode == 0){
@@ -397,7 +393,7 @@ public class ComparativeQuestionScreenCtrl {
         }
     }
 
-    // reset attributes to default
+    // reset attributes to default after each question
     private void reset(){
         timeWhenAnswered = -1;
         answer1.setStyle("");
@@ -410,7 +406,7 @@ public class ComparativeQuestionScreenCtrl {
         answer3.setDisable(false);
 
         // re-enable jokers
-        resetJokers();
+        setJokers();
 
         // reset images
         image1.setImage(null);
@@ -427,13 +423,14 @@ public class ComparativeQuestionScreenCtrl {
     @FXML
     private void joker1() {
         joker1.setDisable(true);
-        joker1Used = true;
+        mainCtrl.getSinglePlayerGame().useJokerAdditionalQuestion();
 
         stopTimers();
-        //even if the correct answer was selected before the question was changed, points won't be added
-        timeWhenAnswered = -1;
-        //doesn't add points, but is used to increment the number of the current question in the list
-        mainCtrl.getSinglePlayerGame().addPoints(timeWhenAnswered, 1.0);
+        /* even if the correct answer was selected before the question was changed, 0 points will be added
+        * the method addPoints() is used just to increment the number of the current question in the list
+        * streak is reset to 0
+        */
+        pointsGainedForQuestion = mainCtrl.getSinglePlayerGame().addPoints(-1, 0.0);
         endQuestion();
     }
 
@@ -441,12 +438,14 @@ public class ComparativeQuestionScreenCtrl {
     private void joker2() {
         //implementation for joker
         joker2.setDisable(true); // disable button
+        mainCtrl.getSinglePlayerGame().useJokerRemoveOneAnswer();
     }
 
     @FXML
     private void joker3() {
         //implementation for joker
         joker3.setDisable(true); // disable button
+        mainCtrl.getSinglePlayerGame().useJokerDoublePoints();
     }
 
     /**
@@ -456,13 +455,13 @@ public class ComparativeQuestionScreenCtrl {
      * because it is used to reset the 3 answer options after every question, but
      * jokers should remain disabled until the end of the game
      */
-    public void resetJokers() {
+    private void resetJokers() {
         joker1.setDisable(false);
         joker2.setDisable(false);
         joker3.setDisable(false);
-        joker1Used = false;
-        joker2Used = false;
-        joker3Used = false;
+        joker1.setMouseTransparent(false);
+        joker2.setMouseTransparent(false);
+        joker3.setMouseTransparent(false);
     }
 
     /**
@@ -472,20 +471,6 @@ public class ComparativeQuestionScreenCtrl {
         reset();
         resetJokers();
         //chat/emoji will possibly have to be included as well
-    }
-
-    /**
-     * Adds question to game maxquestions (because joker skips a question)
-     * @return 1 - If the joker "Change current question" is used,
-     *         in order to add a question to the maximum number of questions in the game;
-     *         0 - Otherwise.
-     */
-    public int jokerAdditionalQuestion() {
-        if(joker1Used) {
-            return 1;
-        } else {
-            return 0;
-        }
     }
 
     /**
@@ -501,6 +486,31 @@ public class ComparativeQuestionScreenCtrl {
         if(answerTimer != null){
             answerTimer.stop();
             answerTimer = null;
+        }
+    }
+
+    /**
+     * Updates the disabling of the buttons used for jokers, in case
+     * a joker has been used on another screen.
+     * Resets the mouse-transparency, used when answers are being shown
+     */
+    private void setJokers() {
+        if(mainCtrl.getSinglePlayerGame().jokerAdditionalQuestionIsUsed()) {
+            joker1.setDisable(true);
+        } else {
+            joker1.setMouseTransparent(false);
+        }
+        
+        if(mainCtrl.getSinglePlayerGame().jokerRemoveOneAnswerIsUsed()) {
+            joker2.setDisable(true);
+        } else {
+            joker2.setMouseTransparent(false);
+        }
+        
+        if(mainCtrl.getSinglePlayerGame().jokerDoublePointsIsUsed()) {
+            joker3.setDisable(true);
+        } else {
+            joker3.setMouseTransparent(false);
         }
     }
 }

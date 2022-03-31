@@ -329,7 +329,7 @@ public class MainCtrl {
         if (singlePlayerGame != null
                 && singlePlayerGame.getQuestions().size() > 0
                 && singlePlayerGame.getQuestionNumber() <= singlePlayerGame.getMaxQuestions()
-                + comparativeQuestionScreenCtrl.jokerAdditionalQuestion()) {
+                + singlePlayerGame.additionalQuestion()) {
 
             Question question = singlePlayerGame.getQuestions().get(singlePlayerGame.getQuestionNumber() - 1);
             // check the question type
