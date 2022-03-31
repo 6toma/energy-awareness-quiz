@@ -1,3 +1,4 @@
+/*
 @font-face {
   src: url('../fonts/FuturaPTLight.otf');
 }
@@ -52,8 +53,7 @@
 
 @font-face {
   src: url('../fonts/FuturaPTExtraBoldOblique.otf');
-}
-
+}*/
 * {
   -fx-font-family: 'Futura PT Medium';
   /*-fx-font-weight: bold;  for bold text*/
