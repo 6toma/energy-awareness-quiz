@@ -372,10 +372,10 @@ public class MainCtrl {
                     || question instanceof MCQuestion
                     || question instanceof EqualityQuestion) {
 
-                    showComparativeQuestionScreen();
+                    showComparativeQuestionScreen(false);
                     comparativeQuestionScreenCtrl.setQuestion(question);
                 } else if (question instanceof EstimationQuestion) {
-                    showEstimationQuestionScreen();
+                    showEstimationQuestionScreen(false);
                     estimationScreenCtrl.setQuestion((EstimationQuestion) question);
                 }
             } catch (Exception e) {
