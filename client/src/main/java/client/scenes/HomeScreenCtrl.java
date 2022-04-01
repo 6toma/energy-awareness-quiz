@@ -94,40 +94,32 @@ public class HomeScreenCtrl implements Initializable {
      * Tries to get a question from the server
      * If succeeds connect create a new singlePlayerGame and go to the username screen
      * <p>
-     * TODO:
-     * - Show error to user if connection to server failed
+     * TODO: popup
      */
     @FXML
     public void showUsernameScreenSingle() {
 
         mainCtrl.getServer().setServerURL(mainCtrl.getServerURL());
-        try {
-            mainCtrl.newSinglePlayerGame();
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.err.println("Connection failed");
-        }
+        mainCtrl.newSinglePlayerGame();
     }
 
     /**
      * Run when pressed multiplayer
      * Sends you to the username selection screen
+     * Gives an error popup when connection to the server not possible
      */
     @FXML
     public void showUsernameScreenMulti() {
 
-        // Testing ServerUtils postPlayer functionality
-        System.out.println(mainCtrl.getServerURL());
         server.setServerURL(mainCtrl.getServerURL());
-        Player player = new Player("test", 7357);
         try {
-            System.out.println(server.postPlayer(player));
+            System.out.println(server.getRandomQuestion());
+            mainCtrl.setUsernameOriginScreen(2);
+            mainCtrl.showUsernameScreen();
         } catch (Exception e) {
-            System.err.println("Connection failed");
+            e.printStackTrace();
+            mainCtrl.showPopup("Connection to the server failed");
         }
-
-        mainCtrl.setUsernameOriginScreen(2);
-        mainCtrl.showUsernameScreen();
     }
 
     @FXML

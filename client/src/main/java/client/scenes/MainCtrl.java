@@ -9,7 +9,6 @@ import commons.questions.EstimationQuestion;
 import commons.questions.MCQuestion;
 import commons.questions.Question;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -299,13 +298,17 @@ public class MainCtrl {
      * Creates a new game with some number of questions
      */
     public void newSinglePlayerGame() {
-        Question question = server.getRandomQuestion();
+        try {
+            Question question = server.getRandomQuestion();
+            singlePlayerGame = new SinglePlayerGame(singlePlayerGameQuestions);
+            singlePlayerGame.addQuestion(question);
 
-        singlePlayerGame = new SinglePlayerGame(singlePlayerGameQuestions);
-        singlePlayerGame.addQuestion(question);
-
-        setUsernameOriginScreen(1);
-        showUsernameScreen();
+            setUsernameOriginScreen(1);
+            showUsernameScreen();
+        } catch(Exception e){
+            e.printStackTrace();
+            showPopup("Connection failed");
+        }
     }
 
     /**
@@ -314,13 +317,19 @@ public class MainCtrl {
      * @param username The username, used in the previous game
      */
     public void consecutiveSinglePlayerGame(String username) {
-        Question question = server.getRandomQuestion();
+        try {
+            Question question = server.getRandomQuestion();
 
-        singlePlayerGame = new SinglePlayerGame(singlePlayerGameQuestions, username);
-        singlePlayerGame.addQuestion(question);
+            singlePlayerGame = new SinglePlayerGame(singlePlayerGameQuestions, username);
+            singlePlayerGame.addQuestion(question);
 
-        //skipping over the part where we ask for username
-        showLoadingScreen();
+            //skipping over the part where we ask for username
+            showLoadingScreen();
+        } catch(Exception e){
+            e.printStackTrace();
+            showPopup("Connection failed");
+        }
+
     }
 
     /**
@@ -335,40 +344,30 @@ public class MainCtrl {
                 && singlePlayerGame.getQuestionNumber() <= singlePlayerGame.getMaxQuestions()
                 + comparativeQuestionScreenCtrl.jokerAdditionalQuestion()) {
 
-            Question question = singlePlayerGame.getQuestions().get(singlePlayerGame.getQuestionNumber() - 1);
-            // check the question type
-            if (question instanceof ComparativeQuestion
-                || question instanceof MCQuestion
-                || question instanceof EqualityQuestion) {
-
-                showComparativeQuestionScreen();
-                comparativeQuestionScreenCtrl.setQuestion(question);
-            } else if (question instanceof EstimationQuestion) {
-                showEstimationQuestionScreen();
-                estimationScreenCtrl.setQuestion((EstimationQuestion) question);
-            }
-
-            // get next question from the server
             try {
+                // get next question from the server
                 Question newQuestion = server.getRandomQuestion();
                 // loop until new question is not already in the list
                 while (!singlePlayerGame.addQuestion(newQuestion)) {
                     newQuestion = server.getRandomQuestion();
                 }
+
+                Question question = singlePlayerGame.getQuestions().get(singlePlayerGame.getQuestionNumber() - 1);
+                // check the question type
+                if (question instanceof ComparativeQuestion
+                    || question instanceof MCQuestion
+                    || question instanceof EqualityQuestion) {
+
+                    showComparativeQuestionScreen();
+                    comparativeQuestionScreenCtrl.setQuestion(question);
+                } else if (question instanceof EstimationQuestion) {
+                    showEstimationQuestionScreen();
+                    estimationScreenCtrl.setQuestion((EstimationQuestion) question);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
-                // TODO: error pop-up
-                Alert alert = new Alert(Alert.AlertType.NONE);
-                EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
-                    public void handle(ActionEvent e) {
-                        // set alert type
-                        alert.setAlertType(Alert.AlertType.ERROR);
-                        // set content text
-                        alert.setContentText("connection failed");
-                        // show the dialog
-                        alert.show();
-                    }
-                };
+                showPopup("Connection failed");
+                showHomeScreen();
             }
 
         } else { // if no question to show display end screen
@@ -395,17 +394,7 @@ public class MainCtrl {
             server.postPlayer(singlePlayerGame.getPlayer());
         } catch (Exception e) {
             e.printStackTrace();
-            Alert alert = new Alert(Alert.AlertType.NONE);
-            EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
-                public void handle(ActionEvent e) {
-                    // set alert type
-                    alert.setAlertType(Alert.AlertType.ERROR);
-                    // set content text
-                    alert.setContentText("connection failed");
-                    // show the dialog
-                    alert.show();
-                }
-            };
+            showPopup("Connection failed");
         }
     }
 
@@ -437,6 +426,16 @@ public class MainCtrl {
      */
     public String getServerURL() {
         return this.settingsScreenCtrl.getServerURL();
+    }
+
+    /**
+     * Shows an error popup message
+     * @param message to be shown on the popup
+     */
+    public void showPopup(String message){
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }
 
