@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import java.net.URL?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<StackPane  prefHeight="907.0" prefWidth="1574.0" stylesheets="@../css/ScoreChangeMultiplayer.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.ScoreChangeMultiplayerCtrl">
+   <HBox alignment="CENTER" maxHeight="-Infinity" prefHeight="100.0" prefWidth="200.0">
+      <children>
+         <Region maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="-Infinity" prefHeight="200.0" prefWidth="200.0" />
+           <VBox alignment="CENTER" maxWidth="-Infinity" prefHeight="638.0" prefWidth="752.0">
+               <Region maxHeight="20" minHeight="20" VBox.vgrow="ALWAYS" />
+               <Label fx:id="scoreGained" alignment="CENTER" prefHeight="80.0" styleClass="label-box" text="+!ENTER SCORE!" />
+               <Region maxHeight="40.0" minHeight="20" VBox.vgrow="ALWAYS" />
+               <StackPane>
+                   <Region maxHeight="70" minHeight="70" VBox.vgrow="ALWAYS" />
+                   <Label fx:id="scoreTotal" alignment="CENTER" prefHeight="80.0" styleClass="label-box" text="Score: !ENTER SCORE!" />
+               </StackPane>
+               <Region maxHeight="40" minHeight="40" VBox.vgrow="ALWAYS" />
+               <StackPane>
+                   <Region maxHeight="70" minHeight="70" VBox.vgrow="ALWAYS" />
+                   <Label fx:id="scoreStreak" alignment="CENTER" prefHeight="80.0" styleClass="label-box" text="Streak: !ENTER SCORE!" />
+               </StackPane>
+           </VBox>
+         <Region maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="-Infinity" prefHeight="200.0" prefWidth="200.0" />
+         <VBox alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="680.0" prefWidth="680.0">
+            <children>
+               <Region maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="0.0" prefHeight="50.0" prefWidth="100.0" />
+                   <TableView fx:id="leaderboard" focusTraversable="false" prefHeight="1162.0" prefWidth="861.0">
+                       <columns>
+                           <TableColumn fx:id="playerPosition" editable="false" minWidth="-1.0" prefWidth="125.0" sortable="false" text="Position" />
+                           <TableColumn fx:id="playerUsername" editable="false" prefWidth="351.0" sortable="false" text="Player name" />
+                           <TableColumn fx:id="playerScore" editable="false" maxWidth="750.0" minWidth="-1.0" prefWidth="199.0" sortType="DESCENDING" sortable="false" text="Score" />
+                       </columns>
+                   </TableView>
+               <Region maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="0.0" prefHeight="50.0" prefWidth="100.0" />
+            </children>
+         </VBox>
+         <Region maxHeight="175.0" maxWidth="-Infinity" minHeight="0.0" minWidth="-Infinity" prefHeight="175.0" prefWidth="200.0" />
+      </children>
+   </HBox>
+    <StackPane maxHeight="132.0" maxWidth="245.0" prefHeight="132.0" prefWidth="245.0" styleClass="padding, margin" stylesheets="@../css/ScoreChangeMultiplayer.css" StackPane.alignment="BOTTOM_LEFT">
+        <children>
+            <Button fx:id="leave" onAction="#exit" text="Leave" StackPane.alignment="BOTTOM_LEFT">
+                <styleClass>
+                    <String fx:value="exit" />
+                    <String fx:value="rounded" />
+                </styleClass></Button>
+        </children>
+    </StackPane>
+    <stylesheets>
+        <URL value="@../css/main.css" />
+        <URL value="@../css/ScoreChangeScreen.css" />
+    </stylesheets>
+
+
+
+
+
+
+</StackPane>
