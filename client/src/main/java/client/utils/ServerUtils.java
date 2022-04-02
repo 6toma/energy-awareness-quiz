@@ -125,11 +125,12 @@ public class ServerUtils {
                         .request(APPLICATION_JSON) //
                         .accept(APPLICATION_JSON) //
                         .get(Response.class);
+
+                var c = res.readEntity(GameUpdatesPacket.class);
                 if (res.getStatus() == 204){
-                    System.out.println();
+                    System.out.println(c);
                     continue;
                 }
-                var c = res.readEntity(GameUpdatesPacket.class);
                 consumer.accept(c);
             }
         });
