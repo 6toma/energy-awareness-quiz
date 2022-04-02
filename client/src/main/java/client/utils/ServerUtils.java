@@ -15,6 +15,7 @@
  */
 package client.utils;
 
+import commons.Activity;
 import commons.GameUpdatesPacket;
 import commons.MultiPlayerGame;
 import commons.Player;
@@ -53,25 +54,28 @@ public class ServerUtils {
 
     /**
      * Gets a random question from the server
+     *
      * @return either:
-     *         - ComparativeQuestion
-     *         - EstimationQuestion
+     * - ComparativeQuestion
+     * - EstimationQuestion
      */
     public Question getRandomQuestion() {
         return ClientBuilder.newClient(new ClientConfig()) //
-            .target(serverURL).path("api/questions/random") // the URL path which we HTTP GET for comparative questions
-            .request(APPLICATION_JSON) //
-            .accept(APPLICATION_JSON) //
-            .get(new GenericType<>() {});
+                .target(serverURL).path("api/questions/random") // the URL path which we HTTP GET for comparative questions
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<>() {
+                });
     }
 
 
     /**
      * Posts a Player object to the server
+     *
      * @param player to be posted
      * @return The posted player if successful
      */
-    public Player postPlayer(Player player){
+    public Player postPlayer(Player player) {
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(serverURL).path("api/players/add-one") // the URL path where we HTTP POST for adding high scores
                 .request(APPLICATION_JSON) //
@@ -100,9 +104,9 @@ public class ServerUtils {
      * @param numberOfTop determines how many players in list
      * @return A list of top numberOfTop players
      */
-    public List<Player> getLeaderPlayers(int numberOfTop){
+    public List<Player> getLeaderPlayers(int numberOfTop) {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(serverURL).path("api/players/leaderboard/"+numberOfTop)
+                .target(serverURL).path("api/players/leaderboard/" + numberOfTop)
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<>() {
@@ -111,6 +115,7 @@ public class ServerUtils {
 
 
     private static final ExecutorService EXEC = Executors.newSingleThreadExecutor();
+
     /**
      * Dont know what this does but apparently
      * its meant to get a change that happened on the server
@@ -125,7 +130,7 @@ public class ServerUtils {
                         .request(APPLICATION_JSON) //
                         .accept(APPLICATION_JSON) //
                         .get(Response.class);
-                if (res.getStatus() == 204){
+                if (res.getStatus() == 204) {
                     System.out.println();
                     continue;
                 }
@@ -138,16 +143,17 @@ public class ServerUtils {
     /**
      * Closes the Thread
      */
-    public void stop(){
+    public void stop() {
         EXEC.shutdownNow();
     }
 
 
     /**
      * Used to sync up scenes with Server
+     *
      * @return String name of the screen
      */
-    public String getCurrentScene(){
+    public String getCurrentScene() {
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(serverURL).path("api/poll/CurrentScreen")
                 .request(APPLICATION_JSON) //
@@ -158,9 +164,10 @@ public class ServerUtils {
 
     /**
      * Used to sync up "which question we are on" with server
+     *
      * @return Integer of the current question
      */
-    public int getCurrentQuestionNumber(){
+    public int getCurrentQuestionNumber() {
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(serverURL).path("api/poll/CurrentQuestionNumber")
                 .request(APPLICATION_JSON) //
@@ -171,11 +178,12 @@ public class ServerUtils {
 
     /**
      * Used to send your score to the Server Multplayer Game Object
+     *
      * @param player player object containing name and score
      * @return the Player that has been posted
      * dont know why this returns anything
      */
-    public Player postScore(Player player){
+    public Player postScore(Player player) {
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(serverURL).path("api/poll/SendScore") //
                 .request(APPLICATION_JSON) //
@@ -187,9 +195,10 @@ public class ServerUtils {
      * When the toilet is flushed we get the whole game object where
      * we take the questions and players from
      * this should only be done once at the start
+     *
      * @return instance of multiplayer game
      */
-    public MultiPlayerGame getMultiplayerGame(){
+    public MultiPlayerGame getMultiplayerGame() {
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(serverURL).path("api/poll/MultiplayerGame")
                 .request(APPLICATION_JSON) //
@@ -201,9 +210,10 @@ public class ServerUtils {
     /**
      * Gets all players, so you can display their names and score
      * on the leaderboard
+     *
      * @return list of players
      */
-    public List<Player> getPlayersMultiplayer(){
+    public List<Player> getPlayersMultiplayer() {
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(serverURL).path("api/poll/players")
                 .request(APPLICATION_JSON) //
@@ -214,10 +224,11 @@ public class ServerUtils {
 
     /**
      * Checks whether a username is valid i.e. has not been previously used
+     *
      * @param username of a player to be added
      * @return True iff can be added else return False
      */
-    public Boolean checkValidityOfUsername(String username){
+    public Boolean checkValidityOfUsername(String username) {
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(serverURL).path("api/waiting-room/username")
                 .request(APPLICATION_JSON) //
@@ -229,10 +240,11 @@ public class ServerUtils {
      * Adds player to the WaitingRoom
      * This is needed because the user can change the name in the input field
      * and click continue and without that there could be multiple players with the same name
+     *
      * @param player player to be added
      * @return player that was added
      */
-    public Player addPlayerWaitingRoom(Player player){
+    public Player addPlayerWaitingRoom(Player player) {
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(serverURL).path("api/waiting-room/player")
                 .request(APPLICATION_JSON) //
@@ -243,29 +255,47 @@ public class ServerUtils {
     /**
      * checks whether a list of questions has been generated,
      * generates a new list if the list is empty
+     *
      * @return player that was added
      */
-    public Boolean areQuestionsGenerated(){
+    public Boolean areQuestionsGenerated() {
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(serverURL).path("api/waiting-room/are-generated")
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
-                .get(new GenericType<>() {});
+                .get(new GenericType<>() {
+                });
     }
 
 
     //TODO make it work
+
     /**
      * Removes a player from waiting room
+     *
      * @param player player to be removed
      * @return player that was removed
      */
-    public Player removePlayerWaitingRoom(Player player){
+    public Player removePlayerWaitingRoom(Player player) {
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(serverURL).path("api/waiting-room/username")
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .post(Entity.entity(player, APPLICATION_JSON), Player.class);
+    }
+
+    /**
+     * Gets a whole list of activities (for admin screen)
+     *
+     * @return list of activities
+     */
+    public List<Activity> getAllActivities() {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(serverURL).path("api/activities")
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<>() {
+                });
     }
 
 
