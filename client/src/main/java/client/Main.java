@@ -119,7 +119,12 @@ public class Main extends Application {
                 "scenes/AdminScreen.fxml",
                 "css/AdminScreen.css"
         );
-
+        var ScoreMultiplayerScreen = FXML.load(
+                ScoreChangeMultiplayerCtrl.class,
+                "scenes/ScoreChangeMultiplayerCtrl.fxml",
+                "css/ScoreChangeMultiplayer.css"
+        );
+        
 
         // add more scenes the same way
 
@@ -137,7 +142,8 @@ public class Main extends Application {
                 scoreChangeScreen,
                 settingsScreen,
                 estimationQuestionScreen,
-                adminScreen
+                adminScreen,
+                ScoreMultiplayerScreen
         );
     }
 }

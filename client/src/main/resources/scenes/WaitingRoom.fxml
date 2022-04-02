@@ -29,11 +29,12 @@
          </columns>
       </TableView>
         <Region maxHeight="20" minHeight="20" VBox.vgrow="ALWAYS" />
-        <Button prefHeight="76.0" prefWidth="182.0" stylesheets="@../css/main.css" text="Ready">
+        <Button fx:id="startButton" onAction="#startGame" prefHeight="76.0" prefWidth="182.0" stylesheets="@../css/main.css" text="Ready">
          <styleClass>
             <String fx:value="rounded" />
             <String fx:value="functionality-button" />
-         </styleClass></Button>
+         </styleClass>
+        </Button>
         <Region maxHeight="20" minHeight="20" styleClass="margin" VBox.vgrow="ALWAYS" />
     </VBox>
 </StackPane>

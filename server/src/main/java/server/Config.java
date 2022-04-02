@@ -16,9 +16,11 @@
 package server;
 
 import commons.MultiPlayerGame;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import server.multiplayer.WaitingRoom;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -31,6 +33,7 @@ import java.util.Random;
 public class Config {
 
     public static String defaultImagePath = "./server/src/main/resources/activity-bank-pictures/";
+    public static int numberOfQuestions = 5;
 
     /**
      * Returns a new random object
@@ -41,6 +44,15 @@ public class Config {
         return new Random();
     }
 
+    /**
+     * Returns a new WaitingRoom object
+     * @return new WaitingRoom
+     */
+    @Bean
+    public WaitingRoom getWaitingRoom() {
+        WaitingRoom waitingRoom = new WaitingRoom(new ArrayList<>(), new ArrayList<>(), numberOfQuestions);
+        return waitingRoom;
+    }
     /**
      * Returns a new multiplayer object
      * Default values are gameID 1, and empty arrays for now
