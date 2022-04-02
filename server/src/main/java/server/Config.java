@@ -33,7 +33,7 @@ import java.util.Random;
 public class Config {
 
     public static String defaultImagePath = "./server/src/main/resources/activity-bank-pictures/";
-    public static int numberOfQuestions = 5;
+    public static int numberOfQuestions = 20;
 
     /**
      * Returns a new random object

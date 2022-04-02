@@ -9,6 +9,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
+import java.util.concurrent.Executors;
+
 public class UsernameScreenCtrl {
 
     private final ServerUtils server;
@@ -97,10 +99,14 @@ public class UsernameScreenCtrl {
                 usernameField.setText("Please select a different username!");
             }
             else {
-                if(!server.areQuestionsGenerated()){
-                    System.out.println("questions are not generated I will generate them");;
-                }
-                else System.out.println("questions are generated");
+                var exec = Executors.newSingleThreadExecutor();
+                exec.submit(() -> {
+                    if(!server.areQuestionsGenerated()){
+                        System.out.println("questions are not generated I will generate them");;
+                    }
+                    else System.out.println("questions are generated");
+                });
+
                 System.out.println(newPlayer);
                 mainCtrl.showWaitingRoom();
             }
