@@ -20,8 +20,8 @@ public class MultiPlayerGame {
     private List<Question> questions;
     private int questionNumber = 1;
     private boolean started = false;
-    @Transient
-    private GameUpdatesPacket gameStatus;
+    //@Transient
+    //private GameUpdatesPacket gameStatus;
 
     // for synchronization of client with server
     // can be "LOADING SCREEN", "QUESTION", "LEADERBOARD", "ENDSCREEN"
@@ -164,7 +164,7 @@ public class MultiPlayerGame {
      * Gets the hashcode of the list of players, the name of the current screen and the number of the current question
      * @return GameUpdatesPacket object, which contains compact information about the game
      */
-    public GameUpdatesPacket getGameStatus() {
+    public GameUpdatesPacket currentGameStatus() {
         return new GameUpdatesPacket(Objects.hash(players), currentScreen, questionNumber);
     }
 

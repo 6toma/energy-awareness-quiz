@@ -482,10 +482,10 @@ public class MultiPlayerGameTest {
         multiPlayerGame.setCurrentScreen("QUESTION");
 
         GameUpdatesPacket updates = new GameUpdatesPacket(Objects.hash(players), "QUESTION", 1);
-        assertEquals(multiPlayerGame.getGameStatus(), updates);
+        assertEquals(multiPlayerGame.currentGameStatus(), updates);
 
         multiPlayerGame.removePlayer(a);
-        assertNotEquals(multiPlayerGame.getGameStatus(), updates);
+        assertNotEquals(multiPlayerGame.currentGameStatus(), updates);
     }
 
 }
