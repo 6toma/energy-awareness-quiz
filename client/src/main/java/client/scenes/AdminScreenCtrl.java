@@ -83,7 +83,6 @@ public class AdminScreenCtrl implements Initializable {
     @FXML
     public void refresh() {
         try {
-            activityTable = new TableView<>();
             List<Activity> activityList = server.getAllActivities();
             ObservableList<Activity> observableArrayList =
                     FXCollections.observableArrayList(activityList);
