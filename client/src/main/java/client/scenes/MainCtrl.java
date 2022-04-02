@@ -114,7 +114,7 @@ public class MainCtrl {
             Pair<ScoreChangeScreenCtrl, Parent> scoreChangeScreen,
             Pair<SettingsScreenCtrl, Parent> settingsScreen,
             Pair<EstimationQuestionCtrl, Parent> estimationQuestion,
-            Pair<AdminScreenCtrl, Parent> adminScreen
+            Pair<AdminScreenCtrl, Parent> adminScreen,
             Pair<ScoreChangeMultiplayerCtrl, Parent> scoreChangeMultiplayer
     ) {
         this.primaryStage = primaryStage;
