@@ -82,9 +82,8 @@ public class LongPollController {
      */
     @PostMapping(path={"add-player"})
     public ResponseEntity<Player> postPlayers(@RequestBody Player player){
-        listeners.forEach((k,l) -> l.accept(new GameUpdatesPacket()));
-        List<Player> players = multiplayerGame.getPlayers();
-        players.add(player);
+        multiplayerGame.getPlayers().add(player);
+        listeners.forEach((k,l) -> l.accept(multiplayerGame.currentGameStatus()));
         return ResponseEntity.ok(player);
         //s.get(players.size()-1)
     }
@@ -126,7 +125,9 @@ public class LongPollController {
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
-                System.out.println("hi");
+                GameUpdatesPacket state = multiplayerGame.currentGameStatus();
+                System.out.println(state);
+                listeners.forEach((k,l) -> l.accept(state));
                 if(multiplayerGame.getQuestionNumber()==20){
                     System.out.print(multiplayerGame.getQuestionNumber());
                     cancel();
@@ -134,12 +135,12 @@ public class LongPollController {
                 multiplayerGame.setCurrentScreen("QUESTION");
                 int currentQ = multiplayerGame.getQuestionNumber();
                 multiplayerGame.setQuestionNumber(currentQ+1);
-                listeners.forEach((k,l) -> l.accept(multiplayerGame.getGameStatus()));
+
             }
         };
 
         timer.schedule(task, 500, 6*1000);
-        timer.cancel();
+        //timer.cancel();
     }
 
 
