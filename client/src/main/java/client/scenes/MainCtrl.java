@@ -434,5 +434,14 @@ public class MainCtrl {
     public String getServerURL() {
         return this.settingsScreenCtrl.getServerURL();
     }
+
+    /**
+     * Resets all attributes on the question screens
+     * Used when the game is left unfinished
+     */
+    public void resetQuestionScreens() {
+        comparativeQuestionScreenCtrl.resetComparativeQuestionScreen();
+        estimationScreenCtrl.resetEstimationQuestion();
+    }
 }
 

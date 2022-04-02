@@ -21,6 +21,7 @@ import javafx.util.Duration;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Random;
 
 public class ComparativeQuestionScreenCtrl {
 
@@ -112,34 +113,37 @@ public class ComparativeQuestionScreenCtrl {
     /**
      * Runs when answer option 1 is clicked
      * Sets color of the clicked button to yellow, others to default
+     * (unless it is disabled and marked red from joker 2)
      */
     public void answer1Clicked(){
         checkAnswer(0);
-        answer1.setStyle("-fx-background-color: #fccf03;");
-        answer2.setStyle("");
-        answer3.setStyle("");
+        if(!answer1.isDisabled()) answer1.setStyle("-fx-background-color: #fccf03;");
+        if(!answer2.isDisabled()) answer2.setStyle("");
+        if(!answer3.isDisabled()) answer3.setStyle("");
     }
 
     /**
      * Runs when answer option 2 is clicked
      * Sets color of the clicked button to yellow, others to default
+     * (unless it is disabled and marked red from joker 2)
      */
     public void answer2Clicked(){
         checkAnswer(1);
-        answer1.setStyle("");
-        answer2.setStyle("-fx-background-color: #fccf03;");
-        answer3.setStyle("");
+        if(!answer1.isDisabled()) answer1.setStyle("");
+        if(!answer2.isDisabled()) answer2.setStyle("-fx-background-color: #fccf03;");
+        if(!answer3.isDisabled()) answer3.setStyle("");
     }
 
     /**
      * Runs when answer option 3 is clicked
      * Sets color of the clicked button to yellow, others to default
+     * (unless it is disabled and marked red from joker 2)
      */
     public void answer3Clicked(){
         checkAnswer(2);
-        answer1.setStyle("");
-        answer2.setStyle("");
-        answer3.setStyle("-fx-background-color: #fccf03;");
+        if(!answer1.isDisabled()) answer1.setStyle("");
+        if(!answer2.isDisabled()) answer2.setStyle("");
+        if(!answer3.isDisabled()) answer3.setStyle("-fx-background-color: #fccf03;");
     }
 
     private void checkAnswer(int answer){
@@ -424,6 +428,9 @@ public class ComparativeQuestionScreenCtrl {
         mainCtrl.showScoreChangeScreen(pointsGainedForQuestion);
     }
 
+    /**
+     * Skips the question and adds one more to the total number of questions
+     */
     @FXML
     private void joker1() {
         joker1.setDisable(true);
@@ -438,13 +445,41 @@ public class ComparativeQuestionScreenCtrl {
         endQuestion();
     }
 
+    /**
+     * Disables one of the incorrect answer options
+     */
     @FXML
     private void joker2() {
-        //implementation for joker
         joker2.setDisable(true); // disable button
         mainCtrl.getSinglePlayerGame().useJokerRemoveOneAnswer();
+
+        int correctAnswer = -1;
+        if(questionMode == 0){
+            correctAnswer = question.getCorrect_answer();
+        } else if(questionMode == 1){
+            correctAnswer = mcQuestion.getCorrect_answer();
+        } else if(questionMode == 2){
+            correctAnswer = equalityQuestion.getCorrect_answer();
+        }
+
+        Random random = new Random();
+        int x = Math.abs(random.nextInt() % 2); // get a 0 or 1 randomly
+        int disableOption = (correctAnswer + x + 1) % 3; // get one of the incorrect answers
+        if(disableOption == 0) {
+            answer1.setDisable(true);
+            answer1.setStyle("-fx-background-color: #fc1c45;");
+        } else if(disableOption == 1) {
+            answer2.setDisable(true);
+            answer2.setStyle("-fx-background-color: #fc1c45;");
+        } else if(disableOption == 2) {
+            answer3.setDisable(true);
+            answer3.setStyle("-fx-background-color: #fc1c45;");
+        }
     }
 
+    /**
+     * Doubles the amount of points for the current question
+     */
     @FXML
     private void joker3() {
         joker3.setDisable(true); // disable button
