@@ -124,7 +124,7 @@ public class Main extends Application {
                 "scenes/ScoreChangeMultiplayerCtrl.fxml",
                 "css/ScoreChangeMultiplayer.css"
         );
-        
+
 
         // add more scenes the same way
 
@@ -142,8 +142,8 @@ public class Main extends Application {
                 scoreChangeScreen,
                 settingsScreen,
                 estimationQuestionScreen,
-                adminScreen,
-                ScoreMultiplayerScreen
+                ScoreMultiplayerScreen,
+                adminScreen
         );
     }
 }
