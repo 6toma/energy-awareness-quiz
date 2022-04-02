@@ -183,7 +183,7 @@ public class MainCtrl {
      */
     public void showWaitingRoom() {
         primaryStage.getScene().setRoot(waitingRoomParent);
-        //waitingRoomCtrl.startListening();
+        startListening();
         waitingRoomCtrl.refresh();
         checkDarkMode();
     }
@@ -471,9 +471,7 @@ public class MainCtrl {
         player = new Player("name");
         currentQuestionNum=0;
         currentScreen="";
-        server.startGame(true);
-        startListening();
-
+        System.out.println(server.startGame(true));
     }
 
     /**
@@ -513,7 +511,7 @@ public class MainCtrl {
         System.out.println("started listenening");
         server.registerUpdates(c -> {
             System.out.println("got update: "+ c);
-            if (c.getQuestionNumber()!=currentQuestionNum && c.getCurrentScreen()!= currentScreen){
+            /*if (c.getQuestionNumber()!=currentQuestionNum && c.getCurrentScreen()!= currentScreen){
                 currentQuestionNum = c.getQuestionNumber();
                 changeScreenMultiplayer(c);
 
@@ -523,7 +521,7 @@ public class MainCtrl {
 
             } else if (c.getQuestionNumber()==currentQuestionNum && c.getCurrentScreen()!= currentScreen){
                 changeScreenMultiplayer(c);
-            }
+            }*/
         });
     }
 
