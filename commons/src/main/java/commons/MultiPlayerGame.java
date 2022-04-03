@@ -1,5 +1,6 @@
 package commons;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import commons.questions.Question;
 import lombok.Data;
 
@@ -169,6 +170,7 @@ public class MultiPlayerGame {
      * Gets the hashcode of the list of players, the name of the current screen and the number of the current question
      * @return A GameUpdatesPacket object, which contains compact information about the game
      */
+    @JsonIgnore
     public GameUpdatesPacket getGameStatus() {
         return new GameUpdatesPacket(Objects.hash(players), currentScreen, questionNumber);
     }

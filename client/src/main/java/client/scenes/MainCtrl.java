@@ -71,15 +71,6 @@ public class MainCtrl {
     private SinglePlayerGame singlePlayerGame;
     private int singlePlayerGameQuestions = 5;
 
-    // multi player game variables
-    @Getter @Setter
-    private String playerUsername;
-    @Getter @Setter
-    private MultiPlayerGame multiPlayerGame;
-    // default game packet used in the waiting room
-    @Getter @Setter
-    private GameUpdatesPacket packet;
-
     /**
      * Creates a new MainCtrl with server
      *
@@ -329,20 +320,6 @@ public class MainCtrl {
     }
 
     /**
-     * upon entering the waiting room the game will create an instance of a multiplayer game for each player
-     */
-    public void newPrivateMultiPlayerGame(List<Player> players){
-        try {
-            multiPlayerGame = new MultiPlayerGame(players);
-            packet = new GameUpdatesPacket(multiPlayerGame.getPlayers().hashCode(), "WAITINGROOM", -1);
-        } catch(Exception e){
-            e.printStackTrace();
-            showPopup("Connection failed");
-        }
-
-    }
-
-    /**
      * Checks for connection
      * Creates a new game with some number of questions
      */
@@ -488,14 +465,17 @@ public class MainCtrl {
         alert.showAndWait();
     }
 
-
+    // multiplayer variables
+    @Getter @Setter
     private MultiPlayerGame multiPlayerGame;
     private int currentQuestionNum;
+    // default game packet used in the waiting room
+    @Getter @Setter
+    private GameUpdatesPacket packet;
     private String currentScreen;
     @Getter
     @Setter
     private Player player;
-
 
     /**
      * starts the multiplayer game

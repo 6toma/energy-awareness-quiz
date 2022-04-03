@@ -57,6 +57,8 @@ public class WaitingRoomController {
     @PostMapping(path = {"remove-player"})
     public ResponseEntity<Boolean> removePlayerFromWaitingRoom(@RequestBody Player player) {
         System.out.println("Player has been removed");
+        System.out.println(ResponseEntity.ok(waitingRoom.removePlayerFromWaitingRoom(player)));
+        System.out.println(waitingRoom.getPlayers());
         return ResponseEntity.ok(waitingRoom.removePlayerFromWaitingRoom(player));
     }
 

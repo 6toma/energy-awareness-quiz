@@ -48,9 +48,10 @@ public class WaitingRoomCtrl implements Initializable {
      * Goes back to the home screen
      */
     public void back() {
-        server.removePlayerWaitingRoom(new Player(mainCtrl.getPlayerUsername()));
+        server.removePlayerWaitingRoom(new Player(mainCtrl.getPlayer().getName()));
         mainCtrl.resetUserText();
         mainCtrl.showHomeScreen();
+        refresh();
         stop();
     }
 
@@ -59,9 +60,6 @@ public class WaitingRoomCtrl implements Initializable {
      */
     public void startListening(){
         server.registerUpdates(c -> {
-            if(c.getHashListPlayers() != mainCtrl.getPacket().getHashListPlayers()){
-
-            }
             refresh();
             System.out.println("object identity: " + c + " has changed");
             System.out.println(mainCtrl.getMultiPlayerGame().getPlayers());

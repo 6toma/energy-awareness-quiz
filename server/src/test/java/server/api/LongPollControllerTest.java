@@ -30,7 +30,7 @@ public class LongPollControllerTest {
                 new Player(3L,"c", 3)
         ));
         mpg = new MultiPlayerGame(0, players, null);
-        lpc = new LongPollController(mpg);
+        lpc = new LongPollController(mpg, null, null);
     }
 
     /**
@@ -79,7 +79,7 @@ public class LongPollControllerTest {
     @Test
     void postPlayersTest() {
         Player newPlayer = new Player();
-        assertEquals(newPlayer, lpc.postPlayers(newPlayer).getBody());
+        assertEquals(newPlayer, lpc.postPlayer(newPlayer).getBody());
         assertEquals(newPlayer, lpc.getPlayers().getBody().get(3));
     }
     /**
