@@ -1,6 +1,6 @@
 package commons;
 
-//import lombok.EqualsAndHashCode;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
