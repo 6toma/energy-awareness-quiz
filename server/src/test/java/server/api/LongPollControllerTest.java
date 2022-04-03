@@ -18,6 +18,9 @@ public class LongPollControllerTest {
     private LongPollController lpc;
     private ArrayList<Player> players;
 
+    /**
+     * Sets up environment before each test
+     */
     @BeforeEach
     public void setup(){
         players = new ArrayList<>();
