@@ -10,7 +10,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -77,21 +76,6 @@ public class HomeScreenCtrl implements Initializable {
         mainCtrl.showSettingsScreen();
     }
 
-
-    private void setGridNodeStyle(Label name, Label score, int index) {
-        if (index == 0) {
-            name.setStyle("-fx-background-color: gold;");
-            score.setStyle("-fx-background-color: gold;");
-        } else if (index == 1) {
-            name.setStyle("-fx-background-color: silver;");
-            score.setStyle("-fx-background-color: silver;");
-        } else if (index == 2) {
-            name.setStyle("-fx-background-color: CD7F32;");
-            score.setStyle("-fx-background-color: CD7F32;");
-        }
-        name.getStyleClass().add("grid-Label");
-        score.getStyleClass().add("grid-Label");
-    }
 
     /**
      * Tries to get a question from the server

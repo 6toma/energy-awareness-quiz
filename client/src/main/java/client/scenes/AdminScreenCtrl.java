@@ -11,7 +11,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 
 import java.net.URL;
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
+import java.util.ResourceBundle;
 
 public class AdminScreenCtrl implements Initializable {
 
@@ -82,14 +84,6 @@ public class AdminScreenCtrl implements Initializable {
         source.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getSource()));
         consumption.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getConsumption_in_wh().toString()));
         image_path.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getImage_path()));
-
-        Timer t = new Timer();
-        t.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                refresh();
-            }
-        }, 0, 60000);
     }
 
     /**
