@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
+import server.multiplayer.WaitingRoom;
 
 import java.net.URI;
 import java.util.HashMap;
@@ -27,14 +28,18 @@ public class LongPollController {
      * For each thing in list we send another request for the body of that change
      */
     private final MultiPlayerGame multiplayerGame;
-
+    private final WaitingRoom waitingRoom;
+    private GameUpdatesPacket gameUpdatesPacket;
     /**
      * Creates a Polling Controller
      * @param multiplayerGame injected instance of MultiPlayerGame
+     * @param waitingRoom injected instance of WaitingRoom
      */
     @Autowired
-    public LongPollController(MultiPlayerGame multiplayerGame){
+    public LongPollController(MultiPlayerGame multiplayerGame, WaitingRoom waitingRoom, GameUpdatesPacket gameUpdatesPacket){
         this.multiplayerGame = multiplayerGame;
+        this.waitingRoom = waitingRoom;
+        this.gameUpdatesPacket = gameUpdatesPacket;
     }
 
     /**
@@ -58,7 +63,7 @@ public class LongPollController {
 
     /**
      * Gets the question currently on 'ID'
-     * @return integer of whcih question server is on eg 3 (out of 20)
+     * @return integer of which question server is on eg 3 (out of 20)
      */
     @GetMapping("CurrentQuestionNumber")
     public ResponseEntity<Integer> getCurrentQuestion(){
@@ -77,16 +82,24 @@ public class LongPollController {
     }
 
     /**
-     * Adds the player to the list of players in the instance of MultiplayerGame
+     * Adds the player to the list of players in the instance of WaitingRoom
      * updates listener to accept number 1. 1 meaning the number of players changed
      * @param player player to be added to the game
      * @return player that was added
      */
-    @PostMapping(path={"add-player"})
-    public ResponseEntity<Player> postPlayers(@RequestBody Player player){
-        listeners.forEach((k,l) -> l.accept(new GameUpdatesPacket()));
-        List<Player> players = multiplayerGame.getPlayers();
-        players.add(player);
+    @PostMapping(path={"add-player-waiting-room"})
+    public ResponseEntity<Player> postPlayerToWaitingRoom(@RequestBody Player player){
+        listeners.forEach((k,l) -> l.accept(new GameUpdatesPacket(waitingRoom.getPlayers().hashCode(), "WAITINGROOM", -1)));
+        if(player == null) {
+            return ResponseEntity.ok(null);
+        }
+        for(var p : waitingRoom.getPlayers()){
+            if(p.getName().equals(player.getName())) {
+                return ResponseEntity.ok(null);
+            }
+        }
+        waitingRoom.addPlayerToWaitingRoom(player);
+        System.out.println("Player added");
         return ResponseEntity.ok(player);
         //s.get(players.size()-1)
     }

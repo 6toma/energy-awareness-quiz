@@ -20,7 +20,7 @@ public class MultiPlayerGame {
     private int questionNumber = 1;
 
     // for synchronization of client with server
-    // can be "LOADING SCREEN", "QUESTION", "LEADERBOARD", "ENDSCREEN"
+    // can be "WAITINGROOM",  "LOADING SCREEN", "QUESTION", "LEADERBOARD", "ENDSCREEN"
     private String currentScreen;
 
     /**
@@ -28,6 +28,15 @@ public class MultiPlayerGame {
      * Used by Jackson to initialize object from JSON
      */
     public MultiPlayerGame() {}
+
+    /**
+     * Creates a new game with existing players
+     * @param players list of players
+     */
+    public MultiPlayerGame(List<Player> players) {
+        this.currentScreen = "WAITINGROOM";
+        this.players = players;
+    }
 
     /**
      * Creates a new game with specified amount of questions

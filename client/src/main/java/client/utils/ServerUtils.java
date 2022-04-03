@@ -126,7 +126,7 @@ public class ServerUtils {
                         .accept(APPLICATION_JSON) //
                         .get(Response.class);
                 if (res.getStatus() == 204){
-                    System.out.println();
+                    System.out.println("nothing happened");
                     continue;
                 }
                 var c = res.readEntity(GameUpdatesPacket.class);
@@ -203,7 +203,7 @@ public class ServerUtils {
      * on the leaderboard
      * @return list of players
      */
-    public List<Player> getPlayersWaitingRoom(){
+    public List<Player> getPlayersInWaitingRoom(){
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(serverURL).path("api/waiting-room/all-players")
                 .request(APPLICATION_JSON) //
@@ -234,7 +234,7 @@ public class ServerUtils {
      */
     public Player addPlayerWaitingRoom(Player player){
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(serverURL).path("api/waiting-room/player")
+                .target(serverURL).path("api/poll/add-player-waiting-room")
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .post(Entity.entity(player, APPLICATION_JSON), Player.class);

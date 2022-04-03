@@ -96,7 +96,7 @@ public class UsernameScreenCtrl {
             //send player to multiplayer game object
             Player newPlayer = server.addPlayerWaitingRoom(new Player(inputUsernameField.getText()));
             // create a multiplayer game on the client side
-            mainCtrl.newPrivateMultiPlayerGame();
+            mainCtrl.newPrivateMultiPlayerGame(server.getPlayersInWaitingRoom());
             mainCtrl.setPlayerUsername(newPlayer.getName());
 
             if(newPlayer == null){

@@ -3,7 +3,9 @@ package client.scenes;
 import client.SinglePlayerGame;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import commons.GameUpdatesPacket;
 import commons.MultiPlayerGame;
+import commons.Player;
 import commons.questions.ComparativeQuestion;
 import commons.questions.EqualityQuestion;
 import commons.questions.EstimationQuestion;
@@ -21,6 +23,8 @@ import javafx.stage.WindowEvent;
 import javafx.util.Pair;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 public class MainCtrl {
 
@@ -70,7 +74,11 @@ public class MainCtrl {
     // multi player game variables
     @Getter @Setter
     private String playerUsername;
+    @Getter @Setter
     private MultiPlayerGame multiPlayerGame;
+    // default game packet used in the waiting room
+    @Getter @Setter
+    private GameUpdatesPacket packet;
 
     /**
      * Creates a new MainCtrl with server
@@ -302,12 +310,11 @@ public class MainCtrl {
 
     /**
      * upon entering the waiting room the game will create an instance of a multiplayer game for each player
-     * and assign the player as the owner.
-     * @param player
      */
-    public void newPrivateMultiPlayerGame(){
+    public void newPrivateMultiPlayerGame(List<Player> players){
         try {
-            multiPlayerGame = new MultiPlayerGame();
+            multiPlayerGame = new MultiPlayerGame(players);
+            packet = new GameUpdatesPacket(multiPlayerGame.getPlayers().hashCode(), "WAITINGROOM", -1);
         } catch(Exception e){
             e.printStackTrace();
             showPopup("Connection failed");

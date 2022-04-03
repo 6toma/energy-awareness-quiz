@@ -65,7 +65,7 @@ public class WaitingRoomController {
      * @return The player is added iff the username is unique
      *         otherwise return null which means that a player with such username exists
      */
-    @PostMapping(path = {"player"})
+    /*@PostMapping(path = {"player"})
     public ResponseEntity<Player> isValidPlayer(@RequestBody Player player) {
         if(player == null) {
             return ResponseEntity.ok(null);
@@ -80,7 +80,7 @@ public class WaitingRoomController {
         System.out.println("Player added");
 
         return ResponseEntity.ok(player);
-    }
+    }*/
 
     /**
      * Endpoint for checking whether a player with a username already exists
