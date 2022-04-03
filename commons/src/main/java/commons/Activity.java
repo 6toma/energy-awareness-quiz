@@ -40,10 +40,11 @@ public class Activity {
 
     /**
      * Constructor with all parameters except ID
-     * @param image_path path of the image
-     * @param title Activity text used in questions
+     *
+     * @param image_path        path of the image
+     * @param title             Activity text used in questions
      * @param consumption_in_wh Consumption in Wh
-     * @param source Source of the activity consumption
+     * @param source            Source of the activity consumption
      */
     public Activity(String image_path, String title, Long consumption_in_wh, String source) {
         this.image_path = image_path;
@@ -54,11 +55,12 @@ public class Activity {
 
     /**
      * Constructor with all parameters
-     * @param id ID of the activity in the database
-     * @param image_path path of the image
-     * @param title Activity text used in questions
+     *
+     * @param id                ID of the activity in the database
+     * @param image_path        path of the image
+     * @param title             Activity text used in questions
      * @param consumption_in_wh Consumption in Wh
-     * @param source Source of the activity consumption
+     * @param source            Source of the activity consumption
      */
     public Activity(String id, String image_path, String title, Long consumption_in_wh, String source) {
         this.id = id;
@@ -75,8 +77,8 @@ public class Activity {
      *
      * @param imageFile image file to use.
      */
-    public void initializeImage(File imageFile){
-        try{
+    public void initializeImage(File imageFile) {
+        try {
             // Reads the image from the file to a BufferedImage
             BufferedImage img = ImageIO.read(imageFile);
             // Creates a new ByteArrayOutputStream
@@ -84,7 +86,7 @@ public class Activity {
             // Writes the image to the output stream. Sending the image gives an error (because it's inefficient and shouldn't be done)
             ImageIO.write(img, "png", outputStream); // jpg would be faster but png supports transparency
             this.image = outputStream.toByteArray();
-        } catch (IOException | IllegalArgumentException e){ // Catches an error if an image couldn't be found
+        } catch (IOException | IllegalArgumentException e) { // Catches an error if an image couldn't be found
             e.printStackTrace();
             System.err.println("Couldn't find picture at " + imageFile.toString());
             this.image = null;

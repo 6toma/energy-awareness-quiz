@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import java.lang.String?>
+<StackPane xmlns="http://javafx.com/javafx"
+           xmlns:fx="http://javafx.com/fxml"
+           fx:controller="client.scenes.AdminScreenCtrl">
+
+    <StackPane styleClass="padding">
+        <Button fx:id="back" onAction="#goToHomeScreen" text="Back" StackPane.alignment="TOP_LEFT">
+            <styleClass>
+                <String fx:value="exit"/>
+                <String fx:value="rounded"/>
+            </styleClass>
+        </Button>
+    </StackPane>
+
+    <VBox alignment="CENTER" maxWidth="900.0" prefHeight="1080.0" prefWidth="1000.0" StackPane.alignment="CENTER">
+        <Region maxHeight="20" minHeight="20" VBox.vgrow="ALWAYS"/>
+        <Label alignment="CENTER" prefHeight="80.0" prefWidth="386.0" styleClass="wait" text="Admin Panel"/>
+        <Region maxHeight="20" minHeight="20" VBox.vgrow="ALWAYS"/>
+        <TableView fx:id="playerTable" focusTraversable="false" prefHeight="800.0" prefWidth="1000.0">
+            <columns>
+                <TableColumn fx:id="position" editable="false" minWidth="-1.0" prefWidth="117.0" sortable="false"
+                             text="Activity"/>
+            </columns>
+        </TableView>
+        <Region maxHeight="20" minHeight="20" VBox.vgrow="ALWAYS"/>
+        <Button prefHeight="76.0" prefWidth="350.0" text="Import">
+            <styleClass>
+                <String fx:value="rounded"/>
+                <String fx:value="functionality-button"/>
+            </styleClass>
+        </Button>
+        <Region maxHeight="20" minHeight="20" styleClass="margin" VBox.vgrow="ALWAYS"/>
+    </VBox>
+
+</StackPane>
