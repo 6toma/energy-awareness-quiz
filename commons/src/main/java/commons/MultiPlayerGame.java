@@ -15,6 +15,9 @@ import java.util.Objects;
 public class MultiPlayerGame {
 
     private int gameID;
+    // this is an instance of a player to whom the game belongs (on the client side, every player will get one)
+    // this will be used to remove the players from the player list
+    private Player owner;
     private List<Player> players;
     private List<Question> questions;
     private int questionNumber = 1;
@@ -28,6 +31,14 @@ public class MultiPlayerGame {
      * Used by Jackson to initialize object from JSON
      */
     public MultiPlayerGame() {}
+
+    /**
+     * constructor for creating a multiplayer game for each player
+     * @param owner
+     */
+    public MultiPlayerGame(Player owner){
+        this.owner = owner;
+    }
 
     /**
      * Creates a new game with specified amount of questions

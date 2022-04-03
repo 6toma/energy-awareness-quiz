@@ -3,6 +3,8 @@ package client.scenes;
 import client.SinglePlayerGame;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import commons.MultiPlayerGame;
+import commons.Player;
 import commons.questions.ComparativeQuestion;
 import commons.questions.EqualityQuestion;
 import commons.questions.EstimationQuestion;
@@ -64,6 +66,10 @@ public class MainCtrl {
     @Getter
     private SinglePlayerGame singlePlayerGame;
     private int singlePlayerGameQuestions = 5;
+
+    // multi player game variables
+    @Getter
+    private MultiPlayerGame multiPlayerGame;
 
     /**
      * Creates a new MainCtrl with server
@@ -291,6 +297,21 @@ public class MainCtrl {
      */
     public void resetUserText() {
         usernameScreenCtrl.resetUserText();
+    }
+
+    /**
+     * upon entering the waiting room the game will create an instance of a multiplayer game for each player
+     * and assign the player as the owner.
+     * @param player
+     */
+    public void newPrivateMultiPlayerGame(){
+        try {
+            multiPlayerGame = new MultiPlayerGame();
+        } catch(Exception e){
+            e.printStackTrace();
+            showPopup("Connection failed");
+        }
+
     }
 
     /**

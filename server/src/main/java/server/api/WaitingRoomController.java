@@ -41,6 +41,25 @@ public class WaitingRoomController {
     }
 
     /**
+     * Endpoint for a list of players from a waiting room
+     * @return The list of players currently in the waiting room
+     */
+    @GetMapping(path = {"all-players"})
+    public ResponseEntity<List<Player>> getWaitingRoomPlayers() {
+        return ResponseEntity.ok(waitingRoom.getPlayers());
+    }
+
+    /**
+     * Endpoint for removing a player from a waiting room
+     * @return True if the player was removed successfully
+     *         otherwise return false
+     */
+    @PostMapping(path = {"remove-player"})
+    public ResponseEntity<Boolean> removePlayerFromWaitingRoom(@RequestBody Player player) {
+        return ResponseEntity.ok(waitingRoom.removePlayerFromWaitingRoom(player));
+    }
+
+    /**
      * Endpoint for adding a player to a waiting room
      * @return The player is added iff the username is unique
      *         otherwise return null which means that a player with such username exists
@@ -126,16 +145,12 @@ public class WaitingRoomController {
         // To add more question types increment numberOfQuestions and add another if statement
         // e.g. else if(randomInt % numberOfQuestions == 1) return ...
         if (randomInt % numberOfQuestions == 0) {
-            //System.out.println("comparative");
             return getRandomComparative();
         } else if(randomInt % numberOfQuestions == 1) {
-            //System.out.println("estiamtion");
             return getRandomEstimation();
         } else if(randomInt % numberOfQuestions == 2){
-            //System.out.println("MC");
             return getRandomMCQuestion();
         } else {
-            //System.out.println("equality");
             return getRandomEquality();
         }
     }
