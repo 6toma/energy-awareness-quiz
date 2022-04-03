@@ -4,13 +4,11 @@ import commons.GameUpdatesPacket;
 import commons.MultiPlayerGame;
 import commons.Player;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
 
-import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -149,6 +147,7 @@ public class LongPollController {
      * @return the same thing as input
      * @throws InterruptedException interrupts something
      */
+    /*
     private ResponseEntity<List<Integer>> keepPolling(Integer input) throws InterruptedException {
         Thread.sleep(5000);
         HttpHeaders headers = new HttpHeaders();
@@ -156,5 +155,6 @@ public class LongPollController {
         headers.setLocation(URI.create("/getMessages?id=" + input + "&type=" + input));
         return new ResponseEntity<>(headers, HttpStatus.TEMPORARY_REDIRECT);
     }
+     */
 
 }

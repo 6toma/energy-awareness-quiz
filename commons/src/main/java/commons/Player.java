@@ -1,18 +1,19 @@
 package commons;
 
-import lombok.EqualsAndHashCode;
+//import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 /**
  * Activity class that is stored in the database
  *
  * Stores an activities
  */
-@ToString @EqualsAndHashCode
+@ToString
 @Entity
 public class Player implements Comparable{
 
@@ -125,5 +126,18 @@ public class Player implements Comparable{
      * Increments streak
      */
     public void incrementStreak() { streak++;}
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Player)) return false;
+        Player player = (Player) o;
+        return Objects.equals(id, player.id) && Objects.equals(name, player.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name);
+    }
 }
 
