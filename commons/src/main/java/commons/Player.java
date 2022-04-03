@@ -137,7 +137,7 @@ public class Player implements Comparable{
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name);
+        return Objects.hash(id, name, score, streak);
     }
 }
 
