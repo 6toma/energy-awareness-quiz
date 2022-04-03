@@ -74,12 +74,6 @@ public class PlayerTest {
     /**
      * Checks if object is not equal to different  score
      */
-    @Test
-    public void equalsTest4() {
-        Player player1 = new Player("p1", 1200);
-        Player player2 = new Player("p1", 2000);
-        assertNotEquals(player1, player2);
-    }
 
     /**
      * Checks if object is not equal to different name and score
@@ -148,15 +142,6 @@ public class PlayerTest {
         assertEquals(player, player);
     }
 
-    /**
-     * Checks if object is not equal to different object
-     */
-    @Test
-    public void equalsTest12() {
-        Player player1 = new Player("p1", 1200);
-        Player player2 = new Player("p1");
-        assertNotEquals(player1, player2);
-    }
 
     /**
      * Checks if object is not equal to different object
@@ -293,7 +278,7 @@ public class PlayerTest {
     @Test
     public void toStringTest1() {
         Player player = new Player(1L, "p1", 1200);
-        assertEquals("Player(id=1, name=p1, score=1200, streak=0)", player.toString());
+        assertEquals("Player(id=1, name=p1, score=1200, streak=0, scoreGained=0)", player.toString());
     }
 
     /**
@@ -302,7 +287,7 @@ public class PlayerTest {
     @Test
     public void toStringTest2() {
         Player player = new Player("p1", 1200);
-        assertEquals("Player(id=null, name=p1, score=1200, streak=0)", player.toString());
+        assertEquals("Player(id=null, name=p1, score=1200, streak=0, scoreGained=0)", player.toString());
     }
 
     /**
@@ -311,7 +296,7 @@ public class PlayerTest {
     @Test
     public void toStringTest3() {
         Player player = new Player("p1");
-        assertEquals("Player(id=null, name=p1, score=0, streak=0)", player.toString());
+        assertEquals("Player(id=null, name=p1, score=0, streak=0, scoreGained=0)", player.toString());
     }
 
     /**
@@ -320,7 +305,7 @@ public class PlayerTest {
     @Test
     public void toStringTest4() {
         Player player = new Player();
-        assertEquals("Player(id=null, name=null, score=null, streak=0)", player.toString());
+        assertEquals("Player(id=null, name=null, score=null, streak=0, scoreGained=0)", player.toString());
     }
 
     @Test

@@ -38,6 +38,25 @@ public class QuestionController {
         this.repo = repo;
     }
 
+    //    /**
+    //     * A endpoint for getting a list of unique random questions
+    //     * @return a list of questions to be used by the waiting room
+    //     */
+    //    @GetMapping(path = {"list"})
+    //    public ResponseEntity<List<Question>> getListOfQuestions() {
+    //        List<Question> questions = new ArrayList<>();
+    //        int count = 0;
+    //        while(count < Config.numberOfQuestions){
+    //            Question q = (Question) getRandomQuestion();
+    //            if(!questions.contains(q)){
+    //                questions.add(q);
+    //                count++;
+    //            }
+    //        }
+    //        return ResponseEntity.ok(questions);
+    //    }
+
+
     /**
      * Generates a random number, uses it to get a random question type
      *
@@ -45,6 +64,8 @@ public class QuestionController {
      * - ResponseEntity precondition failed
      * - ComparativeQuestion
      * - EstimationQuestion
+     * - MC question
+     * - Equality question
      */
     @GetMapping(path = {"/random", "/random/"})
     public ResponseEntity<Question> getRandomQuestion() {

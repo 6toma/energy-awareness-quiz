@@ -27,6 +27,7 @@ public class ComparativeQuestionScreenCtrl {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+    private boolean multiplayer;
 
     /**
      * Integer to set the question mode
@@ -108,6 +109,14 @@ public class ComparativeQuestionScreenCtrl {
     public ComparativeQuestionScreenCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
+    }
+
+    /**
+     * sets multiplayer flag
+     * @param v multiplayer bool
+     */
+    public void setMultiplayer(boolean v){
+        this.multiplayer = v;
     }
 
     /**
@@ -331,7 +340,11 @@ public class ComparativeQuestionScreenCtrl {
         // This creates another timeline for the timer for the answerTime. See countdown() for a more in-depth breakdown
         KeyFrame start = new KeyFrame(Duration.ZERO, new KeyValue(progressBar.progressProperty(), 0));
         KeyFrame aEnd = new KeyFrame(Duration.seconds(answerTime), e -> {
-            endQuestion(); // end the question when the animation is done
+            if(multiplayer){
+                reset();
+            } else {
+                endQuestion(); // end the question when the animation is done
+            }
         }, new KeyValue(progressBar.progressProperty(), 1));
         answerTimer = new Timeline(start, aEnd);
         answerTimer.setCycleCount(1);
@@ -358,9 +371,12 @@ public class ComparativeQuestionScreenCtrl {
             correctAnswer = equalityQuestion.getCorrect_answer();
         }
 
-        // calculate points to be added
-        pointsGainedForQuestion = mainCtrl.getSinglePlayerGame().addPoints(timeWhenAnswered, additionalPoints * 1.0);
-        additionalPoints = 1.0;
+        if (multiplayer) {
+            sendScoreMultiplayer(timeWhenAnswered);
+        }else {
+            pointsGainedForQuestion = mainCtrl.getSinglePlayerGame().addPoints(timeWhenAnswered, additionalPoints * 1.0);
+            additionalPoints = 1.0;
+        }
 
         // highlight correct answer
         if(correctAnswer == 0){
@@ -399,6 +415,26 @@ public class ComparativeQuestionScreenCtrl {
                     + " - " + this.equalityQuestion.getActivities().get(2).getConsumption_in_wh()
                     + " Wh");
         }
+    }
+
+    /**
+     * updates the score of the player in the server
+     * @param time time of answer
+     */
+    public void sendScoreMultiplayer(int time){
+        double guessQuestionRate=1.0;
+        if(time == -1){
+            mainCtrl.getPlayer().resetStreak();
+            mainCtrl.getPlayer().setScoreGained(0);
+        } else {
+            mainCtrl.getPlayer().incrementStreak();
+            int currentScore = mainCtrl.getPlayer().getScore();
+            long points = Math.round(((100.0 +mainCtrl.getPlayer().getStreak()) / 100.0) * (1050 - 5 * time));
+            int pointsToBeAdded = (int) Math.round(guessQuestionRate * points);
+            mainCtrl.getPlayer().setScoreGained(pointsToBeAdded);
+            mainCtrl.getPlayer().setScore(currentScore + pointsToBeAdded);
+        }
+        server.postScore(mainCtrl.getPlayer());
     }
 
     // reset attributes to default after each question

@@ -15,6 +15,7 @@
  */
 package client.utils;
 
+import commons.GameUpdatesPacket;
 import commons.MultiPlayerGame;
 import commons.Player;
 import commons.questions.Question;
@@ -116,7 +117,7 @@ public class ServerUtils {
      * and then based on that change number we send another
      * request but for the body fo the change
      */
-    public void registerUpdates(Consumer<Integer> consumer) {
+    public void registerUpdates(Consumer<GameUpdatesPacket> consumer) {
         EXEC.submit(() -> {
             while (!Thread.interrupted()) {
                 var res = ClientBuilder.newClient(new ClientConfig())
@@ -125,9 +126,10 @@ public class ServerUtils {
                         .accept(APPLICATION_JSON) //
                         .get(Response.class);
                 if (res.getStatus() == 204){
+                    System.out.println();
                     continue;
                 }
-                var c = res.readEntity(Integer.class);
+                var c = res.readEntity(GameUpdatesPacket.class);
                 consumer.accept(c);
             }
         });
@@ -211,15 +213,60 @@ public class ServerUtils {
     }
 
     /**
-     * Adds player to the Multiplayer game
-     * @param player player to add
+     * Checks whether a username is valid i.e. has not been previously used
+     * @param username of a player to be added
+     * @return True iff can be added else return False
+     */
+    public Boolean checkValidityOfUsername(String username){
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(serverURL).path("api/waiting-room/username")
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .post(Entity.entity(username, APPLICATION_JSON), Boolean.class);
+    }
+
+    /**
+     * Adds player to the WaitingRoom
+     * This is needed because the user can change the name in the input field
+     * and click continue and without that there could be multiple players with the same name
+     * @param player player to be added
      * @return player that was added
      */
-    public Player addPlayerMultiplayer(Player player){
+    public Player addPlayerWaitingRoom(Player player){
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(serverURL).path("api/poll/add-player")
+                .target(serverURL).path("api/waiting-room/player")
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .post(Entity.entity(player, APPLICATION_JSON), Player.class);
     }
+
+    /**
+     * checks whether a list of questions has been generated,
+     * generates a new list if the list is empty
+     * @return player that was added
+     */
+    public Boolean areQuestionsGenerated(){
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(serverURL).path("api/waiting-room/are-generated")
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<>() {});
+    }
+
+
+    //TODO make it work
+    /**
+     * Removes a player from waiting room
+     * @param player player to be removed
+     * @return player that was removed
+     */
+    public Player removePlayerWaitingRoom(Player player){
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(serverURL).path("api/waiting-room/username")
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .post(Entity.entity(player, APPLICATION_JSON), Player.class);
+    }
+
+
 }

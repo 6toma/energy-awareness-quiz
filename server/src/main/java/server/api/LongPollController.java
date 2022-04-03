@@ -1,15 +1,14 @@
 package server.api;
 
+import commons.GameUpdatesPacket;
 import commons.MultiPlayerGame;
 import commons.Player;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
 
-import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -83,7 +82,7 @@ public class LongPollController {
      */
     @PostMapping(path={"add-player"})
     public ResponseEntity<Player> postPlayers(@RequestBody Player player){
-        listeners.forEach((k,l) -> l.accept(1));
+        listeners.forEach((k,l) -> l.accept(new GameUpdatesPacket()));
         List<Player> players = multiplayerGame.getPlayers();
         players.add(player);
         return ResponseEntity.ok(player);
@@ -107,15 +106,15 @@ public class LongPollController {
         return ResponseEntity.ok(player);
     }
 
-    private Map<Object, Consumer<Integer>> listeners = new HashMap<>();
+    private Map<Object, Consumer<GameUpdatesPacket>> listeners = new HashMap<>();
     /**
      * Gets a number that corresponds to what has changed
      * @return Integer or 204 error
      */
     @GetMapping("/update")
-    public DeferredResult<ResponseEntity<Integer>> getUpdate(){
+    public DeferredResult<ResponseEntity<GameUpdatesPacket>> getUpdate(){
         var noContent = ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        var res = new DeferredResult<ResponseEntity<Integer>>(5000L,noContent);
+        var res = new DeferredResult<ResponseEntity<GameUpdatesPacket>>(5000L,noContent);
         var key = new Object();
         listeners.put(key,c ->{
             res.setResult(ResponseEntity.ok(c));
@@ -135,11 +134,11 @@ public class LongPollController {
      * @param change number whose bits represent change
      * @return an Integer that describes the change
      */
-    @PostMapping(path = {"give-update/{change}"})
+    /*@PostMapping(path = {"give-update/{change}"})
     public ResponseEntity<Integer> giveUpdate(@PathVariable("change") Integer change){
         listeners.forEach((k,l) -> l.accept(change));
         return ResponseEntity.ok(change);
-    }
+    }*/
 
     /**
      * Cool piece of code found, it redirects so it keeps polling
@@ -148,6 +147,7 @@ public class LongPollController {
      * @return the same thing as input
      * @throws InterruptedException interrupts something
      */
+    /*
     private ResponseEntity<List<Integer>> keepPolling(Integer input) throws InterruptedException {
         Thread.sleep(5000);
         HttpHeaders headers = new HttpHeaders();
@@ -155,5 +155,6 @@ public class LongPollController {
         headers.setLocation(URI.create("/getMessages?id=" + input + "&type=" + input));
         return new ResponseEntity<>(headers, HttpStatus.TEMPORARY_REDIRECT);
     }
+     */
 
 }
