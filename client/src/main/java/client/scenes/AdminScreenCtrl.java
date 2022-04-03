@@ -89,7 +89,7 @@ public class AdminScreenCtrl implements Initializable {
             public void run() {
                 refresh();
             }
-        }, 0, 1000);
+        }, 0, 60000);
     }
 
     /**
@@ -110,6 +110,9 @@ public class AdminScreenCtrl implements Initializable {
         }
     }
 
+    /**
+     *
+     */
     public void addActivity() {
         Activity activity = checkTextFields();
         if (activity != null) {
@@ -121,6 +124,9 @@ public class AdminScreenCtrl implements Initializable {
         }
     }
 
+    /**
+     *
+     */
     public void deleteActivity() {
         Activity toBeDeleted = activityTable.getSelectionModel().getSelectedItem();
         if (toBeDeleted == null) {
@@ -141,6 +147,9 @@ public class AdminScreenCtrl implements Initializable {
         refresh();
     }
 
+    /**
+     *
+     */
     public void editActivity() {
         Activity toBeEdited = activityTable.getSelectionModel().getSelectedItem();
         if (toBeEdited == null) {
@@ -156,6 +165,9 @@ public class AdminScreenCtrl implements Initializable {
         server.deleteActivity(toBeEdited);
     }
 
+    /**
+     *
+     */
     public void commitEdit() {
         Activity toBeAdded = checkTextFields();
         if (toBeAdded != null) {
@@ -165,6 +177,9 @@ public class AdminScreenCtrl implements Initializable {
     }
 
 
+    /**
+     * @return
+     */
     @SuppressWarnings("checkstyle:EqualsAvoidNull")
     public Activity checkTextFields() {
         String id = inputActivityID.getText();
@@ -191,6 +206,9 @@ public class AdminScreenCtrl implements Initializable {
         }
     }
 
+    /**
+     *
+     */
     public void clearFields() {
         inputActivityID.clear();
         inputActivityImagePath.clear();
