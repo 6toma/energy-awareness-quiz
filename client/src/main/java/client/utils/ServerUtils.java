@@ -298,6 +298,12 @@ public class ServerUtils {
                 });
     }
 
+    /**
+     * Deletes activities (used in admin screen)
+     *
+     * @param activity activity to be deleted
+     * @return
+     */
     public Activity deleteActivity(Activity activity) {
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(serverURL).path("api/activities/delete/{id}")
@@ -306,6 +312,12 @@ public class ServerUtils {
                 .post(Entity.entity(activity, APPLICATION_JSON), Activity.class);
     }
 
+    /**
+     * Adds an Activity (used in admin screen)
+     *
+     * @param activity activity to be added
+     * @return
+     */
     public Activity addActivity(Activity activity) {
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(serverURL).path("api/activities/add-one")

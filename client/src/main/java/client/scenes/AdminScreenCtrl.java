@@ -111,7 +111,7 @@ public class AdminScreenCtrl implements Initializable {
     }
 
     /**
-     *
+     * Adds activity to database
      */
     public void addActivity() {
         Activity activity = checkTextFields();
@@ -125,7 +125,7 @@ public class AdminScreenCtrl implements Initializable {
     }
 
     /**
-     *
+     * Deletes activity from a database
      */
     public void deleteActivity() {
         Activity toBeDeleted = activityTable.getSelectionModel().getSelectedItem();
@@ -148,7 +148,7 @@ public class AdminScreenCtrl implements Initializable {
     }
 
     /**
-     *
+     * Edits activity from database
      */
     public void editActivity() {
         Activity toBeEdited = activityTable.getSelectionModel().getSelectedItem();
@@ -166,7 +166,7 @@ public class AdminScreenCtrl implements Initializable {
     }
 
     /**
-     *
+     * Commits changes to server
      */
     public void commitEdit() {
         Activity toBeAdded = checkTextFields();
@@ -178,16 +178,17 @@ public class AdminScreenCtrl implements Initializable {
 
 
     /**
+     * Checks whether text fields are filled
+     *
      * @return
      */
-    @SuppressWarnings("checkstyle:EqualsAvoidNull")
     public Activity checkTextFields() {
         String id = inputActivityID.getText();
         String path = inputActivityImagePath.getText();
         String title = inputActivityTitle.getText();
         String source = inputActivitySource.getText();
-        if (id.equals("") || path.equals("") || title.equals("")
-                || inputActivityConsumption.getText().equals("") || source.equals("")) {
+        if (id.length() == 0 || path.length() == 0 || title.length() == 0
+                || inputActivityConsumption.getText().length() == 0 || source.length() == 0) {
             Alert emptyFields = new Alert(Alert.AlertType.ERROR);
             emptyFields.setHeaderText("Please fill all the text fields with corresponding data.");
             emptyFields.showAndWait();
@@ -207,7 +208,7 @@ public class AdminScreenCtrl implements Initializable {
     }
 
     /**
-     *
+     * Clears text fields after them being manipulated
      */
     public void clearFields() {
         inputActivityID.clear();
