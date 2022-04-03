@@ -45,7 +45,7 @@ public class WaitingRoomCtrl implements Initializable {
      * Goes back to the home screen
      */
     public void back() {
-        server.removePlayerWaitingRoom(mainCtrl.getMultiPlayerGame().getOwner());
+        server.removePlayerWaitingRoom(new Player(mainCtrl.getPlayerUsername()));
         mainCtrl.resetUserText();
         mainCtrl.showHomeScreen();
         stop();
@@ -57,7 +57,7 @@ public class WaitingRoomCtrl implements Initializable {
     public void startListening(){
         server.registerUpdates(c -> {
             System.out.println("object identity: " + c + " has changed");
-            System.out.println(server.getPlayersMultiplayer());
+            System.out.println(server.getPlayersWaitingRoom());
         });
     }
 
@@ -117,7 +117,7 @@ public class WaitingRoomCtrl implements Initializable {
             // because of the getLeaderPlayers(10) method, the
             // leaderboard needs no sorting, as the list of players
             // is returned already sorted through the query
-            List<Player> playerList = server.getPlayersMultiplayer();
+            List<Player> playerList = server.getPlayersWaitingRoom();
             players = FXCollections.observableList(playerList);
             playerTable.setItems(players);
         } catch (Exception e) {

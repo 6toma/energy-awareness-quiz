@@ -203,9 +203,9 @@ public class ServerUtils {
      * on the leaderboard
      * @return list of players
      */
-    public List<Player> getPlayersMultiplayer(){
+    public List<Player> getPlayersWaitingRoom(){
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(serverURL).path("api/poll/players")
+                .target(serverURL).path("api/waiting-room/all-players")
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<>() {

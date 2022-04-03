@@ -56,6 +56,7 @@ public class WaitingRoomController {
      */
     @PostMapping(path = {"remove-player"})
     public ResponseEntity<Boolean> removePlayerFromWaitingRoom(@RequestBody Player player) {
+        System.out.println("Player has been removed");
         return ResponseEntity.ok(waitingRoom.removePlayerFromWaitingRoom(player));
     }
 
@@ -71,12 +72,13 @@ public class WaitingRoomController {
         }
         for(var p : waitingRoom.getPlayers()){
             if(p.getName().equals(player.getName())) {
-                System.out.println("bad player");
+                //System.out.println("bad player");
                 return ResponseEntity.ok(null);
             }
         }
         waitingRoom.addPlayerToWaitingRoom(player);
-        System.out.println("good player");
+        System.out.println("Player added");
+
         return ResponseEntity.ok(player);
     }
 
@@ -92,11 +94,11 @@ public class WaitingRoomController {
         }
         for(var p : waitingRoom.getPlayers()){
             if(p.getName().equals(username)) {
-                System.out.println("bad username");
+                //System.out.println("bad username");
                 return ResponseEntity.ok(false);
             }
         }
-        System.out.println("good username");
+        //System.out.println("good username");
         return ResponseEntity.ok(true);
     }
 

@@ -97,7 +97,7 @@ public class UsernameScreenCtrl {
             Player newPlayer = server.addPlayerWaitingRoom(new Player(inputUsernameField.getText()));
             // create a multiplayer game on the client side
             mainCtrl.newPrivateMultiPlayerGame();
-            mainCtrl.getMultiPlayerGame().setOwner(newPlayer);
+            mainCtrl.setPlayerUsername(newPlayer.getName());
 
             if(newPlayer == null){
                 usernameField.setText("Please select a different username!");
@@ -106,9 +106,9 @@ public class UsernameScreenCtrl {
                 var exec = Executors.newSingleThreadExecutor();
                 exec.submit(() -> {
                     if(!server.areQuestionsGenerated()){
-                        System.out.println("questions are not generated I will generate them");;
+                        System.out.println("I am generating the questions");;
                     }
-                    else System.out.println("questions are generated");
+                    else System.out.println("Questions have been already generated");
                 });
 
                 System.out.println(newPlayer);

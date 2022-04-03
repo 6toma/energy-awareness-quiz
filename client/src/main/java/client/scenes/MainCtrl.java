@@ -20,6 +20,7 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Pair;
 import lombok.Getter;
+import lombok.Setter;
 
 public class MainCtrl {
 
@@ -67,7 +68,8 @@ public class MainCtrl {
     private int singlePlayerGameQuestions = 5;
 
     // multi player game variables
-    @Getter
+    @Getter @Setter
+    private String playerUsername;
     private MultiPlayerGame multiPlayerGame;
 
     /**
