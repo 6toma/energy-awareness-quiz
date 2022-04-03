@@ -92,4 +92,6 @@ public class Activity {
             this.image = null;
         }
     }
+
+
 }

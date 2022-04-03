@@ -2,12 +2,12 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import java.lang.String?>
+<?import java.lang.*?>
 <StackPane xmlns="http://javafx.com/javafx"
            xmlns:fx="http://javafx.com/fxml"
            fx:controller="client.scenes.AdminScreenCtrl">
 
-    <StackPane styleClass="padding">
+    <StackPane styleClass="padding" StackPane.alignment="TOP_CENTER">
         <Button fx:id="back" onAction="#goToHomeScreen" text="Back" StackPane.alignment="TOP_LEFT">
             <styleClass>
                 <String fx:value="exit"/>
@@ -16,24 +16,66 @@
         </Button>
     </StackPane>
 
-    <VBox alignment="CENTER" maxWidth="900.0" prefHeight="1080.0" prefWidth="1000.0" StackPane.alignment="CENTER">
-        <Region maxHeight="20" minHeight="20" VBox.vgrow="ALWAYS"/>
-        <Label alignment="CENTER" prefHeight="80.0" prefWidth="386.0" styleClass="wait" text="Admin Panel"/>
-        <Region maxHeight="20" minHeight="20" VBox.vgrow="ALWAYS"/>
-        <TableView fx:id="playerTable" focusTraversable="false" prefHeight="800.0" prefWidth="1000.0">
-            <columns>
-                <TableColumn fx:id="position" editable="false" minWidth="-1.0" prefWidth="117.0" sortable="false"
-                             text="Activity"/>
-            </columns>
-        </TableView>
-        <Region maxHeight="20" minHeight="20" VBox.vgrow="ALWAYS"/>
-        <Button prefHeight="76.0" prefWidth="350.0" text="Import">
+    <HBox StackPane.alignment="CENTER" maxWidth="1800.0" prefHeight="700.0" prefWidth="1800.0" maxHeight="700.0">
+        <Region maxHeight="20" minHeight="20" minWidth="50" VBox.vgrow="ALWAYS"/>
+        <VBox alignment="CENTER_LEFT" maxWidth="900.0" prefHeight="900.0" prefWidth="900.0">
+            <TableView fx:id="activityTable" prefHeight="600.0" prefWidth="868.0">
+                <columns>
+                    <TableColumn fx:id="id" minWidth="-1.0" prefWidth="125.0" text="id"/>
+                    <TableColumn fx:id="title" minWidth="-1.0" prefWidth="200.0" text="title"/>
+                    <TableColumn fx:id="source" minWidth="-1.0" prefWidth="200.0" text="source"/>
+                    <TableColumn fx:id="consumption" minWidth="-1.0" prefWidth="100.0" text="consumption"/>
+                    <TableColumn fx:id="image_path" minWidth="-1.0" prefWidth="200.0" text="image_path"/>
+                </columns>
+            </TableView>
+        </VBox>
+
+        <Region maxHeight="20" minHeight="20" minWidth="150" styleClass="margin" VBox.vgrow="ALWAYS"/>
+        <VBox alignment="CENTER_RIGHT" maxWidth="300.0" prefHeight="600.0" prefWidth="300.0" maxHeight="600.0">
+            <TextField fx:id="inputActivityID" prefHeight="50.0" prefWidth="200.0" promptText="Input ID"
+                       styleClass="rounded"/>
+            <Region maxHeight="20" minHeight="20" minWidth="30.0" styleClass="margin" VBox.vgrow="ALWAYS"/>
+            <TextField fx:id="inputActivityTitle" prefHeight="50.0" prefWidth="200.0" promptText="Input title"
+                       styleClass="rounded"/>
+            <Region maxHeight="20" minHeight="20" minWidth="30" styleClass="margin" VBox.vgrow="ALWAYS"/>
+            <TextField fx:id="inputActivitySource" prefHeight="50.0" prefWidth="200.0" promptText="Input soure"
+                       styleClass="rounded"/>
+            <Region maxHeight="20" minHeight="20" minWidth="30" styleClass="margin" VBox.vgrow="ALWAYS"/>
+            <TextField fx:id="inputActivityConsumption" prefHeight="50.0" prefWidth="200.0"
+                       promptText="Input consumption"
+                       styleClass="rounded"/>
+            <Region maxHeight="20" minHeight="20" minWidth="30" styleClass="margin" VBox.vgrow="ALWAYS"/>
+            <TextField fx:id="inputActivityImagePath" prefHeight="50.0" prefWidth="200.0" promptText="Input image path"
+                       styleClass="rounded"/>
+
+        </VBox>
+    </HBox>
+    <Region maxHeight="20" minHeight="20" styleClass="margin" VBox.vgrow="ALWAYS"/>
+    <HBox StackPane.alignment="BOTTOM_CENTER" styleClass="padding" maxHeight="100.0" prefHeight="100.0">
+        <Button fx:id="edit" onAction="#editActivity" text="Edit" alignment="BOTTOM_RIGHT">
             <styleClass>
                 <String fx:value="rounded"/>
-                <String fx:value="functionality-button"/>
             </styleClass>
         </Button>
-        <Region maxHeight="20" minHeight="20" styleClass="margin" VBox.vgrow="ALWAYS"/>
-    </VBox>
+        <Region maxHeight="20" minHeight="20" minWidth="20.0" styleClass="margin" VBox.vgrow="ALWAYS"/>
+        <Button fx:id="delete" onAction="#deleteActivity" text="Delete" alignment="BOTTOM_CENTER">
+            <styleClass>
+                <String fx:value="rounded"/>
+            </styleClass>
+        </Button>
+        <Region maxHeight="20" minHeight="20" minWidth="20.0" styleClass="margin" VBox.vgrow="ALWAYS"/>
+        <Button fx:id="add" onAction="#addActivity" text="Add" StackPane.alignment="BOTTOM_LEFT">
+            <styleClass>
+                <String fx:value="rounded"/>
+            </styleClass>
+        </Button>
+        <Region maxHeight="20" minHeight="20" minWidth="20.0" styleClass="margin" VBox.vgrow="ALWAYS"/>
+        <Button fx:id="commit" onAction="#commitEdit" text="Commit Edit" StackPane.alignment="BOTTOM_LEFT">
+            <styleClass>
+                <String fx:value="rounded"/>
+            </styleClass>
+        </Button>
+    </HBox>
+
 
 </StackPane>

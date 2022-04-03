@@ -277,6 +277,7 @@ public class MainCtrl {
      */
     public void showAdminScreen() {
         primaryStage.getScene().setRoot(adminScreenParent);
+        adminScreenCtrl.refresh();
         checkDarkMode();
     }
 

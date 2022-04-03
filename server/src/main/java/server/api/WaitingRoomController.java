@@ -7,9 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import server.Config;
 import server.database.ActivityRepository;
 import server.multiplayer.WaitingRoom;
-import server.Config;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -31,6 +31,7 @@ public class WaitingRoomController {
 
     /**
      * Creates a WaitingRoomController
+     *
      * @param waitingRoom injected instance of Waiting Room
      */
     @Autowired
@@ -42,16 +43,17 @@ public class WaitingRoomController {
 
     /**
      * Endpoint for adding a player to a waiting room
+     *
      * @return The player is added iff the username is unique
-     *         otherwise return null which means that a player with such username exists
+     * otherwise return null which means that a player with such username exists
      */
     @PostMapping(path = {"player"})
     public ResponseEntity<Player> isValidPlayer(@RequestBody Player player) {
-        if(player == null) {
+        if (player == null) {
             return ResponseEntity.ok(null);
         }
-        for(var p : waitingRoom.getPlayers()){
-            if(p.getName().equals(player.getName())) {
+        for (var p : waitingRoom.getPlayers()) {
+            if (p.getName().equals(player.getName())) {
                 System.out.println("bad player");
                 return ResponseEntity.ok(null);
             }
@@ -63,16 +65,17 @@ public class WaitingRoomController {
 
     /**
      * Endpoint for checking whether a player with a username already exists
+     *
      * @return The player added iff the username is unique
-     *         otherwise return null which means that a player with such username exists
+     * otherwise return null which means that a player with such username exists
      */
     @PostMapping(path = {"username"})
     public ResponseEntity<Boolean> isValidUsername(@RequestBody String username) {
-        if("".equals(username) || username == null) {
+        if ("".equals(username) || username == null) {
             return ResponseEntity.ok(false);
         }
-        for(var p : waitingRoom.getPlayers()){
-            if(p.getName().equals(username)) {
+        for (var p : waitingRoom.getPlayers()) {
+            if (p.getName().equals(username)) {
                 System.out.println("bad username");
                 return ResponseEntity.ok(false);
             }
@@ -83,17 +86,18 @@ public class WaitingRoomController {
 
     /**
      * endpoint for checking whether a list of questions has been genarated
+     *
      * @return true if the questions have already been generated
-     *         false if have not yet been generated
+     * false if have not yet been generated
      */
     @GetMapping(path = {"are-generated"})
     public ResponseEntity<Boolean> areQuestionsGenerated() {
-        if(waitingRoom.getQuestions().size() != Config.numberOfQuestions){
+        if (waitingRoom.getQuestions().size() != Config.numberOfQuestions) {
             System.out.println("NOT GENERATED");
             int count = Config.numberOfQuestions;
-            while(count > 0){
+            while (count > 0) {
                 boolean isAdded = waitingRoom.addQuestion((Question) getRandom().getBody());
-                if(isAdded) count--;
+                if (isAdded) count--;
             }
             return ResponseEntity.ok(false);
         }
@@ -102,8 +106,8 @@ public class WaitingRoomController {
     }
 
 
-
     // METHODS FROM QuestionController
+
     /**
      * Generates a random number, uses it to get a random question type
      *
@@ -123,10 +127,10 @@ public class WaitingRoomController {
         if (randomInt % numberOfQuestions == 0) {
             //System.out.println("comparative");
             return getRandomComparative();
-        } else if(randomInt % numberOfQuestions == 1) {
+        } else if (randomInt % numberOfQuestions == 1) {
             //System.out.println("estiamtion");
             return getRandomEstimation();
-        } else if(randomInt % numberOfQuestions == 2){
+        } else if (randomInt % numberOfQuestions == 2) {
             //System.out.println("MC");
             return getRandomMCQuestion();
         } else {
@@ -165,7 +169,7 @@ public class WaitingRoomController {
      * Generates a random question with 3 energy values
      * Gets 3 random activities with similar consumptions
      * Selects one of those, uses the other activities' consumptions
-     *      We use other activities for consumptions to make the numbers feel more natural than randomly generated ones
+     * We use other activities for consumptions to make the numbers feel more natural than randomly generated ones
      * Initializes the image for the activity
      *
      * @return MC Question with 3 values
@@ -190,7 +194,7 @@ public class WaitingRoomController {
     }
 
     /**
-     * endpoint for getting an activity for a Estimation question
+     * endpoint for getting an activity for an Estimation question
      *
      * @return
      */
@@ -244,7 +248,7 @@ public class WaitingRoomController {
     /**
      * Fetches a number of activities, such that they have distinct consumptions
      * Generates a pivot to be used in the generation of such activities
-     *
+     * <p>
      * Split into 2 methods to input specific pivot to the generator
      *
      * @param limit The number of activities with distinct consumption to be fetched from the database
@@ -265,7 +269,7 @@ public class WaitingRoomController {
      * @param pivot Pivot that the result list has close consumptions to
      * @return A list of activities
      */
-    private List<Activity> activitiesWithSuitableConsumptionsGenerator(int limit, Activity pivot){
+    private List<Activity> activitiesWithSuitableConsumptionsGenerator(int limit, Activity pivot) {
         double lowerBound = 0.5;
         double upperBound = 1.5;
         List<Activity> result = new ArrayList<>();
