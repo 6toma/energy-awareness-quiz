@@ -37,6 +37,8 @@
                 </ImageView>
             </children>
         </HBox>
+      <Region layoutX="10.0" layoutY="188.0" maxHeight="30" minHeight="30" styleClass="margin" />
+      <Label fx:id="jokerMessage" text="" textAlignment="CENTER" styleClass="message"/>
     </VBox>
     <StackPane maxHeight="132.0" maxWidth="1.7976931348623157E308" prefHeight="132.0" styleClass="padding, margin" stylesheets="@../css/ComparativeQuestionScreen.css" StackPane.alignment="BOTTOM_CENTER">
         <children>
@@ -50,11 +52,11 @@
                     <Insets />
                 </StackPane.margin>
                 <children>
-                    <Button fx:id="joker1" alignment="CENTER" contentDisplay="CENTER" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#joker1" prefHeight="100.0" prefWidth="140.0" styleClass="joker" text="1" />
-                    <Region prefWidth="40.0" styleClass="margin" />
-                    <Button fx:id="joker2" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#joker2" prefHeight="100.0" prefWidth="140.0" styleClass="joker" text="2" />
-                    <Region layoutX="851.0" layoutY="10.0" prefWidth="40.0" styleClass="margin" />
-                    <Button fx:id="joker3" alignment="CENTER" layoutX="851.0" layoutY="41.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#joker3" prefHeight="100.0" prefWidth="140.0" styleClass="joker" text="3" />
+                    <Button fx:id="joker1" alignment="CENTER" contentDisplay="CENTER" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#joker1" prefHeight="100.0" prefWidth="190.0" styleClass="joker" text="&gt;&gt;" />
+                    <Region prefWidth="50.0" styleClass="margin" />
+                    <Button fx:id="joker2" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#joker2" prefHeight="100.0" prefWidth="190.0" styleClass="joker" text="✓/✗" />
+                    <Region layoutX="851.0" layoutY="10.0" prefWidth="50.0" styleClass="margin" />
+                    <Button fx:id="joker3" alignment="CENTER" layoutX="851.0" layoutY="41.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#joker3" prefHeight="100.0" prefWidth="190.0" styleClass="joker" text="x2" />
                 </children>
             </HBox>
         </children>

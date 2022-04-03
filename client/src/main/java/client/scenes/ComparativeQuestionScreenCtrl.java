@@ -21,11 +21,13 @@ import javafx.util.Duration;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Random;
 
 public class ComparativeQuestionScreenCtrl {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+    private boolean multiplayer;
 
     /**
      * Integer to set the question mode
@@ -46,10 +48,7 @@ public class ComparativeQuestionScreenCtrl {
     private int timeWhenAnswered = -1;
     private int currentTime = (int) questionTime;
     private int pointsGainedForQuestion = 0;
-
-    private boolean joker1Used = false;
-    private boolean joker2Used = false;
-    private boolean joker3Used = false;
+    private double additionalPoints = 1.0; // if joker "double points" is used, it is set to 2.0
 
     // Timeline objects used for animating the progressbar
     // Global objects because they need to be accessed from different methods
@@ -113,36 +112,47 @@ public class ComparativeQuestionScreenCtrl {
     }
 
     /**
+     * sets multiplayer flag
+     * @param v multiplayer bool
+     */
+    public void setMultiplayer(boolean v){
+        this.multiplayer = v;
+    }
+
+    /**
      * Runs when answer option 1 is clicked
      * Sets color of the clicked button to yellow, others to default
+     * (unless it is disabled and marked red from joker 2)
      */
     public void answer1Clicked(){
         checkAnswer(0);
-        answer1.setStyle("-fx-background-color: #fccf03;");
-        answer2.setStyle("");
-        answer3.setStyle("");
+        if(!answer1.isDisabled()) answer1.setStyle("-fx-background-color: #fccf03;");
+        if(!answer2.isDisabled()) answer2.setStyle("");
+        if(!answer3.isDisabled()) answer3.setStyle("");
     }
 
     /**
      * Runs when answer option 2 is clicked
      * Sets color of the clicked button to yellow, others to default
+     * (unless it is disabled and marked red from joker 2)
      */
     public void answer2Clicked(){
         checkAnswer(1);
-        answer1.setStyle("");
-        answer2.setStyle("-fx-background-color: #fccf03;");
-        answer3.setStyle("");
+        if(!answer1.isDisabled()) answer1.setStyle("");
+        if(!answer2.isDisabled()) answer2.setStyle("-fx-background-color: #fccf03;");
+        if(!answer3.isDisabled()) answer3.setStyle("");
     }
 
     /**
      * Runs when answer option 3 is clicked
      * Sets color of the clicked button to yellow, others to default
+     * (unless it is disabled and marked red from joker 2)
      */
     public void answer3Clicked(){
         checkAnswer(2);
-        answer1.setStyle("");
-        answer2.setStyle("");
-        answer3.setStyle("-fx-background-color: #fccf03;");
+        if(!answer1.isDisabled()) answer1.setStyle("");
+        if(!answer2.isDisabled()) answer2.setStyle("");
+        if(!answer3.isDisabled()) answer3.setStyle("-fx-background-color: #fccf03;");
     }
 
     private void checkAnswer(int answer){
@@ -187,7 +197,7 @@ public class ComparativeQuestionScreenCtrl {
             setEqualityAnswerTexts();
             setEqualityImages();
         }
-
+        setJokers();
     }
 
     private void setQuestionText(){
@@ -298,7 +308,7 @@ public class ComparativeQuestionScreenCtrl {
     public void exit() {
         mainCtrl.showHomeScreen();
         stopTimers();
-        resetComparativeQuestionScreen();
+        mainCtrl.resetQuestionScreens();
     }
 
     /**
@@ -330,7 +340,11 @@ public class ComparativeQuestionScreenCtrl {
         // This creates another timeline for the timer for the answerTime. See countdown() for a more in-depth breakdown
         KeyFrame start = new KeyFrame(Duration.ZERO, new KeyValue(progressBar.progressProperty(), 0));
         KeyFrame aEnd = new KeyFrame(Duration.seconds(answerTime), e -> {
-            endQuestion(); // end the question when the animation is done
+            if(multiplayer){
+                reset();
+            } else {
+                endQuestion(); // end the question when the animation is done
+            }
         }, new KeyValue(progressBar.progressProperty(), 1));
         answerTimer = new Timeline(start, aEnd);
         answerTimer.setCycleCount(1);
@@ -344,9 +358,9 @@ public class ComparativeQuestionScreenCtrl {
 
         // disable joker buttons, so they can't be clicked while
         // answers are being shown
-        joker1.setDisable(true);
-        joker2.setDisable(true);
-        joker3.setDisable(true);
+        joker1.setMouseTransparent(true);
+        joker2.setMouseTransparent(true);
+        joker3.setMouseTransparent(true);
 
         int correctAnswer = -1;
         if(questionMode == 0){
@@ -357,7 +371,13 @@ public class ComparativeQuestionScreenCtrl {
             correctAnswer = equalityQuestion.getCorrect_answer();
         }
 
-        pointsGainedForQuestion = mainCtrl.getSinglePlayerGame().addPoints(timeWhenAnswered, 1.0);
+        if (multiplayer) {
+            sendScoreMultiplayer(timeWhenAnswered);
+        }else {
+            pointsGainedForQuestion = mainCtrl.getSinglePlayerGame().addPoints(timeWhenAnswered, additionalPoints * 1.0);
+            additionalPoints = 1.0;
+        }
+
         // highlight correct answer
         if(correctAnswer == 0){
             answer1.setStyle("-fx-background-color: #00ff00;");
@@ -397,7 +417,27 @@ public class ComparativeQuestionScreenCtrl {
         }
     }
 
-    // reset attributes to default
+    /**
+     * updates the score of the player in the server
+     * @param time time of answer
+     */
+    public void sendScoreMultiplayer(int time){
+        double guessQuestionRate=1.0;
+        if(time == -1){
+            mainCtrl.getPlayer().resetStreak();
+            mainCtrl.getPlayer().setScoreGained(0);
+        } else {
+            mainCtrl.getPlayer().incrementStreak();
+            int currentScore = mainCtrl.getPlayer().getScore();
+            long points = Math.round(((100.0 +mainCtrl.getPlayer().getStreak()) / 100.0) * (1050 - 5 * time));
+            int pointsToBeAdded = (int) Math.round(guessQuestionRate * points);
+            mainCtrl.getPlayer().setScoreGained(pointsToBeAdded);
+            mainCtrl.getPlayer().setScore(currentScore + pointsToBeAdded);
+        }
+        server.postScore(mainCtrl.getPlayer());
+    }
+
+    // reset attributes to default after each question
     private void reset(){
         timeWhenAnswered = -1;
         answer1.setStyle("");
@@ -410,7 +450,7 @@ public class ComparativeQuestionScreenCtrl {
         answer3.setDisable(false);
 
         // re-enable jokers
-        resetJokers();
+        setJokers();
 
         // reset images
         image1.setImage(null);
@@ -424,29 +464,64 @@ public class ComparativeQuestionScreenCtrl {
         mainCtrl.showScoreChangeScreen(pointsGainedForQuestion);
     }
 
+    /**
+     * Skips the question and adds one more to the total number of questions
+     */
     @FXML
     private void joker1() {
         joker1.setDisable(true);
-        joker1Used = true;
+        mainCtrl.getSinglePlayerGame().useJokerAdditionalQuestion();
 
         stopTimers();
-        //even if the correct answer was selected before the question was changed, points won't be added
-        timeWhenAnswered = -1;
-        //doesn't add points, but is used to increment the number of the current question in the list
-        mainCtrl.getSinglePlayerGame().addPoints(timeWhenAnswered, 1.0);
+        /* even if the correct answer was selected before the question was changed, 0 points will be added
+        * the method addPoints() is used just to increment the number of the current question in the list
+        * streak is reset to 0
+        */
+        pointsGainedForQuestion = mainCtrl.getSinglePlayerGame().addPoints(-1, 0.0);
         endQuestion();
     }
 
+    /**
+     * Disables one of the incorrect answer options
+     */
     @FXML
     private void joker2() {
-        //implementation for joker
         joker2.setDisable(true); // disable button
+        mainCtrl.getSinglePlayerGame().useJokerRemoveOneAnswer();
+
+        int correctAnswer = -1;
+        if(questionMode == 0){
+            correctAnswer = question.getCorrect_answer();
+        } else if(questionMode == 1){
+            correctAnswer = mcQuestion.getCorrect_answer();
+        } else if(questionMode == 2){
+            correctAnswer = equalityQuestion.getCorrect_answer();
+        }
+
+        Random random = new Random();
+        int x = Math.abs(random.nextInt() % 2); // get a 0 or 1 randomly
+        int disableOption = (correctAnswer + x + 1) % 3; // get one of the incorrect answers
+        if(disableOption == 0) {
+            answer1.setDisable(true);
+            answer1.setStyle("-fx-background-color: #fc1c45;");
+        } else if(disableOption == 1) {
+            answer2.setDisable(true);
+            answer2.setStyle("-fx-background-color: #fc1c45;");
+        } else if(disableOption == 2) {
+            answer3.setDisable(true);
+            answer3.setStyle("-fx-background-color: #fc1c45;");
+        }
     }
 
+    /**
+     * Doubles the amount of points for the current question
+     */
     @FXML
     private void joker3() {
-        //implementation for joker
         joker3.setDisable(true); // disable button
+        mainCtrl.getSinglePlayerGame().useJokerDoublePoints();
+
+        additionalPoints = 2.0; // points will be double only for the current question
     }
 
     /**
@@ -456,13 +531,13 @@ public class ComparativeQuestionScreenCtrl {
      * because it is used to reset the 3 answer options after every question, but
      * jokers should remain disabled until the end of the game
      */
-    public void resetJokers() {
+    private void resetJokers() {
         joker1.setDisable(false);
         joker2.setDisable(false);
         joker3.setDisable(false);
-        joker1Used = false;
-        joker2Used = false;
-        joker3Used = false;
+        joker1.setMouseTransparent(false);
+        joker2.setMouseTransparent(false);
+        joker3.setMouseTransparent(false);
     }
 
     /**
@@ -472,20 +547,6 @@ public class ComparativeQuestionScreenCtrl {
         reset();
         resetJokers();
         //chat/emoji will possibly have to be included as well
-    }
-
-    /**
-     * Adds question to game maxquestions (because joker skips a question)
-     * @return 1 - If the joker "Change current question" is used,
-     *         in order to add a question to the maximum number of questions in the game;
-     *         0 - Otherwise.
-     */
-    public int jokerAdditionalQuestion() {
-        if(joker1Used) {
-            return 1;
-        } else {
-            return 0;
-        }
     }
 
     /**
@@ -501,6 +562,31 @@ public class ComparativeQuestionScreenCtrl {
         if(answerTimer != null){
             answerTimer.stop();
             answerTimer = null;
+        }
+    }
+
+    /**
+     * Updates the disabling of the buttons used for jokers, in case
+     * a joker has been used on another screen.
+     * Resets the mouse-transparency, used when answers are being shown
+     */
+    private void setJokers() {
+        if(mainCtrl.getSinglePlayerGame().jokerAdditionalQuestionIsUsed()) {
+            joker1.setDisable(true);
+        } else {
+            joker1.setMouseTransparent(false);
+        }
+        
+        if(mainCtrl.getSinglePlayerGame().jokerRemoveOneAnswerIsUsed()) {
+            joker2.setDisable(true);
+        } else {
+            joker2.setMouseTransparent(false);
+        }
+        
+        if(mainCtrl.getSinglePlayerGame().jokerDoublePointsIsUsed()) {
+            joker3.setDisable(true);
+        } else {
+            joker3.setMouseTransparent(false);
         }
     }
 }

@@ -56,6 +56,7 @@ public class ScoreChangeScreenCtrl {
         mainCtrl.showHomeScreen();
         timer.cancel();
         timer = new Timer();
+        mainCtrl.resetQuestionScreens();
     }
 
     /**

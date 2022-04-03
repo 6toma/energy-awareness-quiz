@@ -7,34 +7,31 @@ import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import lombok.Getter;
+import javafx.scene.control.*;
 
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.TimerTask;
 
-
-/**
- * Controller used as an intermediate between controllers for all
- * scenes/windows
- * <p>
- * CURRENTLY, USED FOR HOME SCREEN/SCENE ONLY
- */
-public class HomeScreenCtrl implements Initializable {
+public class ScoreChangeMultiplayerCtrl implements Initializable {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
-    public boolean isLightMode;
+    @FXML
+    private Label scoreGained;
+    @FXML
+    private Label scoreTotal;
+    @FXML
+    private Label scoreStreak;
+    @FXML
+    private Button leave;
 
-    @Getter
-    public int usernameOriginScreen;
+    private Timer timer = new Timer();
 
     /**
      * Creates a new screen with injections
@@ -43,79 +40,55 @@ public class HomeScreenCtrl implements Initializable {
      * @param mainCtrl Main Controller
      */
     @Inject
-    public HomeScreenCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public ScoreChangeMultiplayerCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
-        this.isLightMode = true;
-        this.usernameOriginScreen = 0; //still on home screen
     }
 
     /**
-     * Sets the origin of the username selection screen
+     * Sets score change labels
      *
-     * @param usernameOriginScreen 1 if going to single player
-     *                             2 if going to multiplayer
+     * @param gained Number of points gained
+     * @param total  Number of total points
+     * @param streak How many questions in a row were correct
      */
-    public void setUsernameOriginScreen(int usernameOriginScreen) {
-        if (usernameOriginScreen == 0 ||
-                usernameOriginScreen == 1 ||
-                usernameOriginScreen == 2)
-            this.usernameOriginScreen = usernameOriginScreen;
-    }
-
-
-    /**
-     * This method transfers the user to the settings screen
-     * where he/she can switch to dark mode, read the help page,
-     * enter the room URL or go to admin panel
-     *
-     * @param event
-     */
-    @FXML
-    void goToSettings(ActionEvent event) {
-        mainCtrl.showSettingsScreen();
-    }
-
-
-    /**
-     * Tries to get a question from the server
-     * If succeeds connect create a new singlePlayerGame and go to the username screen
-     * <p>
-     * TODO: popup
-     */
-    @FXML
-    public void showUsernameScreenSingle() {
-
-        mainCtrl.getServer().setServerURL(mainCtrl.getServerURL());
-        mainCtrl.newSinglePlayerGame();
+    public void setScoreLabels(int gained, int total, int streak) {
+        scoreGained.setText("+" + gained);
+        scoreTotal.setText("Score: " + total);
+        scoreStreak.setText("Streak: " + streak);
     }
 
     /**
-     * Run when pressed multiplayer
-     * Sends you to the username selection screen
-     * Gives an error popup when connection to the server not possible
+     * Goes back to the home screen
      */
-    @FXML
-    public void showUsernameScreenMulti() {
-
-        server.setServerURL(mainCtrl.getServerURL());
-        try {
-            System.out.println(server.getRandomQuestion());
-            mainCtrl.setUsernameOriginScreen(2);
-            mainCtrl.showUsernameScreen();
-        } catch (Exception e) {
-            e.printStackTrace();
-            mainCtrl.showPopup("Connection to the server failed");
-        }
+    public void exit() {
+        mainCtrl.showHomeScreen();
+        timer.cancel();
+        timer = new Timer();
     }
 
-    @FXML
-    void exitApp(ActionEvent event) {
-        // to fully terminate the client process
-        Platform.exit();
-        System.exit(0);
-    }
+    /**
+     * Starts the countdown to move to the next screen
+     */
+    public void countdown() {
 
+        TimerTask task = new TimerTask() {
+
+            @Override
+            public void run() {
+
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        cancel();
+                        mainCtrl.nextQuestionScreen();
+                    }
+                });
+            }
+        };
+
+        timer.schedule(task, 3000);
+    }
 
     private ObservableList<Player> players;
 
@@ -128,8 +101,25 @@ public class HomeScreenCtrl implements Initializable {
     @FXML
     private TableColumn<Player, String> playerScore;
 
+    /**
+     * Used to refresh the leaderboard entries
+     */
+    public void setTableLeaderboard() {
+        try {
+            // because of the getLeaderPlayers(10) method, the
+            // leaderboard needs no sorting, as the list of players
+            // is returned already sorted through the query
+            List<Player> playerList = server.getPlayersMultiplayer();
+            players = FXCollections.observableList(playerList);
+            leaderboard.setItems(players);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        //public void setTableLeaderboard() {
         playerUsername.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getName()));
         playerUsername.setCellFactory(e -> new TableCell<Player, String>() {
             @Override
@@ -197,35 +187,5 @@ public class HomeScreenCtrl implements Initializable {
                 }
             }
         });
-
-        // To not allow users to resize column widths
-        // or reorder columns (switch column places)
-        playerPosition.setReorderable(false);
-        playerPosition.setResizable(false);
-
-        playerUsername.setReorderable(false);
-        playerUsername.setResizable(false);
-
-        playerScore.setReorderable(false);
-        playerScore.setResizable(false);
-
     }
-
-    /**
-     * Used to refresh the leaderboard entries
-     */
-    @FXML
-    public void refresh() {
-        try {
-            // because of the getLeaderPlayers(10) method, the
-            // leaderboard needs no sorting, as the list of players
-            // is returned already sorted through the query
-            List<Player> playerList = server.getLeaderPlayers(10);
-            players = FXCollections.observableList(playerList);
-            leaderboard.setItems(players);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
 }

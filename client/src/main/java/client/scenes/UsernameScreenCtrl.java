@@ -23,6 +23,12 @@ public class UsernameScreenCtrl {
     @FXML
     private Button continueButton;
 
+    // The point of this field is to check whether
+    // a player has pressed the CONTINUE button in
+    // the username screen, so that their name
+    // gets saved, so they don't have to input it again
+    private boolean usernameInUse = false;
+
     /**
      * Creates a new screen with injections
      * @param server ServerUtils class
@@ -46,9 +52,16 @@ public class UsernameScreenCtrl {
     @FXML
     void setUsernameButtonClicked(ActionEvent event) {
         String newUser = inputUsernameField.getText();
-        if (newUser.length() > 0) { // in the future to be replaced with a isValidUsername(newUser) type function
+
+        // checking whether username is already in waiting room
+        boolean isValidUsername = (Boolean) server.checkValidityOfUsername(newUser);
+        if (isValidUsername) {
             continueButton.setDisable(false);
             usernameField.setText("Hello, " + newUser + "!");
+        }
+        else {
+            continueButton.setDisable(true);
+            usernameField.setText("Please select a different username!");
         }
     }
 
@@ -59,8 +72,16 @@ public class UsernameScreenCtrl {
 
     @FXML
     void back(ActionEvent event) {
+        continueButton.setDisable(true);
         resetUserText();
         mainCtrl.showHomeScreen();
+    }
+
+    void setButtonText() {
+        if(mainCtrl.getUsernameOriginScreen() == 1)
+            continueButton.setText("Start");
+        else if(mainCtrl.getUsernameOriginScreen() == 2)
+            continueButton.setText("Continue");
     }
 
     @FXML
@@ -69,21 +90,36 @@ public class UsernameScreenCtrl {
             mainCtrl.getSinglePlayerGame().setPlayer(new Player(inputUsernameField.getText()));
             mainCtrl.showLoadingScreen();
         } else {
+
             //send player to multiplayer game object
-            Player newPlayer = server.addPlayerMultiplayer(new Player(inputUsernameField.getText()));
-            System.out.println(newPlayer);
-            mainCtrl.showWaitingRoom();
+            Player newPlayer = server.addPlayerWaitingRoom(new Player(inputUsernameField.getText()));
+            if(newPlayer == null){
+                usernameField.setText("Please select a different username!");
+            }
+            else {
+                if(!server.areQuestionsGenerated()){
+                    System.out.println("questions are not generated I will generate them");;
+                }
+                else System.out.println("questions are generated");
+                System.out.println(newPlayer);
+                mainCtrl.showWaitingRoom();
+            }
+
         }
-        resetUserText();
+        // CONTINUE button has been pressed
+        // so a username is now in use
+        this.usernameInUse = true;
     }
 
     /**
      * Resets the text in the username field
      */
     public void resetUserText() {
-        usernameField.setText("Please input your username!");
-        inputUsernameField.clear();
-        continueButton.setDisable(true);
+        if(!usernameInUse) {
+            usernameField.setText("Please input your username!");
+            inputUsernameField.clear();
+            continueButton.setDisable(true);
+        }
     }
 
 }
