@@ -21,6 +21,7 @@
 
 .table-view .column-header {
     -fx-background-color: transparent;
+    -fx-font-size: 20px;
 }
 
 .table-view .table-cell{
@@ -71,4 +72,8 @@
 
 .table {
   -fx-font-size: 12px;
+}
+
+.nag {
+  -fx-font-size: 25px;
 }

@@ -298,5 +298,19 @@ public class ServerUtils {
                 });
     }
 
+    public Activity deleteActivity(Activity activity) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(serverURL).path("api/activities/delete/{id}")
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .post(Entity.entity(activity, APPLICATION_JSON), Activity.class);
+    }
 
+    public Activity addActivity(Activity activity) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(serverURL).path("api/activities/add-one")
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .post(Entity.entity(activity, APPLICATION_JSON), Activity.class);
+    }
 }
