@@ -4,7 +4,6 @@ import client.SinglePlayerGame;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.MultiPlayerGame;
-import commons.Player;
 import commons.questions.ComparativeQuestion;
 import commons.questions.EqualityQuestion;
 import commons.questions.EstimationQuestion;
