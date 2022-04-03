@@ -47,6 +47,7 @@ public class EstimationQuestionCtrl {
     // Global objects because they need to be accessed from different methods
     private Timeline questionTimer;
     private Timeline answerTimer;
+    private boolean multiplayer;
 
 
     @FXML
@@ -85,6 +86,14 @@ public class EstimationQuestionCtrl {
     public EstimationQuestionCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
+    }
+
+    /**
+     * sets multiplayer flag
+     * @param v multiplayer bool
+     */
+    public void setMultiplayer(boolean v){
+        this.multiplayer = v;
     }
 
     /**
@@ -162,7 +171,11 @@ public class EstimationQuestionCtrl {
         // This creates another timeline for the timer for the answerTime. See countdown() for a more in-depth breakdown
         KeyFrame start = new KeyFrame(Duration.ZERO, new KeyValue(progressBar.progressProperty(), 0));
         KeyFrame aEnd = new KeyFrame(Duration.seconds(answerTime), e -> {
-            endQuestion(); // end the question when the animation is done
+            if (multiplayer) {
+                reset();
+            } else {
+                endQuestion(); // end the question when the animation is done
+            }
         }, new KeyValue(progressBar.progressProperty(), 1));
         answerTimer = new Timeline(start, aEnd);
         answerTimer.setCycleCount(1);
@@ -177,8 +190,34 @@ public class EstimationQuestionCtrl {
 
         questionLabel.setText(questionLabel.getText() + " - " + question.getActivity().getConsumption_in_wh() + " Wh");
 
-        pointsGainedForQuestion = mainCtrl.getSinglePlayerGame().addPoints(timeWhenAnswered, guessAccuracy);
+        if (multiplayer) {
+            sendScoreMultiplayer(timeWhenAnswered);
+        } else {
+            pointsGainedForQuestion = mainCtrl.getSinglePlayerGame().addPoints(timeWhenAnswered, guessAccuracy);
+        }
     }
+
+    /**
+     * updates the score of the player in the server
+     * @param time time of answer
+     */
+    public void sendScoreMultiplayer(int time){
+        double guessQuestionRate=1.0;
+        if(time == -1){
+            mainCtrl.getPlayer().resetStreak();
+            mainCtrl.getPlayer().setScoreGained(0);
+        } else {
+            mainCtrl.getPlayer().incrementStreak();
+            int currentScore = mainCtrl.getPlayer().getScore();
+            long points = Math.round(((100.0 +mainCtrl.getPlayer().getStreak()) / 100.0) * (1050 - 5 * time));
+            int pointsToBeAdded = (int) Math.round(guessQuestionRate * points);
+            mainCtrl.getPlayer().setScoreGained(pointsToBeAdded);
+            mainCtrl.getPlayer().setScore(currentScore + pointsToBeAdded);
+        }
+        server.postScore(mainCtrl.getPlayer());
+    }
+
+
 
     private void reset() {
         timeWhenAnswered = -1;

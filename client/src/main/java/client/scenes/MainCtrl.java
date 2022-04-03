@@ -6,11 +6,7 @@ import com.google.inject.Inject;
 import commons.GameUpdatesPacket;
 import commons.MultiPlayerGame;
 import commons.Player;
-import commons.questions.ComparativeQuestion;
-import commons.questions.EqualityQuestion;
-import commons.questions.EstimationQuestion;
-import commons.questions.MCQuestion;
-import commons.questions.Question;
+import commons.questions.*;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
@@ -23,8 +19,6 @@ import javafx.stage.WindowEvent;
 import javafx.util.Pair;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.List;
 
 public class MainCtrl {
 
@@ -65,6 +59,12 @@ public class MainCtrl {
     private SettingsScreenCtrl settingsScreenCtrl;
     private Parent settingsScreenParent;
 
+    private ScoreChangeMultiplayerCtrl scoreChangeMultiplayerCtrl;
+    private Parent scoreChangeMultiplayerParent;
+
+    private AdminScreenCtrl adminScreenCtrl;
+    private Parent adminScreenParent;
+
 
     // single player variables
     @Getter
@@ -102,6 +102,8 @@ public class MainCtrl {
      * @param endScreen
      * @param helpScreen
      * @param scoreChangeScreen
+     * @param scoreChangeMultiplayer
+     * @param adminScreen
      */
     public void initialize(
             Stage primaryStage,
@@ -114,7 +116,9 @@ public class MainCtrl {
             Pair<HelpScreenCtrl, Parent> helpScreen,
             Pair<ScoreChangeScreenCtrl, Parent> scoreChangeScreen,
             Pair<SettingsScreenCtrl, Parent> settingsScreen,
-            Pair<EstimationQuestionCtrl, Parent> estimationQuestion
+            Pair<EstimationQuestionCtrl, Parent> estimationQuestion,
+            Pair<ScoreChangeMultiplayerCtrl, Parent> scoreChangeMultiplayer,
+            Pair<AdminScreenCtrl, Parent> adminScreen
     ) {
         this.primaryStage = primaryStage;
 
@@ -148,6 +152,12 @@ public class MainCtrl {
 
         this.settingsScreenCtrl = settingsScreen.getKey();
         this.settingsScreenParent = settingsScreen.getValue();
+
+        this.scoreChangeMultiplayerCtrl = scoreChangeMultiplayer.getKey();
+        this.scoreChangeMultiplayerParent = scoreChangeMultiplayer.getValue();
+
+        this.adminScreenCtrl = adminScreen.getKey();
+        this.adminScreenParent = adminScreen.getValue();
 
 
         // TODO: uncomment to disable the fullscreen popup
@@ -219,18 +229,20 @@ public class MainCtrl {
     /**
      * method for showing the comparative question
      */
-    public void showComparativeQuestionScreen() {
+    public void showComparativeQuestionScreen(boolean multiplayer) {
         primaryStage.getScene().setRoot(comparativeQuestionScreenParent);
         checkDarkMode();
+        comparativeQuestionScreenCtrl.setMultiplayer(multiplayer);
         comparativeQuestionScreenCtrl.countdown();
     }
 
     /**
      * method for showing an Estimation question
      */
-    public void showEstimationQuestionScreen() {
+    public void showEstimationQuestionScreen(boolean multiplayer) {
         primaryStage.getScene().setRoot(estimationQuestionParent);
         checkDarkMode();
+        estimationScreenCtrl.setMultiplayer(multiplayer);
         estimationScreenCtrl.countdown();
     }
 
@@ -267,6 +279,14 @@ public class MainCtrl {
         checkDarkMode();
         showScore(pointsGained);
         scoreChangeScreenCtrl.countdown();
+    }
+
+    /**
+     * method for showing admin screen
+     */
+    public void showAdminScreen() {
+        primaryStage.getScene().setRoot(adminScreenParent);
+        checkDarkMode();
     }
 
 
@@ -334,7 +354,7 @@ public class MainCtrl {
 
             setUsernameOriginScreen(1);
             showUsernameScreen();
-        } catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             showPopup("Connection failed");
         }
@@ -354,7 +374,7 @@ public class MainCtrl {
 
             //skipping over the part where we ask for username
             showLoadingScreen();
-        } catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             showPopup("Connection failed");
         }
@@ -384,13 +404,13 @@ public class MainCtrl {
                 Question question = singlePlayerGame.getQuestions().get(singlePlayerGame.getQuestionNumber() - 1);
                 // check the question type
                 if (question instanceof ComparativeQuestion
-                    || question instanceof MCQuestion
-                    || question instanceof EqualityQuestion) {
+                        || question instanceof MCQuestion
+                        || question instanceof EqualityQuestion) {
 
-                    showComparativeQuestionScreen();
+                    showComparativeQuestionScreen(false);
                     comparativeQuestionScreenCtrl.setQuestion(question);
                 } else if (question instanceof EstimationQuestion) {
-                    showEstimationQuestionScreen();
+                    showEstimationQuestionScreen(false);
                     estimationScreenCtrl.setQuestion((EstimationQuestion) question);
                 }
             } catch (Exception e) {
@@ -459,12 +479,101 @@ public class MainCtrl {
 
     /**
      * Shows an error popup message
+     *
      * @param message to be shown on the popup
      */
-    public void showPopup(String message){
+    public void showPopup(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+
+    private MultiPlayerGame multiPlayerGame;
+    private int currentQuestionNum;
+    private String currentScreen;
+    @Getter
+    @Setter
+    private Player player;
+
+
+    /**
+     * starts the multiplayer game
+     */
+    public void startMultiplayer() {
+        multiPlayerGame = server.getMultiplayerGame();
+        player = new Player("name");
+        currentQuestionNum = 0;
+        currentScreen = "";
+        startListening();
+
+    }
+
+    /**
+     *
+     */
+    public void showQuestionMultiplayer() {
+        Question question = multiPlayerGame.getQuestions().get(currentQuestionNum);
+        // check the question type
+        if (question instanceof ComparativeQuestion
+                || question instanceof MCQuestion
+                || question instanceof EqualityQuestion) {
+
+            showComparativeQuestionScreen(true);
+            comparativeQuestionScreenCtrl.setQuestion(question);
+        } else if (question instanceof EstimationQuestion) {
+            showEstimationQuestionScreen(true);
+            estimationScreenCtrl.setQuestion((EstimationQuestion) question);
+        }
+
+    }
+
+    /**
+     * Shows the leaderboard after each question
+     */
+    public void showLeaderBoard() {
+        primaryStage.getScene().setRoot(scoreChangeMultiplayerParent);
+        checkDarkMode();
+        scoreChangeMultiplayerCtrl.countdown();
+    }
+
+    /**
+     * start listening for updates
+     * if questionnumber is wrong it updates it
+     * if current screen is wrong is forces the player to the correct screen
+     */
+    public void startListening() {
+        server.registerUpdates(c -> {
+            if (c.getQuestionNumber() != currentQuestionNum && c.getCurrentScreen() != currentScreen) {
+                currentQuestionNum = c.getQuestionNumber();
+                changeScreenMultiplayer(c);
+
+            } else if (c.getQuestionNumber() != currentQuestionNum && c.getCurrentScreen() == currentScreen) {
+                currentQuestionNum = c.getQuestionNumber();
+                showQuestionMultiplayer();
+
+            } else if (c.getQuestionNumber() == currentQuestionNum && c.getCurrentScreen() != currentScreen) {
+                changeScreenMultiplayer(c);
+            }
+        });
+    }
+
+    /**
+     * updates the screens
+     * needs to be its own function because of cyclomatic complectity
+     *
+     * @param packet the packet with the updates
+     */
+    public void changeScreenMultiplayer(GameUpdatesPacket packet) {
+        if (packet.getCurrentScreen().equals("QUESTION")) {
+            showQuestionMultiplayer();
+        } else if (packet.getCurrentScreen().equals("LEADERBOARD")) {
+            scoreChangeMultiplayerCtrl.setTableLeaderboard();
+            scoreChangeMultiplayerCtrl.setScoreLabels(player.getScoreGained(), player.getScore(), player.getStreak());
+            showLeaderBoard();
+        } else if (packet.getCurrentScreen().equals("ENDSCREEN")) {
+            showEndScreen();
+        }
     }
 }
 
