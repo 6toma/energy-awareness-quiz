@@ -73,6 +73,9 @@ public class EstimationQuestionCtrl {
     @FXML
     private HBox questionBox;
 
+    @FXML
+    private Label jokerMessage;
+
     /**
      * Constructor for the Estimation Question Controller
      * @param server
@@ -90,7 +93,7 @@ public class EstimationQuestionCtrl {
     public void exit() {
         mainCtrl.showHomeScreen();
         stopTimers();
-        resetEstimationQuestion();
+        mainCtrl.resetQuestionScreens();
     }
 
     /**
@@ -190,6 +193,8 @@ public class EstimationQuestionCtrl {
         // reset answerField text and status
         answerField.setText("");
         answerField.setDisable(false);
+
+        jokerMessage.setText("");
     }
 
     private void endQuestion() {
@@ -223,9 +228,25 @@ public class EstimationQuestionCtrl {
 
     @FXML
     private void joker2() {
-        //implementation for joker
+        // if there is no answer input, don't use joker
+        if(answerField.getText().equals("")) {
+            jokerMessage.setText("Input an answer to use this joker!");
+            return;
+        }
+
         joker2.setDisable(true); // disable button
         mainCtrl.getSinglePlayerGame().useJokerRemoveOneAnswer();
+
+        /* calculate the points the player would win for this question
+        * the same way they are calculated in addPoints(), but without actually adding them
+        */
+        int pointsToBeAdded = (int)Math.round(guessAccuracy * additionalPoints * mainCtrl.getSinglePlayerGame().getPointsToBeAdded(timeWhenAnswered));
+
+        if(pointsToBeAdded > 0 ) {
+            jokerMessage.setText("Close enough! You will get some points for this answer.");
+        } else {
+            jokerMessage.setText("You guess is too far from the actual answer! Try changing it so you can get some points for this question.");
+        }
     }
 
     @FXML

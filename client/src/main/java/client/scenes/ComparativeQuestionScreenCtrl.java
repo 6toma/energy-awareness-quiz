@@ -299,7 +299,7 @@ public class ComparativeQuestionScreenCtrl {
     public void exit() {
         mainCtrl.showHomeScreen();
         stopTimers();
-        resetComparativeQuestionScreen();
+        mainCtrl.resetQuestionScreens();
     }
 
     /**
