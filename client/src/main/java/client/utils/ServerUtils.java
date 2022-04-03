@@ -306,10 +306,10 @@ public class ServerUtils {
      */
     public Activity deleteActivity(Activity activity) {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(serverURL).path("api/activities/delete/{id}")
+                .target(serverURL).path("api/activities/delete/" + activity.getId())
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
-                .post(Entity.entity(activity, APPLICATION_JSON), Activity.class);
+                .delete(new GenericType<>() {});
     }
 
     /**
