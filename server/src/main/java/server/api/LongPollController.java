@@ -25,9 +25,8 @@ public class LongPollController {
      * List of everything thats different from last poll
      * For each thing in list we send another request for the body of that change
      */
-    private final MultiPlayerGame multiplayerGame;
+    private MultiPlayerGame multiplayerGame;
     private final WaitingRoom waitingRoom;
-    private GameUpdatesPacket gameUpdatesPacket;
     /**
      * Creates a Polling Controller
      * @param multiplayerGame injected instance of MultiPlayerGame
@@ -37,15 +36,15 @@ public class LongPollController {
     public LongPollController(MultiPlayerGame multiplayerGame, WaitingRoom waitingRoom, GameUpdatesPacket gameUpdatesPacket){
         this.multiplayerGame = multiplayerGame;
         this.waitingRoom = waitingRoom;
-        this.gameUpdatesPacket = gameUpdatesPacket;
     }
 
     /**
      * Returns the instance of the game to the client
      * @return Multiplayer Game object
      */
-    @GetMapping("MultiplayerGame")
+    @GetMapping("start-multiplayer")
     public ResponseEntity<MultiPlayerGame> getGame(){
+        multiplayerGame = waitingRoom.flushWaitingRoom();
         return ResponseEntity.ok(multiplayerGame);
     }
 

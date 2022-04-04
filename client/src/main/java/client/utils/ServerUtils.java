@@ -198,9 +198,9 @@ public class ServerUtils {
      *
      * @return instance of multiplayer game
      */
-    public MultiPlayerGame getMultiplayerGame() {
+    public MultiPlayerGame startMultiplayer() {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(serverURL).path("api/poll/MultiplayerGame")
+                .target(serverURL).path("api/poll/start-multiplayer")
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<>() {

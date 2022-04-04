@@ -115,6 +115,6 @@ public class WaitingRoomCtrl implements Initializable {
      * Starts the gam when you click start
      */
     public void startGame() {
-        //mainCtrl.startMultiplayer();
+        mainCtrl.startMultiplayer();
     }
 }

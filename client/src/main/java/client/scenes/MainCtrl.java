@@ -476,52 +476,9 @@ public class MainCtrl {
         alert.showAndWait();
     }
 
-    // multiplayer variables
-    @Getter @Setter
-    private MultiPlayerGame multiPlayerGame;
-    private int currentQuestionNum;
-    // default game packet that is updated whenever the state of the game changes
-    @Getter @Setter
-    private GameUpdatesPacket packet;
-    private String currentScreen;
-    @Getter
-    @Setter
-    private Player player;
-
     /**
-     * starts the multiplayer game
+     * ----------------------------------------- MULTIPLAYER CODE AHEAD ------------------------------------------------
      */
-    public void startMultiplayer() {
-
-    }
-
-    /**
-     *
-     */
-    public void showQuestionMultiplayer() {
-        Question question = multiPlayerGame.getQuestions().get(currentQuestionNum);
-        // check the question type
-        if (question instanceof ComparativeQuestion
-                || question instanceof MCQuestion
-                || question instanceof EqualityQuestion) {
-
-            showComparativeQuestionScreen(true);
-            comparativeQuestionScreenCtrl.setQuestion(question);
-        } else if (question instanceof EstimationQuestion) {
-            showEstimationQuestionScreen(true);
-            estimationScreenCtrl.setQuestion((EstimationQuestion) question);
-        }
-
-    }
-
-    /**
-     * Shows the leaderboard after each question
-     */
-    public void showLeaderBoard() {
-        primaryStage.getScene().setRoot(scoreChangeMultiplayerParent);
-        checkDarkMode();
-        scoreChangeMultiplayerCtrl.countdown();
-    }
 
     /**
      * start listening for updates
@@ -554,6 +511,51 @@ public class MainCtrl {
      */
     public void stopListening(){
         server.stop();
+    }
+
+    /**
+     * multiplayer variables
+     */
+    @Getter @Setter
+    private MultiPlayerGame multiPlayerGame;
+    @Getter @Setter
+    private GameUpdatesPacket packet;
+    @Getter @Setter
+    private Player player;
+
+    /**
+     * starts the multiplayer game
+     */
+    public void startMultiplayer() {
+        System.out.println(server.startMultiplayer());
+    }
+
+    /**
+     *
+     */
+    public void showQuestionMultiplayer() {
+        Question question = multiPlayerGame.getQuestions().get(packet.getQuestionNumber());
+        // check the question type
+        if (question instanceof ComparativeQuestion
+                || question instanceof MCQuestion
+                || question instanceof EqualityQuestion) {
+
+            showComparativeQuestionScreen(true);
+            comparativeQuestionScreenCtrl.setQuestion(question);
+        } else if (question instanceof EstimationQuestion) {
+            showEstimationQuestionScreen(true);
+            estimationScreenCtrl.setQuestion((EstimationQuestion) question);
+        }
+
+    }
+
+    /**
+     * Shows the leaderboard after each question
+     */
+    public void showLeaderBoard() {
+        primaryStage.getScene().setRoot(scoreChangeMultiplayerParent);
+        checkDarkMode();
+        scoreChangeMultiplayerCtrl.countdown();
     }
 
     /**
