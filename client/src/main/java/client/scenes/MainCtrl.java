@@ -491,14 +491,9 @@ public class MainCtrl {
     /**
      * starts the multiplayer game
      */
-    /*public void startMultiplayer() {
-        multiPlayerGame = server.getMultiplayerGame();
-        player = new Player("name");
-        currentQuestionNum = 0;
-        currentScreen = "";
-        startListening();
+    public void startMultiplayer() {
 
-    }*/
+    }
 
     /**
      *

@@ -87,7 +87,7 @@ public class LongPollController {
      */
     @PostMapping(path={"add-player"})
     public ResponseEntity<Player> postPlayer(@RequestBody Player player){
-        listeners.forEach((k,l) -> l.accept(new GameUpdatesPacket()));
+        listeners.forEach((k,l) -> l.accept(multiplayerGame.getGameStatus()));
         List<Player> players = multiplayerGame.getPlayers();
         players.add(player);
         return ResponseEntity.ok(player);
