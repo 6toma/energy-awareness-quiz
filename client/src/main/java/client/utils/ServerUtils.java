@@ -131,7 +131,6 @@ public class ServerUtils {
                         .accept(APPLICATION_JSON) //
                         .get(Response.class);
                 if (res.getStatus() == 204){
-                    System.out.println("nothing happened");
                     continue;
                 }
                 var c = res.readEntity(GameUpdatesPacket.class);
@@ -224,8 +223,7 @@ public class ServerUtils {
     }
 
     /**
-     * Gets all players, so you can display their names and score
-     * on the leaderboard
+     * Gets all players in the waitingroom
      *
      * @return list of players
      */
@@ -236,6 +234,20 @@ public class ServerUtils {
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<>() {
                 });
+    }
+
+    /**
+     * Gets all players, in the multiplayerGame
+     *
+     * @return list of players
+     */
+    public List<Player> getPlayersMultiplayer(){
+        return ClientBuilder.newClient(new ClientConfig()) //
+            .target(serverURL).path("api/poll/players")
+            .request(APPLICATION_JSON) //
+            .accept(APPLICATION_JSON) //
+            .get(new GenericType<>() {
+            });
     }
 
     /**
@@ -292,10 +304,24 @@ public class ServerUtils {
      */
     public Boolean removePlayerWaitingRoom(Player player) {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(serverURL).path("api/poll/remove-player")
+                .target(serverURL).path("api/poll/remove-player-waiting-room")
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .post(Entity.entity(player, APPLICATION_JSON), Boolean.class);
+    }
+
+    /**
+     * Removes a player from multiplayer
+     *
+     * @param player player to be removed
+     * @return true if removed correctly else false
+     */
+    public Boolean removePlayerMultiplayer(Player player) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+            .target(serverURL).path("api/poll/remove-player")
+            .request(APPLICATION_JSON) //
+            .accept(APPLICATION_JSON) //
+            .post(Entity.entity(player, APPLICATION_JSON), Boolean.class);
     }
 
     /**

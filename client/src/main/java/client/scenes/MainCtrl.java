@@ -183,17 +183,6 @@ public class MainCtrl {
     }
 
     /**
-     * method for showing the waiting room
-     */
-    public void showWaitingRoom() {
-        primaryStage.getScene().setRoot(waitingRoomParent);
-        startListening();
-        MPStarted = false;
-        waitingRoomCtrl.refresh();
-        checkDarkMode();
-    }
-
-    /**
      * method for showing the settings screen
      */
     public void showSettingsScreen() {
@@ -495,27 +484,46 @@ public class MainCtrl {
     private Player player;
 
     /**
+     * method for showing the waiting room
+     */
+    public void showWaitingRoom() {
+        primaryStage.getScene().setRoot(waitingRoomParent);
+        startListening();
+        MPStarted = false;
+        multiPlayerGame = null;
+        packet = new GameUpdatesPacket();
+        waitingRoomCtrl.refresh();
+        checkDarkMode();
+    }
+
+    /**
      * start listening for updates
      * if questionnumber is wrong it updates it
      * if current screen is wrong is forces the player to the correct screen
      */
     public void startListening() {
         server.registerUpdates(c -> {
-            packet = c;
-
-            if(!MPStarted && !"WAITINGROOM".equals(c.getCurrentScreen())){
-                MPStarted = true;
-                System.out.println("Starting multiplayer");
+            System.out.println("new: " + c + "\nold: " + packet);
+            if(packet.getHashListPlayers() != c.getHashListPlayers()){
                 try {
-                    server.getMultiplayerGame();
+                    if(!MPStarted){
+                        waitingRoomCtrl.refresh();
+                    } else {
+                        System.out.println(server.getPlayersMultiplayer());
+                    }
                 } catch (Exception e) {
                     showPopup("Connection failed");
                 }
             }
-            waitingRoomCtrl.refresh();
-
-            System.out.println("object identity: " + c + " has changed");
-            System.out.println(server.getPlayersInWaitingRoom());
+            if(primaryStage.getScene().getRoot().equals(waitingRoomParent) && !MPStarted && !"WAITINGROOM".equals(c.getCurrentScreen())){
+                MPStarted = true;
+                try {
+                    System.out.println(server.getMultiplayerGame());
+                } catch (Exception e) {
+                    showPopup("Connection failed");
+                }
+            }
+            packet = c;
 
             /*if (c.getQuestionNumber() != currentQuestionNum && c.getCurrentScreen() != currentScreen) {
                 currentQuestionNum = c.getQuestionNumber();
@@ -535,6 +543,15 @@ public class MainCtrl {
      * stops the thread used for long polling
      */
     public void stopListening(){
+        if(!MPStarted){
+            server.removePlayerWaitingRoom(player);
+        } else {
+            server.removePlayerMultiplayer(player);
+        }
+
+        MPStarted = false;
+        multiPlayerGame = null;
+        packet = null;
         server.stop();
     }
 

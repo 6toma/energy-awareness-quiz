@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
+import server.Config;
 import server.multiplayer.WaitingRoom;
 
 import java.util.HashMap;
@@ -43,11 +44,23 @@ public class LongPollController {
      * @return Multiplayer Game object
      */
     @GetMapping("start-multiplayer")
-    public ResponseEntity<Boolean> getGame(){
+    public ResponseEntity<Boolean> startGame(){
+        if(waitingRoom.getQuestions().size() < Config.numberOfQuestions){
+            return ResponseEntity.ok(false);
+        }
         multiplayerGame = waitingRoom.flushWaitingRoom();
         multiplayerGame.setCurrentScreen("LOADING SCREEN");
         listeners.forEach((k,l) -> l.accept(multiplayerGame.getGameStatus()));
         return ResponseEntity.ok(true);
+    }
+
+    /**
+     * Returns the instance of the game to the client
+     * @return Multiplayer Game object
+     */
+    @GetMapping("multiplayer")
+    public ResponseEntity<MultiPlayerGame> getGame(){
+        return ResponseEntity.ok(multiplayerGame);
     }
 
     /**
@@ -108,12 +121,27 @@ public class LongPollController {
      * @return True if the player was removed successfully
      *         otherwise return false
      */
-    @PostMapping(path = {"remove-player"})
+    @PostMapping(path = {"remove-player-waiting-room"})
     public ResponseEntity<Boolean> removePlayerFromWaitingRoom(@RequestBody Player player) {
+        boolean result = waitingRoom.removePlayerFromWaitingRoom(player);
         listeners.forEach((k,l) -> l.accept(new GameUpdatesPacket(waitingRoom.getPlayers().hashCode(), "WAITINGROOM", -1)));
         System.out.println("Player has been removed");
         System.out.println(waitingRoom.getPlayers());
-        return ResponseEntity.ok(waitingRoom.removePlayerFromWaitingRoom(player));
+        return ResponseEntity.ok(result);
+    }
+
+    /**
+     * Endpoint for removing a player from a game
+     * @return True if the player was removed successfully
+     *         otherwise return false
+     */
+    @PostMapping(path = {"remove-player"})
+    public ResponseEntity<Boolean> removePlayerFromMultiplayer(@RequestBody Player player) {
+        boolean result = multiplayerGame.removePlayer(player);
+        listeners.forEach((k,l) -> l.accept(multiplayerGame.getGameStatus()));
+        System.out.println("Player has been removed from MP");
+        System.out.println(multiplayerGame.getPlayers());
+        return ResponseEntity.ok(result);
     }
 
     /**
