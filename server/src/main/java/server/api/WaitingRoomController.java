@@ -120,15 +120,15 @@ public class WaitingRoomController {
 
         // To add more question types increment numberOfQuestions and add another if statement
         // e.g. else if(randomInt % numberOfQuestions == 1) return ...
-        /*if (randomInt % numberOfQuestions == 0) {
+        if (randomInt % numberOfQuestions == 0) {
             return getRandomComparative();
-        } else if(randomInt % numberOfQuestions == 1) {*/
+        } else if(randomInt % numberOfQuestions == 1) {
             return getRandomEstimation();
-        /*} else if(randomInt % numberOfQuestions == 2){
+        } else if(randomInt % numberOfQuestions == 2){
             return getRandomMCQuestion();
         } else {
             return getRandomEquality();
-        }*/
+        }
     }
 
     /**
