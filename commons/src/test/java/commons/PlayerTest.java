@@ -74,12 +74,6 @@ public class PlayerTest {
     /**
      * Checks if object is not equal to different  score
      */
-    @Test
-    public void equalsTest4() {
-        Player player1 = new Player("p1", 1200);
-        Player player2 = new Player("p1", 2000);
-        assertNotEquals(player1, player2);
-    }
 
     /**
      * Checks if object is not equal to different name and score
@@ -148,15 +142,6 @@ public class PlayerTest {
         assertEquals(player, player);
     }
 
-    /**
-     * Checks if object is not equal to different object
-     */
-    @Test
-    public void equalsTest12() {
-        Player player1 = new Player("p1", 1200);
-        Player player2 = new Player("p1");
-        assertNotEquals(player1, player2);
-    }
 
     /**
      * Checks if object is not equal to different object

@@ -9,6 +9,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
+import java.util.concurrent.Executors;
+
 public class UsernameScreenCtrl {
 
     private final ServerUtils server;
@@ -52,9 +54,16 @@ public class UsernameScreenCtrl {
     @FXML
     void setUsernameButtonClicked(ActionEvent event) {
         String newUser = inputUsernameField.getText();
-        if (newUser.length() > 0) { // in the future to be replaced with a isValidUsername(newUser) type function
+
+        // checking whether username is already in waiting room
+        boolean isValidUsername = (Boolean) server.checkValidityOfUsername(newUser);
+        if (isValidUsername) {
             continueButton.setDisable(false);
             usernameField.setText("Hello, " + newUser + "!");
+        }
+        else {
+            continueButton.setDisable(true);
+            usernameField.setText("Please select a different username!");
         }
     }
 
@@ -65,6 +74,7 @@ public class UsernameScreenCtrl {
 
     @FXML
     void back(ActionEvent event) {
+        continueButton.setDisable(true);
         resetUserText();
         mainCtrl.showHomeScreen();
     }
@@ -82,10 +92,30 @@ public class UsernameScreenCtrl {
             mainCtrl.getSinglePlayerGame().setPlayer(new Player(inputUsernameField.getText()));
             mainCtrl.showLoadingScreen();
         } else {
+
             //send player to multiplayer game object
-            Player newPlayer = server.addPlayerMultiplayer(new Player(inputUsernameField.getText()));
-            System.out.println(newPlayer);
-            mainCtrl.showWaitingRoom();
+            Player newPlayer = server.addPlayerWaitingRoom(new Player(inputUsernameField.getText()));
+            // create a multiplayer game on the client side
+            //TODO start the game upon clicking the start button
+            //mainCtrl.startMultiplayer();
+            mainCtrl.setPlayer(newPlayer);
+
+            if(newPlayer == null){
+                usernameField.setText("Please select a different username!");
+            }
+            else {
+                var exec = Executors.newSingleThreadExecutor();
+                exec.submit(() -> {
+                    if(!server.areQuestionsGenerated()){
+                        System.out.println("I am generating the questions");;
+                    }
+                    else System.out.println("Questions have been already generated");
+                });
+
+                System.out.println(newPlayer);
+                mainCtrl.showWaitingRoom();
+            }
+
         }
         // CONTINUE button has been pressed
         // so a username is now in use

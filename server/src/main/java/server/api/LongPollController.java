@@ -4,14 +4,15 @@ import commons.GameUpdatesPacket;
 import commons.MultiPlayerGame;
 import commons.Player;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
+import server.multiplayer.WaitingRoom;
 
-import java.net.URI;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 
 
@@ -25,14 +26,18 @@ public class LongPollController {
      * For each thing in list we send another request for the body of that change
      */
     private final MultiPlayerGame multiplayerGame;
-
+    private final WaitingRoom waitingRoom;
+    private GameUpdatesPacket gameUpdatesPacket;
     /**
      * Creates a Polling Controller
      * @param multiplayerGame injected instance of MultiPlayerGame
+     * @param waitingRoom injected instance of WaitingRoom
      */
     @Autowired
-    public LongPollController(MultiPlayerGame multiplayerGame){
+    public LongPollController(MultiPlayerGame multiplayerGame, WaitingRoom waitingRoom, GameUpdatesPacket gameUpdatesPacket){
         this.multiplayerGame = multiplayerGame;
+        this.waitingRoom = waitingRoom;
+        this.gameUpdatesPacket = gameUpdatesPacket;
     }
 
     /**
@@ -56,7 +61,7 @@ public class LongPollController {
 
     /**
      * Gets the question currently on 'ID'
-     * @return integer of whcih question server is on eg 3 (out of 20)
+     * @return integer of which question server is on eg 3 (out of 20)
      */
     @GetMapping("CurrentQuestionNumber")
     public ResponseEntity<Integer> getCurrentQuestion(){
@@ -81,11 +86,48 @@ public class LongPollController {
      * @return player that was added
      */
     @PostMapping(path={"add-player"})
-    public ResponseEntity<Player> postPlayers(@RequestBody Player player){
-        multiplayerGame.getPlayers().add(player);
-        listeners.forEach((k,l) -> l.accept(multiplayerGame.currentGameStatus()));
+    public ResponseEntity<Player> postPlayer(@RequestBody Player player){
+        listeners.forEach((k,l) -> l.accept(new GameUpdatesPacket()));
+        List<Player> players = multiplayerGame.getPlayers();
+        players.add(player);
         return ResponseEntity.ok(player);
         //s.get(players.size()-1)
+    }
+
+    /**
+     * Adds the player to the list of players in the instance of WaitingRoom
+     * updates listener to accept number 1. 1 meaning the number of players changed
+     * @param player player to be added to the game
+     * @return player that was added
+     */
+    @PostMapping(path={"add-player-waiting-room"})
+    public ResponseEntity<Player> postPlayerToWaitingRoom(@RequestBody Player player){
+
+        listeners.forEach((k,l) -> l.accept(new GameUpdatesPacket(waitingRoom.getPlayers().hashCode(), "WAITINGROOM", -1)));
+        if(player == null) {
+            return ResponseEntity.ok(null);
+        }
+        for(var p : waitingRoom.getPlayers()){
+            if(p.getName().equals(player.getName())) {
+                return ResponseEntity.ok(null);
+            }
+        }
+        waitingRoom.addPlayerToWaitingRoom(player);
+        System.out.println("Player added");
+        return ResponseEntity.ok(player);
+        //s.get(players.size()-1)
+    }
+    /**
+     * Endpoint for removing a player from a waiting room
+     * @return True if the player was removed successfully
+     *         otherwise return false
+     */
+    @PostMapping(path = {"remove-player"})
+    public ResponseEntity<Boolean> removePlayerFromWaitingRoom(@RequestBody Player player) {
+        listeners.forEach((k,l) -> l.accept(new GameUpdatesPacket(waitingRoom.getPlayers().hashCode(), "WAITINGROOM", -1)));
+        System.out.println("Player has been removed");
+        System.out.println(waitingRoom.getPlayers());
+        return ResponseEntity.ok(waitingRoom.removePlayerFromWaitingRoom(player));
     }
 
     /**
@@ -104,45 +146,6 @@ public class LongPollController {
         multiplayerGame.getPlayers().get(indexPlayer).setScore(player.getScore());
         return ResponseEntity.ok(player);
     }
-
-
-    /**
-     * tells server to start game
-     * @return ok sign idk
-     */
-    @PostMapping(path = {"StartGame"})
-    public ResponseEntity<Boolean> startGame(@RequestBody Boolean bool){
-        multiplayerGame.setStarted(bool);
-        startQuestions();
-        return ResponseEntity.ok(true);
-    }
-
-    /**
-     * this doesnt work
-     */
-    public void startQuestions(){
-        Timer timer = new Timer();
-        TimerTask task = new TimerTask() {
-            @Override
-            public void run() {
-                GameUpdatesPacket state = multiplayerGame.currentGameStatus();
-                System.out.println(state);
-                listeners.forEach((k,l) -> l.accept(state));
-                if(multiplayerGame.getQuestionNumber()==20){
-                    System.out.print(multiplayerGame.getQuestionNumber());
-                    cancel();
-                }
-                multiplayerGame.setCurrentScreen("QUESTION");
-                int currentQ = multiplayerGame.getQuestionNumber();
-                multiplayerGame.setQuestionNumber(currentQ+1);
-
-            }
-        };
-
-        timer.schedule(task, 500, 6*1000);
-        //timer.cancel();
-    }
-
 
     private Map<Object, Consumer<GameUpdatesPacket>> listeners = new HashMap<>();
     /**
@@ -185,6 +188,7 @@ public class LongPollController {
      * @return the same thing as input
      * @throws InterruptedException interrupts something
      */
+    /*
     private ResponseEntity<List<Integer>> keepPolling(Integer input) throws InterruptedException {
         Thread.sleep(5000);
         HttpHeaders headers = new HttpHeaders();
@@ -192,5 +196,6 @@ public class LongPollController {
         headers.setLocation(URI.create("/getMessages?id=" + input + "&type=" + input));
         return new ResponseEntity<>(headers, HttpStatus.TEMPORARY_REDIRECT);
     }
+     */
 
 }
