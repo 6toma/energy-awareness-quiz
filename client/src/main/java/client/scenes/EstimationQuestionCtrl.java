@@ -7,11 +7,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TextFormatter;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
@@ -363,6 +359,26 @@ public class EstimationQuestionCtrl {
         } else {
             joker3.setMouseTransparent(false);
         }
+    }
+
+    /**
+     * Add tooltips for the jokers
+     */
+    public void addTooltips() {
+        Tooltip skipQuestion = new Tooltip();
+        skipQuestion.setText("Skip this question!");
+        skipQuestion.setShowDelay(Duration.ZERO);
+        joker1.setTooltip(skipQuestion);
+
+        Tooltip cutAnswer = new Tooltip();
+        cutAnswer.setText("Reveal a wrong answer!");
+        cutAnswer.setShowDelay(Duration.ZERO);
+        joker2.setTooltip(cutAnswer);
+
+        Tooltip doublePoints = new Tooltip();
+        doublePoints.setText("Double score intake for this question!");
+        doublePoints.setShowDelay(Duration.ZERO);
+        joker3.setTooltip(doublePoints);
     }
 
 }
