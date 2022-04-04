@@ -363,4 +363,45 @@ public class PlayerTest {
         assertEquals(6, a.getStreak());
     }
 
+    /**
+     * comparing to a non player class
+     */
+    @Test
+    public void testEquals() {
+        Player p = new Player("a");
+        Object p1 = new Object();
+        assertFalse(p.equals(p1));
+    }
+
+    /**
+     * negative streak
+     */
+    @Test()
+    public void testNegativeStreak() throws Exception{
+        Player p = new Player("a");
+        assertThrows(IllegalArgumentException.class, () -> {
+            p.setStreak(-6);
+        }, "Streak cannot be negative");
+    }
+
+    /**
+     * negative score constructor
+     */
+    @Test()
+    public void testNegativeScoreConstructor() {
+        Player p = new Player("a", -10);
+        assertEquals("a", p.getName());
+        assertEquals(0, p.getScore());
+    }
+
+    /**
+     * negative score constructor
+     */
+    @Test()
+    public void testNegativeScoreConstructor1() {
+        Player p = new Player(20L,"a", -10);
+        assertEquals(20L, p.getId());
+        assertEquals("a", p.getName());
+        assertEquals(0, p.getScore());
+    }
 }
