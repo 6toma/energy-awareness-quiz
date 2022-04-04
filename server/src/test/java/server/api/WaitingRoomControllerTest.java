@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import server.Config;
+import server.SomeController;
 import server.api.dependencies.TestActivityRepository;
 import server.api.dependencies.TestRandom;
 import server.multiplayer.WaitingRoom;
@@ -55,6 +56,12 @@ class WaitingRoomControllerTest {
     void cleanUp(){
         repo.activities = new ArrayList<>();
         random.setCount(0);
+    }
+
+    @Test
+    void someControllerTest() {
+        SomeController someController = new SomeController();
+        assertEquals("Hello there General Kenobi!", someController.index());
     }
 
     /**
