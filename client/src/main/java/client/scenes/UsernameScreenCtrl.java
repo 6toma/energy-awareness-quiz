@@ -61,7 +61,7 @@ public class UsernameScreenCtrl {
         }
         else {
             continueButton.setDisable(true);
-            usernameField.setText("Please select a different username!");
+            usernameField.setText("Username taken!");
         }
     }
 
@@ -94,7 +94,7 @@ public class UsernameScreenCtrl {
             //send player to multiplayer game object
             Player newPlayer = server.addPlayerWaitingRoom(new Player(inputUsernameField.getText()));
             if(newPlayer == null){
-                usernameField.setText("Please select a different username!");
+                usernameField.setText("Username taken!");
             }
             else {
                 if(!server.areQuestionsGenerated()){
