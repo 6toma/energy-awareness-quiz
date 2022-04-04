@@ -499,35 +499,40 @@ public class MainCtrl {
     public void startListening() {
         server.registerUpdates(c -> {
             Platform.runLater(() -> {
-                System.out.println("packet: " + c);
-                if(packet.getHashListPlayers() != c.getHashListPlayers()){
-                    try {
-                        if(!MultiplayerStarted){
-                            waitingRoomCtrl.refresh();
-                        } else {
-                            System.out.println(server.getPlayersMultiplayer());
+                if(packet != null) {
+                    System.out.println("packet: " + c);
+                    if (packet.getHashListPlayers() != c.getHashListPlayers()) {
+                        updatePlayerList();
+                    }
+                    // Check if you are in waiting room and game has been started
+                    if (primaryStage.getScene().getRoot().equals(waitingRoomParent) && !MultiplayerStarted && !"WAITINGROOM".equals(c.getCurrentScreen())) {
+                        MultiplayerStarted = true;
+                        try {
+                            multiPlayerGame = server.getMultiplayerGame();
+                            System.out.println(multiPlayerGame);
+                        } catch (Exception e) {
+                            showPopup("Connection failed");
                         }
-                    } catch (Exception e) {
-                        showPopup("Connection failed");
                     }
-                }
-                // Check if you are in waiting room and game has been started
-                if(primaryStage.getScene().getRoot().equals(waitingRoomParent) && !MultiplayerStarted && !"WAITINGROOM".equals(c.getCurrentScreen())){
-                    MultiplayerStarted = true;
-                    try {
-                        multiPlayerGame = server.getMultiplayerGame();
-                        System.out.println(multiPlayerGame);
-                    } catch (Exception e) {
-                        showPopup("Connection failed");
+                    if (MultiplayerStarted && (c.getCurrentScreen() != packet.getCurrentScreen() || c.getQuestionNumber() != packet.getQuestionNumber())) {
+                        changeScreenMultiplayer(c);
                     }
+                    packet = c;
                 }
-                if(MultiplayerStarted && (c.getCurrentScreen() != packet.getCurrentScreen() || c.getQuestionNumber() != packet.getQuestionNumber())){
-                    System.out.println(Thread.currentThread().getName());
-                    changeScreenMultiplayer(c);
-                }
-                packet = c;
             });
         });
+    }
+
+    private void updatePlayerList(){
+        try {
+            if(!MultiplayerStarted){
+                waitingRoomCtrl.refresh();
+            } else {
+                System.out.println(server.getPlayersMultiplayer());
+            }
+        } catch (Exception e) {
+            showPopup("Connection failed");
+        }
     }
 
     /**
@@ -567,6 +572,12 @@ public class MainCtrl {
      * @param packet the packet with the updates
      */
     public void changeScreenMultiplayer(GameUpdatesPacket packet) {
+
+        comparativeQuestionScreenCtrl.setMultiplayer(true);
+        comparativeQuestionScreenCtrl.resetComparativeQuestionScreen();
+        estimationScreenCtrl.setMultiplayer(true);
+        estimationScreenCtrl.resetEstimationQuestion();
+
         if (packet.getCurrentScreen().equals("QUESTION")) {
             showQuestionMultiplayer(packet);
         } else if (packet.getCurrentScreen().equals("LEADERBOARD")) {
@@ -575,8 +586,7 @@ public class MainCtrl {
             //showLeaderBoard();
             System.out.println("Leaderboard screen");
         } else if (packet.getCurrentScreen().equals("ENDSCREEN")) {
-            //showEndScreen();
-            System.out.println("End screen");
+            showEndScreen();
         } else if (packet.getCurrentScreen().equals("LOADING SCREEN")){
             showLoadingScreen(true);
         }

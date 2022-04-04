@@ -65,7 +65,7 @@ public class LongPollController {
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
-                if(multiplayerGame.getQuestionNumber() < Config.numberOfQuestions){
+                if(multiplayerGame.getQuestionNumber() < Config.numberOfQuestions - 1){
                     multiplayerGame.setCurrentScreen("QUESTION");
                     multiplayerGame.nextQuestion();
                 } else {
@@ -78,7 +78,7 @@ public class LongPollController {
             }
         };
 
-        timer.schedule(task, 3000, 6*1000);
+        timer.schedule(task, 3000, (15+4)*1000);
     }
 
     /**
