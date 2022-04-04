@@ -208,13 +208,11 @@ public class EstimationQuestionCtrl {
         double guessQuestionRate=1.0;
         if(time == -1){
             mainCtrl.getPlayer().resetStreak();
-            mainCtrl.getPlayer().setScoreGained(0);
         } else {
             mainCtrl.getPlayer().incrementStreak();
             int currentScore = mainCtrl.getPlayer().getScore();
             long points = Math.round(((100.0 +mainCtrl.getPlayer().getStreak()) / 100.0) * (1050 - 5 * time));
             int pointsToBeAdded = (int) Math.round(guessQuestionRate * points);
-            mainCtrl.getPlayer().setScoreGained(pointsToBeAdded);
             mainCtrl.getPlayer().setScore(currentScore + pointsToBeAdded);
         }
         server.postScore(mainCtrl.getPlayer());

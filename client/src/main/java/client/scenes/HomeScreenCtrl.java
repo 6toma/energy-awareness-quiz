@@ -100,7 +100,7 @@ public class HomeScreenCtrl implements Initializable {
 
         server.setServerURL(mainCtrl.getServerURL());
         try {
-            //System.out.println(server.getRandomQuestion());
+            System.out.println(server.getRandomQuestion());
             mainCtrl.setUsernameOriginScreen(2);
             mainCtrl.showUsernameScreen();
         } catch (Exception e) {

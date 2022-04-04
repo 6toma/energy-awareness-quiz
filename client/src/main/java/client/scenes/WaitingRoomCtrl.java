@@ -50,30 +50,9 @@ public class WaitingRoomCtrl implements Initializable {
      */
     public void back() {
         server.removePlayerWaitingRoom(mainCtrl.getPlayer());
-        stop();
+        mainCtrl.stopListening();
         mainCtrl.resetUserText();
         mainCtrl.showHomeScreen();
-    }
-
-    /**
-     * start listening for updates
-     */
-    public void startListening(){
-        // default packet set at the beginning of the waiting room
-        mainCtrl.setPacket(new GameUpdatesPacket(server.getPlayersInWaitingRoom().hashCode(), "WAITINGROOM", -1 ));
-        server.registerUpdates(c -> {
-            refresh();
-            mainCtrl.setPacket(new GameUpdatesPacket(server.getPlayersInWaitingRoom().hashCode(), "WAITINGROOM", -1 ));
-            System.out.println("object identity: " + c + " has changed");
-            System.out.println(server.getPlayersInWaitingRoom());
-        });
-    }
-
-    /**
-     * stops the thread used for long polling
-     */
-    public void stop(){
-        server.stop();
     }
 
     private ObservableList<Player> players;
@@ -137,6 +116,6 @@ public class WaitingRoomCtrl implements Initializable {
      * Starts the gam when you click start
      */
     public void startGame() {
-        mainCtrl.startMultiplayer();
+        //mainCtrl.startMultiplayer();
     }
 }

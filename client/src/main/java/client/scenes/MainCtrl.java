@@ -166,7 +166,7 @@ public class MainCtrl {
             @Override
             public void handle(WindowEvent t) {
                 server.removePlayerWaitingRoom(player);
-                waitingRoomCtrl.stop();
+                stopListening();
                 Platform.exit();
                 System.exit(0);
             }
@@ -187,7 +187,7 @@ public class MainCtrl {
      */
     public void showWaitingRoom() {
         primaryStage.getScene().setRoot(waitingRoomParent);
-        waitingRoomCtrl.startListening();
+        startListening();
         waitingRoomCtrl.refresh();
         checkDarkMode();
     }
@@ -491,14 +491,14 @@ public class MainCtrl {
     /**
      * starts the multiplayer game
      */
-    public void startMultiplayer() {
+    /*public void startMultiplayer() {
         multiPlayerGame = server.getMultiplayerGame();
         player = new Player("name");
         currentQuestionNum = 0;
         currentScreen = "";
         startListening();
 
-    }
+    }*/
 
     /**
      *
@@ -535,7 +535,12 @@ public class MainCtrl {
      */
     public void startListening() {
         server.registerUpdates(c -> {
-            if (c.getQuestionNumber() != currentQuestionNum && c.getCurrentScreen() != currentScreen) {
+            waitingRoomCtrl.refresh();
+
+            System.out.println("object identity: " + c + " has changed");
+            System.out.println(server.getPlayersInWaitingRoom());
+
+            /*if (c.getQuestionNumber() != currentQuestionNum && c.getCurrentScreen() != currentScreen) {
                 currentQuestionNum = c.getQuestionNumber();
                 changeScreenMultiplayer(c);
 
@@ -545,8 +550,15 @@ public class MainCtrl {
 
             } else if (c.getQuestionNumber() == currentQuestionNum && c.getCurrentScreen() != currentScreen) {
                 changeScreenMultiplayer(c);
-            }
+            }*/
         });
+    }
+
+    /**
+     * stops the thread used for long polling
+     */
+    public void stopListening(){
+        server.stop();
     }
 
     /**
@@ -555,7 +567,7 @@ public class MainCtrl {
      *
      * @param packet the packet with the updates
      */
-    public void changeScreenMultiplayer(GameUpdatesPacket packet) {
+    /*public void changeScreenMultiplayer(GameUpdatesPacket packet) {
         if (packet.getCurrentScreen().equals("QUESTION")) {
             showQuestionMultiplayer();
         } else if (packet.getCurrentScreen().equals("LEADERBOARD")) {
@@ -565,6 +577,6 @@ public class MainCtrl {
         } else if (packet.getCurrentScreen().equals("ENDSCREEN")) {
             showEndScreen();
         }
-    }
+    }*/
 }
 
