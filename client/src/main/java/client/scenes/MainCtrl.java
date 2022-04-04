@@ -196,8 +196,9 @@ public class MainCtrl {
     public void showLoadingScreen(boolean multiPlayer) {
         primaryStage.getScene().setRoot(loadingScreenParent);
         checkDarkMode();
-        loadingScreenCtrl.countdown();
         loadingScreenCtrl.setMultiplayer(multiPlayer);
+        loadingScreenCtrl.getCounter().setText("3");
+        loadingScreenCtrl.countdown();
     }
 
     /**
@@ -213,22 +214,24 @@ public class MainCtrl {
      * method for showing the comparative question
      */
     public void showComparativeQuestionScreen(boolean multiplayer) {
-        primaryStage.getScene().setRoot(comparativeQuestionScreenParent);
-        checkDarkMode();
         comparativeQuestionScreenCtrl.addTooltips();
         comparativeQuestionScreenCtrl.setMultiplayer(multiplayer);
+        comparativeQuestionScreenCtrl.resetComparativeQuestionScreen();
         comparativeQuestionScreenCtrl.countdown();
+        primaryStage.getScene().setRoot(comparativeQuestionScreenParent);
+        checkDarkMode();
     }
 
     /**
      * method for showing an Estimation question
      */
     public void showEstimationQuestionScreen(boolean multiplayer) {
-        primaryStage.getScene().setRoot(estimationQuestionParent);
-        checkDarkMode();
         estimationScreenCtrl.addTooltips();
         estimationScreenCtrl.setMultiplayer(multiplayer);
+        estimationScreenCtrl.resetEstimationQuestion();
         estimationScreenCtrl.countdown();
+        primaryStage.getScene().setRoot(estimationQuestionParent);
+        checkDarkMode();
     }
 
 
@@ -450,15 +453,6 @@ public class MainCtrl {
     }
 
     /**
-     * Resets all attributes on the question screens
-     * Used when the game is left unfinished
-     */
-    public void resetQuestionScreens() {
-        comparativeQuestionScreenCtrl.resetComparativeQuestionScreen();
-        estimationScreenCtrl.resetEstimationQuestion();
-    }
-
-    /**
      * Shows an error popup message
      *
      * @param message to be shown on the popup
@@ -504,31 +498,35 @@ public class MainCtrl {
      */
     public void startListening() {
         server.registerUpdates(c -> {
-            System.out.println("packet: " + c);
-            if(packet.getHashListPlayers() != c.getHashListPlayers()){
-                try {
-                    if(!MultiplayerStarted){
-                        waitingRoomCtrl.refresh();
-                    } else {
-                        System.out.println(server.getPlayersMultiplayer());
+            Platform.runLater(() -> {
+                System.out.println("packet: " + c);
+                if(packet.getHashListPlayers() != c.getHashListPlayers()){
+                    try {
+                        if(!MultiplayerStarted){
+                            waitingRoomCtrl.refresh();
+                        } else {
+                            System.out.println(server.getPlayersMultiplayer());
+                        }
+                    } catch (Exception e) {
+                        showPopup("Connection failed");
                     }
-                } catch (Exception e) {
-                    showPopup("Connection failed");
                 }
-            }
-            // Check if you are in waiting room and game has been started
-            if(primaryStage.getScene().getRoot().equals(waitingRoomParent) && !MultiplayerStarted && !"WAITINGROOM".equals(c.getCurrentScreen())){
-                MultiplayerStarted = true;
-                try {
-                    System.out.println(server.getMultiplayerGame());
-                } catch (Exception e) {
-                    showPopup("Connection failed");
+                // Check if you are in waiting room and game has been started
+                if(primaryStage.getScene().getRoot().equals(waitingRoomParent) && !MultiplayerStarted && !"WAITINGROOM".equals(c.getCurrentScreen())){
+                    MultiplayerStarted = true;
+                    try {
+                        multiPlayerGame = server.getMultiplayerGame();
+                        System.out.println(multiPlayerGame);
+                    } catch (Exception e) {
+                        showPopup("Connection failed");
+                    }
                 }
-            }
-            if(MultiplayerStarted && c.getCurrentScreen() != packet.getCurrentScreen() || c.getQuestionNumber() != packet.getQuestionNumber()){
-                changeScreenMultiplayer(c);
-            }
-            packet = c;
+                if(MultiplayerStarted && (c.getCurrentScreen() != packet.getCurrentScreen() || c.getQuestionNumber() != packet.getQuestionNumber())){
+                    System.out.println(Thread.currentThread().getName());
+                    changeScreenMultiplayer(c);
+                }
+                packet = c;
+            });
         });
     }
 
@@ -570,7 +568,7 @@ public class MainCtrl {
      */
     public void changeScreenMultiplayer(GameUpdatesPacket packet) {
         if (packet.getCurrentScreen().equals("QUESTION")) {
-            showQuestionMultiplayer();
+            showQuestionMultiplayer(packet);
         } else if (packet.getCurrentScreen().equals("LEADERBOARD")) {
             //scoreChangeMultiplayerCtrl.setTableLeaderboard();
             //scoreChangeMultiplayerCtrl.setScoreLabels(0, player.getScore(), player.getStreak());
@@ -587,11 +585,10 @@ public class MainCtrl {
     /**
      *
      */
-    public void showQuestionMultiplayer() {
+    public void showQuestionMultiplayer(GameUpdatesPacket packet) {
         Question question = multiPlayerGame.getQuestions().get(packet.getQuestionNumber());
         System.out.println(question);
         // check the question type
-        resetQuestionScreens();
         if (question instanceof ComparativeQuestion
                 || question instanceof MCQuestion
                 || question instanceof EqualityQuestion) {

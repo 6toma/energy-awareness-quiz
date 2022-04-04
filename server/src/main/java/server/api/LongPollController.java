@@ -65,12 +65,12 @@ public class LongPollController {
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
-                if(multiplayerGame.getQuestionNumber()==20){
-                    multiplayerGame.setCurrentScreen("ENDSCREEN");
-                    cancel();
-                } else {
+                if(multiplayerGame.getQuestionNumber() < Config.numberOfQuestions){
                     multiplayerGame.setCurrentScreen("QUESTION");
                     multiplayerGame.nextQuestion();
+                } else {
+                    multiplayerGame.setCurrentScreen("ENDSCREEN");
+                    cancel();
                 }
                 GameUpdatesPacket state = multiplayerGame.getGameStatus();
                 System.out.println(state);

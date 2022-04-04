@@ -26,6 +26,8 @@ public class LoadingScreenCtrl {
     @FXML
     private Button back;
 
+    @Getter
+    @Setter
     @FXML
     private Label counter;
 
@@ -59,7 +61,6 @@ public class LoadingScreenCtrl {
      * Displays seconds on the screen
      */
     public void countdown() {
-
         TimerTask task = new TimerTask() {
             int second = 2;
 
@@ -73,10 +74,10 @@ public class LoadingScreenCtrl {
                             cancel();
                             if(!multiplayer){
                                 mainCtrl.nextQuestionScreen();
+                                counter.setText("3");
                             } else {
                                 System.out.println("Waiting for question screen");
                             }
-                            counter.setText("3");
                         } else {
                             counter.setText(String.valueOf(second--));
                         }

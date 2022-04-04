@@ -312,7 +312,7 @@ public class ComparativeQuestionScreenCtrl {
         }
         mainCtrl.showHomeScreen();
         stopTimers();
-        mainCtrl.resetQuestionScreens();
+        resetComparativeQuestionScreen();
     }
 
     /**
@@ -471,16 +471,18 @@ public class ComparativeQuestionScreenCtrl {
      */
     @FXML
     private void joker1() {
-        joker1.setDisable(true);
-        mainCtrl.getSinglePlayerGame().useJokerAdditionalQuestion();
+        if(!multiplayer) {
+            joker1.setDisable(true);
+            mainCtrl.getSinglePlayerGame().useJokerAdditionalQuestion();
 
-        stopTimers();
-        /* even if the correct answer was selected before the question was changed, 0 points will be added
-        * the method addPoints() is used just to increment the number of the current question in the list
-        * streak is reset to 0
-        */
-        pointsGainedForQuestion = mainCtrl.getSinglePlayerGame().addPoints(-1, 0.0);
-        endQuestion();
+            stopTimers();
+            /* even if the correct answer was selected before the question was changed, 0 points will be added
+             * the method addPoints() is used just to increment the number of the current question in the list
+             * streak is reset to 0
+             */
+            pointsGainedForQuestion = mainCtrl.getSinglePlayerGame().addPoints(-1, 0.0);
+            endQuestion();
+        }
     }
 
     /**
@@ -488,30 +490,32 @@ public class ComparativeQuestionScreenCtrl {
      */
     @FXML
     private void joker2() {
-        joker2.setDisable(true); // disable button
-        mainCtrl.getSinglePlayerGame().useJokerRemoveOneAnswer();
+        if(!multiplayer) {
+            joker2.setDisable(true); // disable button
+            mainCtrl.getSinglePlayerGame().useJokerRemoveOneAnswer();
 
-        int correctAnswer = -1;
-        if(questionMode == 0){
-            correctAnswer = question.getCorrect_answer();
-        } else if(questionMode == 1){
-            correctAnswer = mcQuestion.getCorrect_answer();
-        } else if(questionMode == 2){
-            correctAnswer = equalityQuestion.getCorrect_answer();
-        }
+            int correctAnswer = -1;
+            if (questionMode == 0) {
+                correctAnswer = question.getCorrect_answer();
+            } else if (questionMode == 1) {
+                correctAnswer = mcQuestion.getCorrect_answer();
+            } else if (questionMode == 2) {
+                correctAnswer = equalityQuestion.getCorrect_answer();
+            }
 
-        Random random = new Random();
-        int x = Math.abs(random.nextInt() % 2); // get a 0 or 1 randomly
-        int disableOption = (correctAnswer + x + 1) % 3; // get one of the incorrect answers
-        if(disableOption == 0) {
-            answer1.setDisable(true);
-            answer1.setStyle("-fx-background-color: #fc1c45;");
-        } else if(disableOption == 1) {
-            answer2.setDisable(true);
-            answer2.setStyle("-fx-background-color: #fc1c45;");
-        } else if(disableOption == 2) {
-            answer3.setDisable(true);
-            answer3.setStyle("-fx-background-color: #fc1c45;");
+            Random random = new Random();
+            int x = Math.abs(random.nextInt() % 2); // get a 0 or 1 randomly
+            int disableOption = (correctAnswer + x + 1) % 3; // get one of the incorrect answers
+            if (disableOption == 0) {
+                answer1.setDisable(true);
+                answer1.setStyle("-fx-background-color: #fc1c45;");
+            } else if (disableOption == 1) {
+                answer2.setDisable(true);
+                answer2.setStyle("-fx-background-color: #fc1c45;");
+            } else if (disableOption == 2) {
+                answer3.setDisable(true);
+                answer3.setStyle("-fx-background-color: #fc1c45;");
+            }
         }
     }
 
@@ -520,10 +524,12 @@ public class ComparativeQuestionScreenCtrl {
      */
     @FXML
     private void joker3() {
-        joker3.setDisable(true); // disable button
-        mainCtrl.getSinglePlayerGame().useJokerDoublePoints();
+        if(!multiplayer) {
+            joker3.setDisable(true); // disable button
+            mainCtrl.getSinglePlayerGame().useJokerDoublePoints();
 
-        additionalPoints = 2.0; // points will be double only for the current question
+            additionalPoints = 2.0; // points will be double only for the current question
+        }
     }
 
     /**
@@ -546,6 +552,7 @@ public class ComparativeQuestionScreenCtrl {
      * Resets the comparative question screen
      */
     public void resetComparativeQuestionScreen() {
+        stopTimers();
         reset();
         resetJokers();
         //chat/emoji will possibly have to be included as well
@@ -573,22 +580,24 @@ public class ComparativeQuestionScreenCtrl {
      * Resets the mouse-transparency, used when answers are being shown
      */
     private void setJokers() {
-        if(mainCtrl.getSinglePlayerGame().jokerAdditionalQuestionIsUsed()) {
-            joker1.setDisable(true);
-        } else {
-            joker1.setMouseTransparent(false);
-        }
-        
-        if(mainCtrl.getSinglePlayerGame().jokerRemoveOneAnswerIsUsed()) {
-            joker2.setDisable(true);
-        } else {
-            joker2.setMouseTransparent(false);
-        }
-        
-        if(mainCtrl.getSinglePlayerGame().jokerDoublePointsIsUsed()) {
-            joker3.setDisable(true);
-        } else {
-            joker3.setMouseTransparent(false);
+        if(!multiplayer){
+            if(mainCtrl.getSinglePlayerGame().jokerAdditionalQuestionIsUsed()) {
+                joker1.setDisable(true);
+            } else {
+                joker1.setMouseTransparent(false);
+            }
+
+            if(mainCtrl.getSinglePlayerGame().jokerRemoveOneAnswerIsUsed()) {
+                joker2.setDisable(true);
+            } else {
+                joker2.setMouseTransparent(false);
+            }
+
+            if(mainCtrl.getSinglePlayerGame().jokerDoublePointsIsUsed()) {
+                joker3.setDisable(true);
+            } else {
+                joker3.setMouseTransparent(false);
+            }
         }
     }
 

@@ -98,7 +98,7 @@ public class EstimationQuestionCtrl {
     public void exit() {
         mainCtrl.showHomeScreen();
         stopTimers();
-        mainCtrl.resetQuestionScreens();
+        resetEstimationQuestion();
     }
 
     /**
