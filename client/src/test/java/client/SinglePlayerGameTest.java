@@ -29,7 +29,7 @@ public class SinglePlayerGameTest {
      * Tests if the empty constructor creates an object
      */
     @Test
-    public void TestEmptyConstructor() {
+    public void testEmptyConstructor() {
         singlePlayerGame = new SinglePlayerGame();
         assertNotNull(singlePlayerGame);
     }
@@ -38,7 +38,7 @@ public class SinglePlayerGameTest {
      * Tests if the constructor with Player creates a new object
      */
     @Test
-    public void TestConstructorPlayer() {
+    public void testConstructorPlayer() {
         singlePlayerGame = new SinglePlayerGame(new Player("a"));
         assertNotNull(singlePlayerGame);
     }
@@ -47,7 +47,7 @@ public class SinglePlayerGameTest {
      * Tests if the constructor with maxQuestions creates a new object
      */
     @Test
-    public void TestConstructorMaxQuestions() {
+    public void testConstructorMaxQuestions() {
         singlePlayerGame = new SinglePlayerGame(1);
         assertNotNull(singlePlayerGame);
     }
@@ -56,7 +56,7 @@ public class SinglePlayerGameTest {
      * Tests if the constructor with maxQuestions and username creates a new object
      */
     @Test
-    public void TestConstructorMaxQuestionsUserName() {
+    public void testConstructorMaxQuestionsUserName() {
         singlePlayerGame = new SinglePlayerGame(1, "username");
         assertNotNull(singlePlayerGame);
     }
@@ -65,7 +65,7 @@ public class SinglePlayerGameTest {
      * Tests if the constructor in setup creates a new object
      */
     @Test
-    public void TestConstructor() {
+    public void testConstructor() {
         assertNotNull(singlePlayerGame);
     }
 
@@ -73,7 +73,7 @@ public class SinglePlayerGameTest {
      * Tests if a question is added successfully
      */
     @Test
-    public void TestAddQuestion(){
+    public void testAddQuestion(){
         singlePlayerGame.addQuestion(new ComparativeQuestion());
         assertEquals(1, singlePlayerGame.getQuestions().size());
     }
@@ -82,7 +82,7 @@ public class SinglePlayerGameTest {
      * Tests if the points to be added calculation is correct
      */
     @Test
-    public void TestGetPointsToBeAdded() {
+    public void testGetPointsToBeAdded() {
         singlePlayerGame.getPlayer().setStreak(5);
         assertEquals(1050, singlePlayerGame.getPointsToBeAdded(10));
         singlePlayerGame.getPlayer().setStreak(1);
@@ -96,7 +96,7 @@ public class SinglePlayerGameTest {
      * Tests if the points to be added for a regular question is correct
      */
     @Test
-    public void TestAddPointsRegularQuestion() {
+    public void testAddPointsRegularQuestion() {
         singlePlayerGame.getPlayer().setStreak(3); // once the question is answered the streak is incremented and the score calculated (actual streak will be 4)
         singlePlayerGame.addPoints(5, 1.0);
         assertEquals(1066, singlePlayerGame.getPlayer().getScore());
@@ -106,7 +106,7 @@ public class SinglePlayerGameTest {
      * Tests if the points to be added for a wrong answer is correct
      */
     @Test
-    public void TestAddPointsWrongAnswer() {
+    public void testAddPointsWrongAnswer() {
         int scoreBefore = singlePlayerGame.getPlayer().getScore();
         singlePlayerGame.addPoints(-1, 1.0);
         assertEquals(scoreBefore, singlePlayerGame.getPlayer().getScore());
@@ -116,7 +116,7 @@ public class SinglePlayerGameTest {
      * Tests if the points to be added for an estimation question is correct
      */
     @Test
-    public void TestAddPointsGuessQuestion() {
+    public void testAddPointsGuessQuestion() {
         singlePlayerGame.getPlayer().setStreak(3); // once the question is answered the streak is incremented and the score calculated (actual streak will be 4)
         singlePlayerGame.addPoints(7, 0.49);
         assertEquals(517, singlePlayerGame.getPlayer().getScore());
@@ -127,7 +127,7 @@ public class SinglePlayerGameTest {
      * Tests the nextQuestion method
      */
     @Test
-    public void TestNextQuestion() {
+    public void testNextQuestion() {
         for(int i = 0; i < 5; i++){
             singlePlayerGame.nextQuestion();
         }
@@ -139,7 +139,7 @@ public class SinglePlayerGameTest {
      * Tests if the streak is reset after a wrong answer
      */
     @Test
-    public void TestStreakAfterWrongAnswer() {
+    public void testStreakAfterWrongAnswer() {
         singlePlayerGame.addPoints(-1, 1.0);
         assertEquals(0, singlePlayerGame.getPlayer().getStreak());
     }
@@ -148,7 +148,7 @@ public class SinglePlayerGameTest {
      * Test for getPlayer
      */
     @Test
-    public void TestPlayerGetter() {
+    public void testPlayerGetter() {
         Player p = new Player("a", 420);
         singlePlayerGame.getPlayer().setScore(420);
         assertEquals(p, singlePlayerGame.getPlayer());
@@ -159,7 +159,7 @@ public class SinglePlayerGameTest {
      * Tests if question gets added
      */
     @Test
-    public void TestQuestionGetter() {
+    public void testQuestionGetter() {
         singlePlayerGame.addQuestion(new ComparativeQuestion());
         singlePlayerGame.addQuestion(new ComparativeQuestion(new ArrayList<Activity>(), true));
         assertEquals(2, singlePlayerGame.getQuestions().size());
@@ -169,7 +169,7 @@ public class SinglePlayerGameTest {
      * Test if question added was not null
      */
     @Test
-    public void TestQuestionGetterNotNull() {
+    public void testQuestionGetterNotNull() {
         singlePlayerGame.addQuestion(new ComparativeQuestion());
         singlePlayerGame.addQuestion(new ComparativeQuestion());
         assertNotNull(singlePlayerGame.getQuestions().get(0));
@@ -179,7 +179,7 @@ public class SinglePlayerGameTest {
      * Test for setQuestion
      */
     @Test
-    public void TestQuestionSetter() {
+    public void testQuestionSetter() {
         List<Question> questions = new ArrayList<>();
         questions.add(new ComparativeQuestion());
         questions.add(new ComparativeQuestion());
@@ -191,7 +191,7 @@ public class SinglePlayerGameTest {
      * Test for getQuestionNumber
      */
     @Test
-    public void TestQuestionNumberGetter() {
+    public void testQuestionNumberGetter() {
         singlePlayerGame.nextQuestion();
         singlePlayerGame.nextQuestion();
         singlePlayerGame.nextQuestion();
@@ -202,7 +202,7 @@ public class SinglePlayerGameTest {
      * Test for setPlayer
      */
     @Test
-    public void TestPlayerSetter() {
+    public void testPlayerSetter() {
         Player p = new Player("b", 420);
         singlePlayerGame.setPlayer(p);
         assertEquals(p, singlePlayerGame.getPlayer());
@@ -213,8 +213,67 @@ public class SinglePlayerGameTest {
      * Test for setQuestionNumber
      */
     @Test
-    public void TestQuestionNumberSetter() {
+    public void testQuestionNumberSetter() {
         singlePlayerGame.setQuestionNumber(3);
         assertEquals(3, singlePlayerGame.getQuestionNumber());
     }
+
+    @Test
+    void testUseJokerAdditionalQuestion(){
+        singlePlayerGame.useJokerAdditionalQuestion();
+        assertTrue(singlePlayerGame.jokerAdditionalQuestionIsUsed());
+    }
+
+    @Test
+    void testJokerAdditionalQuestionIsUsed(){
+        var isUsed = singlePlayerGame.jokerAdditionalQuestionIsUsed();
+        assertFalse(isUsed);
+
+        singlePlayerGame.useJokerAdditionalQuestion();
+        isUsed = singlePlayerGame.jokerAdditionalQuestionIsUsed();
+        assertTrue(isUsed);
+    }
+
+    @Test
+    void testUseJokerRemoveOneAnswer(){
+        singlePlayerGame.useJokerRemoveOneAnswer();
+        assertTrue(singlePlayerGame.jokerRemoveOneAnswerIsUsed());
+    }
+
+    @Test
+    void testJokerRemoveOneAnswerIsUsed(){
+        var isUsed = singlePlayerGame.jokerRemoveOneAnswerIsUsed();
+        assertFalse(isUsed);
+
+        singlePlayerGame.useJokerRemoveOneAnswer();
+        isUsed = singlePlayerGame.jokerRemoveOneAnswerIsUsed();
+        assertTrue(isUsed);
+    }
+
+    @Test
+    void testUseJokerDoublePoints(){
+        singlePlayerGame.useJokerDoublePoints();
+        assertTrue(singlePlayerGame.jokerDoublePointsIsUsed());
+    }
+
+    @Test
+    void testJokerDoublePointsIsUsed(){
+        var isUsed = singlePlayerGame.jokerDoublePointsIsUsed();
+        assertFalse(isUsed);
+
+        singlePlayerGame.useJokerDoublePoints();
+        isUsed = singlePlayerGame.jokerDoublePointsIsUsed();
+        assertTrue(isUsed);
+    }
+
+    @Test
+    void testAdditionalQuestion1(){
+        int res = singlePlayerGame.additionalQuestion();
+
+        assertEquals(0, res);
+        singlePlayerGame.useJokerAdditionalQuestion();
+        res = singlePlayerGame.additionalQuestion();
+        assertEquals(1, res);
+    }
+
 }
