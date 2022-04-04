@@ -41,7 +41,7 @@
             <TextField fx:id="inputActivitySource" prefHeight="50.0" prefWidth="200.0" promptText="Input soure"
                        styleClass="rounded"/>
             <Region maxHeight="20" minHeight="20" minWidth="30" styleClass="margin" VBox.vgrow="ALWAYS"/>
-            <TextField fx:id="inputActivityConsumption" prefHeight="50.0" prefWidth="200.0"
+            <TextField fx:id="inputActivityConsumption"  prefHeight="50.0" prefWidth="200.0"
                        promptText="Input consumption"
                        styleClass="rounded"/>
             <Region maxHeight="20" minHeight="20" minWidth="30" styleClass="margin" VBox.vgrow="ALWAYS"/>
@@ -55,24 +55,35 @@
         <Button fx:id="edit" onAction="#editActivity" text="Edit" alignment="BOTTOM_RIGHT">
             <styleClass>
                 <String fx:value="rounded"/>
+                <String fx:value="functionality-button" />
             </styleClass>
         </Button>
         <Region maxHeight="20" minHeight="20" minWidth="20.0" styleClass="margin" VBox.vgrow="ALWAYS"/>
         <Button fx:id="delete" onAction="#deleteActivity" text="Delete" alignment="BOTTOM_CENTER">
             <styleClass>
                 <String fx:value="rounded"/>
+                <String fx:value="functionality-button" />
             </styleClass>
         </Button>
         <Region maxHeight="20" minHeight="20" minWidth="20.0" styleClass="margin" VBox.vgrow="ALWAYS"/>
         <Button fx:id="add" onAction="#addActivity" text="Add" StackPane.alignment="BOTTOM_LEFT">
             <styleClass>
                 <String fx:value="rounded"/>
+                <String fx:value="functionality-button" />
             </styleClass>
         </Button>
         <Region maxHeight="20" minHeight="20" minWidth="20.0" styleClass="margin" VBox.vgrow="ALWAYS"/>
         <Button fx:id="commit" onAction="#commitEdit" text="Commit Edit" StackPane.alignment="BOTTOM_LEFT">
             <styleClass>
                 <String fx:value="rounded"/>
+                <String fx:value="functionality-button" />
+            </styleClass>
+        </Button>
+        <Region maxHeight="20" minHeight="20" minWidth="20.0" styleClass="margin" />
+        <Button fx:id="importActivities" onAction="#importActivities" alignment="BOTTOM_RIGHT" styleClass="rounded" text="Import" >
+            <styleClass>
+                <String fx:value="rounded"/>
+                <String fx:value="functionality-button" />
             </styleClass>
         </Button>
     </HBox>

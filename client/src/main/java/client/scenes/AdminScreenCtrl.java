@@ -1,6 +1,8 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
 import commons.Activity;
 import javafx.beans.property.SimpleStringProperty;
@@ -9,7 +11,12 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.List;
 import java.util.Optional;
@@ -212,5 +219,36 @@ public class AdminScreenCtrl implements Initializable {
         inputActivitySource.clear();
     }
 
+    /**
+     * method for importing activities from a json file
+     */
+    @FXML
+    public void importActivities(){
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open Resource File");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON files (*.json)", "*.json"));
+        File selectedJson = fileChooser.showOpenDialog(new Stage());
 
+        System.out.println();
+        ObjectMapper mapper = new ObjectMapper();
+        TypeReference<List<Activity>> mapType = new TypeReference<>() {
+        };
+        InputStream inputStream = TypeReference
+                .class
+                .getClassLoader()
+                .getResourceAsStream(
+                        selectedJson.getPath()
+                );
+
+        try {
+            List<Activity> activityList = mapper.readValue(inputStream, mapType);
+            for(var a : activityList){
+                server.addActivity(a);
+            }
+            System.out.println("Activity list saved successfully");
+        }
+        catch(IOException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 }
