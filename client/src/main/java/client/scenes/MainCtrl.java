@@ -193,10 +193,11 @@ public class MainCtrl {
     /**
      * method for showing the laoding screen
      */
-    public void showLoadingScreen() {
+    public void showLoadingScreen(boolean multiPlayer) {
         primaryStage.getScene().setRoot(loadingScreenParent);
         checkDarkMode();
         loadingScreenCtrl.countdown();
+        loadingScreenCtrl.setMultiplayer(multiPlayer);
     }
 
     /**
@@ -344,7 +345,7 @@ public class MainCtrl {
             singlePlayerGame.addQuestion(question);
 
             //skipping over the part where we ask for username
-            showLoadingScreen();
+            showLoadingScreen(false);
         } catch (Exception e) {
             e.printStackTrace();
             showPopup("Connection failed");
@@ -477,7 +478,7 @@ public class MainCtrl {
      */
     @Getter @Setter
     private MultiPlayerGame multiPlayerGame;
-    private boolean MPStarted;
+    private boolean MultiplayerStarted;
     @Getter @Setter
     private GameUpdatesPacket packet;
     @Getter @Setter
@@ -489,7 +490,7 @@ public class MainCtrl {
     public void showWaitingRoom() {
         primaryStage.getScene().setRoot(waitingRoomParent);
         startListening();
-        MPStarted = false;
+        MultiplayerStarted = false;
         multiPlayerGame = null;
         packet = new GameUpdatesPacket();
         waitingRoomCtrl.refresh();
@@ -503,10 +504,10 @@ public class MainCtrl {
      */
     public void startListening() {
         server.registerUpdates(c -> {
-            System.out.println("new: " + c + "\nold: " + packet);
+            System.out.println("packet: " + c);
             if(packet.getHashListPlayers() != c.getHashListPlayers()){
                 try {
-                    if(!MPStarted){
+                    if(!MultiplayerStarted){
                         waitingRoomCtrl.refresh();
                     } else {
                         System.out.println(server.getPlayersMultiplayer());
@@ -515,27 +516,19 @@ public class MainCtrl {
                     showPopup("Connection failed");
                 }
             }
-            if(primaryStage.getScene().getRoot().equals(waitingRoomParent) && !MPStarted && !"WAITINGROOM".equals(c.getCurrentScreen())){
-                MPStarted = true;
+            // Check if you are in waiting room and game has been started
+            if(primaryStage.getScene().getRoot().equals(waitingRoomParent) && !MultiplayerStarted && !"WAITINGROOM".equals(c.getCurrentScreen())){
+                MultiplayerStarted = true;
                 try {
                     System.out.println(server.getMultiplayerGame());
                 } catch (Exception e) {
                     showPopup("Connection failed");
                 }
             }
+            if(MultiplayerStarted && c.getCurrentScreen() != packet.getCurrentScreen()){
+                changeScreenMultiplayer(c);
+            }
             packet = c;
-
-            /*if (c.getQuestionNumber() != currentQuestionNum && c.getCurrentScreen() != currentScreen) {
-                currentQuestionNum = c.getQuestionNumber();
-                changeScreenMultiplayer(c);
-
-            } else if (c.getQuestionNumber() != currentQuestionNum && c.getCurrentScreen() == currentScreen) {
-                currentQuestionNum = c.getQuestionNumber();
-                showQuestionMultiplayer();
-
-            } else if (c.getQuestionNumber() == currentQuestionNum && c.getCurrentScreen() != currentScreen) {
-                changeScreenMultiplayer(c);
-            }*/
         });
     }
 
@@ -543,13 +536,13 @@ public class MainCtrl {
      * stops the thread used for long polling
      */
     public void stopListening(){
-        if(!MPStarted){
+        if(!MultiplayerStarted){
             server.removePlayerWaitingRoom(player);
         } else {
             server.removePlayerMultiplayer(player);
         }
 
-        MPStarted = false;
+        MultiplayerStarted = false;
         multiPlayerGame = null;
         packet = null;
         server.stop();
@@ -570,10 +563,32 @@ public class MainCtrl {
     }
 
     /**
+     * updates the screens
+     * needs to be its own function because of cyclomatic complectity
+     *
+     * @param packet the packet with the updates
+     */
+    public void changeScreenMultiplayer(GameUpdatesPacket packet) {
+        if (packet.getCurrentScreen().equals("QUESTION")) {
+            showQuestionMultiplayer();
+        } else if (packet.getCurrentScreen().equals("LEADERBOARD")) {
+            //scoreChangeMultiplayerCtrl.setTableLeaderboard();
+            //scoreChangeMultiplayerCtrl.setScoreLabels(0, player.getScore(), player.getStreak());
+            //showLeaderBoard();
+            System.out.println("Leaderboard screen");
+        } else if (packet.getCurrentScreen().equals("ENDSCREEN")) {
+            //showEndScreen();
+            System.out.println("End screen");
+        } else if (packet.getCurrentScreen().equals("LOADING SCREEN")){
+            showLoadingScreen(true);
+        }
+    }
+
+    /**
      *
      */
     public void showQuestionMultiplayer() {
-        Question question = multiPlayerGame.getQuestions().get(packet.getQuestionNumber());
+        Question question = multiPlayerGame.getQuestions().get(packet.getQuestionNumber() - 1);
         // check the question type
         if (question instanceof ComparativeQuestion
                 || question instanceof MCQuestion
@@ -596,23 +611,5 @@ public class MainCtrl {
         checkDarkMode();
         scoreChangeMultiplayerCtrl.countdown();
     }
-
-    /**
-     * updates the screens
-     * needs to be its own function because of cyclomatic complectity
-     *
-     * @param packet the packet with the updates
-     */
-    /*public void changeScreenMultiplayer(GameUpdatesPacket packet) {
-        if (packet.getCurrentScreen().equals("QUESTION")) {
-            showQuestionMultiplayer();
-        } else if (packet.getCurrentScreen().equals("LEADERBOARD")) {
-            scoreChangeMultiplayerCtrl.setTableLeaderboard();
-            scoreChangeMultiplayerCtrl.setScoreLabels(player.getScoreGained(), player.getScore(), player.getStreak());
-            showLeaderBoard();
-        } else if (packet.getCurrentScreen().equals("ENDSCREEN")) {
-            showEndScreen();
-        }
-    }*/
 }
 

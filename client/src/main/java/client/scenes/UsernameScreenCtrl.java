@@ -90,7 +90,7 @@ public class UsernameScreenCtrl {
     void showNextScreen(ActionEvent event) {
         if(mainCtrl.getUsernameOriginScreen() == 1) {
             mainCtrl.getSinglePlayerGame().setPlayer(new Player(inputUsernameField.getText()));
-            mainCtrl.showLoadingScreen();
+            mainCtrl.showLoadingScreen(false);
         } else {
 
             //send player to multiplayer game object
