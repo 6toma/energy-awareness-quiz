@@ -60,9 +60,9 @@ public class LongPollControllerTest {
      */
     @Test
     void getCurrentQuestionTest() {
-        assertEquals(1, lpc.getCurrentQuestion().getBody());
+        assertEquals(-1, lpc.getCurrentQuestion().getBody());
         mpg.nextQuestion();
-        assertEquals(2, lpc.getCurrentQuestion().getBody());
+        assertEquals(0, lpc.getCurrentQuestion().getBody());
     }
 
     /**
