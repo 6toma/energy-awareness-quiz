@@ -55,7 +55,7 @@ public class UsernameScreenCtrl {
 
         // checking whether username is already in waiting room
         boolean isValidUsername = (Boolean) server.checkValidityOfUsername(newUser);
-        if (isValidUsername) {
+        if (isValidUsername || mainCtrl.getUsernameOriginScreen() == 1) {
             continueButton.setDisable(false);
             usernameField.setText("Hello, " + newUser + "!");
         }
@@ -119,6 +119,8 @@ public class UsernameScreenCtrl {
             usernameField.setText("Please input your username!");
             inputUsernameField.clear();
             continueButton.setDisable(true);
+        } else {
+            continueButton.setDisable(false);
         }
     }
 
