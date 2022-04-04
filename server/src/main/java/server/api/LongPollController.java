@@ -43,9 +43,11 @@ public class LongPollController {
      * @return Multiplayer Game object
      */
     @GetMapping("start-multiplayer")
-    public ResponseEntity<MultiPlayerGame> getGame(){
+    public ResponseEntity<Boolean> getGame(){
         multiplayerGame = waitingRoom.flushWaitingRoom();
-        return ResponseEntity.ok(multiplayerGame);
+        multiplayerGame.setCurrentScreen("LOADING SCREEN");
+        listeners.forEach((k,l) -> l.accept(multiplayerGame.getGameStatus()));
+        return ResponseEntity.ok(true);
     }
 
     /**
@@ -79,28 +81,13 @@ public class LongPollController {
     }
 
     /**
-     * Adds the player to the list of players in the instance of MultiplayerGame
-     * updates listener to accept number 1. 1 meaning the number of players changed
-     * @param player player to be added to the game
-     * @return player that was added
-     */
-    @PostMapping(path={"add-player"})
-    public ResponseEntity<Player> postPlayer(@RequestBody Player player){
-        listeners.forEach((k,l) -> l.accept(multiplayerGame.getGameStatus()));
-        List<Player> players = multiplayerGame.getPlayers();
-        players.add(player);
-        return ResponseEntity.ok(player);
-        //s.get(players.size()-1)
-    }
-
-    /**
      * Adds the player to the list of players in the instance of WaitingRoom
      * updates listener to accept number 1. 1 meaning the number of players changed
      * @param player player to be added to the game
      * @return player that was added
      */
     @PostMapping(path={"add-player-waiting-room"})
-    public ResponseEntity<Player> postPlayerToWaitingRoom(@RequestBody Player player){
+    public ResponseEntity<Integer> postPlayerToWaitingRoom(@RequestBody Player player){
 
         listeners.forEach((k,l) -> l.accept(new GameUpdatesPacket(waitingRoom.getPlayers().hashCode(), "WAITINGROOM", -1)));
         if(player == null) {
@@ -113,7 +100,7 @@ public class LongPollController {
         }
         waitingRoom.addPlayerToWaitingRoom(player);
         System.out.println("Player added");
-        return ResponseEntity.ok(player);
+        return ResponseEntity.ok(waitingRoom.getMultiplayerGameID());
         //s.get(players.size()-1)
     }
     /**

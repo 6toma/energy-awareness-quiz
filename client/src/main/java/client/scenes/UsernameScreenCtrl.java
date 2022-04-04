@@ -56,7 +56,7 @@ public class UsernameScreenCtrl {
         String newUser = inputUsernameField.getText();
 
         // checking whether username is already in waiting room
-        boolean isValidUsername = (Boolean) server.checkValidityOfUsername(newUser);
+        boolean isValidUsername = server.checkValidityOfUsername(newUser);
         if (isValidUsername || mainCtrl.getUsernameOriginScreen() == 1) {
             continueButton.setDisable(false);
             usernameField.setText("Hello, " + newUser + "!");
@@ -94,25 +94,23 @@ public class UsernameScreenCtrl {
         } else {
 
             //send player to multiplayer game object
-            Player newPlayer = server.addPlayerWaitingRoom(new Player(inputUsernameField.getText()));
-            // create a multiplayer game on the client side
-            //TODO start the game upon clicking the start button
-            //mainCtrl.startMultiplayer();
-            mainCtrl.setPlayer(newPlayer);
+            Player player = new Player(inputUsernameField.getText());
+            Integer gameId = server.addPlayerWaitingRoom(player);
+            mainCtrl.setPlayer(player);
 
-            if(newPlayer == null){
+            if(gameId == null){
                 usernameField.setText("Username taken!");
             }
             else {
                 var exec = Executors.newSingleThreadExecutor();
                 exec.submit(() -> {
                     if(!server.areQuestionsGenerated()){
-                        System.out.println("I am generating the questions");;
+                        System.out.println("I am generating the questions");
                     }
                     else System.out.println("Questions have been already generated");
                 });
 
-                System.out.println(newPlayer);
+                System.out.println(player + ", " + gameId);
                 mainCtrl.showWaitingRoom();
             }
 

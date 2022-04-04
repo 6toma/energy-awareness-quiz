@@ -188,6 +188,7 @@ public class MainCtrl {
     public void showWaitingRoom() {
         primaryStage.getScene().setRoot(waitingRoomParent);
         startListening();
+        MPStarted = false;
         waitingRoomCtrl.refresh();
         checkDarkMode();
     }
@@ -483,12 +484,34 @@ public class MainCtrl {
      */
 
     /**
+     * multiplayer variables
+     */
+    @Getter @Setter
+    private MultiPlayerGame multiPlayerGame;
+    private boolean MPStarted;
+    @Getter @Setter
+    private GameUpdatesPacket packet;
+    @Getter @Setter
+    private Player player;
+
+    /**
      * start listening for updates
      * if questionnumber is wrong it updates it
      * if current screen is wrong is forces the player to the correct screen
      */
     public void startListening() {
         server.registerUpdates(c -> {
+            packet = c;
+
+            if(!MPStarted && !"WAITINGROOM".equals(c.getCurrentScreen())){
+                MPStarted = true;
+                System.out.println("Starting multiplayer");
+                try {
+                    server.getMultiplayerGame();
+                } catch (Exception e) {
+                    showPopup("Connection failed");
+                }
+            }
             waitingRoomCtrl.refresh();
 
             System.out.println("object identity: " + c + " has changed");
@@ -516,20 +539,17 @@ public class MainCtrl {
     }
 
     /**
-     * multiplayer variables
-     */
-    @Getter @Setter
-    private MultiPlayerGame multiPlayerGame;
-    @Getter @Setter
-    private GameUpdatesPacket packet;
-    @Getter @Setter
-    private Player player;
-
-    /**
      * starts the multiplayer game
      */
     public void startMultiplayer() {
-        System.out.println(server.startMultiplayer());
+        try {
+            boolean started = server.startMultiplayer();
+            if(!started){
+                showPopup("Error starting the game");
+            }
+        } catch(Exception e){
+            showPopup("Connection failed");
+        }
     }
 
     /**

@@ -74,15 +74,6 @@ public class LongPollControllerTest {
     }
 
     /**
-     * Test for adding players to the multiplayer game instance
-     */
-    @Test
-    void postPlayersTest() {
-        Player newPlayer = new Player();
-        assertEquals(newPlayer, lpc.postPlayer(newPlayer).getBody());
-        assertEquals(newPlayer, lpc.getPlayers().getBody().get(3));
-    }
-    /**
      * Test for updating score of player
      * Needs Mockito for proper testing
      */

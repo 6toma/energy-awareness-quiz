@@ -198,7 +198,23 @@ public class ServerUtils {
      *
      * @return instance of multiplayer game
      */
-    public MultiPlayerGame startMultiplayer() {
+    public MultiPlayerGame getMultiplayerGame() {
+        return ClientBuilder.newClient(new ClientConfig()) //
+            .target(serverURL).path("api/poll/multiplayer")
+            .request(APPLICATION_JSON) //
+            .accept(APPLICATION_JSON) //
+            .get(new GenericType<>() {
+            });
+    }
+
+    /**
+     * When the toilet is flushed we get the whole game object where
+     * we take the questions and players from
+     * this should only be done once at the start
+     *
+     * @return instance of multiplayer game
+     */
+    public boolean startMultiplayer() {
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(serverURL).path("api/poll/start-multiplayer")
                 .request(APPLICATION_JSON) //
@@ -244,12 +260,12 @@ public class ServerUtils {
      * @param player player to be added
      * @return player that was added
      */
-    public Player addPlayerWaitingRoom(Player player) {
+    public Integer addPlayerWaitingRoom(Player player) {
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(serverURL).path("api/poll/add-player-waiting-room")
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
-                .post(Entity.entity(player, APPLICATION_JSON), Player.class);
+                .post(Entity.entity(player, APPLICATION_JSON), Integer.class);
     }
 
     /**
