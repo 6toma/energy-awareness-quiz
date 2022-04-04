@@ -57,13 +57,13 @@ public class UsernameScreenCtrl {
 
         // checking whether username is already in waiting room
         boolean isValidUsername = (Boolean) server.checkValidityOfUsername(newUser);
-        if (isValidUsername) {
+        if (isValidUsername || mainCtrl.getUsernameOriginScreen() == 1) {
             continueButton.setDisable(false);
             usernameField.setText("Hello, " + newUser + "!");
         }
         else {
             continueButton.setDisable(true);
-            usernameField.setText("Please select a different username!");
+            usernameField.setText("Username taken!");
         }
     }
 
@@ -101,7 +101,7 @@ public class UsernameScreenCtrl {
             mainCtrl.setPlayer(newPlayer);
 
             if(newPlayer == null){
-                usernameField.setText("Please select a different username!");
+                usernameField.setText("Username taken!");
             }
             else {
                 var exec = Executors.newSingleThreadExecutor();
@@ -130,6 +130,8 @@ public class UsernameScreenCtrl {
             usernameField.setText("Please input your username!");
             inputUsernameField.clear();
             continueButton.setDisable(true);
+        } else {
+            continueButton.setDisable(false);
         }
     }
 

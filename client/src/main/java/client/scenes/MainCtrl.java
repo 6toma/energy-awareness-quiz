@@ -224,6 +224,7 @@ public class MainCtrl {
     public void showComparativeQuestionScreen(boolean multiplayer) {
         primaryStage.getScene().setRoot(comparativeQuestionScreenParent);
         checkDarkMode();
+        comparativeQuestionScreenCtrl.addTooltips();
         comparativeQuestionScreenCtrl.setMultiplayer(multiplayer);
         comparativeQuestionScreenCtrl.countdown();
     }
@@ -234,6 +235,7 @@ public class MainCtrl {
     public void showEstimationQuestionScreen(boolean multiplayer) {
         primaryStage.getScene().setRoot(estimationQuestionParent);
         checkDarkMode();
+        estimationScreenCtrl.addTooltips();
         estimationScreenCtrl.setMultiplayer(multiplayer);
         estimationScreenCtrl.countdown();
     }
