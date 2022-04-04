@@ -525,7 +525,7 @@ public class MainCtrl {
                     showPopup("Connection failed");
                 }
             }
-            if(MultiplayerStarted && c.getCurrentScreen() != packet.getCurrentScreen()){
+            if(MultiplayerStarted && c.getCurrentScreen() != packet.getCurrentScreen() || c.getQuestionNumber() != packet.getQuestionNumber()){
                 changeScreenMultiplayer(c);
             }
             packet = c;
@@ -588,8 +588,10 @@ public class MainCtrl {
      *
      */
     public void showQuestionMultiplayer() {
-        Question question = multiPlayerGame.getQuestions().get(packet.getQuestionNumber() - 1);
+        Question question = multiPlayerGame.getQuestions().get(packet.getQuestionNumber());
+        System.out.println(question);
         // check the question type
+        resetQuestionScreens();
         if (question instanceof ComparativeQuestion
                 || question instanceof MCQuestion
                 || question instanceof EqualityQuestion) {

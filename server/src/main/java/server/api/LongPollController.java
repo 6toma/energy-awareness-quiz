@@ -14,6 +14,8 @@ import server.multiplayer.WaitingRoom;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.function.Consumer;
 
 
@@ -51,7 +53,32 @@ public class LongPollController {
         multiplayerGame = waitingRoom.flushWaitingRoom();
         multiplayerGame.setCurrentScreen("LOADING SCREEN");
         listeners.forEach((k,l) -> l.accept(multiplayerGame.getGameStatus()));
+        startMultiplayerLogic();
         return ResponseEntity.ok(true);
+    }
+
+    /**
+     * this doesnt work
+     */
+    private void startMultiplayerLogic(){
+        Timer timer = new Timer();
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                if(multiplayerGame.getQuestionNumber()==20){
+                    multiplayerGame.setCurrentScreen("ENDSCREEN");
+                    cancel();
+                } else {
+                    multiplayerGame.setCurrentScreen("QUESTION");
+                    multiplayerGame.nextQuestion();
+                }
+                GameUpdatesPacket state = multiplayerGame.getGameStatus();
+                System.out.println(state);
+                listeners.forEach((k,l) -> l.accept(state));
+            }
+        };
+
+        timer.schedule(task, 3000, 6*1000);
     }
 
     /**

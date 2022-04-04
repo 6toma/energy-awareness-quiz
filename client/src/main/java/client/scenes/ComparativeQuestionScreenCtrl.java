@@ -307,6 +307,9 @@ public class ComparativeQuestionScreenCtrl {
      * Exits the screen. Goes back to the home screen
      */
     public void exit() {
+        if(multiplayer){
+            mainCtrl.stopListening();
+        }
         mainCtrl.showHomeScreen();
         stopTimers();
         mainCtrl.resetQuestionScreens();

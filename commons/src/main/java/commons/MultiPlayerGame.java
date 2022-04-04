@@ -18,7 +18,7 @@ public class MultiPlayerGame {
     private int gameID;
     private List<Player> players;
     private List<Question> questions;
-    private int questionNumber = 1;
+    private int questionNumber = -1;
 
     // for synchronization of client with server
     // can be "WAITINGROOM",  "LOADING SCREEN", "QUESTION", "LEADERBOARD", "ENDSCREEN"
