@@ -165,6 +165,7 @@ public class MainCtrl {
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent t) {
+                server.removePlayerWaitingRoom(player);
                 waitingRoomCtrl.stop();
                 Platform.exit();
                 System.exit(0);
@@ -475,14 +476,17 @@ public class MainCtrl {
         alert.showAndWait();
     }
 
-
+    // multiplayer variables
+    @Getter @Setter
     private MultiPlayerGame multiPlayerGame;
     private int currentQuestionNum;
+    // default game packet that is updated whenever the state of the game changes
+    @Getter @Setter
+    private GameUpdatesPacket packet;
     private String currentScreen;
     @Getter
     @Setter
     private Player player;
-
 
     /**
      * starts the multiplayer game

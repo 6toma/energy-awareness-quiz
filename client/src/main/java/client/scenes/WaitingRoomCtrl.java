@@ -2,6 +2,7 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import commons.GameUpdatesPacket;
 import commons.Player;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -48,18 +49,23 @@ public class WaitingRoomCtrl implements Initializable {
      * Goes back to the home screen
      */
     public void back() {
+        server.removePlayerWaitingRoom(mainCtrl.getPlayer());
+        stop();
         mainCtrl.resetUserText();
         mainCtrl.showHomeScreen();
-        stop();
     }
 
     /**
      * start listening for updates
      */
     public void startListening(){
+        // default packet set at the beginning of the waiting room
+        mainCtrl.setPacket(new GameUpdatesPacket(server.getPlayersInWaitingRoom().hashCode(), "WAITINGROOM", -1 ));
         server.registerUpdates(c -> {
+            refresh();
+            mainCtrl.setPacket(new GameUpdatesPacket(server.getPlayersInWaitingRoom().hashCode(), "WAITINGROOM", -1 ));
             System.out.println("object identity: " + c + " has changed");
-            System.out.println(server.getPlayersMultiplayer());
+            System.out.println(server.getPlayersInWaitingRoom());
         });
     }
 
@@ -119,7 +125,7 @@ public class WaitingRoomCtrl implements Initializable {
             // because of the getLeaderPlayers(10) method, the
             // leaderboard needs no sorting, as the list of players
             // is returned already sorted through the query
-            List<Player> playerList = server.getPlayersMultiplayer();
+            List<Player> playerList = server.getPlayersInWaitingRoom();
             players = FXCollections.observableList(playerList);
             playerTable.setItems(players);
         } catch (Exception e) {

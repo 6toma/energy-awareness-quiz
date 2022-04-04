@@ -109,7 +109,7 @@ public class ScoreChangeMultiplayerCtrl implements Initializable {
             // because of the getLeaderPlayers(10) method, the
             // leaderboard needs no sorting, as the list of players
             // is returned already sorted through the query
-            List<Player> playerList = server.getPlayersMultiplayer();
+            List<Player> playerList = server.getPlayersInWaitingRoom();
             players = FXCollections.observableList(playerList);
             leaderboard.setItems(players);
         } catch (Exception e) {

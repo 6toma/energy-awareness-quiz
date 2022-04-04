@@ -114,8 +114,7 @@ public class ServerUtils {
     }
 
 
-    private static final ExecutorService EXEC = Executors.newSingleThreadExecutor();
-
+    private ExecutorService EXEC;
     /**
      * Dont know what this does but apparently
      * its meant to get a change that happened on the server
@@ -123,6 +122,7 @@ public class ServerUtils {
      * request but for the body fo the change
      */
     public void registerUpdates(Consumer<GameUpdatesPacket> consumer) {
+        EXEC = Executors.newSingleThreadExecutor();
         EXEC.submit(() -> {
             while (!Thread.interrupted()) {
                 var res = ClientBuilder.newClient(new ClientConfig())
@@ -130,8 +130,8 @@ public class ServerUtils {
                         .request(APPLICATION_JSON) //
                         .accept(APPLICATION_JSON) //
                         .get(Response.class);
-                if (res.getStatus() == 204) {
-                    System.out.println();
+                if (res.getStatus() == 204){
+                    System.out.println("nothing happened");
                     continue;
                 }
                 var c = res.readEntity(GameUpdatesPacket.class);
@@ -213,9 +213,9 @@ public class ServerUtils {
      *
      * @return list of players
      */
-    public List<Player> getPlayersMultiplayer() {
+    public List<Player> getPlayersInWaitingRoom(){
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(serverURL).path("api/poll/players")
+                .target(serverURL).path("api/waiting-room/all-players")
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<>() {
@@ -246,7 +246,7 @@ public class ServerUtils {
      */
     public Player addPlayerWaitingRoom(Player player) {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(serverURL).path("api/waiting-room/player")
+                .target(serverURL).path("api/poll/add-player-waiting-room")
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .post(Entity.entity(player, APPLICATION_JSON), Player.class);
@@ -268,20 +268,18 @@ public class ServerUtils {
     }
 
 
-    //TODO make it work
-
     /**
      * Removes a player from waiting room
      *
      * @param player player to be removed
-     * @return player that was removed
+     * @return true if removed correctly else false
      */
-    public Player removePlayerWaitingRoom(Player player) {
+    public Boolean removePlayerWaitingRoom(Player player) {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(serverURL).path("api/waiting-room/username")
+                .target(serverURL).path("api/poll/remove-player")
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
-                .post(Entity.entity(player, APPLICATION_JSON), Player.class);
+                .post(Entity.entity(player, APPLICATION_JSON), Boolean.class);
     }
 
     /**

@@ -42,26 +42,14 @@ public class WaitingRoomController {
     }
 
     /**
-     * Endpoint for adding a player to a waiting room
-     *
-     * @return The player is added iff the username is unique
-     * otherwise return null which means that a player with such username exists
+     * Endpoint for a list of players from a waiting room
+     * @return The list of players currently in the waiting room
      */
-    @PostMapping(path = {"player"})
-    public ResponseEntity<Player> isValidPlayer(@RequestBody Player player) {
-        if (player == null) {
-            return ResponseEntity.ok(null);
-        }
-        for (var p : waitingRoom.getPlayers()) {
-            if (p.getName().equals(player.getName())) {
-                System.out.println("bad player");
-                return ResponseEntity.ok(null);
-            }
-        }
-        waitingRoom.addPlayerToWaitingRoom(player);
-        System.out.println("good player");
-        return ResponseEntity.ok(player);
+    @GetMapping(path = {"all-players"})
+    public ResponseEntity<List<Player>> getWaitingRoomPlayers() {
+        return ResponseEntity.ok(waitingRoom.getPlayers());
     }
+
 
     /**
      * Endpoint for checking whether a player with a username already exists
@@ -74,15 +62,18 @@ public class WaitingRoomController {
         if ("".equals(username) || username == null) {
             return ResponseEntity.ok(false);
         }
-        for (var p : waitingRoom.getPlayers()) {
-            if (p.getName().equals(username)) {
-                System.out.println("bad username");
+        for(var p : waitingRoom.getPlayers()){
+            if(p.getName().equals(username)) {
+                //System.out.println("bad username");
                 return ResponseEntity.ok(false);
             }
         }
-        System.out.println("good username");
+        //System.out.println("good username");
         return ResponseEntity.ok(true);
     }
+
+
+    // METHODS FROM GENERATING QUESTIONS
 
     /**
      * endpoint for checking whether a list of questions has been genarated
@@ -92,15 +83,20 @@ public class WaitingRoomController {
      */
     @GetMapping(path = {"are-generated"})
     public ResponseEntity<Boolean> areQuestionsGenerated() {
-        if (waitingRoom.getQuestions().size() != Config.numberOfQuestions) {
+        if(waitingRoom.getQuestions().size() != Config.numberOfQuestions){
+            System.out.println("Question size before: " + waitingRoom.getQuestions().size());
             System.out.println("NOT GENERATED");
             int count = Config.numberOfQuestions;
             while (count > 0) {
                 boolean isAdded = waitingRoom.addQuestion((Question) getRandom().getBody());
-                if (isAdded) count--;
+                if(isAdded) count--;
+                System.out.println(Config.numberOfQuestions - count);
             }
+
             return ResponseEntity.ok(false);
         }
+        System.out.println("Question size after: " + waitingRoom.getQuestions().size());
+
         System.out.println("ALREADY GENERATED");
         return ResponseEntity.ok(true);
     }
@@ -125,16 +121,12 @@ public class WaitingRoomController {
         // To add more question types increment numberOfQuestions and add another if statement
         // e.g. else if(randomInt % numberOfQuestions == 1) return ...
         if (randomInt % numberOfQuestions == 0) {
-            //System.out.println("comparative");
             return getRandomComparative();
-        } else if (randomInt % numberOfQuestions == 1) {
-            //System.out.println("estiamtion");
+        } else if(randomInt % numberOfQuestions == 1) {
             return getRandomEstimation();
-        } else if (randomInt % numberOfQuestions == 2) {
-            //System.out.println("MC");
+        } else if(randomInt % numberOfQuestions == 2){
             return getRandomMCQuestion();
         } else {
-            //System.out.println("equality");
             return getRandomEquality();
         }
     }

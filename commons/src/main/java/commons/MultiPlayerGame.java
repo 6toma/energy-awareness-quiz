@@ -1,5 +1,6 @@
 package commons;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import commons.questions.Question;
 import lombok.Data;
 
@@ -20,7 +21,7 @@ public class MultiPlayerGame {
     private int questionNumber = 1;
 
     // for synchronization of client with server
-    // can be "LOADING SCREEN", "QUESTION", "LEADERBOARD", "ENDSCREEN"
+    // can be "WAITINGROOM",  "LOADING SCREEN", "QUESTION", "LEADERBOARD", "ENDSCREEN"
     private String currentScreen;
 
     /**
@@ -28,6 +29,15 @@ public class MultiPlayerGame {
      * Used by Jackson to initialize object from JSON
      */
     public MultiPlayerGame() {}
+
+    /**
+     * Creates a new game with existing players
+     * @param players list of players
+     */
+    public MultiPlayerGame(List<Player> players) {
+        this.currentScreen = "WAITINGROOM";
+        this.players = players;
+    }
 
     /**
      * Creates a new game with specified amount of questions
@@ -160,6 +170,7 @@ public class MultiPlayerGame {
      * Gets the hashcode of the list of players, the name of the current screen and the number of the current question
      * @return A GameUpdatesPacket object, which contains compact information about the game
      */
+    @JsonIgnore
     public GameUpdatesPacket getGameStatus() {
         return new GameUpdatesPacket(Objects.hash(players), currentScreen, questionNumber);
     }

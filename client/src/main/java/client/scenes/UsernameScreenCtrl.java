@@ -9,6 +9,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
+import java.util.concurrent.Executors;
+
 public class UsernameScreenCtrl {
 
     private final ServerUtils server;
@@ -93,14 +95,23 @@ public class UsernameScreenCtrl {
 
             //send player to multiplayer game object
             Player newPlayer = server.addPlayerWaitingRoom(new Player(inputUsernameField.getText()));
+            // create a multiplayer game on the client side
+            //TODO start the game upon clicking the start button
+            //mainCtrl.startMultiplayer();
+            mainCtrl.setPlayer(newPlayer);
+
             if(newPlayer == null){
                 usernameField.setText("Please select a different username!");
             }
             else {
-                if(!server.areQuestionsGenerated()){
-                    System.out.println("questions are not generated I will generate them");;
-                }
-                else System.out.println("questions are generated");
+                var exec = Executors.newSingleThreadExecutor();
+                exec.submit(() -> {
+                    if(!server.areQuestionsGenerated()){
+                        System.out.println("I am generating the questions");;
+                    }
+                    else System.out.println("Questions have been already generated");
+                });
+
                 System.out.println(newPlayer);
                 mainCtrl.showWaitingRoom();
             }
