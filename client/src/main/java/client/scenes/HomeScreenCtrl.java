@@ -10,7 +10,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -39,7 +38,8 @@ public class HomeScreenCtrl implements Initializable {
 
     /**
      * Creates a new screen with injections
-     * @param server ServerUtils class
+     *
+     * @param server   ServerUtils class
      * @param mainCtrl Main Controller
      */
     @Inject
@@ -52,6 +52,7 @@ public class HomeScreenCtrl implements Initializable {
 
     /**
      * Sets the origin of the username selection screen
+     *
      * @param usernameOriginScreen 1 if going to single player
      *                             2 if going to multiplayer
      */
@@ -67,6 +68,7 @@ public class HomeScreenCtrl implements Initializable {
      * This method transfers the user to the settings screen
      * where he/she can switch to dark mode, read the help page,
      * enter the room URL or go to admin panel
+     *
      * @param event
      */
     @FXML
@@ -74,21 +76,6 @@ public class HomeScreenCtrl implements Initializable {
         mainCtrl.showSettingsScreen();
     }
 
-
-    private void setGridNodeStyle(Label name, Label score, int index){
-        if (index==0){
-            name.setStyle("-fx-background-color: gold;");
-            score.setStyle("-fx-background-color: gold;");
-        } else if (index==1){
-            name.setStyle("-fx-background-color: silver;");
-            score.setStyle("-fx-background-color: silver;");
-        } else if (index==2){
-            name.setStyle("-fx-background-color: CD7F32;");
-            score.setStyle("-fx-background-color: CD7F32;");
-        }
-        name.getStyleClass().add("grid-Label");
-        score.getStyleClass().add("grid-Label");
-    }
 
     /**
      * Tries to get a question from the server
@@ -148,7 +135,7 @@ public class HomeScreenCtrl implements Initializable {
             @Override
             public void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
-                if(item == null || empty)
+                if (item == null || empty)
                     setText(null);
                 else
                     setText(item);
@@ -172,7 +159,7 @@ public class HomeScreenCtrl implements Initializable {
             @Override
             public void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
-                if(item == null || empty)
+                if (item == null || empty)
                     setText(null);
                 else
                     setText(item);

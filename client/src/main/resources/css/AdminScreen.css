@@ -21,6 +21,7 @@
 
 .table-view .column-header {
     -fx-background-color: transparent;
+    -fx-font-size: 20px;
 }
 
 .table-view .table-cell{
@@ -68,3 +69,8 @@
     -fx-background-color: #81c483;
     -fx-background-radius: 15px;
 }
+
+.table {
+  -fx-font-size: 12px;
+}
+

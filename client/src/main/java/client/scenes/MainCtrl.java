@@ -278,6 +278,7 @@ public class MainCtrl {
      */
     public void showAdminScreen() {
         primaryStage.getScene().setRoot(adminScreenParent);
+        adminScreenCtrl.refresh();
         checkDarkMode();
     }
 
@@ -369,7 +370,7 @@ public class MainCtrl {
         if (singlePlayerGame != null
                 && singlePlayerGame.getQuestions().size() > 0
                 && singlePlayerGame.getQuestionNumber() <= singlePlayerGame.getMaxQuestions()
-                + comparativeQuestionScreenCtrl.jokerAdditionalQuestion()) {
+                + singlePlayerGame.additionalQuestion()) {
 
             try {
                 // get next question from the server
@@ -453,6 +454,15 @@ public class MainCtrl {
      */
     public String getServerURL() {
         return this.settingsScreenCtrl.getServerURL();
+    }
+
+    /**
+     * Resets all attributes on the question screens
+     * Used when the game is left unfinished
+     */
+    public void resetQuestionScreens() {
+        comparativeQuestionScreenCtrl.resetComparativeQuestionScreen();
+        estimationScreenCtrl.resetEstimationQuestion();
     }
 
     /**
