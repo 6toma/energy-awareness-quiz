@@ -2,6 +2,7 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import commons.GameUpdatesPacket;
 import commons.Player;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -59,10 +60,13 @@ public class WaitingRoomCtrl implements Initializable {
      * start listening for updates
      */
     public void startListening(){
+        // default packet set at the beginning of the waiting room
+        mainCtrl.setPacket(new GameUpdatesPacket(server.getPlayersInWaitingRoom().hashCode(), "WAITINGROOM", -1 ));
         server.registerUpdates(c -> {
             refresh();
+            mainCtrl.setPacket(new GameUpdatesPacket(server.getPlayersInWaitingRoom().hashCode(), "WAITINGROOM", -1 ));
             System.out.println("object identity: " + c + " has changed");
-            System.out.println(mainCtrl.getMultiPlayerGame().getPlayers());
+            System.out.println(server.getPlayersInWaitingRoom());
         });
     }
 

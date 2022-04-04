@@ -49,40 +49,6 @@ public class WaitingRoomController {
         return ResponseEntity.ok(waitingRoom.getPlayers());
     }
 
-    /**
-     * Endpoint for removing a player from a waiting room
-     * @return True if the player was removed successfully
-     *         otherwise return false
-     */
-    @PostMapping(path = {"remove-player"})
-    public ResponseEntity<Boolean> removePlayerFromWaitingRoom(@RequestBody Player player) {
-        System.out.println("Player has been removed");
-        System.out.println(ResponseEntity.ok(waitingRoom.removePlayerFromWaitingRoom(player)));
-        System.out.println(waitingRoom.getPlayers());
-        return ResponseEntity.ok(waitingRoom.removePlayerFromWaitingRoom(player));
-    }
-
-    /**
-     * Endpoint for adding a player to a waiting room
-     * @return The player is added iff the username is unique
-     *         otherwise return null which means that a player with such username exists
-     */
-    /*@PostMapping(path = {"player"})
-    public ResponseEntity<Player> isValidPlayer(@RequestBody Player player) {
-        if(player == null) {
-            return ResponseEntity.ok(null);
-        }
-        for(var p : waitingRoom.getPlayers()){
-            if(p.getName().equals(player.getName())) {
-                //System.out.println("bad player");
-                return ResponseEntity.ok(null);
-            }
-        }
-        waitingRoom.addPlayerToWaitingRoom(player);
-        System.out.println("Player added");
-
-        return ResponseEntity.ok(player);
-    }*/
 
     /**
      * Endpoint for checking whether a player with a username already exists
@@ -103,6 +69,9 @@ public class WaitingRoomController {
         //System.out.println("good username");
         return ResponseEntity.ok(true);
     }
+
+
+    // METHODS FROM GENERATING QUESTIONS
 
     /**
      * endpoint for checking whether a list of questions has been genarated
@@ -130,8 +99,6 @@ public class WaitingRoomController {
     }
 
 
-
-    // METHODS FROM QuestionController
     /**
      * Generates a random number, uses it to get a random question type
      *

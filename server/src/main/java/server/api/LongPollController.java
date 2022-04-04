@@ -102,6 +102,7 @@ public class LongPollController {
      */
     @PostMapping(path={"add-player-waiting-room"})
     public ResponseEntity<Player> postPlayerToWaitingRoom(@RequestBody Player player){
+
         listeners.forEach((k,l) -> l.accept(new GameUpdatesPacket(waitingRoom.getPlayers().hashCode(), "WAITINGROOM", -1)));
         if(player == null) {
             return ResponseEntity.ok(null);
@@ -115,6 +116,19 @@ public class LongPollController {
         System.out.println("Player added");
         return ResponseEntity.ok(player);
         //s.get(players.size()-1)
+    }
+    /**
+     * Endpoint for removing a player from a waiting room
+     * @return True if the player was removed successfully
+     *         otherwise return false
+     */
+    @PostMapping(path = {"remove-player"})
+    public ResponseEntity<Boolean> removePlayerFromWaitingRoom(@RequestBody Player player) {
+        System.out.println(ResponseEntity.ok(waitingRoom.removePlayerFromWaitingRoom(player)));
+        listeners.forEach((k,l) -> l.accept(new GameUpdatesPacket(waitingRoom.getPlayers().hashCode(), "WAITINGROOM", -1)));
+        System.out.println("Player has been removed");
+        System.out.println(waitingRoom.getPlayers());
+        return ResponseEntity.ok(waitingRoom.removePlayerFromWaitingRoom(player));
     }
 
     /**

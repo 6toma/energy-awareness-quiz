@@ -469,7 +469,7 @@ public class MainCtrl {
     @Getter @Setter
     private MultiPlayerGame multiPlayerGame;
     private int currentQuestionNum;
-    // default game packet used in the waiting room
+    // default game packet that is updated whenever the state of the game changes
     @Getter @Setter
     private GameUpdatesPacket packet;
     private String currentScreen;

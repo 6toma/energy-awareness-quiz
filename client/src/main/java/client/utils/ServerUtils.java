@@ -261,7 +261,7 @@ public class ServerUtils {
      */
     public Boolean removePlayerWaitingRoom(Player player){
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(serverURL).path("api/waiting-room/remove-player")
+                .target(serverURL).path("api/poll/remove-player")
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .post(Entity.entity(player, APPLICATION_JSON), Boolean.class);
