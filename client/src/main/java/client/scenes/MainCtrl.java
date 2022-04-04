@@ -165,6 +165,7 @@ public class MainCtrl {
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent t) {
+                server.removePlayerWaitingRoom(player);
                 waitingRoomCtrl.stop();
                 Platform.exit();
                 System.exit(0);

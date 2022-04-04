@@ -49,11 +49,10 @@ public class WaitingRoomCtrl implements Initializable {
      * Goes back to the home screen
      */
     public void back() {
-        server.removePlayerWaitingRoom(new Player(mainCtrl.getPlayer().getName()));
+        server.removePlayerWaitingRoom(mainCtrl.getPlayer());
+        stop();
         mainCtrl.resetUserText();
         mainCtrl.showHomeScreen();
-        refresh();
-        stop();
     }
 
     /**

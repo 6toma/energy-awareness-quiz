@@ -124,7 +124,6 @@ public class LongPollController {
      */
     @PostMapping(path = {"remove-player"})
     public ResponseEntity<Boolean> removePlayerFromWaitingRoom(@RequestBody Player player) {
-        System.out.println(ResponseEntity.ok(waitingRoom.removePlayerFromWaitingRoom(player)));
         listeners.forEach((k,l) -> l.accept(new GameUpdatesPacket(waitingRoom.getPlayers().hashCode(), "WAITINGROOM", -1)));
         System.out.println("Player has been removed");
         System.out.println(waitingRoom.getPlayers());

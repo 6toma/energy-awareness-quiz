@@ -110,7 +110,7 @@ public class ServerUtils {
     }
 
 
-    private static final ExecutorService EXEC = Executors.newSingleThreadExecutor();
+    private ExecutorService EXEC;
     /**
      * Dont know what this does but apparently
      * its meant to get a change that happened on the server
@@ -118,6 +118,7 @@ public class ServerUtils {
      * request but for the body fo the change
      */
     public void registerUpdates(Consumer<GameUpdatesPacket> consumer) {
+        EXEC = Executors.newSingleThreadExecutor();
         EXEC.submit(() -> {
             while (!Thread.interrupted()) {
                 var res = ClientBuilder.newClient(new ClientConfig())
