@@ -272,9 +272,9 @@ public class ServerUtils {
      * Removes a player from waiting room
      *
      * @param player player to be removed
-     * @return player that was removed
+     * @return true if removed correctly else false
      */
-    public Player removePlayerWaitingRoom(Player player) {
+    public Boolean removePlayerWaitingRoom(Player player) {
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(serverURL).path("api/poll/remove-player")
                 .request(APPLICATION_JSON) //
