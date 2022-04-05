@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
-import server.Config;
 import server.database.ActivityRepository;
 import server.multiplayer.WaitingRoom;
 
@@ -40,13 +39,12 @@ public class MultiplayerController {
 
     /**
      * Creates a Polling Controller
-     * @param multiplayerGame injected instance of MultiPlayerGame
      * @param waitingRoom injected instance of WaitingRoom
      * @param random injected instance of Random
      * @param repo injected instance of ActivityRepository
      */
     @Autowired
-    public MultiplayerController(MultiPlayerGame multiplayerGame, WaitingRoom waitingRoom, Random random, ActivityRepository repo){
+    public MultiplayerController(WaitingRoom waitingRoom, Random random, ActivityRepository repo){
         this.multiplayerGames = new HashMap<>();
         this.waitingRoom = waitingRoom;
         this.questionController = new QuestionController(random, repo);
@@ -59,7 +57,7 @@ public class MultiplayerController {
      */
     @GetMapping("/poll/start-multiplayer")
     public ResponseEntity<Boolean> startGame(){
-        if(waitingRoom.getQuestions().size() < Config.numberOfQuestions){
+        if(waitingRoom.getQuestions().size() < waitingRoom.getMaxNumberOfQuestions()){
             return ResponseEntity.ok(false);
         }
         int id = waitingRoom.getMultiplayerGameID();
@@ -78,7 +76,7 @@ public class MultiplayerController {
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
-                if(multiplayerGames.get(id).getQuestionNumber() < Config.numberOfQuestions - 1){
+                if(multiplayerGames.get(id).getQuestionNumber() < waitingRoom.getMaxNumberOfQuestions() - 1){
                     multiplayerGames.get(id).setCurrentScreen("QUESTION");
                     multiplayerGames.get(id).nextQuestion();
                     GameUpdatesPacket packet = multiplayerGames.get(id).getGameStatus();
@@ -291,14 +289,14 @@ public class MultiplayerController {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                if(waitingRoom.getQuestions().size() != Config.numberOfQuestions){
+                if(waitingRoom.getQuestions().size() != waitingRoom.getMaxNumberOfQuestions()){
                     System.out.println("Question size before: " + waitingRoom.getQuestions().size());
                     System.out.println("NOT GENERATED");
-                    int count = Config.numberOfQuestions;
+                    int count = waitingRoom.getMaxNumberOfQuestions();
                     while (count > 0) {
                         boolean isAdded = waitingRoom.addQuestion(questionController.getRandomQuestion().getBody());
                         if(isAdded) count--;
-                        System.out.println(Config.numberOfQuestions - count);
+                        System.out.println(waitingRoom.getMaxNumberOfQuestions() - count);
                     }
                 } else {
                     System.out.println("ALREADY GENERATED");
