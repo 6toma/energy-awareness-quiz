@@ -520,18 +520,21 @@ public class MainCtrl {
                     if (packet.getHashListPlayers() != c.getHashListPlayers()) {
                         updatePlayerList();
                     }
+                    // check if multiplayer has started and the screen or question number has changed
+                    if (MultiplayerStarted && (c.getCurrentScreen() != packet.getCurrentScreen() || c.getQuestionNumber() != packet.getQuestionNumber())) {
+                        changeScreenMultiplayer(c);
+                    }
                     // Check if you are in waiting room and game has been started
                     if (primaryStage.getScene().getRoot().equals(waitingRoomParent) && !MultiplayerStarted && !"WAITINGROOM".equals(c.getCurrentScreen())) {
                         MultiplayerStarted = true;
+                        changeScreenMultiplayer(c);
                         try {
                             multiPlayerGame = server.getMultiplayerGame();
                             System.out.println(multiPlayerGame);
                         } catch (Exception e) {
                             showPopup("Connection failed");
+                            showHomeScreen();
                         }
-                    }
-                    if (MultiplayerStarted && (c.getCurrentScreen() != packet.getCurrentScreen() || c.getQuestionNumber() != packet.getQuestionNumber())) {
-                        changeScreenMultiplayer(c);
                     }
                     packet = c;
                 }
@@ -550,6 +553,7 @@ public class MainCtrl {
             }
         } catch (Exception e) {
             showPopup("Connection failed");
+            showHomeScreen();
         }
     }
 
@@ -560,8 +564,6 @@ public class MainCtrl {
         try {
             if(!MultiplayerStarted){
                 server.removePlayerWaitingRoom(player);
-            } else {
-                server.removePlayerMultiplayer(player);
             }
         } catch (Exception e){
             // do nothing if can't remove player, means there's nothing to remove
@@ -588,6 +590,7 @@ public class MainCtrl {
             }
         } catch(Exception e){
             showPopup("Connection failed");
+            showHomeScreen();
         }
     }
 
@@ -651,6 +654,7 @@ public class MainCtrl {
                 server.postScore(player);
             } catch (Exception e) {
                 showPopup("Connection failed");
+                showHomeScreen();
             }
         }
     }
