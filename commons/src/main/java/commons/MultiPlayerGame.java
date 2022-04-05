@@ -31,15 +31,6 @@ public class MultiPlayerGame {
     public MultiPlayerGame() {}
 
     /**
-     * Creates a new game with existing players
-     * @param players list of players
-     */
-    public MultiPlayerGame(List<Player> players) {
-        this.currentScreen = "WAITINGROOM";
-        this.players = players;
-    }
-
-    /**
      * Creates a new game with specified amount of questions
      * @param players list of players
      * @param questions list of questions for the game
