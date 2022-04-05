@@ -270,7 +270,7 @@ public class ComparativeQuestionScreenCtrl {
     }
 
     private void setEqualityText(){
-        String questionText = "Instead of " + equalityQuestion.getChosen().getTitle() + " you could ...";
+        String questionText = "Instead of '" + equalityQuestion.getChosen().getTitle() + "' you could be...";
         this.questionLabel.setText(questionText);
     }
 

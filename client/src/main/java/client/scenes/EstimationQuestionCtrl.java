@@ -150,18 +150,33 @@ public class EstimationQuestionCtrl {
      * @param answer
      */
     public void checkAnswer(Long answer) {
-        guessAccuracy = (double) answer / question.getActivity().getConsumption_in_wh();
-        // convert to accuracy value of < 1. for example 1.04 -> 0.96
-        if(guessAccuracy > 1.0){
-            guessAccuracy = 1 - 2 * (guessAccuracy - 1);
-        }
-        // set a lower limit to the guess accuracy
-        if(guessAccuracy < 0.2){
+//        guessAccuracy = (double) answer / question.getActivity().getConsumption_in_wh();
+//        // convert to accuracy value of < 1. for example 1.04 -> 0.96
+//        if(guessAccuracy > 1.0) {
+//            guessAccuracy = 1 - 2 * (guessAccuracy - 1);
+//        }
+//        // set a lower limit to the guess accuracy
+//        if(guessAccuracy < 0.2) {
+//            guessAccuracy = 0;
+//            timeWhenAnswered = -1;
+//        } else {
+//            timeWhenAnswered = (int) (progressBar.getProgress() * questionTime);
+//        }
+
+        Long correctAnswer = question.getActivity().getConsumption_in_wh();
+        double upperBound = correctAnswer * 1.8;
+        double lowerBound = correctAnswer * 0.4;
+
+        if(answer > upperBound || answer < lowerBound) {
             guessAccuracy = 0;
             timeWhenAnswered = -1;
-        } else {
-            timeWhenAnswered = (int) (progressBar.getProgress() * questionTime);
+            return;
         }
+
+        guessAccuracy = (double) answer / correctAnswer;
+        if(guessAccuracy > 1)
+            guessAccuracy = 2 - guessAccuracy;
+        timeWhenAnswered = (int) (progressBar.getProgress() * questionTime);
     }
 
     private void showAnswers() {
@@ -279,7 +294,9 @@ public class EstimationQuestionCtrl {
         if(pointsToBeAdded > 0 ) {
             jokerMessage.setText("Close enough! You will get some points for this answer.");
         } else {
-            jokerMessage.setText("You guess is too far from the actual answer! Try changing it so you can get some points for this question.");
+            if(guessAccuracy > 1)
+                jokerMessage.setText("You guess is too far from the actual answer! Try a lower value.");
+            else jokerMessage.setText("You guess is too far from the actual answer! Try a higher value.");
         }
     }
 
