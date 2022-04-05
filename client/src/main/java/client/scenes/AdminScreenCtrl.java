@@ -14,6 +14,7 @@ import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import javax.swing.plaf.synth.SynthOptionPaneUI;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -222,8 +223,7 @@ public class AdminScreenCtrl implements Initializable {
     /**
      * method for importing activities from a json file
      */
-    @FXML
-    public void importActivities(){
+    public void importActivities() throws IOException {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Resource File");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON files (*.json)", "*.json"));
@@ -231,24 +231,26 @@ public class AdminScreenCtrl implements Initializable {
 
         System.out.println();
         ObjectMapper mapper = new ObjectMapper();
-        TypeReference<List<Activity>> mapType = new TypeReference<>() {
-        };
+        TypeReference<List<Activity>> mapType = new TypeReference<>() {};
         InputStream inputStream = TypeReference
                 .class
                 .getClassLoader()
                 .getResourceAsStream(
                         selectedJson.getPath()
                 );
+        System.out.println("fdjsakolfjaklsdf");
 
         try {
+            System.out.println("fdrigg");
             List<Activity> activityList = mapper.readValue(inputStream, mapType);
+            System.out.println("asdfsadf");
             for(var a : activityList){
                 server.addActivity(a);
             }
             System.out.println("Activity list saved successfully");
         }
         catch(IOException e) {
-            System.out.println(e.getMessage());
+            System.out.println("fuuuuuck");
         }
     }
 }
