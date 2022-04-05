@@ -251,21 +251,6 @@ public class ServerUtils {
                 .post(Entity.entity(player, APPLICATION_JSON), Integer.class);
     }
 
-    /**
-     * checks whether a list of questions has been generated,
-     * generates a new list if the list is empty
-     *
-     * @return player that was added
-     */
-    public Boolean areQuestionsGenerated() {
-        return ClientBuilder.newClient(new ClientConfig()) //
-                .target(serverURL).path("api/waiting-room/are-generated")
-                .request(APPLICATION_JSON) //
-                .accept(APPLICATION_JSON) //
-                .get(new GenericType<>() {
-                });
-    }
-
 
     /**
      * Removes a player from waiting room

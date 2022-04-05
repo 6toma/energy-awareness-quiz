@@ -47,6 +47,7 @@ public class MultiplayerController {
         this.multiplayerGame = multiplayerGame;
         this.waitingRoom = waitingRoom;
         this.questionController = new QuestionController(random, repo);
+        generateQuestions();
     }
 
     /**
@@ -62,6 +63,7 @@ public class MultiplayerController {
         multiplayerGame.setCurrentScreen("LOADING SCREEN");
         listeners.forEach((k,l) -> l.accept(multiplayerGame.getGameStatus()));
         sendQuestionToClients(3000);
+        generateQuestions();
         return ResponseEntity.ok(true);
     }
 
@@ -281,28 +283,26 @@ public class MultiplayerController {
 
 
     /**
-     * endpoint for checking whether a list of questions has been genarated
-     *
-     * @return true if the questions have already been generated
-     * false if have not yet been generated
+     * Generates a list of questions in a separate thread
      */
-    @GetMapping(path = {"/waiting-room/are-generated"})
-    public ResponseEntity<Boolean> areQuestionsGenerated() {
-        if(waitingRoom.getQuestions().size() != Config.numberOfQuestions){
-            System.out.println("Question size before: " + waitingRoom.getQuestions().size());
-            System.out.println("NOT GENERATED");
-            int count = Config.numberOfQuestions;
-            while (count > 0) {
-                boolean isAdded = waitingRoom.addQuestion(questionController.getRandomQuestion().getBody());
-                if(isAdded) count--;
-                System.out.println(Config.numberOfQuestions - count);
+    private void generateQuestions(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                if(waitingRoom.getQuestions().size() != Config.numberOfQuestions){
+                    System.out.println("Question size before: " + waitingRoom.getQuestions().size());
+                    System.out.println("NOT GENERATED");
+                    int count = Config.numberOfQuestions;
+                    while (count > 0) {
+                        boolean isAdded = waitingRoom.addQuestion(questionController.getRandomQuestion().getBody());
+                        if(isAdded) count--;
+                        System.out.println(Config.numberOfQuestions - count);
+                    }
+                } else {
+                    System.out.println("ALREADY GENERATED");
+                }
+                System.out.println("Question size after: " + waitingRoom.getQuestions().size());
             }
-
-            return ResponseEntity.ok(false);
-        }
-        System.out.println("Question size after: " + waitingRoom.getQuestions().size());
-
-        System.out.println("ALREADY GENERATED");
-        return ResponseEntity.ok(true);
+        }).start();
     }
 }

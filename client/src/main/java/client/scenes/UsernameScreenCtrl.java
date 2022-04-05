@@ -102,14 +102,6 @@ public class UsernameScreenCtrl {
                 usernameField.setText("Username taken!");
             }
             else {
-                var exec = Executors.newSingleThreadExecutor();
-                exec.submit(() -> {
-                    if(!mainCtrl.getServer().areQuestionsGenerated()){
-                        System.out.println("I am generating the questions");
-                    }
-                    else System.out.println("Questions have been already generated");
-                });
-
                 System.out.println(player + ", " + gameId);
                 mainCtrl.showWaitingRoom();
             }
