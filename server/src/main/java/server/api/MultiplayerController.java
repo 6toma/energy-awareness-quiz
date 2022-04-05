@@ -119,25 +119,6 @@ public class MultiplayerController {
     }
 
     /**
-     * gets the name of the current screen of the server
-     * "LOADING SCREEN", "QUESTION", "LEADERBOARD", "ENDSCREEN"
-     * @return the name of current screen
-     */
-    @GetMapping("/poll/CurrentScreen")
-    public ResponseEntity<String> getCurrentScreen(){
-        return ResponseEntity.ok(multiplayerGame.getCurrentScreen());
-    }
-
-    /**
-     * Gets the question currently on 'ID'
-     * @return integer of which question server is on eg 3 (out of 20)
-     */
-    @GetMapping("/poll/CurrentQuestionNumber")
-    public ResponseEntity<Integer> getCurrentQuestion(){
-        return ResponseEntity.ok(multiplayerGame.getQuestionNumber());
-    }
-
-    /**
      * Returns a list of player objects
      * to iterate over and get their
      * name and score
