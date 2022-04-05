@@ -31,9 +31,12 @@ public class MultiplayerController {
      * List of everything thats different from last poll
      * For each thing in list we send another request for the body of that change
      */
-    private MultiPlayerGame multiplayerGame;
+    private Map<Integer, MultiPlayerGame> multiplayerGames;
     private final WaitingRoom waitingRoom;
     private final QuestionController questionController;
+
+    private Map<Integer, Map<Object, Consumer<GameUpdatesPacket>>> listeners = new HashMap<>();
+    //private Map<Object, Consumer<GameUpdatesPacket>> listeners = new HashMap<>();
 
     /**
      * Creates a Polling Controller
@@ -44,7 +47,7 @@ public class MultiplayerController {
      */
     @Autowired
     public MultiplayerController(MultiPlayerGame multiplayerGame, WaitingRoom waitingRoom, Random random, ActivityRepository repo){
-        this.multiplayerGame = multiplayerGame;
+        this.multiplayerGames = new HashMap<>();
         this.waitingRoom = waitingRoom;
         this.questionController = new QuestionController(random, repo);
         generateQuestions();
@@ -59,30 +62,31 @@ public class MultiplayerController {
         if(waitingRoom.getQuestions().size() < Config.numberOfQuestions){
             return ResponseEntity.ok(false);
         }
-        multiplayerGame = waitingRoom.flushWaitingRoom();
-        multiplayerGame.setCurrentScreen("LOADING SCREEN");
-        listeners.forEach((k,l) -> l.accept(multiplayerGame.getGameStatus()));
-        sendQuestionToClients(3000);
+        int id = waitingRoom.getMultiplayerGameID();
+        multiplayerGames.put(id, waitingRoom.flushWaitingRoom());
+        multiplayerGames.get(id).setCurrentScreen("LOADING SCREEN");
+        listeners.get(id).forEach((k,l) -> l.accept(multiplayerGames.get(id).getGameStatus()));
+        sendQuestionToClients(3000, id);
         generateQuestions();
         return ResponseEntity.ok(true);
     }
 
 
-    private void sendQuestionToClients(int delay){
+    private void sendQuestionToClients(int delay, int id){
         Timer timer = new Timer();
 
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
-                if(multiplayerGame.getQuestionNumber() < Config.numberOfQuestions - 1){
-                    multiplayerGame.setCurrentScreen("QUESTION");
-                    multiplayerGame.nextQuestion();
-                    GameUpdatesPacket packet = multiplayerGame.getGameStatus();
+                if(multiplayerGames.get(id).getQuestionNumber() < Config.numberOfQuestions - 1){
+                    multiplayerGames.get(id).setCurrentScreen("QUESTION");
+                    multiplayerGames.get(id).nextQuestion();
+                    GameUpdatesPacket packet = multiplayerGames.get(id).getGameStatus();
                     System.out.println(packet);
-                    listeners.forEach((k,l) -> l.accept(packet));
-                    sendLeaderboardToClients(19000);
+                    listeners.get(id).forEach((k,l) -> l.accept(packet));
+                    sendLeaderboardToClients(19000, id);
                 } else {
-                    endMultiplayerGame();
+                    endMultiplayerGame(id);
                 }
             }
         };
@@ -90,38 +94,39 @@ public class MultiplayerController {
         timer.schedule(task, delay);
     }
 
-    private void sendLeaderboardToClients(int delay){
+    private void sendLeaderboardToClients(int delay, int id){
         Timer timer = new Timer();
 
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
-                multiplayerGame.setCurrentScreen("LEADERBOARD");
-                GameUpdatesPacket packet = multiplayerGame.getGameStatus();
+                multiplayerGames.get(id).setCurrentScreen("LEADERBOARD");
+                GameUpdatesPacket packet = multiplayerGames.get(id).getGameStatus();
                 System.out.println(packet);
-                listeners.forEach((k,l) -> l.accept(packet));
-                sendQuestionToClients(4000);
+                listeners.get(id).forEach((k,l) -> l.accept(packet));
+                sendQuestionToClients(4000, id);
             }
         };
 
         timer.schedule(task, delay);
     }
 
-    private void endMultiplayerGame(){
-        multiplayerGame.setCurrentScreen("ENDSCREEN");
-        GameUpdatesPacket packet = multiplayerGame.getGameStatus();
+    private void endMultiplayerGame(int id){
+        multiplayerGames.get(id).setCurrentScreen("ENDSCREEN");
+        GameUpdatesPacket packet = multiplayerGames.get(id).getGameStatus();
         System.out.println(packet);
-        listeners.forEach((k,l) -> l.accept(packet));
-        multiplayerGame = null;
+        listeners.get(id).forEach((k,l) -> l.accept(packet));
+        multiplayerGames.remove(id);
+        listeners.remove(id);
     }
 
     /**
      * Returns the instance of the game to the client
      * @return Multiplayer Game object
      */
-    @GetMapping("/poll/multiplayer")
-    public ResponseEntity<MultiPlayerGame> getGame(){
-        return ResponseEntity.ok(multiplayerGame);
+    @GetMapping("/poll/multiplayer/{id}")
+    public ResponseEntity<MultiPlayerGame> getGame(@PathVariable("id") int id){
+        return ResponseEntity.ok(multiplayerGames.get(id));
     }
 
     /**
@@ -130,9 +135,9 @@ public class MultiplayerController {
      * name and score
      * @return list of players
      */
-    @GetMapping("/poll/players")
-    public ResponseEntity<List<Player>> getPlayers(){
-        List<Player> playerList = multiplayerGame.getPlayers();
+    @GetMapping("/poll/players/{id}")
+    public ResponseEntity<List<Player>> getPlayers(@PathVariable("id") int id){
+        List<Player> playerList = multiplayerGames.get(id).getPlayers();
         Collections.sort(playerList);
         return ResponseEntity.ok(playerList);
     }
@@ -156,7 +161,11 @@ public class MultiplayerController {
         }
         waitingRoom.addPlayerToWaitingRoom(player);
         System.out.println("Player added");
-        listeners.forEach((k,l) -> l.accept(new GameUpdatesPacket(waitingRoom.getPlayers().hashCode(), "WAITINGROOM", -1)));
+
+        listeners.computeIfAbsent(waitingRoom.getMultiplayerGameID(), k -> new HashMap<>());
+        listeners.get(waitingRoom.getMultiplayerGameID()).forEach((k,l) ->
+            l.accept(new GameUpdatesPacket(waitingRoom.getPlayers().hashCode(), "WAITINGROOM", -1))
+        );
         return ResponseEntity.ok(waitingRoom.getMultiplayerGameID());
         //s.get(players.size()-1)
     }
@@ -168,7 +177,9 @@ public class MultiplayerController {
     @PostMapping(path = {"/poll/remove-player-waiting-room"})
     public ResponseEntity<Boolean> removePlayerFromWaitingRoom(@RequestBody Player player) {
         boolean result = waitingRoom.removePlayerFromWaitingRoom(player);
-        listeners.forEach((k,l) -> l.accept(new GameUpdatesPacket(waitingRoom.getPlayers().hashCode(), "WAITINGROOM", -1)));
+        listeners.get(waitingRoom.getMultiplayerGameID()).forEach((k,l) ->
+            l.accept(new GameUpdatesPacket(waitingRoom.getPlayers().hashCode(), "WAITINGROOM", -1))
+        );
         System.out.println("Player has been removed");
         System.out.println(waitingRoom.getPlayers());
         return ResponseEntity.ok(result);
@@ -179,13 +190,13 @@ public class MultiplayerController {
      * @return True if the player was removed successfully
      *         otherwise return false
      */
-    @PostMapping(path = {"/poll/remove-player"})
+    /*@PostMapping(path = {"/poll/remove-player"})
     public ResponseEntity<Boolean> removePlayerFromMultiplayer(@RequestBody Player player) {
         boolean result = multiplayerGame.removePlayer(player);
         System.out.println("Player has been removed from MP");
         System.out.println(multiplayerGame.getPlayers());
         return ResponseEntity.ok(result);
-    }
+    }*/
 
     /**
      * //ToDo: change this depending on needs and multiplayegame class implementation
@@ -194,10 +205,10 @@ public class MultiplayerController {
      * @param player The player that had its score changed
      * @return the same player with updated score
      */
-    @PostMapping(path = {"/poll/send-score"})
-    public ResponseEntity<Player> updateScore(@RequestBody Player player){
+    @PostMapping(path = {"/poll/send-score/{id}"})
+    public ResponseEntity<Player> updateScore(@PathVariable("id") int id, @RequestBody Player player){
         Player playerInGame = null;
-        List<Player> playerList = multiplayerGame.getPlayers();
+        List<Player> playerList = multiplayerGames.get(id).getPlayers();
         for(int i = 0; i < playerList.size(); i++){
             Player p = playerList.get(i);
             if(p.getName().equals(player.getName())){
@@ -214,21 +225,25 @@ public class MultiplayerController {
         return ResponseEntity.ok(player);
     }
 
-    private Map<Object, Consumer<GameUpdatesPacket>> listeners = new HashMap<>();
     /**
      * Gets a number that corresponds to what has changed
      * @return Integer or 204 error
      */
-    @GetMapping("/poll/update")
-    public DeferredResult<ResponseEntity<GameUpdatesPacket>> getUpdate(){
+    @GetMapping("/poll/update/{id}")
+    public DeferredResult<ResponseEntity<GameUpdatesPacket>> getUpdate(@PathVariable("id") int id){
+
+        if(!listeners.containsKey(id)){
+            listeners.put(id, new HashMap<>());
+        }
+
         var noContent = ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         var res = new DeferredResult<ResponseEntity<GameUpdatesPacket>>(5000L,noContent);
         var key = new Object();
-        listeners.put(key,c ->{
+        listeners.get(id).put(key,c ->{
             res.setResult(ResponseEntity.ok(c));
         });
         res.onCompletion(()-> {
-            listeners.remove(key);
+            listeners.get(id).remove(key);
         });
         return res;
     }

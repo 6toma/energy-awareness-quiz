@@ -468,7 +468,7 @@ public class MainCtrl {
     public void showPopup(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setContentText(message);
-        alert.showAndWait();
+        alert.show();
     }
 
     /**
@@ -499,13 +499,15 @@ public class MainCtrl {
     @Getter @Setter
     private Player player;
     private int pointsGained;
+    @Getter @Setter
+    private int gameID = -1;
 
     /**
      * method for showing the waiting room
      */
     public void showWaitingRoom() {
         primaryStage.getScene().setRoot(waitingRoomParent);
-        startListening();
+        startListening(gameID);
         MultiplayerStarted = false;
         multiPlayerGame = null;
         packet = new GameUpdatesPacket();
@@ -518,8 +520,8 @@ public class MainCtrl {
      * if questionnumber is wrong it updates it
      * if current screen is wrong is forces the player to the correct screen
      */
-    public void startListening() {
-        server.registerUpdates(c -> {
+    public void startListening(int id) {
+        server.registerUpdates(id, c -> {
             Platform.runLater(() -> {
                 if(packet != null) {
                     System.out.println("packet: " + c);
@@ -535,7 +537,7 @@ public class MainCtrl {
                         MultiplayerStarted = true;
                         changeScreenMultiplayer(c);
                         try {
-                            multiPlayerGame = server.getMultiplayerGame();
+                            multiPlayerGame = server.getMultiplayerGame(gameID);
                             System.out.println(multiPlayerGame);
                         } catch (Exception e) {
                             showPopup("Connection failed");
@@ -553,7 +555,7 @@ public class MainCtrl {
             if(!MultiplayerStarted){
                 waitingRoomCtrl.refresh();
             } else {
-                List<Player> playas = server.getPlayersMultiplayer();
+                List<Player> playas = server.getPlayersMultiplayer(gameID);
                 System.out.println(playas);
                 multiPlayerGame.setPlayers(playas);
             }
@@ -584,6 +586,7 @@ public class MainCtrl {
         multiPlayerGame = null;
         packet = null;
         player = null;
+        gameID = -1;
     }
 
     /**
@@ -660,7 +663,7 @@ public class MainCtrl {
         pointsGained = multiPlayerGame.addPointsForPlayer(timeWhenAnswered, guessQuestionRate, player);
         if(pointsGained > 0){
             try {
-                server.postScore(player);
+                server.postScore(player, gameID);
             } catch (Exception e) {
                 showPopup("Connection failed");
                 showHomeScreen();

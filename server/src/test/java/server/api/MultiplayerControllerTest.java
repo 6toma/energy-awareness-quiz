@@ -38,31 +38,7 @@ public class MultiplayerControllerTest {
      */
     @Test
     void getGameTest() {
-        assertEquals(mpg, lpc.getGame().getBody());
-    }
-
-    /**
-     * Test for getting current screen
-     */
-    @Test
-    void getCurrentScreenTest() {
-        assertEquals("LOADING SCREEN", lpc.getCurrentScreen().getBody());
-        mpg.setCurrentScreen("ENDSCREEN");
-        assertEquals("ENDSCREEN", lpc.getCurrentScreen().getBody());
-        mpg.setCurrentScreen("LEADERBOARD");
-        assertEquals("LEADERBOARD", lpc.getCurrentScreen().getBody());
-        mpg.setCurrentScreen("QUESTION");
-        assertEquals("QUESTION", lpc.getCurrentScreen().getBody());
-    }
-
-    /**
-     * Test for current question number
-     */
-    @Test
-    void getCurrentQuestionTest() {
-        assertEquals(-1, lpc.getCurrentQuestion().getBody());
-        mpg.nextQuestion();
-        assertEquals(0, lpc.getCurrentQuestion().getBody());
+        assertEquals(mpg, lpc.getGame(0).getBody());
     }
 
     /**
@@ -70,7 +46,7 @@ public class MultiplayerControllerTest {
      */
     @Test
     void getPlayersTest() {
-        assertEquals(players, lpc.getPlayers().getBody());
+        assertEquals(players, lpc.getPlayers(0).getBody());
     }
 
     /**
@@ -80,10 +56,10 @@ public class MultiplayerControllerTest {
     @Test
     void updateScoreTest() {
         Player newScore = new Player(1L,"a", 5);
-        assertEquals(newScore, lpc.updateScore(newScore).getBody());
+        assertEquals(newScore, lpc.updateScore(0, newScore).getBody());
         int indexPlayer = mpg.getPlayers().indexOf(newScore);
         assertEquals(5, mpg.getPlayers().get(indexPlayer).getScore());
-        assertEquals(ResponseEntity.badRequest().build(), lpc.updateScore(new Player(5L,"bob", 99)));
+        assertEquals(ResponseEntity.badRequest().build(), lpc.updateScore(0, new Player(5L,"bob", 99)));
     }
     /**
      * Test for getting the update packet
@@ -93,10 +69,8 @@ public class MultiplayerControllerTest {
     void getUpdateTest() throws InterruptedException {
         var noContent = ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         var res = new DeferredResult<ResponseEntity<GameUpdatesPacket>>(5000L,noContent);
-        var res2 = lpc.getUpdate();
+        var res2 = lpc.getUpdate(0);
         Thread.sleep(5500);
         assertEquals(res.getClass(), res2.getClass());
     }
-
-
 }

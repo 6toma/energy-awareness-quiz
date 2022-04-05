@@ -121,12 +121,12 @@ public class ServerUtils {
      * and then based on that change number we send another
      * request but for the body fo the change
      */
-    public void registerUpdates(Consumer<GameUpdatesPacket> consumer) {
+    public void registerUpdates(int id, Consumer<GameUpdatesPacket> consumer) {
         EXEC = Executors.newSingleThreadExecutor();
         EXEC.submit(() -> {
             while (!Thread.interrupted()) {
                 var res = ClientBuilder.newClient(new ClientConfig())
-                        .target(serverURL).path("api/poll/update")
+                        .target(serverURL).path("api/poll/update/" + id)
                         .request(APPLICATION_JSON) //
                         .accept(APPLICATION_JSON) //
                         .get(Response.class);
@@ -153,9 +153,9 @@ public class ServerUtils {
      * @return the Player that has been posted
      * dont know why this returns anything
      */
-    public Player postScore(Player player) {
+    public Player postScore(Player player, int id) {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(serverURL).path("api/poll/send-score") //
+                .target(serverURL).path("api/poll/send-score/" + id) //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .post(Entity.entity(player, APPLICATION_JSON), Player.class);
@@ -168,9 +168,9 @@ public class ServerUtils {
      *
      * @return instance of multiplayer game
      */
-    public MultiPlayerGame getMultiplayerGame() {
+    public MultiPlayerGame getMultiplayerGame(int id) {
         return ClientBuilder.newClient(new ClientConfig()) //
-            .target(serverURL).path("api/poll/multiplayer")
+            .target(serverURL).path("api/poll/multiplayer/" + id)
             .request(APPLICATION_JSON) //
             .accept(APPLICATION_JSON) //
             .get(new GenericType<>() {
@@ -212,9 +212,9 @@ public class ServerUtils {
      *
      * @return list of players
      */
-    public List<Player> getPlayersMultiplayer(){
+    public List<Player> getPlayersMultiplayer(int id){
         return ClientBuilder.newClient(new ClientConfig()) //
-            .target(serverURL).path("api/poll/players")
+            .target(serverURL).path("api/poll/players/" + id)
             .request(APPLICATION_JSON) //
             .accept(APPLICATION_JSON) //
             .get(new GenericType<>() {

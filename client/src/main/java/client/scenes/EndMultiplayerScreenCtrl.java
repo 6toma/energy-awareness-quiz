@@ -76,6 +76,7 @@ public class EndMultiplayerScreenCtrl implements Initializable {
         }
         else {
             System.out.println(player + ", " + gameId);
+            mainCtrl.setGameID(gameId);
             mainCtrl.showWaitingRoom();
         }
     }

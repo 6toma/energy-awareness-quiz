@@ -103,6 +103,7 @@ public class UsernameScreenCtrl {
             }
             else {
                 System.out.println(player + ", " + gameId);
+                mainCtrl.setGameID(gameId);
                 mainCtrl.showWaitingRoom();
             }
 
