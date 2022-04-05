@@ -108,6 +108,7 @@ public class HomeScreenCtrl implements Initializable {
     @FXML
     void exitApp(ActionEvent event) {
         // to fully terminate the client process
+        mainCtrl.stopListening();
         Platform.exit();
         System.exit(0);
     }

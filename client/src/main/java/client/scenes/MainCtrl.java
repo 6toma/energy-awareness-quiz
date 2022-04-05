@@ -167,7 +167,6 @@ public class MainCtrl {
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent t) {
-                server.removePlayerWaitingRoom(player);
                 stopListening();
                 Platform.exit();
                 System.exit(0);
@@ -557,16 +556,24 @@ public class MainCtrl {
      * stops the thread used for long polling
      */
     public void stopListening(){
-        if(!MultiplayerStarted){
-            server.removePlayerWaitingRoom(player);
-        } else {
-            server.removePlayerMultiplayer(player);
+        try {
+            if(!MultiplayerStarted){
+                server.removePlayerWaitingRoom(player);
+            } else {
+                server.removePlayerMultiplayer(player);
+            }
+        } catch (Exception e){
+            // do nothing if can't remove player, means there's nothing to remove
+        }
+        try {
+            server.stop();
+        } catch (Exception e){
+            // do nothing if can't stop process, means there's nothing to stop
         }
 
         MultiplayerStarted = false;
         multiPlayerGame = null;
         packet = null;
-        server.stop();
     }
 
     /**
