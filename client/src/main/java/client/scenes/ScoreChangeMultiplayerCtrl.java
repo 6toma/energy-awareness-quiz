@@ -3,7 +3,6 @@ package client.scenes;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Player;
-import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -14,8 +13,6 @@ import javafx.scene.control.*;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class ScoreChangeMultiplayerCtrl implements Initializable {
 
@@ -30,8 +27,6 @@ public class ScoreChangeMultiplayerCtrl implements Initializable {
     private Label scoreStreak;
     @FXML
     private Button leave;
-
-    private Timer timer = new Timer();
 
     /**
      * Creates a new screen with injections
@@ -62,32 +57,8 @@ public class ScoreChangeMultiplayerCtrl implements Initializable {
      * Goes back to the home screen
      */
     public void exit() {
+        mainCtrl.stopListening();
         mainCtrl.showHomeScreen();
-        timer.cancel();
-        timer = new Timer();
-    }
-
-    /**
-     * Starts the countdown to move to the next screen
-     */
-    public void countdown() {
-
-        TimerTask task = new TimerTask() {
-
-            @Override
-            public void run() {
-
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        cancel();
-                        mainCtrl.nextQuestionScreen();
-                    }
-                });
-            }
-        };
-
-        timer.schedule(task, 3000);
     }
 
     private ObservableList<Player> players;
@@ -104,22 +75,12 @@ public class ScoreChangeMultiplayerCtrl implements Initializable {
     /**
      * Used to refresh the leaderboard entries
      */
-    public void setTableLeaderboard() {
-        try {
-            // because of the getLeaderPlayers(10) method, the
-            // leaderboard needs no sorting, as the list of players
-            // is returned already sorted through the query
-            List<Player> playerList = server.getPlayersInWaitingRoom();
-            players = FXCollections.observableList(playerList);
-            leaderboard.setItems(players);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+    public void setTableLeaderboard(List<Player> playerList) {
+        players = FXCollections.observableList(playerList);
+        leaderboard.setItems(players);
     }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        //public void setTableLeaderboard() {
         playerUsername.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getName()));
         playerUsername.setCellFactory(e -> new TableCell<Player, String>() {
             @Override

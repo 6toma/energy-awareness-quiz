@@ -53,32 +53,50 @@ public class LongPollController {
         multiplayerGame = waitingRoom.flushWaitingRoom();
         multiplayerGame.setCurrentScreen("LOADING SCREEN");
         listeners.forEach((k,l) -> l.accept(multiplayerGame.getGameStatus()));
-        startMultiplayerLogic();
+        sendQuestionToClients(3000);
         return ResponseEntity.ok(true);
     }
 
     /**
-     * this doesnt work
+     * this works very well
      */
-    private void startMultiplayerLogic(){
+    private void sendQuestionToClients(int delay){
         Timer timer = new Timer();
+
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
                 if(multiplayerGame.getQuestionNumber() < Config.numberOfQuestions - 1){
                     multiplayerGame.setCurrentScreen("QUESTION");
                     multiplayerGame.nextQuestion();
+                    sendLeaderboardToClients(19000);
                 } else {
                     multiplayerGame.setCurrentScreen("ENDSCREEN");
-                    cancel();
                 }
-                GameUpdatesPacket state = multiplayerGame.getGameStatus();
-                System.out.println(state);
-                listeners.forEach((k,l) -> l.accept(state));
+                GameUpdatesPacket packet = multiplayerGame.getGameStatus();
+                System.out.println(packet);
+                listeners.forEach((k,l) -> l.accept(packet));
             }
         };
 
-        timer.schedule(task, 3000, (15+4)*1000);
+        timer.schedule(task, delay);
+    }
+
+    private void sendLeaderboardToClients(int delay){
+        Timer timer = new Timer();
+
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                multiplayerGame.setCurrentScreen("LEADERBOARD");
+                GameUpdatesPacket packet = multiplayerGame.getGameStatus();
+                System.out.println(packet);
+                listeners.forEach((k,l) -> l.accept(packet));
+                sendQuestionToClients(4000);
+            }
+        };
+
+        timer.schedule(task, delay);
     }
 
     /**
@@ -180,11 +198,20 @@ public class LongPollController {
      */
     @PostMapping(path = {"send-score"})
     public ResponseEntity<Player> updateScore(@RequestBody Player player){
-        int indexPlayer = multiplayerGame.getPlayers().indexOf(player);
-        if (indexPlayer==-1){
+        Player playerInGame = null;
+        List<Player> playerList = multiplayerGame.getPlayers();
+        for(int i = 0; i < playerList.size(); i++){
+            Player p = playerList.get(i);
+            if(p.getName().equals(player.getName())){
+                playerInGame = p;
+                break;
+            }
+        }
+
+        if (playerInGame == null){
             return ResponseEntity.badRequest().build();
         }
-        multiplayerGame.getPlayers().get(indexPlayer).setScore(player.getScore());
+        playerInGame.setScore(player.getScore());
         System.out.println("New score: " + player);
         return ResponseEntity.ok(player);
     }

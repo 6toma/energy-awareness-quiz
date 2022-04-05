@@ -124,24 +124,14 @@ public class Player implements Comparable{
      */
     public void incrementStreak() { streak++;}
 
-    /**
-     * Equals method
-     * @param o object to be tested equality to
-     * @return true name and id are equal
-     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Player)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         Player player = (Player) o;
-        return Objects.equals(id, player.id) && Objects.equals(name, player.name);
+        return Objects.equals(id, player.id) && Objects.equals(name, player.name) && Objects.equals(score, player.score);
     }
 
-    /**
-     * HashCode method
-     * Generates hash from id, name and score
-     * @return int hashcode
-     */
     @Override
     public int hashCode() {
         return Objects.hash(id, name, score);

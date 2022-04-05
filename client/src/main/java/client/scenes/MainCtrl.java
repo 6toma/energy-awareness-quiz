@@ -20,6 +20,8 @@ import javafx.util.Pair;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 public class MainCtrl {
 
     @Getter
@@ -529,7 +531,9 @@ public class MainCtrl {
             if(!MultiplayerStarted){
                 waitingRoomCtrl.refresh();
             } else {
-                System.out.println(server.getPlayersMultiplayer());
+                List<Player> playas = server.getPlayersMultiplayer();
+                System.out.println(playas);
+                multiPlayerGame.setPlayers(playas);
             }
         } catch (Exception e) {
             showPopup("Connection failed");
@@ -582,11 +586,12 @@ public class MainCtrl {
         if (packet.getCurrentScreen().equals("QUESTION")) {
             showQuestionMultiplayer(packet);
         } else if (packet.getCurrentScreen().equals("LEADERBOARD")) {
-            //scoreChangeMultiplayerCtrl.setTableLeaderboard();
-            //scoreChangeMultiplayerCtrl.setScoreLabels(0, player.getScore(), player.getStreak());
-            //showLeaderBoard();
+            scoreChangeMultiplayerCtrl.setTableLeaderboard(multiPlayerGame.getPlayers());
+            scoreChangeMultiplayerCtrl.setScoreLabels(pointsGained, player.getScore(), player.getStreak());
+            showLeaderBoard();
             System.out.println("Leaderboard screen");
         } else if (packet.getCurrentScreen().equals("ENDSCREEN")) {
+            endScreenCtrl.setScoreLabel(player.getScore());
             showEndScreen();
         } else if (packet.getCurrentScreen().equals("LOADING SCREEN")){
             showLoadingScreen(true);
@@ -635,7 +640,6 @@ public class MainCtrl {
     public void showLeaderBoard() {
         primaryStage.getScene().setRoot(scoreChangeMultiplayerParent);
         checkDarkMode();
-        scoreChangeMultiplayerCtrl.countdown();
     }
 }
 
