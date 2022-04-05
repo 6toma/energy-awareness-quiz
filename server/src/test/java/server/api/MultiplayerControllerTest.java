@@ -13,9 +13,9 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class LongPollControllerTest {
+public class MultiplayerControllerTest {
     private MultiPlayerGame mpg;
-    private LongPollController lpc;
+    private MultiplayerController lpc;
     private ArrayList<Player> players;
 
     /**
@@ -30,7 +30,7 @@ public class LongPollControllerTest {
                 new Player(3L,"c", 3)
         ));
         mpg = new MultiPlayerGame(0, players, null);
-        lpc = new LongPollController(mpg, null, null);
+        lpc = new MultiplayerController(mpg, null, null, null);
     }
 
     /**

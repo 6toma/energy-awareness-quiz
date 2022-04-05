@@ -9,21 +9,23 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
 import server.Config;
+import server.database.ActivityRepository;
 import server.multiplayer.WaitingRoom;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.function.Consumer;
 
 
 @RestController
-@RequestMapping("/api/poll")
+@RequestMapping("/api")
 
-public class LongPollController {
+public class MultiplayerController {
 
     /**
      * List of everything thats different from last poll
@@ -31,22 +33,27 @@ public class LongPollController {
      */
     private MultiPlayerGame multiplayerGame;
     private final WaitingRoom waitingRoom;
+    private final QuestionController questionController;
+
     /**
      * Creates a Polling Controller
      * @param multiplayerGame injected instance of MultiPlayerGame
      * @param waitingRoom injected instance of WaitingRoom
+     * @param random
+     * @param repo
      */
     @Autowired
-    public LongPollController(MultiPlayerGame multiplayerGame, WaitingRoom waitingRoom, GameUpdatesPacket gameUpdatesPacket){
+    public MultiplayerController(MultiPlayerGame multiplayerGame, WaitingRoom waitingRoom, Random random, ActivityRepository repo){
         this.multiplayerGame = multiplayerGame;
         this.waitingRoom = waitingRoom;
+        this.questionController = new QuestionController(random, repo);
     }
 
     /**
      * Returns the instance of the game to the client
      * @return Multiplayer Game object
      */
-    @GetMapping("start-multiplayer")
+    @GetMapping("/poll/start-multiplayer")
     public ResponseEntity<Boolean> startGame(){
         if(waitingRoom.getQuestions().size() < Config.numberOfQuestions){
             return ResponseEntity.ok(false);
@@ -104,7 +111,7 @@ public class LongPollController {
      * Returns the instance of the game to the client
      * @return Multiplayer Game object
      */
-    @GetMapping("multiplayer")
+    @GetMapping("/poll/multiplayer")
     public ResponseEntity<MultiPlayerGame> getGame(){
         return ResponseEntity.ok(multiplayerGame);
     }
@@ -114,7 +121,7 @@ public class LongPollController {
      * "LOADING SCREEN", "QUESTION", "LEADERBOARD", "ENDSCREEN"
      * @return the name of current screen
      */
-    @GetMapping("CurrentScreen")
+    @GetMapping("/poll/CurrentScreen")
     public ResponseEntity<String> getCurrentScreen(){
         return ResponseEntity.ok(multiplayerGame.getCurrentScreen());
     }
@@ -123,7 +130,7 @@ public class LongPollController {
      * Gets the question currently on 'ID'
      * @return integer of which question server is on eg 3 (out of 20)
      */
-    @GetMapping("CurrentQuestionNumber")
+    @GetMapping("/poll/CurrentQuestionNumber")
     public ResponseEntity<Integer> getCurrentQuestion(){
         return ResponseEntity.ok(multiplayerGame.getQuestionNumber());
     }
@@ -134,7 +141,7 @@ public class LongPollController {
      * name and score
      * @return list of players
      */
-    @GetMapping("players")
+    @GetMapping("/poll/players")
     public ResponseEntity<List<Player>> getPlayers(){
         List<Player> playerList = multiplayerGame.getPlayers();
         Collections.sort(playerList);
@@ -147,7 +154,7 @@ public class LongPollController {
      * @param player player to be added to the game
      * @return player that was added
      */
-    @PostMapping(path={"add-player-waiting-room"})
+    @PostMapping(path={"/poll/add-player-waiting-room"})
     public ResponseEntity<Integer> postPlayerToWaitingRoom(@RequestBody Player player){
 
         listeners.forEach((k,l) -> l.accept(new GameUpdatesPacket(waitingRoom.getPlayers().hashCode(), "WAITINGROOM", -1)));
@@ -169,7 +176,7 @@ public class LongPollController {
      * @return True if the player was removed successfully
      *         otherwise return false
      */
-    @PostMapping(path = {"remove-player-waiting-room"})
+    @PostMapping(path = {"/poll/remove-player-waiting-room"})
     public ResponseEntity<Boolean> removePlayerFromWaitingRoom(@RequestBody Player player) {
         boolean result = waitingRoom.removePlayerFromWaitingRoom(player);
         listeners.forEach((k,l) -> l.accept(new GameUpdatesPacket(waitingRoom.getPlayers().hashCode(), "WAITINGROOM", -1)));
@@ -183,7 +190,7 @@ public class LongPollController {
      * @return True if the player was removed successfully
      *         otherwise return false
      */
-    @PostMapping(path = {"remove-player"})
+    @PostMapping(path = {"/poll/remove-player"})
     public ResponseEntity<Boolean> removePlayerFromMultiplayer(@RequestBody Player player) {
         boolean result = multiplayerGame.removePlayer(player);
         System.out.println("Player has been removed from MP");
@@ -198,7 +205,7 @@ public class LongPollController {
      * @param player The player that had its score changed
      * @return the same player with updated score
      */
-    @PostMapping(path = {"send-score"})
+    @PostMapping(path = {"/poll/send-score"})
     public ResponseEntity<Player> updateScore(@RequestBody Player player){
         Player playerInGame = null;
         List<Player> playerList = multiplayerGame.getPlayers();
@@ -223,7 +230,7 @@ public class LongPollController {
      * Gets a number that corresponds to what has changed
      * @return Integer or 204 error
      */
-    @GetMapping("/update")
+    @GetMapping("/poll/update")
     public DeferredResult<ResponseEntity<GameUpdatesPacket>> getUpdate(){
         var noContent = ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         var res = new DeferredResult<ResponseEntity<GameUpdatesPacket>>(5000L,noContent);
@@ -238,35 +245,64 @@ public class LongPollController {
     }
 
     /**
-     * Currently obsolete but give undesrtanting of how it will work
-     * Returns a number that's 2^x which describes what is
-     * different compared to what the client sent
-     * so the client can request for those specific objects
-     * instead of the whole game object
-     * @param change number whose bits represent change
-     * @return an Integer that describes the change
+     * ----------------------------------------- WAITING ROOM METHODS --------------------------------------------------
      */
-    /*@PostMapping(path = {"give-update/{change}"})
-    public ResponseEntity<Integer> giveUpdate(@PathVariable("change") Integer change){
-        listeners.forEach((k,l) -> l.accept(change));
-        return ResponseEntity.ok(change);
-    }*/
 
     /**
-     * Cool piece of code found, it redirects so it keeps polling
-     * obsolete right now but could be used in the future
-     * @param input the input of the previous endpoint
-     * @return the same thing as input
-     * @throws InterruptedException interrupts something
+     * Endpoint for a list of players from a waiting room
+     * @return The list of players currently in the waiting room
      */
-    /*
-    private ResponseEntity<List<Integer>> keepPolling(Integer input) throws InterruptedException {
-        Thread.sleep(5000);
-        HttpHeaders headers = new HttpHeaders();
-        //"/getMessages?id=" + input.getID() + "&type=" + input.getType()
-        headers.setLocation(URI.create("/getMessages?id=" + input + "&type=" + input));
-        return new ResponseEntity<>(headers, HttpStatus.TEMPORARY_REDIRECT);
+    @GetMapping(path = {"/waiting-room/all-players"})
+    public ResponseEntity<List<Player>> getWaitingRoomPlayers() {
+        return ResponseEntity.ok(waitingRoom.getPlayers());
     }
-     */
 
+
+    /**
+     * Endpoint for checking whether a player with a username already exists
+     *
+     * @return The player added iff the username is unique
+     * otherwise return null which means that a player with such username exists
+     */
+    @PostMapping(path = {"/waiting-room/username"})
+    public ResponseEntity<Boolean> isValidUsername(@RequestBody String username) {
+        if ("".equals(username) || username == null) {
+            return ResponseEntity.ok(false);
+        }
+        for(var p : waitingRoom.getPlayers()){
+            if(p.getName().equals(username)) {
+                //System.out.println("bad username");
+                return ResponseEntity.ok(false);
+            }
+        }
+        //System.out.println("good username");
+        return ResponseEntity.ok(true);
+    }
+
+
+    /**
+     * endpoint for checking whether a list of questions has been genarated
+     *
+     * @return true if the questions have already been generated
+     * false if have not yet been generated
+     */
+    @GetMapping(path = {"/waiting-room/are-generated"})
+    public ResponseEntity<Boolean> areQuestionsGenerated() {
+        if(waitingRoom.getQuestions().size() != Config.numberOfQuestions){
+            System.out.println("Question size before: " + waitingRoom.getQuestions().size());
+            System.out.println("NOT GENERATED");
+            int count = Config.numberOfQuestions;
+            while (count > 0) {
+                boolean isAdded = waitingRoom.addQuestion(questionController.getRandomQuestion().getBody());
+                if(isAdded) count--;
+                System.out.println(Config.numberOfQuestions - count);
+            }
+
+            return ResponseEntity.ok(false);
+        }
+        System.out.println("Question size after: " + waitingRoom.getQuestions().size());
+
+        System.out.println("ALREADY GENERATED");
+        return ResponseEntity.ok(true);
+    }
 }
