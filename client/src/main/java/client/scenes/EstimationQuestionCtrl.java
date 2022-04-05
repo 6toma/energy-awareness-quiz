@@ -150,19 +150,6 @@ public class EstimationQuestionCtrl {
      * @param answer
      */
     public void checkAnswer(Long answer) {
-//        guessAccuracy = (double) answer / question.getActivity().getConsumption_in_wh();
-//        // convert to accuracy value of < 1. for example 1.04 -> 0.96
-//        if(guessAccuracy > 1.0) {
-//            guessAccuracy = 1 - 2 * (guessAccuracy - 1);
-//        }
-//        // set a lower limit to the guess accuracy
-//        if(guessAccuracy < 0.2) {
-//            guessAccuracy = 0;
-//            timeWhenAnswered = -1;
-//        } else {
-//            timeWhenAnswered = (int) (progressBar.getProgress() * questionTime);
-//        }
-
         Long correctAnswer = question.getActivity().getConsumption_in_wh();
         double upperBound = correctAnswer * 1.8;
         double lowerBound = correctAnswer * 0.4;
@@ -207,7 +194,8 @@ public class EstimationQuestionCtrl {
             sendScoreMultiplayer(timeWhenAnswered);
         } else {
             pointsGainedForQuestion = mainCtrl.getSinglePlayerGame().addPoints(timeWhenAnswered, additionalPoints * guessAccuracy);
-            additionalPoints = 1.0;
+            if(additionalPoints == 2.0)
+                additionalPoints = 1.0;
         }
     }
 

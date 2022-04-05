@@ -375,7 +375,7 @@ public class ComparativeQuestionScreenCtrl {
         if (multiplayer) {
             sendScoreMultiplayer(timeWhenAnswered);
         }else {
-            pointsGainedForQuestion = mainCtrl.getSinglePlayerGame().addPoints(timeWhenAnswered, additionalPoints * 1.0);
+            pointsGainedForQuestion = mainCtrl.getSinglePlayerGame().addPoints(timeWhenAnswered, additionalPoints);
             additionalPoints = 1.0;
         }
 
