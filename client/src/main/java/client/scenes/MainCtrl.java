@@ -620,7 +620,13 @@ public class MainCtrl {
      */
     public void addScoreMultiplayer(int timeWhenAnswered, double guessQuestionRate){
         pointsGained = multiPlayerGame.addPointsForPlayer(timeWhenAnswered, guessQuestionRate, player);
-        server.postScore(player);
+        if(pointsGained > 0){
+            try {
+                server.postScore(player);
+            } catch (Exception e) {
+                showPopup("Connection failed");
+            }
+        }
     }
 
     /**
