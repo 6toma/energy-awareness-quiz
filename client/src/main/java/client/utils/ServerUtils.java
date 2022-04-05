@@ -146,35 +146,6 @@ public class ServerUtils {
         EXEC.shutdownNow();
     }
 
-
-    /**
-     * Used to sync up scenes with Server
-     *
-     * @return String name of the screen
-     */
-    public String getCurrentScene() {
-        return ClientBuilder.newClient(new ClientConfig()) //
-                .target(serverURL).path("api/poll/CurrentScreen")
-                .request(APPLICATION_JSON) //
-                .accept(APPLICATION_JSON) //
-                .get(new GenericType<>() {
-                });
-    }
-
-    /**
-     * Used to sync up "which question we are on" with server
-     *
-     * @return Integer of the current question
-     */
-    public int getCurrentQuestionNumber() {
-        return ClientBuilder.newClient(new ClientConfig()) //
-                .target(serverURL).path("api/poll/CurrentQuestionNumber")
-                .request(APPLICATION_JSON) //
-                .accept(APPLICATION_JSON) //
-                .get(new GenericType<>() {
-                });
-    }
-
     /**
      * Used to send your score to the Server Multplayer Game Object
      *
