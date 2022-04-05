@@ -96,9 +96,6 @@ public class EstimationQuestionCtrl {
      * Exiting the screen
      */
     public void exit() {
-        if(multiplayer){
-            mainCtrl.stopListening();
-        }
         mainCtrl.showHomeScreen();
         stopTimers();
         resetEstimationQuestion();

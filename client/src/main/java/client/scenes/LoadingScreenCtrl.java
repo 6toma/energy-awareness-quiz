@@ -44,9 +44,6 @@ public class LoadingScreenCtrl {
 
     @FXML
     void back(ActionEvent event) {
-        if(multiplayer){
-            mainCtrl.stopListening();
-        }
         mainCtrl.resetUserText();
         mainCtrl.showHomeScreen();
         timer.cancel();

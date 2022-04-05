@@ -57,7 +57,6 @@ public class ScoreChangeMultiplayerCtrl implements Initializable {
      * Goes back to the home screen
      */
     public void exit() {
-        mainCtrl.stopListening();
         mainCtrl.showHomeScreen();
     }
 
