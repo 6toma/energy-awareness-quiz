@@ -178,6 +178,7 @@ public class MainCtrl {
      * method for showing the home screen
      */
     public void showHomeScreen() {
+        stopListening();
         primaryStage.getScene().setRoot(homeScreenParent);
         homeScreenCtrl.refresh();
         checkDarkMode();

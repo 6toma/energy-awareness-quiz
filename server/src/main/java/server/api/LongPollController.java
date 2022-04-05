@@ -11,6 +11,7 @@ import org.springframework.web.context.request.async.DeferredResult;
 import server.Config;
 import server.multiplayer.WaitingRoom;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -135,7 +136,9 @@ public class LongPollController {
      */
     @GetMapping("players")
     public ResponseEntity<List<Player>> getPlayers(){
-        return ResponseEntity.ok(multiplayerGame.getPlayers());
+        List<Player> playerList = multiplayerGame.getPlayers();
+        Collections.sort(playerList);
+        return ResponseEntity.ok(playerList);
     }
 
     /**
@@ -183,7 +186,6 @@ public class LongPollController {
     @PostMapping(path = {"remove-player"})
     public ResponseEntity<Boolean> removePlayerFromMultiplayer(@RequestBody Player player) {
         boolean result = multiplayerGame.removePlayer(player);
-        listeners.forEach((k,l) -> l.accept(multiplayerGame.getGameStatus()));
         System.out.println("Player has been removed from MP");
         System.out.println(multiplayerGame.getPlayers());
         return ResponseEntity.ok(result);
