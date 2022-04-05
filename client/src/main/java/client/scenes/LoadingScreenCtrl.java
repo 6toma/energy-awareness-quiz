@@ -58,6 +58,20 @@ public class LoadingScreenCtrl {
      * Displays seconds on the screen
      */
     public void countdown() {
+        if(!multiplayer){
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try{
+                        mainCtrl.getSinglePlayerGame().addQuestion(mainCtrl.getServer().getRandomQuestion());
+                    } catch (Exception e){
+                        mainCtrl.showPopup("Connection failed");
+                        mainCtrl.showHomeScreen();
+                    }
+                }
+            }).start();
+        }
+
         TimerTask task = new TimerTask() {
             int second = 2;
 

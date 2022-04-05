@@ -336,4 +336,17 @@ public class ServerUtils {
                 .accept(APPLICATION_JSON) //
                 .post(Entity.entity(activity, APPLICATION_JSON), Activity.class);
     }
+
+    /**
+     * Gets a random activity from the database
+     * Used for testing connection to the server
+     */
+    public Activity getRandomActivity(){
+        return ClientBuilder.newClient(new ClientConfig()) //
+            .target(serverURL).path("api/activities/random")
+            .request(APPLICATION_JSON) //
+            .accept(APPLICATION_JSON) //
+            .get(new GenericType<>() {
+            });
+    }
 }

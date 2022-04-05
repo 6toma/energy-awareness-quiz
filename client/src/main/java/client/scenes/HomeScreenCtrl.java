@@ -96,7 +96,7 @@ public class HomeScreenCtrl implements Initializable {
     @FXML
     public void showUsernameScreenMulti() {
         try {
-            System.out.println(mainCtrl.getServer().getRandomQuestion());
+            mainCtrl.getServer().getRandomActivity();
             mainCtrl.setUsernameOriginScreen(2);
             mainCtrl.showUsernameScreen();
         } catch (Exception e) {

@@ -325,9 +325,9 @@ public class MainCtrl {
      */
     public void newSinglePlayerGame() {
         try {
-            Question question = server.getRandomQuestion();
+            server.getRandomActivity();
             singlePlayerGame = new SinglePlayerGame(singlePlayerGameQuestions);
-            singlePlayerGame.addQuestion(question);
+            //singlePlayerGame.addQuestion(question);
 
             setUsernameOriginScreen(1);
             showUsernameScreen();
@@ -344,10 +344,9 @@ public class MainCtrl {
      */
     public void consecutiveSinglePlayerGame(String username) {
         try {
-            Question question = server.getRandomQuestion();
+            server.getRandomActivity();
 
             singlePlayerGame = new SinglePlayerGame(singlePlayerGameQuestions, username);
-            singlePlayerGame.addQuestion(question);
 
             //skipping over the part where we ask for username
             showLoadingScreen(false);
@@ -366,7 +365,6 @@ public class MainCtrl {
     public void nextQuestionScreen() {
         // check if there's a next question to show
         if (singlePlayerGame != null
-                && singlePlayerGame.getQuestions().size() > 0
                 && singlePlayerGame.getQuestionNumber() <= singlePlayerGame.getMaxQuestions()
                 + singlePlayerGame.additionalQuestion()) {
 
@@ -472,7 +470,7 @@ public class MainCtrl {
     public void setServerURL(String URL){
         server.setServerURL(URL);
         try {
-            server.getRandomQuestion();
+            server.getRandomActivity();
         } catch (Exception e) {
             showPopup("Connection failed");
         }
