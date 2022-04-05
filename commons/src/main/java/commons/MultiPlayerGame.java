@@ -99,7 +99,6 @@ public class MultiPlayerGame {
     public int addPointsForPlayer(int timeWhenAnswered, double guessQuestionRate, Player player){
         if(timeWhenAnswered == -1){
             player.resetStreak();
-            nextQuestion();
             return 0;
         }
         player.incrementStreak();

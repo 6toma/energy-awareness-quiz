@@ -184,7 +184,7 @@ public class ServerUtils {
      */
     public Player postScore(Player player) {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(serverURL).path("api/poll/SendScore") //
+                .target(serverURL).path("api/poll/send-score") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .post(Entity.entity(player, APPLICATION_JSON), Player.class);

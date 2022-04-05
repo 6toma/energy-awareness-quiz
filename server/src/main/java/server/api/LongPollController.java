@@ -178,13 +178,14 @@ public class LongPollController {
      * @param player The player that had its score changed
      * @return the same player with updated score
      */
-    @PostMapping(path = {"SendScore"})
+    @PostMapping(path = {"send-score"})
     public ResponseEntity<Player> updateScore(@RequestBody Player player){
         int indexPlayer = multiplayerGame.getPlayers().indexOf(player);
         if (indexPlayer==-1){
             return ResponseEntity.badRequest().build();
         }
         multiplayerGame.getPlayers().get(indexPlayer).setScore(player.getScore());
+        System.out.println("New score: " + player);
         return ResponseEntity.ok(player);
     }
 

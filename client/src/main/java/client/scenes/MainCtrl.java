@@ -477,6 +477,7 @@ public class MainCtrl {
     private GameUpdatesPacket packet;
     @Getter @Setter
     private Player player;
+    private int pointsGained;
 
     /**
      * method for showing the waiting room
@@ -610,6 +611,16 @@ public class MainCtrl {
             estimationScreenCtrl.setQuestion((EstimationQuestion) question);
         }
 
+    }
+
+    /**
+     * Adds score to the multiplayer player
+     * @param timeWhenAnswered
+     * @param guessQuestionRate
+     */
+    public void addScoreMultiplayer(int timeWhenAnswered, double guessQuestionRate){
+        pointsGained = multiPlayerGame.addPointsForPlayer(timeWhenAnswered, guessQuestionRate, player);
+        server.postScore(player);
     }
 
     /**

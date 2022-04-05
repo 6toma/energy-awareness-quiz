@@ -376,7 +376,7 @@ public class ComparativeQuestionScreenCtrl {
         }
 
         if (multiplayer) {
-            sendScoreMultiplayer(timeWhenAnswered);
+            mainCtrl.addScoreMultiplayer(timeWhenAnswered, 1.0);
         }else {
             pointsGainedForQuestion = mainCtrl.getSinglePlayerGame().addPoints(timeWhenAnswered, additionalPoints * 1.0);
             additionalPoints = 1.0;
@@ -419,24 +419,6 @@ public class ComparativeQuestionScreenCtrl {
                     + " - " + this.equalityQuestion.getActivities().get(2).getConsumption_in_wh()
                     + " Wh");
         }
-    }
-
-    /**
-     * updates the score of the player in the server
-     * @param time time of answer
-     */
-    public void sendScoreMultiplayer(int time){
-        double guessQuestionRate=1.0;
-        if(time == -1){
-            mainCtrl.getPlayer().resetStreak();
-        } else {
-            mainCtrl.getPlayer().incrementStreak();
-            int currentScore = mainCtrl.getPlayer().getScore();
-            long points = Math.round(((100.0 +mainCtrl.getPlayer().getStreak()) / 100.0) * (1050 - 5 * time));
-            int pointsToBeAdded = (int) Math.round(guessQuestionRate * points);
-            mainCtrl.getPlayer().setScore(currentScore + pointsToBeAdded);
-        }
-        server.postScore(mainCtrl.getPlayer());
     }
 
     // reset attributes to default after each question
