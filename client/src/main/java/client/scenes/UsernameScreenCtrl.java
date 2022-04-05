@@ -8,14 +8,14 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-
-import java.util.concurrent.Executors;
+import lombok.Getter;
 
 public class UsernameScreenCtrl {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
+    @Getter
     @FXML
     private TextField inputUsernameField;
 
@@ -52,7 +52,7 @@ public class UsernameScreenCtrl {
      * of the new username, which may be invalid
      */
     @FXML
-    void setUsernameButtonClicked(ActionEvent event) {
+    public void setUsernameButtonClicked() {
         String newUser = inputUsernameField.getText();
 
         // checking whether username is already in waiting room
@@ -68,8 +68,8 @@ public class UsernameScreenCtrl {
     }
 
     @FXML
-    void userInputOnEnter(ActionEvent event) {
-        setUsernameButtonClicked(event);
+    void userInputOnEnter() {
+        setUsernameButtonClicked();
     }
 
     @FXML

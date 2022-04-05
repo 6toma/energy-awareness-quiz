@@ -53,15 +53,6 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
 
-        // loading the overview and add quote scenes
-        /*
-        var overview = FXML.load(QuoteOverviewCtrl.class, "client", "scenes", "QuoteOverview.fxml");
-        var add = FXML.load(AddQuoteCtrl.class, "client", "scenes", "AddQuote.fxml");
-
-        var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
-        mainCtrl.initialize(primaryStage, overview, add); //main controller gets 2 scenes it can switch between
-         */
-
         var homeScreen = FXML.load(
                 HomeScreenCtrl.class,
                 "scenes/HomeScreen.fxml",
@@ -124,6 +115,11 @@ public class Main extends Application {
                 "scenes/ScoreChangeMultiplayerCtrl.fxml",
                 "css/ScoreChangeMultiplayer.css"
         );
+        var EndMultiplayerScreen = FXML.load(
+            EndMultiplayerScreenCtrl.class,
+            "scenes/EndMultiplayerScreen.fxml",
+            "css/ScoreChangeMultiplayer.css"
+        );
 
 
         // add more scenes the same way
@@ -143,7 +139,8 @@ public class Main extends Application {
                 settingsScreen,
                 estimationQuestionScreen,
                 ScoreMultiplayerScreen,
-                adminScreen
+                adminScreen,
+                EndMultiplayerScreen
         );
     }
 }

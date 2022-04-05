@@ -43,6 +43,7 @@ public class MainCtrl {
     private ComparativeQuestionScreenCtrl comparativeQuestionScreenCtrl;
     private Parent comparativeQuestionScreenParent;
 
+    @Getter
     private UsernameScreenCtrl usernameScreenCtrl;
     private Parent usernameScreenParent;
 
@@ -66,6 +67,9 @@ public class MainCtrl {
 
     private AdminScreenCtrl adminScreenCtrl;
     private Parent adminScreenParent;
+
+    private EndMultiplayerScreenCtrl endMultiplayerScreenCtrl;
+    private Parent endMultiplayerScreenParent;
 
 
     // single player variables
@@ -111,7 +115,8 @@ public class MainCtrl {
             Pair<SettingsScreenCtrl, Parent> settingsScreen,
             Pair<EstimationQuestionCtrl, Parent> estimationQuestion,
             Pair<ScoreChangeMultiplayerCtrl, Parent> scoreChangeMultiplayer,
-            Pair<AdminScreenCtrl, Parent> adminScreen
+            Pair<AdminScreenCtrl, Parent> adminScreen,
+            Pair<EndMultiplayerScreenCtrl, Parent> endMultiplayerScreen
     ) {
         this.primaryStage = primaryStage;
 
@@ -151,6 +156,9 @@ public class MainCtrl {
 
         this.adminScreenCtrl = adminScreen.getKey();
         this.adminScreenParent = adminScreen.getValue();
+
+        this.endMultiplayerScreenCtrl = endMultiplayerScreen.getKey();
+        this.endMultiplayerScreenParent = endMultiplayerScreen.getValue();
 
 
         // TODO: uncomment to disable the fullscreen popup
@@ -575,6 +583,7 @@ public class MainCtrl {
         MultiplayerStarted = false;
         multiPlayerGame = null;
         packet = null;
+        player = null;
     }
 
     /**
@@ -613,8 +622,9 @@ public class MainCtrl {
             showLeaderBoard();
             System.out.println("Leaderboard screen");
         } else if (packet.getCurrentScreen().equals("ENDSCREEN")) {
-            endScreenCtrl.setScoreLabel(player.getScore());
-            showEndScreen();
+            endMultiplayerScreenCtrl.setTableLeaderboard(multiPlayerGame.getPlayers());
+            endMultiplayerScreenCtrl.setScoreLabel(player.getScore());
+            showEndMultiplayerScreen();
         } else if (packet.getCurrentScreen().equals("LOADING SCREEN")){
             showLoadingScreen(true);
         }
@@ -663,6 +673,15 @@ public class MainCtrl {
     public void showLeaderBoard() {
         primaryStage.getScene().setRoot(scoreChangeMultiplayerParent);
         checkDarkMode();
+    }
+
+    /**
+     * method for showing the multiplayer end screen
+     */
+    public void showEndMultiplayerScreen() {
+        primaryStage.getScene().setRoot(endMultiplayerScreenParent);
+        checkDarkMode();
+        stopListening();
     }
 }
 
