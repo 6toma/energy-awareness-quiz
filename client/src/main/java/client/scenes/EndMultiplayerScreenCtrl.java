@@ -13,6 +13,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import lombok.Setter;
 
 import java.net.URL;
 import java.util.List;
@@ -23,6 +24,8 @@ public class EndMultiplayerScreenCtrl implements Initializable {
     private final MainCtrl mainCtrl;
 
     private ObservableList<Player> players;
+    @Setter
+    private String playerName;
 
     @FXML
     private Button goToHomeScreen;
@@ -61,7 +64,7 @@ public class EndMultiplayerScreenCtrl implements Initializable {
 
     @FXML
     void playAgain(ActionEvent event) {
-        Player player = new Player(mainCtrl.getPlayer().getName());
+        Player player = new Player(playerName);
         Integer gameId = mainCtrl.getServer().addPlayerWaitingRoom(player);
         mainCtrl.setPlayer(player);
 

@@ -14,7 +14,7 @@
 <StackPane prefHeight="907.0" prefWidth="1574.0" stylesheets="@../css/ScoreChangeMultiplayer.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.EndMultiplayerScreenCtrl">
    <HBox alignment="CENTER" maxHeight="-Infinity" prefHeight="100.0" prefWidth="200.0">
       <children>
-           <VBox alignment="CENTER" maxWidth="-Infinity">
+           <VBox alignment="CENTER" maxWidth="-Infinity" prefWidth="752.0">
             <Label alignment="CENTER" prefHeight="80.0" style="-fx-font-size: 72;" text="Your score was:" />
                <Label fx:id="score" alignment="CENTER" prefHeight="80.0" style="-fx-font-size: 72;" text="!ENTER SCORE!" />
             <Region minHeight="-Infinity" prefHeight="30.0" />

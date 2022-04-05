@@ -624,6 +624,7 @@ public class MainCtrl {
         } else if (packet.getCurrentScreen().equals("ENDSCREEN")) {
             endMultiplayerScreenCtrl.setTableLeaderboard(multiPlayerGame.getPlayers());
             endMultiplayerScreenCtrl.setScoreLabel(player.getScore());
+            endMultiplayerScreenCtrl.setPlayerName(player.getName());
             showEndMultiplayerScreen();
         } else if (packet.getCurrentScreen().equals("LOADING SCREEN")){
             showLoadingScreen(true);
