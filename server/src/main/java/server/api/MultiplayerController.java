@@ -39,8 +39,8 @@ public class MultiplayerController {
      * Creates a Polling Controller
      * @param multiplayerGame injected instance of MultiPlayerGame
      * @param waitingRoom injected instance of WaitingRoom
-     * @param random
-     * @param repo
+     * @param random injected instance of Random
+     * @param repo injected instance of ActivityRepository
      */
     @Autowired
     public MultiplayerController(MultiPlayerGame multiplayerGame, WaitingRoom waitingRoom, Random random, ActivityRepository repo){
@@ -67,9 +67,7 @@ public class MultiplayerController {
         return ResponseEntity.ok(true);
     }
 
-    /**
-     * this works very well
-     */
+
     private void sendQuestionToClients(int delay){
         Timer timer = new Timer();
 
@@ -79,13 +77,13 @@ public class MultiplayerController {
                 if(multiplayerGame.getQuestionNumber() < Config.numberOfQuestions - 1){
                     multiplayerGame.setCurrentScreen("QUESTION");
                     multiplayerGame.nextQuestion();
+                    GameUpdatesPacket packet = multiplayerGame.getGameStatus();
+                    System.out.println(packet);
+                    listeners.forEach((k,l) -> l.accept(packet));
                     sendLeaderboardToClients(19000);
                 } else {
-                    multiplayerGame.setCurrentScreen("ENDSCREEN");
+                    endMultiplayerGame();
                 }
-                GameUpdatesPacket packet = multiplayerGame.getGameStatus();
-                System.out.println(packet);
-                listeners.forEach((k,l) -> l.accept(packet));
             }
         };
 
@@ -107,6 +105,14 @@ public class MultiplayerController {
         };
 
         timer.schedule(task, delay);
+    }
+
+    private void endMultiplayerGame(){
+        multiplayerGame.setCurrentScreen("ENDSCREEN");
+        GameUpdatesPacket packet = multiplayerGame.getGameStatus();
+        System.out.println(packet);
+        listeners.forEach((k,l) -> l.accept(packet));
+        multiplayerGame = null;
     }
 
     /**
@@ -140,7 +146,6 @@ public class MultiplayerController {
     @PostMapping(path={"/poll/add-player-waiting-room"})
     public ResponseEntity<Integer> postPlayerToWaitingRoom(@RequestBody Player player){
 
-        listeners.forEach((k,l) -> l.accept(new GameUpdatesPacket(waitingRoom.getPlayers().hashCode(), "WAITINGROOM", -1)));
         if(player == null) {
             return ResponseEntity.ok(null);
         }
@@ -151,6 +156,7 @@ public class MultiplayerController {
         }
         waitingRoom.addPlayerToWaitingRoom(player);
         System.out.println("Player added");
+        listeners.forEach((k,l) -> l.accept(new GameUpdatesPacket(waitingRoom.getPlayers().hashCode(), "WAITINGROOM", -1)));
         return ResponseEntity.ok(waitingRoom.getMultiplayerGameID());
         //s.get(players.size()-1)
     }
