@@ -102,7 +102,7 @@ public class WaitingRoomCtrl implements Initializable {
             // because of the getLeaderPlayers(10) method, the
             // leaderboard needs no sorting, as the list of players
             // is returned already sorted through the query
-            List<Player> playerList = server.getPlayersInWaitingRoom();
+            List<Player> playerList = mainCtrl.getServer().getPlayersInWaitingRoom();
             players = FXCollections.observableList(playerList);
             playerTable.setItems(players);
         } catch (Exception e) {
