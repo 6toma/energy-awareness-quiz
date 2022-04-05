@@ -85,8 +85,6 @@ public class HomeScreenCtrl implements Initializable {
      */
     @FXML
     public void showUsernameScreenSingle() {
-
-        mainCtrl.getServer().setServerURL(mainCtrl.getServerURL());
         mainCtrl.newSinglePlayerGame();
     }
 
@@ -97,8 +95,6 @@ public class HomeScreenCtrl implements Initializable {
      */
     @FXML
     public void showUsernameScreenMulti() {
-
-        server.setServerURL(mainCtrl.getServerURL());
         try {
             System.out.println(server.getRandomQuestion());
             mainCtrl.setUsernameOriginScreen(2);

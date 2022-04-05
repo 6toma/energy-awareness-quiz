@@ -466,6 +466,19 @@ public class MainCtrl {
     }
 
     /**
+     * Sets the server url and tests connection
+     * @param URL Server URL
+     */
+    public void setServerURL(String URL){
+        server.setServerURL(URL);
+        try {
+            server.getRandomQuestion();
+        } catch (Exception e) {
+            showPopup("Connection failed");
+        }
+    }
+
+    /**
      * ----------------------------------------- MULTIPLAYER CODE AHEAD ------------------------------------------------
      */
 
