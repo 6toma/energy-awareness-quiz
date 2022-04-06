@@ -495,32 +495,30 @@ public class ComparativeQuestionScreenCtrl {
      */
     @FXML
     private void joker2() {
-        if(!multiplayer) {
-            joker2.setDisable(true); // disable button
-            mainCtrl.useJokerRemoveOneAnswer();
+        joker2.setDisable(true); // disable button
+        mainCtrl.useJokerRemoveOneAnswer();
 
-            int correctAnswer = -1;
-            if (questionMode == 0) {
-                correctAnswer = question.getCorrect_answer();
-            } else if (questionMode == 1) {
-                correctAnswer = mcQuestion.getCorrect_answer();
-            } else if (questionMode == 2) {
-                correctAnswer = equalityQuestion.getCorrect_answer();
-            }
+        int correctAnswer = -1;
+        if (questionMode == 0) {
+            correctAnswer = question.getCorrect_answer();
+        } else if (questionMode == 1) {
+            correctAnswer = mcQuestion.getCorrect_answer();
+        } else if (questionMode == 2) {
+            correctAnswer = equalityQuestion.getCorrect_answer();
+        }
 
-            Random random = new Random();
-            int x = Math.abs(random.nextInt() % 2); // get a 0 or 1 randomly
-            int disableOption = (correctAnswer + x + 1) % 3; // get one of the incorrect answers
-            if (disableOption == 0) {
-                answer1.setDisable(true);
-                answer1.setStyle("-fx-background-color: #fc1c45;");
-            } else if (disableOption == 1) {
-                answer2.setDisable(true);
-                answer2.setStyle("-fx-background-color: #fc1c45;");
-            } else if (disableOption == 2) {
-                answer3.setDisable(true);
-                answer3.setStyle("-fx-background-color: #fc1c45;");
-            }
+        Random random = new Random();
+        int x = Math.abs(random.nextInt() % 2); // get a 0 or 1 randomly
+        int disableOption = (correctAnswer + x + 1) % 3; // get one of the incorrect answers
+        if (disableOption == 0) {
+            answer1.setDisable(true);
+            answer1.setStyle("-fx-background-color: #fc1c45;");
+        } else if (disableOption == 1) {
+            answer2.setDisable(true);
+            answer2.setStyle("-fx-background-color: #fc1c45;");
+        } else if (disableOption == 2) {
+            answer3.setDisable(true);
+            answer3.setStyle("-fx-background-color: #fc1c45;");
         }
     }
 
