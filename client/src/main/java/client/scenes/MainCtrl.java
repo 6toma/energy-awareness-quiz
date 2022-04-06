@@ -758,6 +758,15 @@ public class MainCtrl {
     }
 
     /**
+     * Checks how many points the player will get without adding them
+     * @param timeWhenAnswered
+     * @return
+     */
+    public int getPointsToBeAdded(int timeWhenAnswered) {
+        return multiPlayerGame.getPointsToBeAdded(timeWhenAnswered, this.player);
+    }
+
+    /**
      * Shows the leaderboard after each question
      */
     public void showLeaderBoard() {
