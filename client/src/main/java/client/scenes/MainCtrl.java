@@ -76,7 +76,7 @@ public class MainCtrl {
     @Getter
     private SinglePlayerGame singlePlayerGame;
     @Getter
-    private int singlePlayerGameQuestions = 5;
+    private int singlePlayerGameQuestions = 20;
 
     /**
      * Creates a new MainCtrl with server
@@ -162,10 +162,10 @@ public class MainCtrl {
         this.endMultiplayerScreenParent = endMultiplayerScreen.getValue();
 
 
-        // TODO: uncomment to disable the fullscreen popup
+        // uncomment to disable the fullscreen popup
         //primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
 
-        primaryStage.setTitle("Hello World!");
+        primaryStage.setTitle("Quizzzz!");
         primaryStage.setScene(new Scene(homeScreenParent));
         primaryStage.show();
         primaryStage.setFullScreen(true);

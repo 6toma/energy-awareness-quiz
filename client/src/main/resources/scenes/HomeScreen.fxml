@@ -33,7 +33,7 @@
       
             
                         <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minWidth="0.0" prefHeight="638.0" stylesheets="@../css/main.css">
-                      <Text fx:id="titleText" strokeType="OUTSIDE" strokeWidth="0.0" text="Quizzzzzz!" textAlignment="CENTER" wrappingWidth="526.13671875">
+                      <Text fx:id="titleText" strokeType="OUTSIDE" strokeWidth="0.0" text="Quizzzz!" textAlignment="CENTER" wrappingWidth="526.13671875">
                           <font>
                               <Font size="96.0" />
                           </font>
