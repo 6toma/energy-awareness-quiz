@@ -283,7 +283,7 @@ public class ComparativeQuestionScreenCtrl {
     }
 
     private void setEqualityText(){
-        String questionText = "Instead of " + equalityQuestion.getChosen().getTitle() + " you could ...";
+        String questionText = "Instead of '" + equalityQuestion.getChosen().getTitle() + "' you could be...";
         this.questionLabel.setText(questionText);
     }
 
@@ -388,7 +388,7 @@ public class ComparativeQuestionScreenCtrl {
         if (multiplayer) {
             mainCtrl.addScoreMultiplayer(timeWhenAnswered, 1.0);
         }else {
-            pointsGainedForQuestion = mainCtrl.getSinglePlayerGame().addPoints(timeWhenAnswered, additionalPoints * 1.0);
+            pointsGainedForQuestion = mainCtrl.getSinglePlayerGame().addPoints(timeWhenAnswered, additionalPoints);
             additionalPoints = 1.0;
         }
 

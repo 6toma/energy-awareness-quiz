@@ -79,6 +79,7 @@ public class EstimationQuestionCtrl {
 
     /**
      * Constructor for the Estimation Question Controller
+     *
      * @param server
      * @param mainCtrl
      */
@@ -90,9 +91,10 @@ public class EstimationQuestionCtrl {
 
     /**
      * sets multiplayer flag
+     *
      * @param v multiplayer bool
      */
-    public void setMultiplayer(boolean v){
+    public void setMultiplayer(boolean v) {
         this.multiplayer = v;
     }
 
@@ -139,6 +141,7 @@ public class EstimationQuestionCtrl {
     /**
      * Sets the question object for this screen
      * Also sets the question label and answer text field
+     *
      * @param question
      */
     public void setQuestion(EstimationQuestion question) {
@@ -161,21 +164,24 @@ public class EstimationQuestionCtrl {
 
     /**
      * Checking the correctness of the answer
+     *
      * @param answer
      */
     public void checkAnswer(Long answer) {
-        guessAccuracy = (double) answer / question.getActivity().getConsumption_in_wh();
-        // convert to accuracy value of < 1. for example 1.04 -> 0.96
-        if(guessAccuracy > 1.0){
-            guessAccuracy = 1 - 2 * (guessAccuracy - 1);
-        }
-        // set a lower limit to the guess accuracy
-        if(guessAccuracy < 0.2){
+        Long correctAnswer = question.getActivity().getConsumption_in_wh();
+        double upperBound = correctAnswer * 1.8;
+        double lowerBound = correctAnswer * 0.4;
+
+        if (answer > upperBound || answer < lowerBound) {
             guessAccuracy = 0;
             timeWhenAnswered = -1;
-        } else {
-            timeWhenAnswered = (int) (progressBar.getProgress() * questionTime);
+            return;
         }
+
+        guessAccuracy = (double) answer / correctAnswer;
+        if (guessAccuracy > 1)
+            guessAccuracy = 2 - guessAccuracy;
+        timeWhenAnswered = (int) (progressBar.getProgress() * questionTime);
     }
 
     private void showAnswers() {
@@ -206,7 +212,8 @@ public class EstimationQuestionCtrl {
             mainCtrl.addScoreMultiplayer(timeWhenAnswered, guessAccuracy);
         } else {
             pointsGainedForQuestion = mainCtrl.getSinglePlayerGame().addPoints(timeWhenAnswered, additionalPoints * guessAccuracy);
-            additionalPoints = 1.0;
+            if (additionalPoints == 2.0)
+                additionalPoints = 1.0;
         }
     }
 
@@ -234,13 +241,13 @@ public class EstimationQuestionCtrl {
         try {
             Long answer = Long.parseLong(answerField.getText());
             checkAnswer(answer);
-        } catch(NumberFormatException e){
+        } catch (NumberFormatException e) {
         }
     }
 
     @FXML
     private void joker1() {
-        if(!multiplayer) {
+        if (!multiplayer) {
             joker1.setDisable(true);
             mainCtrl.getSinglePlayerGame().useJokerAdditionalQuestion();
 
@@ -256,7 +263,7 @@ public class EstimationQuestionCtrl {
 
     @FXML
     private void joker2() {
-        if(!multiplayer) {
+        if (!multiplayer) {
             // if there is no answer input, don't use joker
             if (answerField.getText().equals("")) {
                 jokerMessage.setText("Input an answer to use this joker!");
@@ -269,19 +276,24 @@ public class EstimationQuestionCtrl {
             /* calculate the points the player would win for this question
              * the same way they are calculated in addPoints(), but without actually adding them
              */
+            Long answer = Long.parseLong(answerField.getText());
+            checkAnswer(answer);
             int pointsToBeAdded = (int) Math.round(guessAccuracy * additionalPoints * mainCtrl.getSinglePlayerGame().getPointsToBeAdded(timeWhenAnswered));
 
             if (pointsToBeAdded > 0) {
                 jokerMessage.setText("Close enough! You will get some points for this answer.");
             } else {
-                jokerMessage.setText("You guess is too far from the actual answer! Try changing it so you can get some points for this question.");
+                Long correctAnswer = question.getActivity().getConsumption_in_wh();
+                if (answer > correctAnswer)
+                    jokerMessage.setText("You guess is too far from the actual answer! Try a lower value.");
+                else jokerMessage.setText("You guess is too far from the actual answer! Try a higher value.");
             }
         }
     }
 
     @FXML
-    private void joker3() {
-        if(!multiplayer) {
+    private void joker3 () {
+        if (!multiplayer) {
             joker3.setDisable(true); // disable button
             mainCtrl.getSinglePlayerGame().useJokerDoublePoints();
 
@@ -292,7 +304,7 @@ public class EstimationQuestionCtrl {
     /**
      * Reset the states of the jokers. Enable all jokers and set their usage to false.
      */
-    private void resetJokers() {
+    private void resetJokers () {
         joker1.setDisable(false);
         joker2.setDisable(false);
         joker3.setDisable(false);
@@ -304,13 +316,13 @@ public class EstimationQuestionCtrl {
     /**
      * Reset an estimation question
      */
-    public void resetEstimationQuestion() {
+    public void resetEstimationQuestion () {
         stopTimers();
         reset();
         resetJokers();
     }
 
-    private void stopTimers() {
+    private void stopTimers () {
         if (questionTimer != null) {
             questionTimer.stop();
             questionTimer = null;
@@ -325,10 +337,10 @@ public class EstimationQuestionCtrl {
      * Sets the images to the ones stored in the activities.
      * Also sets the images to be the same width as the question
      */
-    private void setImage(){
-        if(question.getActivity().getImage() != null){
+    private void setImage () {
+        if (question.getActivity().getImage() != null) {
             InputStream inputStream = new ByteArrayInputStream(question.getActivity().getImage());
-            if(inputStream != null){
+            if (inputStream != null) {
                 image.setImage(new Image(inputStream));
             }
         }
@@ -340,8 +352,8 @@ public class EstimationQuestionCtrl {
      * a joker has been used on another screen.
      * Resets the mouse-transparency, used when answers are being shown
      */
-    private void setJokers() {
-        if(!multiplayer) {
+    private void setJokers () {
+        if (!multiplayer) {
             if (mainCtrl.getSinglePlayerGame().jokerAdditionalQuestionIsUsed()) {
                 joker1.setDisable(true);
             } else {
@@ -365,7 +377,7 @@ public class EstimationQuestionCtrl {
     /**
      * Add tooltips for the jokers
      */
-    public void addTooltips() {
+    public void addTooltips () {
         Tooltip skipQuestion = new Tooltip();
         skipQuestion.setText("Skip this question!");
         skipQuestion.setShowDelay(Duration.ZERO);

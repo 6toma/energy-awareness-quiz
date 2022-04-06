@@ -199,8 +199,8 @@ public class QuestionController {
      * @return A list of activities
      */
     private List<Activity> activitiesWithSuitableConsumptionsGenerator(int limit, Activity pivot){
-        double lowerBound = 0.5;
-        double upperBound = 1.5;
+        double lowerBound = 0.1;
+        double upperBound = 2.5;
         List<Activity> result = new ArrayList<>();
         // list of the IDs of the selection of activities returned by the SQL query
         Optional<List<String>> ids;
@@ -216,8 +216,8 @@ public class QuestionController {
                 (int) Math.ceil(upperBound * pivot.getConsumption_in_wh()),
                 pivot.getConsumption_in_wh()
             );
-            lowerBound -= 0.05; //it is not a problem for lowerBound to go below 0
-            upperBound += 0.2;
+            lowerBound -= 0.1; //it is not a problem for lowerBound to go below 0
+            upperBound += 0.25;
         } while (ids.isEmpty() || ids.get().size() < limit);
         //the while condition ensures exactly the needed number of IDs are returned and not less
 
