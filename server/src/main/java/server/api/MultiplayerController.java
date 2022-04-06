@@ -11,13 +11,7 @@ import org.springframework.web.context.request.async.DeferredResult;
 import server.database.ActivityRepository;
 import server.multiplayer.WaitingRoom;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 import java.util.function.Consumer;
 
 
@@ -65,10 +59,18 @@ public class MultiplayerController {
         int id = waitingRoom.getMultiplayerGameID();
         multiplayerGames.put(id, waitingRoom.flushWaitingRoom());
         multiplayerGames.get(id).setCurrentScreen("LOADING SCREEN");
-        listeners.get(id).forEach((k,l) -> l.accept(multiplayerGames.get(id).getGameStatus()));
+        sendToListeners(listeners.get(id), multiplayerGames.get(id).getGameStatus());
+        //listeners.get(id).forEach((k,l) -> l.accept(multiplayerGames.get(id).getGameStatus()));
         sendQuestionToClients(3000, id);
         generateQuestions();
         return ResponseEntity.ok(true);
+    }
+
+    private void sendToListeners(Map<Object, Consumer<GameUpdatesPacket>> listenerMap, GameUpdatesPacket gameStatus){
+        Iterator<Map.Entry<Object, Consumer<GameUpdatesPacket>>> it = listenerMap.entrySet().iterator();
+        while(it.hasNext()){
+            it.next().getValue().accept(gameStatus);
+        }
     }
 
 
@@ -82,8 +84,9 @@ public class MultiplayerController {
                     multiplayerGames.get(id).setCurrentScreen("QUESTION");
                     multiplayerGames.get(id).nextQuestion();
                     GameUpdatesPacket packet = multiplayerGames.get(id).getGameStatus();
-                    System.out.println(packet);
-                    listeners.get(id).forEach((k,l) -> l.accept(packet));
+                    System.out.println("Sent " + packet + " to game " + id);
+                    sendToListeners(listeners.get(id), packet);
+                    //listeners.get(id).forEach((k,l) -> l.accept(packet));
                     sendLeaderboardToClients(19000, id);
                 } else {
                     endMultiplayerGame(id);
@@ -102,8 +105,9 @@ public class MultiplayerController {
             public void run() {
                 multiplayerGames.get(id).setCurrentScreen("LEADERBOARD");
                 GameUpdatesPacket packet = multiplayerGames.get(id).getGameStatus();
-                System.out.println(packet);
-                listeners.get(id).forEach((k,l) -> l.accept(packet));
+                System.out.println("Sent " + packet + " to game " + id);
+                sendToListeners(listeners.get(id), packet);
+                //listeners.get(id).forEach((k,l) -> l.accept(packet));
                 sendQuestionToClients(4000, id);
             }
         };
@@ -114,8 +118,9 @@ public class MultiplayerController {
     private void endMultiplayerGame(int id){
         multiplayerGames.get(id).setCurrentScreen("ENDSCREEN");
         GameUpdatesPacket packet = multiplayerGames.get(id).getGameStatus();
-        System.out.println(packet);
-        listeners.get(id).forEach((k,l) -> l.accept(packet));
+        System.out.println("Sent " + packet + " to game " + id);
+        sendToListeners(listeners.get(id), packet);
+        //listeners.get(id).forEach((k,l) -> l.accept(packet));
         multiplayerGames.remove(id);
         listeners.remove(id);
     }
@@ -160,12 +165,15 @@ public class MultiplayerController {
             }
         }
         waitingRoom.addPlayerToWaitingRoom(player);
-        System.out.println("Player added");
+        System.out.println("Player added to the waitingroom");
 
         listeners.computeIfAbsent(waitingRoom.getMultiplayerGameID(), k -> new HashMap<>());
-        listeners.get(waitingRoom.getMultiplayerGameID()).forEach((k,l) ->
-            l.accept(new GameUpdatesPacket(waitingRoom.getPlayers().hashCode(), "WAITINGROOM", -1))
+        sendToListeners(listeners.get(waitingRoom.getMultiplayerGameID()),
+                new GameUpdatesPacket(waitingRoom.getPlayers().hashCode(), "WAITINGROOM", -1)
         );
+        /*listeners.get(waitingRoom.getMultiplayerGameID()).forEach((k,l) ->
+            l.accept()
+        );*/
         return ResponseEntity.ok(waitingRoom.getMultiplayerGameID());
         //s.get(players.size()-1)
     }
@@ -177,11 +185,13 @@ public class MultiplayerController {
     @PostMapping(path = {"/poll/remove-player-waiting-room"})
     public ResponseEntity<Boolean> removePlayerFromWaitingRoom(@RequestBody Player player) {
         boolean result = waitingRoom.removePlayerFromWaitingRoom(player);
-        listeners.get(waitingRoom.getMultiplayerGameID()).forEach((k,l) ->
-            l.accept(new GameUpdatesPacket(waitingRoom.getPlayers().hashCode(), "WAITINGROOM", -1))
+        sendToListeners(listeners.get(waitingRoom.getMultiplayerGameID()),
+                new GameUpdatesPacket(waitingRoom.getPlayers().hashCode(), "WAITINGROOM", -1)
         );
-        System.out.println("Player has been removed");
-        System.out.println(waitingRoom.getPlayers());
+        /*listeners.get(waitingRoom.getMultiplayerGameID()).forEach((k,l) ->
+            l.accept(new GameUpdatesPacket(waitingRoom.getPlayers().hashCode(), "WAITINGROOM", -1))
+        );*/
+        System.out.println("Player has been removed from the waitingroom");
         return ResponseEntity.ok(result);
     }
 
@@ -221,7 +231,6 @@ public class MultiplayerController {
             return ResponseEntity.badRequest().build();
         }
         playerInGame.setScore(player.getScore());
-        System.out.println("New score: " + player);
         return ResponseEntity.ok(player);
     }
 
@@ -275,11 +284,9 @@ public class MultiplayerController {
         }
         for(var p : waitingRoom.getPlayers()){
             if(p.getName().equals(username)) {
-                //System.out.println("bad username");
                 return ResponseEntity.ok(false);
             }
         }
-        //System.out.println("good username");
         return ResponseEntity.ok(true);
     }
 
@@ -299,7 +306,6 @@ public class MultiplayerController {
                         while (count > 0) {
                             boolean isAdded = waitingRoom.addQuestion(questionController.getRandomQuestion().getBody());
                             if (isAdded) count--;
-                            System.out.println(waitingRoom.getMaxNumberOfQuestions() - count);
                         }
                     } else {
                         System.out.println("ALREADY GENERATED");
