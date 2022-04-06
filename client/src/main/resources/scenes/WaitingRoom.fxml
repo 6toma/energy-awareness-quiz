@@ -22,7 +22,7 @@
          </columns>
       </TableView>
         <Region maxHeight="20" minHeight="20" VBox.vgrow="ALWAYS" />
-        <Button fx:id="startButton" onAction="#startGame" prefHeight="76.0" prefWidth="182.0" stylesheets="@../css/main.css" text="Ready">
+        <Button fx:id="startButton" onAction="#startGame" prefHeight="76.0" prefWidth="182.0" stylesheets="@../css/main.css" text="Start">
          <styleClass>
             <String fx:value="rounded" />
             <String fx:value="functionality-button" />
