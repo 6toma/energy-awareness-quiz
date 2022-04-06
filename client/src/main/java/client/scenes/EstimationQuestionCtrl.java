@@ -107,9 +107,9 @@ public class EstimationQuestionCtrl {
 
     private void setQuestionNumber(){
         if (!multiplayer){
-            QuestionNumber.setText("Question:  " + mainCtrl.getSinglePlayerGame().getQuestionNumber());
+            QuestionNumber.setText("Question:  " + mainCtrl.getSinglePlayerGame().getQuestionNumber() +"/"+mainCtrl.getSinglePlayerGameQuestions());
         } else {
-            QuestionNumber.setText("Question:  " + (mainCtrl.getMultiPlayerGame().getQuestionNumber()+1));
+            QuestionNumber.setText("Question:  " + (mainCtrl.getMultiPlayerGame().getQuestionNumber()+1)+"/"+mainCtrl.getMultiPlayerGame().getQuestions().size());
         }
     }
 

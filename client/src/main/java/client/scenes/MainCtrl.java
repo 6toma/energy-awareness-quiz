@@ -75,6 +75,7 @@ public class MainCtrl {
     // single player variables
     @Getter
     private SinglePlayerGame singlePlayerGame;
+    @Getter
     private int singlePlayerGameQuestions = 5;
 
     /**
