@@ -277,12 +277,15 @@ public class EstimationQuestionCtrl {
         /* calculate the points the player would win for this question
         * the same way they are calculated in addPoints(), but without actually adding them
         */
+        Long answer = Long.parseLong(answerField.getText());
+        checkAnswer(answer);
         int pointsToBeAdded = (int)Math.round(guessAccuracy * additionalPoints * mainCtrl.getSinglePlayerGame().getPointsToBeAdded(timeWhenAnswered));
 
         if(pointsToBeAdded > 0 ) {
             jokerMessage.setText("Close enough! You will get some points for this answer.");
         } else {
-            if(guessAccuracy > 1)
+            Long correctAnswer = question.getActivity().getConsumption_in_wh();
+            if(answer > correctAnswer)
                 jokerMessage.setText("You guess is too far from the actual answer! Try a lower value.");
             else jokerMessage.setText("You guess is too far from the actual answer! Try a higher value.");
         }

@@ -217,8 +217,8 @@ public class QuestionController {
      * @return A list of activities
      */
     private List<Activity> activitiesWithSuitableConsumptionsGenerator(int limit, Activity pivot){
-        double lowerBound = 0.2;
-        double upperBound = 2;
+        double lowerBound = 0.1;
+        double upperBound = 2.5;
         List<Activity> result = new ArrayList<>();
         // list of the IDs of the selection of activities returned by the SQL query
         Optional<List<String>> ids;
