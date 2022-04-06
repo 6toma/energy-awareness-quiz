@@ -79,7 +79,7 @@ public class MainCtrl {
     @Getter
     private SinglePlayerGame singlePlayerGame;
     @Getter
-    private int singlePlayerGameQuestions = 4;
+    private int singlePlayerGameQuestions = 20;
 
     /**
      * Creates a new MainCtrl with server
