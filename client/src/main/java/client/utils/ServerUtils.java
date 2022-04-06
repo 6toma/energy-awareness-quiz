@@ -121,17 +121,16 @@ public class ServerUtils {
      * and then based on that change number we send another
      * request but for the body fo the change
      */
-    public void registerUpdates(Consumer<GameUpdatesPacket> consumer) {
+    public void registerUpdates(int id, Consumer<GameUpdatesPacket> consumer) {
         EXEC = Executors.newSingleThreadExecutor();
         EXEC.submit(() -> {
             while (!Thread.interrupted()) {
                 var res = ClientBuilder.newClient(new ClientConfig())
-                        .target(serverURL).path("api/poll/update")
+                        .target(serverURL).path("api/poll/update/" + id)
                         .request(APPLICATION_JSON) //
                         .accept(APPLICATION_JSON) //
                         .get(Response.class);
                 if (res.getStatus() == 204){
-                    System.out.println("nothing happened");
                     continue;
                 }
                 var c = res.readEntity(GameUpdatesPacket.class);
@@ -147,35 +146,6 @@ public class ServerUtils {
         EXEC.shutdownNow();
     }
 
-
-    /**
-     * Used to sync up scenes with Server
-     *
-     * @return String name of the screen
-     */
-    public String getCurrentScene() {
-        return ClientBuilder.newClient(new ClientConfig()) //
-                .target(serverURL).path("api/poll/CurrentScreen")
-                .request(APPLICATION_JSON) //
-                .accept(APPLICATION_JSON) //
-                .get(new GenericType<>() {
-                });
-    }
-
-    /**
-     * Used to sync up "which question we are on" with server
-     *
-     * @return Integer of the current question
-     */
-    public int getCurrentQuestionNumber() {
-        return ClientBuilder.newClient(new ClientConfig()) //
-                .target(serverURL).path("api/poll/CurrentQuestionNumber")
-                .request(APPLICATION_JSON) //
-                .accept(APPLICATION_JSON) //
-                .get(new GenericType<>() {
-                });
-    }
-
     /**
      * Used to send your score to the Server Multplayer Game Object
      *
@@ -183,9 +153,9 @@ public class ServerUtils {
      * @return the Player that has been posted
      * dont know why this returns anything
      */
-    public Player postScore(Player player) {
+    public Player postScore(Player player, int id) {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(serverURL).path("api/poll/SendScore") //
+                .target(serverURL).path("api/poll/send-score/" + id) //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .post(Entity.entity(player, APPLICATION_JSON), Player.class);
@@ -198,9 +168,25 @@ public class ServerUtils {
      *
      * @return instance of multiplayer game
      */
-    public MultiPlayerGame getMultiplayerGame() {
+    public MultiPlayerGame getMultiplayerGame(int id) {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(serverURL).path("api/poll/MultiplayerGame")
+            .target(serverURL).path("api/poll/multiplayer/" + id)
+            .request(APPLICATION_JSON) //
+            .accept(APPLICATION_JSON) //
+            .get(new GenericType<>() {
+            });
+    }
+
+    /**
+     * When the toilet is flushed we get the whole game object where
+     * we take the questions and players from
+     * this should only be done once at the start
+     *
+     * @return instance of multiplayer game
+     */
+    public boolean startMultiplayer() {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(serverURL).path("api/poll/start-multiplayer")
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<>() {
@@ -208,8 +194,7 @@ public class ServerUtils {
     }
 
     /**
-     * Gets all players, so you can display their names and score
-     * on the leaderboard
+     * Gets all players in the waitingroom
      *
      * @return list of players
      */
@@ -220,6 +205,20 @@ public class ServerUtils {
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<>() {
                 });
+    }
+
+    /**
+     * Gets all players, in the multiplayerGame
+     *
+     * @return list of players
+     */
+    public List<Player> getPlayersMultiplayer(int id){
+        return ClientBuilder.newClient(new ClientConfig()) //
+            .target(serverURL).path("api/poll/players/" + id)
+            .request(APPLICATION_JSON) //
+            .accept(APPLICATION_JSON) //
+            .get(new GenericType<>() {
+            });
     }
 
     /**
@@ -244,27 +243,12 @@ public class ServerUtils {
      * @param player player to be added
      * @return player that was added
      */
-    public Player addPlayerWaitingRoom(Player player) {
+    public Integer addPlayerWaitingRoom(Player player) {
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(serverURL).path("api/poll/add-player-waiting-room")
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
-                .post(Entity.entity(player, APPLICATION_JSON), Player.class);
-    }
-
-    /**
-     * checks whether a list of questions has been generated,
-     * generates a new list if the list is empty
-     *
-     * @return player that was added
-     */
-    public Boolean areQuestionsGenerated() {
-        return ClientBuilder.newClient(new ClientConfig()) //
-                .target(serverURL).path("api/waiting-room/are-generated")
-                .request(APPLICATION_JSON) //
-                .accept(APPLICATION_JSON) //
-                .get(new GenericType<>() {
-                });
+                .post(Entity.entity(player, APPLICATION_JSON), Integer.class);
     }
 
 
@@ -276,10 +260,24 @@ public class ServerUtils {
      */
     public Boolean removePlayerWaitingRoom(Player player) {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(serverURL).path("api/poll/remove-player")
+                .target(serverURL).path("api/poll/remove-player-waiting-room")
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .post(Entity.entity(player, APPLICATION_JSON), Boolean.class);
+    }
+
+    /**
+     * Removes a player from multiplayer
+     *
+     * @param player player to be removed
+     * @return true if removed correctly else false
+     */
+    public Boolean removePlayerMultiplayer(Player player) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+            .target(serverURL).path("api/poll/remove-player")
+            .request(APPLICATION_JSON) //
+            .accept(APPLICATION_JSON) //
+            .post(Entity.entity(player, APPLICATION_JSON), Boolean.class);
     }
 
     /**
@@ -322,5 +320,18 @@ public class ServerUtils {
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .post(Entity.entity(activity, APPLICATION_JSON), Activity.class);
+    }
+
+    /**
+     * Gets a random activity from the database
+     * Used for testing connection to the server
+     */
+    public Activity getRandomActivity(){
+        return ClientBuilder.newClient(new ClientConfig()) //
+            .target(serverURL).path("api/activities/random")
+            .request(APPLICATION_JSON) //
+            .accept(APPLICATION_JSON) //
+            .get(new GenericType<>() {
+            });
     }
 }

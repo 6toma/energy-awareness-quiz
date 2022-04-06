@@ -11,15 +11,26 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<StackPane prefHeight="907.0" prefWidth="1574.0" stylesheets="@../css/ScoreChangeMultiplayer.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.ScoreChangeMultiplayerCtrl">
+<StackPane prefHeight="907.0" prefWidth="1574.0" stylesheets="@../css/ScoreChangeMultiplayer.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.EndMultiplayerScreenCtrl">
    <HBox alignment="CENTER" maxHeight="-Infinity" prefHeight="100.0" prefWidth="200.0">
       <children>
            <VBox alignment="CENTER" maxWidth="-Infinity" prefWidth="752.0">
-               <Label fx:id="scoreGained" alignment="CENTER" prefHeight="80.0" style="-fx-font-size: 72;" styleClass="label-box" text="+!ENTER SCORE!" />
+            <Label alignment="CENTER" prefHeight="80.0" style="-fx-font-size: 72;" text="Your score was:" />
+               <Label fx:id="score" alignment="CENTER" prefHeight="80.0" style="-fx-font-size: 72;" text="!ENTER SCORE!" />
             <Region minHeight="-Infinity" prefHeight="30.0" />
-                <Label fx:id="scoreTotal" alignment="CENTER" prefHeight="80.0" style="-fx-font-size: 72;" styleClass="label-box" text="Score: !ENTER SCORE!" />
+            <Button fx:id="playAgain" alignment="CENTER" onAction="#playAgain" text="Play again">
+               <styleClass>
+                  <String fx:value="functionality-button" />
+                  <String fx:value="rounded" />
+               </styleClass>
+            </Button>
             <Region minHeight="-Infinity" prefHeight="30.0" />
-                <Label fx:id="scoreStreak" alignment="CENTER" prefHeight="80.0" style="-fx-font-size: 72;" styleClass="label-box" text="Streak: !ENTER SCORE!" />
+            <Button fx:id="goToHomeScreen" alignment="CENTER" onAction="#goToHomeScreen" text="Home">
+               <styleClass>
+                  <String fx:value="functionality-button" />
+                  <String fx:value="rounded" />
+               </styleClass>
+            </Button>
            </VBox>
          <Region minWidth="-Infinity" prefWidth="50.0" />
          <VBox alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="680.0" prefWidth="680.0">
@@ -35,15 +46,6 @@
          </VBox>
       </children>
    </HBox>
-    <StackPane maxHeight="132.0" maxWidth="245.0" prefHeight="132.0" prefWidth="245.0" styleClass="padding, margin" stylesheets="@../css/ScoreChangeMultiplayer.css" StackPane.alignment="BOTTOM_LEFT">
-        <children>
-            <Button fx:id="leave" onAction="#exit" text="Leave" StackPane.alignment="BOTTOM_LEFT">
-                <styleClass>
-                    <String fx:value="exit" />
-                    <String fx:value="rounded" />
-                </styleClass></Button>
-        </children>
-    </StackPane>
     <stylesheets>
         <URL value="@../css/main.css" />
         <URL value="@../css/ScoreChangeScreen.css" />

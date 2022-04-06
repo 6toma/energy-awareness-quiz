@@ -92,7 +92,7 @@ public class AdminScreenCtrl implements Initializable {
     @FXML
     public void refresh() {
         try {
-            List<Activity> activityList = server.getAllActivities();
+            List<Activity> activityList = mainCtrl.getServer().getAllActivities();
             ObservableList<Activity> observableArrayList =
                     FXCollections.observableArrayList(activityList);
             activityTable.setItems(observableArrayList);
@@ -110,7 +110,7 @@ public class AdminScreenCtrl implements Initializable {
     public void addActivity() {
         Activity activity = checkTextFields();
         if (activity != null) {
-            server.addActivity(activity);
+            mainCtrl.getServer().addActivity(activity);
             refresh();
             Alert successfulAdd = new Alert(Alert.AlertType.INFORMATION);
             successfulAdd.setHeaderText("The activity has been added successfully!");
@@ -136,7 +136,7 @@ public class AdminScreenCtrl implements Initializable {
 
         Optional<ButtonType> res = confirmDeletion.showAndWait();
         if (res.get() == ButtonType.OK) {
-            server.deleteActivity(toBeDeleted);
+            mainCtrl.getServer().deleteActivity(toBeDeleted);
         }
         refresh();
     }
@@ -156,7 +156,7 @@ public class AdminScreenCtrl implements Initializable {
         inputActivityTitle.setText(toBeEdited.getTitle());
         inputActivityConsumption.setText(Long.toString(toBeEdited.getConsumption_in_wh()));
         inputActivitySource.setText(toBeEdited.getSource());
-        server.deleteActivity(toBeEdited);
+        mainCtrl.getServer().deleteActivity(toBeEdited);
     }
 
     /**
@@ -165,7 +165,7 @@ public class AdminScreenCtrl implements Initializable {
     public void commitEdit() {
         Activity toBeAdded = checkTextFields();
         if (toBeAdded != null) {
-            server.addActivity(toBeAdded);
+            mainCtrl.getServer().addActivity(toBeAdded);
             refresh();
         }
     }
