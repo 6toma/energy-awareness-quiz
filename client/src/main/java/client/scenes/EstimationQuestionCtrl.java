@@ -98,7 +98,7 @@ public class EstimationQuestionCtrl {
     public void exit() {
         mainCtrl.showHomeScreen();
         stopTimers();
-        mainCtrl.resetQuestionScreens();
+        resetEstimationQuestion();
     }
 
     /**
@@ -189,34 +189,12 @@ public class EstimationQuestionCtrl {
         questionLabel.setText(questionLabel.getText() + " - " + question.getActivity().getConsumption_in_wh() + " Wh");
 
         if (multiplayer) {
-            sendScoreMultiplayer(timeWhenAnswered);
+            mainCtrl.addScoreMultiplayer(timeWhenAnswered, guessAccuracy);
         } else {
             pointsGainedForQuestion = mainCtrl.getSinglePlayerGame().addPoints(timeWhenAnswered, additionalPoints * guessAccuracy);
             additionalPoints = 1.0;
         }
     }
-
-    /**
-     * updates the score of the player in the server
-     * @param time time of answer
-     */
-    public void sendScoreMultiplayer(int time){
-        double guessQuestionRate=1.0;
-        if(time == -1){
-            mainCtrl.getPlayer().resetStreak();
-            mainCtrl.getPlayer().setScoreGained(0);
-        } else {
-            mainCtrl.getPlayer().incrementStreak();
-            int currentScore = mainCtrl.getPlayer().getScore();
-            long points = Math.round(((100.0 +mainCtrl.getPlayer().getStreak()) / 100.0) * (1050 - 5 * time));
-            int pointsToBeAdded = (int) Math.round(guessQuestionRate * points);
-            mainCtrl.getPlayer().setScoreGained(pointsToBeAdded);
-            mainCtrl.getPlayer().setScore(currentScore + pointsToBeAdded);
-        }
-        server.postScore(mainCtrl.getPlayer());
-    }
-
-
 
     private void reset() {
         timeWhenAnswered = -1;
@@ -248,47 +226,53 @@ public class EstimationQuestionCtrl {
 
     @FXML
     private void joker1() {
-        joker1.setDisable(true);
-        mainCtrl.getSinglePlayerGame().useJokerAdditionalQuestion();
+        if(!multiplayer) {
+            joker1.setDisable(true);
+            mainCtrl.getSinglePlayerGame().useJokerAdditionalQuestion();
 
-        stopTimers();
-        /* even if the correct answer was selected before the question was changed, 0 points will be added
-         * the method addPoints() is used just to increment the number of the current question in the list
-         * streak is reset to 0
-         */
-        pointsGainedForQuestion = mainCtrl.getSinglePlayerGame().addPoints(-1, 0.0);
-        endQuestion();
+            stopTimers();
+            /* even if the correct answer was selected before the question was changed, 0 points will be added
+             * the method addPoints() is used just to increment the number of the current question in the list
+             * streak is reset to 0
+             */
+            pointsGainedForQuestion = mainCtrl.getSinglePlayerGame().addPoints(-1, 0.0);
+            endQuestion();
+        }
     }
 
     @FXML
     private void joker2() {
-        // if there is no answer input, don't use joker
-        if(answerField.getText().equals("")) {
-            jokerMessage.setText("Input an answer to use this joker!");
-            return;
-        }
+        if(!multiplayer) {
+            // if there is no answer input, don't use joker
+            if (answerField.getText().equals("")) {
+                jokerMessage.setText("Input an answer to use this joker!");
+                return;
+            }
 
-        joker2.setDisable(true); // disable button
-        mainCtrl.getSinglePlayerGame().useJokerRemoveOneAnswer();
+            joker2.setDisable(true); // disable button
+            mainCtrl.getSinglePlayerGame().useJokerRemoveOneAnswer();
 
-        /* calculate the points the player would win for this question
-        * the same way they are calculated in addPoints(), but without actually adding them
-        */
-        int pointsToBeAdded = (int)Math.round(guessAccuracy * additionalPoints * mainCtrl.getSinglePlayerGame().getPointsToBeAdded(timeWhenAnswered));
+            /* calculate the points the player would win for this question
+             * the same way they are calculated in addPoints(), but without actually adding them
+             */
+            int pointsToBeAdded = (int) Math.round(guessAccuracy * additionalPoints * mainCtrl.getSinglePlayerGame().getPointsToBeAdded(timeWhenAnswered));
 
-        if(pointsToBeAdded > 0 ) {
-            jokerMessage.setText("Close enough! You will get some points for this answer.");
-        } else {
-            jokerMessage.setText("You guess is too far from the actual answer! Try changing it so you can get some points for this question.");
+            if (pointsToBeAdded > 0) {
+                jokerMessage.setText("Close enough! You will get some points for this answer.");
+            } else {
+                jokerMessage.setText("You guess is too far from the actual answer! Try changing it so you can get some points for this question.");
+            }
         }
     }
 
     @FXML
     private void joker3() {
-        joker3.setDisable(true); // disable button
-        mainCtrl.getSinglePlayerGame().useJokerDoublePoints();
+        if(!multiplayer) {
+            joker3.setDisable(true); // disable button
+            mainCtrl.getSinglePlayerGame().useJokerDoublePoints();
 
-        additionalPoints = 2.0; // points will be double only for the current question
+            additionalPoints = 2.0; // points will be double only for the current question
+        }
     }
 
     /**
@@ -307,6 +291,7 @@ public class EstimationQuestionCtrl {
      * Reset an estimation question
      */
     public void resetEstimationQuestion() {
+        stopTimers();
         reset();
         resetJokers();
     }
@@ -342,22 +327,24 @@ public class EstimationQuestionCtrl {
      * Resets the mouse-transparency, used when answers are being shown
      */
     private void setJokers() {
-        if(mainCtrl.getSinglePlayerGame().jokerAdditionalQuestionIsUsed()) {
-            joker1.setDisable(true);
-        } else {
-            joker1.setMouseTransparent(false);
-        }
+        if(!multiplayer) {
+            if (mainCtrl.getSinglePlayerGame().jokerAdditionalQuestionIsUsed()) {
+                joker1.setDisable(true);
+            } else {
+                joker1.setMouseTransparent(false);
+            }
 
-        if(mainCtrl.getSinglePlayerGame().jokerRemoveOneAnswerIsUsed()) {
-            joker2.setDisable(true);
-        } else {
-            joker2.setMouseTransparent(false);
-        }
+            if (mainCtrl.getSinglePlayerGame().jokerRemoveOneAnswerIsUsed()) {
+                joker2.setDisable(true);
+            } else {
+                joker2.setMouseTransparent(false);
+            }
 
-        if(mainCtrl.getSinglePlayerGame().jokerDoublePointsIsUsed()) {
-            joker3.setDisable(true);
-        } else {
-            joker3.setMouseTransparent(false);
+            if (mainCtrl.getSinglePlayerGame().jokerDoublePointsIsUsed()) {
+                joker3.setDisable(true);
+            } else {
+                joker3.setMouseTransparent(false);
+            }
         }
     }
 

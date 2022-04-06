@@ -85,8 +85,6 @@ public class HomeScreenCtrl implements Initializable {
      */
     @FXML
     public void showUsernameScreenSingle() {
-
-        mainCtrl.getServer().setServerURL(mainCtrl.getServerURL());
         mainCtrl.newSinglePlayerGame();
     }
 
@@ -97,10 +95,8 @@ public class HomeScreenCtrl implements Initializable {
      */
     @FXML
     public void showUsernameScreenMulti() {
-
-        server.setServerURL(mainCtrl.getServerURL());
         try {
-            //System.out.println(server.getRandomQuestion());
+            System.out.println(mainCtrl.getServer().getRandomQuestion());
             mainCtrl.setUsernameOriginScreen(2);
             mainCtrl.showUsernameScreen();
         } catch (Exception e) {
@@ -112,6 +108,7 @@ public class HomeScreenCtrl implements Initializable {
     @FXML
     void exitApp(ActionEvent event) {
         // to fully terminate the client process
+        mainCtrl.stopListening();
         Platform.exit();
         System.exit(0);
     }
@@ -220,7 +217,7 @@ public class HomeScreenCtrl implements Initializable {
             // because of the getLeaderPlayers(10) method, the
             // leaderboard needs no sorting, as the list of players
             // is returned already sorted through the query
-            List<Player> playerList = server.getLeaderPlayers(10);
+            List<Player> playerList = mainCtrl.getServer().getLeaderPlayers(10);
             players = FXCollections.observableList(playerList);
             leaderboard.setItems(players);
         } catch (Exception e) {

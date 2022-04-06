@@ -7,6 +7,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -16,11 +18,16 @@ public class LoadingScreenCtrl {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
+    @Setter @Getter
+    private boolean multiplayer;
+
     private Timer timer = new Timer();
 
     @FXML
     private Button back;
 
+    @Getter
+    @Setter
     @FXML
     private Label counter;
 
@@ -42,6 +49,7 @@ public class LoadingScreenCtrl {
         timer.cancel();
         timer = new Timer();
         counter.setText("3");
+        multiplayer = false;
     }
 
     /**
@@ -50,7 +58,6 @@ public class LoadingScreenCtrl {
      * Displays seconds on the screen
      */
     public void countdown() {
-
         TimerTask task = new TimerTask() {
             int second = 2;
 
@@ -62,8 +69,12 @@ public class LoadingScreenCtrl {
                     public void run() {
                         if(second == 0) {
                             cancel();
-                            mainCtrl.nextQuestionScreen();
-                            counter.setText("3");
+                            if(!multiplayer){
+                                mainCtrl.nextQuestionScreen();
+                                counter.setText("3");
+                            } else {
+                                System.out.println("Waiting for question screen");
+                            }
                         } else {
                             counter.setText(String.valueOf(second--));
                         }

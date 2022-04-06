@@ -8,11 +8,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
+import server.Config;
 import server.multiplayer.WaitingRoom;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.function.Consumer;
 
 
@@ -25,9 +29,8 @@ public class LongPollController {
      * List of everything thats different from last poll
      * For each thing in list we send another request for the body of that change
      */
-    private final MultiPlayerGame multiplayerGame;
+    private MultiPlayerGame multiplayerGame;
     private final WaitingRoom waitingRoom;
-    private GameUpdatesPacket gameUpdatesPacket;
     /**
      * Creates a Polling Controller
      * @param multiplayerGame injected instance of MultiPlayerGame
@@ -37,14 +40,71 @@ public class LongPollController {
     public LongPollController(MultiPlayerGame multiplayerGame, WaitingRoom waitingRoom, GameUpdatesPacket gameUpdatesPacket){
         this.multiplayerGame = multiplayerGame;
         this.waitingRoom = waitingRoom;
-        this.gameUpdatesPacket = gameUpdatesPacket;
     }
 
     /**
      * Returns the instance of the game to the client
      * @return Multiplayer Game object
      */
-    @GetMapping("MultiplayerGame")
+    @GetMapping("start-multiplayer")
+    public ResponseEntity<Boolean> startGame(){
+        if(waitingRoom.getQuestions().size() < Config.numberOfQuestions){
+            return ResponseEntity.ok(false);
+        }
+        multiplayerGame = waitingRoom.flushWaitingRoom();
+        multiplayerGame.setCurrentScreen("LOADING SCREEN");
+        listeners.forEach((k,l) -> l.accept(multiplayerGame.getGameStatus()));
+        sendQuestionToClients(3000);
+        return ResponseEntity.ok(true);
+    }
+
+    /**
+     * this works very well
+     */
+    private void sendQuestionToClients(int delay){
+        Timer timer = new Timer();
+
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                if(multiplayerGame.getQuestionNumber() < Config.numberOfQuestions - 1){
+                    multiplayerGame.setCurrentScreen("QUESTION");
+                    multiplayerGame.nextQuestion();
+                    sendLeaderboardToClients(19000);
+                } else {
+                    multiplayerGame.setCurrentScreen("ENDSCREEN");
+                }
+                GameUpdatesPacket packet = multiplayerGame.getGameStatus();
+                System.out.println(packet);
+                listeners.forEach((k,l) -> l.accept(packet));
+            }
+        };
+
+        timer.schedule(task, delay);
+    }
+
+    private void sendLeaderboardToClients(int delay){
+        Timer timer = new Timer();
+
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                multiplayerGame.setCurrentScreen("LEADERBOARD");
+                GameUpdatesPacket packet = multiplayerGame.getGameStatus();
+                System.out.println(packet);
+                listeners.forEach((k,l) -> l.accept(packet));
+                sendQuestionToClients(4000);
+            }
+        };
+
+        timer.schedule(task, delay);
+    }
+
+    /**
+     * Returns the instance of the game to the client
+     * @return Multiplayer Game object
+     */
+    @GetMapping("multiplayer")
     public ResponseEntity<MultiPlayerGame> getGame(){
         return ResponseEntity.ok(multiplayerGame);
     }
@@ -76,22 +136,9 @@ public class LongPollController {
      */
     @GetMapping("players")
     public ResponseEntity<List<Player>> getPlayers(){
-        return ResponseEntity.ok(multiplayerGame.getPlayers());
-    }
-
-    /**
-     * Adds the player to the list of players in the instance of MultiplayerGame
-     * updates listener to accept number 1. 1 meaning the number of players changed
-     * @param player player to be added to the game
-     * @return player that was added
-     */
-    @PostMapping(path={"add-player"})
-    public ResponseEntity<Player> postPlayer(@RequestBody Player player){
-        listeners.forEach((k,l) -> l.accept(new GameUpdatesPacket()));
-        List<Player> players = multiplayerGame.getPlayers();
-        players.add(player);
-        return ResponseEntity.ok(player);
-        //s.get(players.size()-1)
+        List<Player> playerList = multiplayerGame.getPlayers();
+        Collections.sort(playerList);
+        return ResponseEntity.ok(playerList);
     }
 
     /**
@@ -101,7 +148,7 @@ public class LongPollController {
      * @return player that was added
      */
     @PostMapping(path={"add-player-waiting-room"})
-    public ResponseEntity<Player> postPlayerToWaitingRoom(@RequestBody Player player){
+    public ResponseEntity<Integer> postPlayerToWaitingRoom(@RequestBody Player player){
 
         listeners.forEach((k,l) -> l.accept(new GameUpdatesPacket(waitingRoom.getPlayers().hashCode(), "WAITINGROOM", -1)));
         if(player == null) {
@@ -114,7 +161,7 @@ public class LongPollController {
         }
         waitingRoom.addPlayerToWaitingRoom(player);
         System.out.println("Player added");
-        return ResponseEntity.ok(player);
+        return ResponseEntity.ok(waitingRoom.getMultiplayerGameID());
         //s.get(players.size()-1)
     }
     /**
@@ -122,12 +169,26 @@ public class LongPollController {
      * @return True if the player was removed successfully
      *         otherwise return false
      */
-    @PostMapping(path = {"remove-player"})
+    @PostMapping(path = {"remove-player-waiting-room"})
     public ResponseEntity<Boolean> removePlayerFromWaitingRoom(@RequestBody Player player) {
+        boolean result = waitingRoom.removePlayerFromWaitingRoom(player);
         listeners.forEach((k,l) -> l.accept(new GameUpdatesPacket(waitingRoom.getPlayers().hashCode(), "WAITINGROOM", -1)));
         System.out.println("Player has been removed");
         System.out.println(waitingRoom.getPlayers());
-        return ResponseEntity.ok(waitingRoom.removePlayerFromWaitingRoom(player));
+        return ResponseEntity.ok(result);
+    }
+
+    /**
+     * Endpoint for removing a player from a game
+     * @return True if the player was removed successfully
+     *         otherwise return false
+     */
+    @PostMapping(path = {"remove-player"})
+    public ResponseEntity<Boolean> removePlayerFromMultiplayer(@RequestBody Player player) {
+        boolean result = multiplayerGame.removePlayer(player);
+        System.out.println("Player has been removed from MP");
+        System.out.println(multiplayerGame.getPlayers());
+        return ResponseEntity.ok(result);
     }
 
     /**
@@ -137,13 +198,23 @@ public class LongPollController {
      * @param player The player that had its score changed
      * @return the same player with updated score
      */
-    @PostMapping(path = {"SendScore"})
+    @PostMapping(path = {"send-score"})
     public ResponseEntity<Player> updateScore(@RequestBody Player player){
-        int indexPlayer = multiplayerGame.getPlayers().indexOf(player);
-        if (indexPlayer==-1){
+        Player playerInGame = null;
+        List<Player> playerList = multiplayerGame.getPlayers();
+        for(int i = 0; i < playerList.size(); i++){
+            Player p = playerList.get(i);
+            if(p.getName().equals(player.getName())){
+                playerInGame = p;
+                break;
+            }
+        }
+
+        if (playerInGame == null){
             return ResponseEntity.badRequest().build();
         }
-        multiplayerGame.getPlayers().get(indexPlayer).setScore(player.getScore());
+        playerInGame.setScore(player.getScore());
+        System.out.println("New score: " + player);
         return ResponseEntity.ok(player);
     }
 
