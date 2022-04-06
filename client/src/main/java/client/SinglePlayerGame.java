@@ -19,9 +19,6 @@ public class SinglePlayerGame {
     private Player player;
     private int questionNumber = 1;
     private int maxQuestions;
-    private boolean jokerAdditionalQuestion;
-    private boolean jokerRemoveOneAnswer;
-    private boolean jokerDoublePoints;
 
     /**
      * Empty constructor
@@ -122,61 +119,5 @@ public class SinglePlayerGame {
      * Increments questionNumber
      */
     public void nextQuestion(){ questionNumber++;}
-
-    /**
-     * @return true if jokerAdditionalQuestion has been used, false otherwise
-     */
-    public boolean jokerAdditionalQuestionIsUsed() {
-        return jokerAdditionalQuestion;
-    }
-
-    /**
-     * @return true if jokerRemoveOneAnswer has been used, false otherwise
-     */
-    public boolean jokerRemoveOneAnswerIsUsed() {
-        return jokerRemoveOneAnswer;
-    }
-
-    /**
-     * @return true if jokerDoublePoints has been used, false otherwise
-     */
-    public boolean jokerDoublePointsIsUsed() {
-        return jokerDoublePoints;
-    }
-
-    /**
-     * Sets the status of the AdditionalQuestion joker to "used"
-     */
-    public void useJokerAdditionalQuestion() {
-        jokerAdditionalQuestion = true;
-    }
-
-    /**
-     * Sets the status of the RemoveOneAnswer joker to "used"
-     */
-    public void useJokerRemoveOneAnswer() {
-        jokerRemoveOneAnswer= true;
-    }
-
-    /**
-     * Sets the status of the DoublePoints joker to "used"
-     */
-    public void useJokerDoublePoints() {
-        jokerDoublePoints = true;
-    }
-
-    /**
-     * Adds question to game maxquestions (because joker skips a question)
-     * @return 1 - If the joker "Change current question" is used,
-     *         in order to add a question to the maximum number of questions in the game;
-     *         0 - Otherwise.
-     */
-    public int additionalQuestion() {
-        if(jokerAdditionalQuestionIsUsed()) {
-            return 1;
-        } else {
-            return 0;
-        }
-    }
 
 }
