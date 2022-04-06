@@ -2,70 +2,25 @@
 
 .table-view {
     -fx-border-color: #168AAD;
-    -fx-border-radius: 30px;
-    -fx-background-radius: 30px;
-
+    -fx-border-radius: 5px;
+    -fx-background-radius: 10px;
+    -fx-background-color: transparent;
 }
 
 .table-view .column-header-background .label {
     -fx-font-weight: bold;
     -fx-font-size: 24px;
+    -fx-background-color:  linear-gradient(to bottom, #1a759f, #1e6091);
 }
 
 .table-view .table-column {
     -fx-alignment: CENTER;
 }
 
-.table-view .table-cell{
-    -fx-font-size: 24px;
-}
-
-
-.table-view .column-header-background .label {
-    -fx-font-size: 15px;
- }
-
-.table-view {
-    -fx-background-color: transparent;
-}
-
-.table-view .column-header-background .filler {
-    -fx-background-color: transparent;
-}
-
-.table-view .corner {
-    -fx-background-color: transparent;
-}
-
-.table-view .column-header-background{
-    -fx-background-color: linear-gradient(to bottom, #1a759f, #1e6091);
-    -fx-background-radius: 7px 7px 0px 0px;
-    -fx-background-insets: 0 11px 0 0;
-    -fx-padding: 0 0 5px 0;
-}
-
-.table-view .column-header {
-    -fx-background-color: transparent;
-    -fx-font-size: 12px;
-}
-
-.table-view .table-cell{
+.table-view .table-cell {
+    -fx-font-size: 27px;
     -fx-border-color: transparent;
     -fx-padding: 2 0 2 10px;
-}
-.table-row-cell: hover {
-    -fx-background-color: #1e6091;
-    -fx-text-background-color: white;
-}
-.table-row-cell: odd{
-    -fx-background-color: #1e6091;
-    -fx-background-insets: 0, 0 0 1 0;
-    -fx-padding: 0.0em;
-}
-.table-row-cell: even{
-    -fx-background-color: #1e6091;
-    -fx-background-insets: 0, 0 0 1 0;
-    -fx-padding: 0.0em;
 }
 
 .table-view .virtual-flow .scroll-bar:vertical,
@@ -82,15 +37,11 @@
     -fx-opacity: 0;
     -fx-padding: 2;
 }
-.table-view .virtual-flow .scroll-bar:vertical .thumb{
+
+.table-view .virtual-flow .scroll-bar:vertical .thumb {
     -fx-background-color:  linear-gradient(to bottom, #1a759f, #1e6091);
 }
 
 .table-view .virtual-flow .scroll-bar:horizontal .thumb {
     -fx-background-color:  linear-gradient(to right, #1a759f, #1e6091);
-}
-
-.table-row-cell: highlighted {
-    -fx-background-color: #81c483;
-    -fx-background-radius: 15px;
 }
