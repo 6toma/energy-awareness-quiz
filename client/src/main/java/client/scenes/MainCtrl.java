@@ -612,7 +612,6 @@ public class MainCtrl {
         server.registerUpdates(id, c -> {
             Platform.runLater(() -> {
                 if (packet != null) {
-                    System.out.println("packet: " + c);
                     if (packet.getHashListPlayers() != c.getHashListPlayers()) {
                         updatePlayerList();
                     }
@@ -627,7 +626,6 @@ public class MainCtrl {
                         changeScreenMultiplayer(c);
                         try {
                             multiPlayerGame = server.getMultiplayerGame(gameID);
-                            System.out.println(multiPlayerGame);
                         } catch (Exception e) {
                             showPopup(Alert.AlertType.ERROR, "Connection failed");
                             showHomeScreen();
@@ -645,7 +643,6 @@ public class MainCtrl {
                 waitingRoomCtrl.refresh();
             } else {
                 List<Player> playas = server.getPlayersMultiplayer(gameID);
-                System.out.println(playas);
                 multiPlayerGame.setPlayers(playas);
             }
         } catch (Exception e) {
@@ -687,7 +684,7 @@ public class MainCtrl {
         try {
             boolean started = server.startMultiplayer();
             if(!started){
-                showPopup(Alert.AlertType.ERROR, "Error starting the game");
+                showPopup(Alert.AlertType.ERROR, "Server is still generating questions, try again in a moment");
             }
         } catch(Exception e){
             showPopup(Alert.AlertType.ERROR, "Connection failed");
@@ -714,7 +711,6 @@ public class MainCtrl {
             scoreChangeMultiplayerCtrl.setTableLeaderboard(multiPlayerGame.getPlayers());
             scoreChangeMultiplayerCtrl.setScoreLabels(pointsGained, player.getScore(), player.getStreak());
             showLeaderBoard();
-            System.out.println("Leaderboard screen");
         } else if (packet.getCurrentScreen().equals("ENDSCREEN")) {
             endMultiplayerScreenCtrl.setTableLeaderboard(multiPlayerGame.getPlayers());
             endMultiplayerScreenCtrl.setScoreLabel(player.getScore());
@@ -730,7 +726,6 @@ public class MainCtrl {
      */
     public void showQuestionMultiplayer(GameUpdatesPacket packet) {
         Question question = multiPlayerGame.getQuestions().get(packet.getQuestionNumber());
-        System.out.println(question);
         // check the question type
         if (question instanceof ComparativeQuestion
                 || question instanceof MCQuestion

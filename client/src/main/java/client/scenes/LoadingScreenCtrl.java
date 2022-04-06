@@ -87,8 +87,6 @@ public class LoadingScreenCtrl {
                             if(!multiplayer){
                                 mainCtrl.nextQuestionScreen();
                                 counter.setText("3");
-                            } else {
-                                System.out.println("Waiting for question screen");
                             }
                         } else {
                             counter.setText(String.valueOf(second--));

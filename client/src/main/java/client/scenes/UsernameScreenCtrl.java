@@ -111,7 +111,6 @@ public class UsernameScreenCtrl {
                 usernameField.setText("Username taken!");
             }
             else {
-                System.out.println(player + ", " + gameId);
                 mainCtrl.setGameID(gameId);
                 mainCtrl.showWaitingRoom();
             }

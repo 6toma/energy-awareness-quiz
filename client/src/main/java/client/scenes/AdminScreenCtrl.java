@@ -245,7 +245,6 @@ public class AdminScreenCtrl implements Initializable {
         fileChooser.setTitle("Select a JSON file to import from");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON files (*.json)", "*.json"));
         File selectedJson = fileChooser.showOpenDialog(new Stage());
-        System.out.println(selectedJson.getPath());
 
         ObjectMapper mapper = new ObjectMapper();
         try {

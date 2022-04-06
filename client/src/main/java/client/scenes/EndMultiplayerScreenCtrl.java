@@ -81,7 +81,6 @@ public class EndMultiplayerScreenCtrl implements Initializable {
             mainCtrl.getUsernameScreenCtrl().setUsernameButtonClicked();
         }
         else {
-            System.out.println(player + ", " + gameId);
             mainCtrl.setGameID(gameId);
             mainCtrl.showWaitingRoom();
         }
