@@ -50,6 +50,123 @@ public class MultiplayerControllerTest {
     }
 
     /**
+     * Test for getting correct username
+     * Tests if the given username is empty
+     */
+    @Test
+    void isValidUsernameEmptyTest() {
+        assertNotEquals(Boolean.TRUE, lpc.isValidUsername("").getBody());
+        assertNotEquals(Boolean.TRUE, lpc.isValidUsername(null).getBody());
+    }
+
+    /**
+     * Test for getting correct username
+     * Tests if the username is taken already
+     */
+    @Test
+    void isValidUsernameTakenTest() {
+        lpc.postPlayerToWaitingRoom(players.get(0));
+        assertEquals(Boolean.FALSE, lpc.isValidUsername("a").getBody());
+        lpc.postPlayerToWaitingRoom(players.get(1));
+        assertEquals(Boolean.FALSE, lpc.isValidUsername("b").getBody());
+        lpc.postPlayerToWaitingRoom(players.get(2));
+        assertEquals(Boolean.FALSE, lpc.isValidUsername("c").getBody());
+    }
+
+    /**
+     * Test for getting correct username
+     * Tests if the username is is nto taken
+     * it should return true
+     */
+    @Test
+    void isValidUsernameValidTest() {
+        assertEquals(Boolean.TRUE, lpc.isValidUsername("d").getBody());
+        lpc.postPlayerToWaitingRoom(new Player(4L,"d", 1));
+        assertEquals(Boolean.FALSE, lpc.isValidUsername("d").getBody());
+        assertEquals(Boolean.TRUE, lpc.isValidUsername("1").getBody());
+    }
+
+    /**
+     * Test for getting list of all players in waiting room
+     */
+    @Test
+    void getWaitingRoomPlayersTest() {
+        lpc.postPlayerToWaitingRoom(players.get(0));
+        assertEquals(List.of(players.get(0)), lpc.getWaitingRoomPlayers().getBody());
+    }
+
+    /**
+     * Test for getting list of all players in waiting room which is empty
+     * Should return empty list
+     */
+    @Test
+    void getWaitingRoomPlayersEmptyTest() {
+        assertEquals(List.of(), lpc.getWaitingRoomPlayers().getBody());
+    }
+
+    /**
+     * Test for getting list of all players in waiting room
+     */
+    @Test
+    void removePlayerFromWaitingRoomTest() {
+        lpc.postPlayerToWaitingRoom(players.get(0));
+        assertEquals(List.of(players.get(0)), lpc.getWaitingRoomPlayers().getBody());
+        assertEquals(true, lpc.removePlayerFromWaitingRoom(players.get(0)).getBody());
+        assertEquals(List.of(), lpc.getWaitingRoomPlayers().getBody());
+        assertEquals(false, lpc.removePlayerFromWaitingRoom(players.get(0)).getBody());
+        assertEquals(List.of(), lpc.getWaitingRoomPlayers().getBody());
+    }
+
+    /**
+     * Tests adding players to waiting room
+     */
+    @Test
+    void postPlayerToWaitingRoomTest() {
+        assertEquals(List.of(), lpc.getWaitingRoomPlayers().getBody());
+        lpc.postPlayerToWaitingRoom(players.get(0));
+        assertEquals(List.of(players.get(0)), lpc.getWaitingRoomPlayers().getBody());
+    }
+
+    /**
+     * Tests adding players to waiting room but player is empty
+     */
+    @Test
+    void postPlayerToWaitingRoomNullTest() {
+        assertNull(lpc.postPlayerToWaitingRoom(null).getBody());
+        lpc.postPlayerToWaitingRoom(players.get(0));
+        assertNull(lpc.postPlayerToWaitingRoom(players.get(0)).getBody());
+    }
+
+    /**
+     * Tests adding players to waiting room
+     * Tests the response to correct addition
+     */
+    @Test
+    void postPlayerToWaitingRoomResponseTest() {
+        assertEquals(1, lpc.postPlayerToWaitingRoom(players.get(1)).getBody());
+    }
+
+    /**
+     * Tests getting game
+     * should be null before game starts
+     */
+    @Test
+    void getGamesTest() {
+        assertNull(lpc.getGame(1).getBody());
+    }
+
+    /**
+     * Tests starting the game
+     * If there are no questions it breaks
+     * So cant test assertEquals(false, startGame())
+     */
+    @Test
+    void startGameTest() {
+        assertEquals(Boolean.TRUE, lpc.startGame().getBody());
+    }
+
+
+    /**
      * Test for getting list of all players
      */
     @Test
