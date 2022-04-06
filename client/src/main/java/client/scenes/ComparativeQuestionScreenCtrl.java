@@ -60,6 +60,9 @@ public class ComparativeQuestionScreenCtrl {
     private Label questionLabel;
 
     @FXML
+    private Label QuestionNumber;
+
+    @FXML
     private Button answer1;
 
     @FXML
@@ -156,6 +159,15 @@ public class ComparativeQuestionScreenCtrl {
         if(!answer3.isDisabled()) answer3.setStyle("-fx-background-color: #fccf03;");
     }
 
+    private void setQuestionNumber(){
+        if (!multiplayer){
+            QuestionNumber.setText("Question:  " + mainCtrl.getSinglePlayerGame().getQuestionNumber());
+        } else {
+            QuestionNumber.setText("Question:  " + (mainCtrl.getMultiPlayerGame().getQuestionNumber()+1));
+        }
+    }
+
+
     private void checkAnswer(int answer){
         int correctAnswer = -1;
         if(questionMode == 0){
@@ -199,6 +211,7 @@ public class ComparativeQuestionScreenCtrl {
             setEqualityImages();
         }
         setJokers();
+        setQuestionNumber();
     }
 
     private void setQuestionText(){

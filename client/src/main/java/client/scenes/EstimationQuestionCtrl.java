@@ -73,6 +73,10 @@ public class EstimationQuestionCtrl {
     @FXML
     private Label jokerMessage;
 
+    @FXML
+    private Label QuestionNumber;
+
+
     /**
      * Constructor for the Estimation Question Controller
      * @param server
@@ -100,6 +104,15 @@ public class EstimationQuestionCtrl {
         stopTimers();
         resetEstimationQuestion();
     }
+
+    private void setQuestionNumber(){
+        if (!multiplayer){
+            QuestionNumber.setText("Question:  " + mainCtrl.getSinglePlayerGame().getQuestionNumber());
+        } else {
+            QuestionNumber.setText("Question:  " + (mainCtrl.getMultiPlayerGame().getQuestionNumber()+1));
+        }
+    }
+
 
     /**
      * Function for creating a countdown and a progress bar
@@ -135,6 +148,7 @@ public class EstimationQuestionCtrl {
         answerField.setTextFormatter(new TextFormatter<>(change -> change.getControlNewText().matches("[0-9]*") ? change : null));
         setImage();
         setJokers();
+        setQuestionNumber();
     }
 
     /**
