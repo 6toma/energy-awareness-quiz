@@ -342,7 +342,7 @@ public class MainCtrl {
             showUsernameScreen();
         } catch (Exception e) {
             e.printStackTrace();
-            showPopup("Connection failed");
+            showPopup(Alert.AlertType.ERROR, "Connection failed");
         }
     }
 
@@ -361,7 +361,7 @@ public class MainCtrl {
             showLoadingScreen(false);
         } catch (Exception e) {
             e.printStackTrace();
-            showPopup("Connection failed");
+            showPopup(Alert.AlertType.ERROR, "Connection failed");
         }
 
     }
@@ -399,7 +399,7 @@ public class MainCtrl {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                showPopup("Connection failed");
+                showPopup(Alert.AlertType.ERROR, "Connection failed");
                 showHomeScreen();
             }
 
@@ -427,7 +427,7 @@ public class MainCtrl {
             server.postPlayer(singlePlayerGame.getPlayer());
         } catch (Exception e) {
             e.printStackTrace();
-            showPopup("Connection failed");
+            showPopup(Alert.AlertType.ERROR, "Connection failed");
         }
     }
 
@@ -466,9 +466,10 @@ public class MainCtrl {
      *
      * @param message to be shown on the popup
      */
-    public void showPopup(String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setContentText(message);
+    public void showPopup(Alert.AlertType type, String message) {
+        Alert alert = new Alert(type);
+        alert.initOwner(primaryStage);
+        alert.setHeaderText(message);
         alert.show();
     }
 
@@ -480,8 +481,9 @@ public class MainCtrl {
         server.setServerURL(URL);
         try {
             server.getRandomActivity();
+            showPopup(Alert.AlertType.INFORMATION, "Connected to " + server.getServerURL());
         } catch (Exception e) {
-            showPopup("Connection failed");
+            showPopup(Alert.AlertType.ERROR, "Failed to connect to " + server.getServerURL());
         }
     }
 
@@ -508,7 +510,12 @@ public class MainCtrl {
      */
     public void showWaitingRoom() {
         primaryStage.getScene().setRoot(waitingRoomParent);
-        startListening(gameID);
+        try {
+            startListening(gameID);
+        } catch (Exception e){
+            showPopup(Alert.AlertType.ERROR, "Connection failed");
+            showHomeScreen();
+        }
         MultiplayerStarted = false;
         multiPlayerGame = null;
         packet = new GameUpdatesPacket();
@@ -524,7 +531,7 @@ public class MainCtrl {
     public void startListening(int id) {
         server.registerUpdates(id, c -> {
             Platform.runLater(() -> {
-                if(packet != null) {
+                if (packet != null) {
                     System.out.println("packet: " + c);
                     if (packet.getHashListPlayers() != c.getHashListPlayers()) {
                         updatePlayerList();
@@ -542,7 +549,7 @@ public class MainCtrl {
                             multiPlayerGame = server.getMultiplayerGame(gameID);
                             System.out.println(multiPlayerGame);
                         } catch (Exception e) {
-                            showPopup("Connection failed");
+                            showPopup(Alert.AlertType.ERROR, "Connection failed");
                             showHomeScreen();
                         }
                     }
@@ -562,7 +569,7 @@ public class MainCtrl {
                 multiPlayerGame.setPlayers(playas);
             }
         } catch (Exception e) {
-            showPopup("Connection failed");
+            showPopup(Alert.AlertType.ERROR, "Connection failed");
             showHomeScreen();
         }
     }
@@ -598,10 +605,10 @@ public class MainCtrl {
         try {
             boolean started = server.startMultiplayer();
             if(!started){
-                showPopup("Error starting the game");
+                showPopup(Alert.AlertType.ERROR, "Error starting the game");
             }
         } catch(Exception e){
-            showPopup("Connection failed");
+            showPopup(Alert.AlertType.ERROR, "Connection failed");
             showHomeScreen();
         }
     }
@@ -667,7 +674,7 @@ public class MainCtrl {
             try {
                 server.postScore(player, gameID);
             } catch (Exception e) {
-                showPopup("Connection failed");
+                showPopup(Alert.AlertType.ERROR, "Connection failed");
                 showHomeScreen();
             }
         }

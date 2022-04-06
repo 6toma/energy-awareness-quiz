@@ -5,6 +5,7 @@ import com.google.inject.Inject;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import lombok.Getter;
@@ -65,7 +66,7 @@ public class LoadingScreenCtrl {
                     try{
                         mainCtrl.getSinglePlayerGame().addQuestion(mainCtrl.getServer().getRandomQuestion());
                     } catch (Exception e){
-                        mainCtrl.showPopup("Connection failed");
+                        mainCtrl.showPopup(Alert.AlertType.ERROR, "Connection failed");
                         mainCtrl.showHomeScreen();
                     }
                 }

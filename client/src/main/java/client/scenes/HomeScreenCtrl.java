@@ -10,6 +10,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -101,7 +102,7 @@ public class HomeScreenCtrl implements Initializable {
             mainCtrl.showUsernameScreen();
         } catch (Exception e) {
             e.printStackTrace();
-            mainCtrl.showPopup("Connection to the server failed");
+            mainCtrl.showPopup(Alert.AlertType.ERROR, "Connection to the server failed");
         }
     }
 
@@ -221,7 +222,7 @@ public class HomeScreenCtrl implements Initializable {
             players = FXCollections.observableList(playerList);
             leaderboard.setItems(players);
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println("Failed to connect to the server");
         }
     }
 
