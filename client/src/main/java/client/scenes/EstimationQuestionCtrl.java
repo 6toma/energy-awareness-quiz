@@ -290,7 +290,13 @@ public class EstimationQuestionCtrl {
          */
         Long answer = Long.parseLong(answerField.getText());
         checkAnswer(answer);
-        int pointsToBeAdded = (int) Math.round(guessAccuracy * additionalPoints * mainCtrl.getSinglePlayerGame().getPointsToBeAdded(timeWhenAnswered));
+
+        int pointsToBeAdded = 0;
+        if(multiplayer) {
+            pointsToBeAdded = (int) Math.round(guessAccuracy * additionalPoints * mainCtrl.getPointsToBeAdded(timeWhenAnswered));
+        } else {
+            pointsToBeAdded = (int) Math.round(guessAccuracy * additionalPoints * mainCtrl.getSinglePlayerGame().getPointsToBeAdded(timeWhenAnswered));
+        }
 
         if (pointsToBeAdded > 0) {
             jokerMessage.setText("Close enough! You will get some points for this answer.");
