@@ -223,15 +223,14 @@ public class AdminScreenCtrl implements Initializable {
      */
     public void importActivities() throws IOException {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Open Resource File");
+        fileChooser.setTitle("Select a JSON file to import from");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON files (*.json)", "*.json"));
         File selectedJson = fileChooser.showOpenDialog(new Stage());
         System.out.println(selectedJson.getPath());
 
         ObjectMapper mapper = new ObjectMapper();
         try {
-            List<Activity> activityList = mapper.readValue(selectedJson, new TypeReference<List<Activity>>() {
-            });
+            List<Activity> activityList = mapper.readValue(selectedJson, new TypeReference<List<Activity>>() {});
             for(var a : activityList){
                 server.addActivity(a);
             }
@@ -239,7 +238,9 @@ public class AdminScreenCtrl implements Initializable {
             refresh();
         }
         catch(IOException e) {
-            System.out.println("You fucked up big time");
+            Alert wrongImport = new Alert(Alert.AlertType.ERROR);
+            wrongImport.setHeaderText("Something when wrong, please make sure the activities are in correct format!");
+            wrongImport.showAndWait();
         }
     }
 }
