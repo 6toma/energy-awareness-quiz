@@ -212,6 +212,11 @@ public class ComparativeQuestionScreenCtrl {
         }
         setJokers();
         setQuestionNumber();
+        if(multiplayer) {
+            joker1.setVisible(false);
+        } else {
+            joker1.setVisible(true);
+        }
     }
 
     private void setQuestionText(){

@@ -152,6 +152,11 @@ public class EstimationQuestionCtrl {
         setImage();
         setJokers();
         setQuestionNumber();
+        if(multiplayer) {
+            joker1.setVisible(false);
+        } else {
+            joker1.setVisible(true);
+        }
     }
 
     /**
