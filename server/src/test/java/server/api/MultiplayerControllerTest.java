@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.context.request.async.DeferredResult;
+import server.SomeController;
 import server.api.dependencies.TestActivityRepository;
 import server.api.dependencies.TestRandom;
 import server.multiplayer.WaitingRoom;
@@ -15,7 +16,7 @@ import server.multiplayer.WaitingRoom;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class MultiplayerControllerTest {
     private MultiplayerController lpc;
@@ -78,4 +79,67 @@ public class MultiplayerControllerTest {
         Thread.sleep(5500);
         assertEquals(res.getClass(), res2.getClass());
     }
+
+    /**
+     * test for getting players to waiting room
+     *
+     */
+    @Test
+    void getWaitingRoomPlayersTest() {
+        Player p1 = new Player("p1");
+        Player p2 = new Player("p2");
+
+        List<Player> players = new ArrayList<>();
+        players.add(p1);
+        players.add(p2);
+        lpc.postPlayerToWaitingRoom(p1);
+        lpc.postPlayerToWaitingRoom(p2);
+
+        assertEquals(players, lpc.getWaitingRoomPlayers().getBody());
+    }
+
+    /**
+     * test for checking validity of username
+     */
+    @Test
+    void isValidUsernameTest() {
+        Player p1 = new Player("p1");
+        Player p2 = new Player("p2");
+
+        lpc.postPlayerToWaitingRoom(p1);
+        lpc.postPlayerToWaitingRoom(p2);
+
+        assertFalse(lpc.isValidUsername("").getBody());
+        assertFalse(lpc.isValidUsername(null).getBody());
+        assertFalse(lpc.isValidUsername(p1.getName()).getBody());
+        assertTrue(lpc.isValidUsername("p3").getBody());
+    }
+
+    /**
+     * test for removing players from waiting room
+     */
+    @Test
+    void removePlayerFromWaitingRoom() {
+        Player p1 = new Player("p1");
+        Player p2 = new Player("p2");
+
+        lpc.postPlayerToWaitingRoom(p1);
+        lpc.postPlayerToWaitingRoom(p2);
+        assertEquals(2, lpc.getWaitingRoomPlayers().getBody().size());
+        lpc.removePlayerFromWaitingRoom(p1);
+
+        assertEquals(1, lpc.getWaitingRoomPlayers().getBody().size());
+        assertTrue(lpc.removePlayerFromWaitingRoom(p2).getBody());
+        assertFalse(lpc.removePlayerFromWaitingRoom(new Player("p3")).getBody());
+    }
+
+    /**
+     * idk we can just delete it later
+     */
+    @Test
+    void someControllerTest() {
+        SomeController someController = new SomeController();
+        assertEquals("Hello there General Kenobi!", someController.index());
+    }
+
 }
