@@ -18,7 +18,7 @@
             <Region maxHeight="20" minHeight="20" VBox.vgrow="ALWAYS" />
             <StackPane>
                 <Region maxHeight="70" minHeight="70" VBox.vgrow="ALWAYS" />
-                <Button fx:id="playAgain" alignment="CENTER" onAction="#playAgain" prefHeight="77.0" prefWidth="235.0" text="Play again">
+                <Button fx:id="playAgain" alignment="CENTER" onAction="#playAgain" text="Play again">
                <styleClass>
                   <String fx:value="functionality-button" />
                   <String fx:value="rounded" />
@@ -27,7 +27,7 @@
             <Region maxHeight="40" minHeight="40" VBox.vgrow="ALWAYS" />
             <StackPane>
                 <Region maxHeight="70" minHeight="70" VBox.vgrow="ALWAYS" />
-                <Button fx:id="goToHomeScreen" alignment="CENTER" onAction="#goToHomeScreen" prefHeight="75.0" prefWidth="181.0" text="Home">
+                <Button fx:id="goToHomeScreen" alignment="CENTER" onAction="#goToHomeScreen" text="Home">
                <styleClass>
                   <String fx:value="functionality-button" />
                   <String fx:value="rounded" />

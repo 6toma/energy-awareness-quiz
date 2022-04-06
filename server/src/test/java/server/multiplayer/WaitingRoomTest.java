@@ -89,22 +89,6 @@ public class WaitingRoomTest {
         WaitingRoom w3 = new WaitingRoom(players, questions, 25);
 
         assertEquals(25, w3.getMaxNumberOfQuestions());
-
-        WaitingRoom w4 = new WaitingRoom(players, questions, 45);
-
-        assertEquals(25, w4.getMaxNumberOfQuestions());
-
-        WaitingRoom w5 = new WaitingRoom(players, questions, -1);
-
-        assertEquals(5, w5.getMaxNumberOfQuestions());
-
-        WaitingRoom w6 = new WaitingRoom(players, questions, Integer.MAX_VALUE);
-
-        assertEquals(25, w6.getMaxNumberOfQuestions());
-
-        WaitingRoom w7 = new WaitingRoom(players, questions, Integer.MIN_VALUE);
-
-        assertEquals(5, w7.getMaxNumberOfQuestions());
     }
 
     /**
@@ -471,22 +455,6 @@ public class WaitingRoomTest {
         waitingRoom.setMaxNumberOfQuestions(25);
 
         assertEquals(25, waitingRoom.getMaxNumberOfQuestions());
-
-        waitingRoom.setMaxNumberOfQuestions(45);
-
-        assertEquals(25, waitingRoom.getMaxNumberOfQuestions());
-
-        waitingRoom.setMaxNumberOfQuestions(-1);
-
-        assertEquals(5, waitingRoom.getMaxNumberOfQuestions());
-
-        waitingRoom.setMaxNumberOfQuestions(Integer.MAX_VALUE);
-
-        assertEquals(25, waitingRoom.getMaxNumberOfQuestions());
-
-        waitingRoom.setMaxNumberOfQuestions(Integer.MIN_VALUE);
-
-        assertEquals(5, waitingRoom.getMaxNumberOfQuestions());
     }
 
 }

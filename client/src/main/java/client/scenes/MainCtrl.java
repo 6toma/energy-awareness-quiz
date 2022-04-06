@@ -43,6 +43,7 @@ public class MainCtrl {
     private ComparativeQuestionScreenCtrl comparativeQuestionScreenCtrl;
     private Parent comparativeQuestionScreenParent;
 
+    @Getter
     private UsernameScreenCtrl usernameScreenCtrl;
     private Parent usernameScreenParent;
 
@@ -66,6 +67,9 @@ public class MainCtrl {
 
     private AdminScreenCtrl adminScreenCtrl;
     private Parent adminScreenParent;
+
+    private EndMultiplayerScreenCtrl endMultiplayerScreenCtrl;
+    private Parent endMultiplayerScreenParent;
 
 
     // single player variables
@@ -111,7 +115,8 @@ public class MainCtrl {
             Pair<SettingsScreenCtrl, Parent> settingsScreen,
             Pair<EstimationQuestionCtrl, Parent> estimationQuestion,
             Pair<ScoreChangeMultiplayerCtrl, Parent> scoreChangeMultiplayer,
-            Pair<AdminScreenCtrl, Parent> adminScreen
+            Pair<AdminScreenCtrl, Parent> adminScreen,
+            Pair<EndMultiplayerScreenCtrl, Parent> endMultiplayerScreen
     ) {
         this.primaryStage = primaryStage;
 
@@ -151,6 +156,9 @@ public class MainCtrl {
 
         this.adminScreenCtrl = adminScreen.getKey();
         this.adminScreenParent = adminScreen.getValue();
+
+        this.endMultiplayerScreenCtrl = endMultiplayerScreen.getKey();
+        this.endMultiplayerScreenParent = endMultiplayerScreen.getValue();
 
 
         // TODO: uncomment to disable the fullscreen popup
@@ -325,9 +333,9 @@ public class MainCtrl {
      */
     public void newSinglePlayerGame() {
         try {
-            Question question = server.getRandomQuestion();
+            server.getRandomActivity();
             singlePlayerGame = new SinglePlayerGame(singlePlayerGameQuestions);
-            singlePlayerGame.addQuestion(question);
+            //singlePlayerGame.addQuestion(question);
 
             setUsernameOriginScreen(1);
             showUsernameScreen();
@@ -344,10 +352,9 @@ public class MainCtrl {
      */
     public void consecutiveSinglePlayerGame(String username) {
         try {
-            Question question = server.getRandomQuestion();
+            server.getRandomActivity();
 
             singlePlayerGame = new SinglePlayerGame(singlePlayerGameQuestions, username);
-            singlePlayerGame.addQuestion(question);
 
             //skipping over the part where we ask for username
             showLoadingScreen(false);
@@ -366,7 +373,6 @@ public class MainCtrl {
     public void nextQuestionScreen() {
         // check if there's a next question to show
         if (singlePlayerGame != null
-                && singlePlayerGame.getQuestions().size() > 0
                 && singlePlayerGame.getQuestionNumber() <= singlePlayerGame.getMaxQuestions()
                 + singlePlayerGame.additionalQuestion()) {
 
@@ -462,7 +468,7 @@ public class MainCtrl {
     public void showPopup(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setContentText(message);
-        alert.showAndWait();
+        alert.show();
     }
 
     /**
@@ -472,7 +478,7 @@ public class MainCtrl {
     public void setServerURL(String URL){
         server.setServerURL(URL);
         try {
-            server.getRandomQuestion();
+            server.getRandomActivity();
         } catch (Exception e) {
             showPopup("Connection failed");
         }
@@ -493,13 +499,15 @@ public class MainCtrl {
     @Getter @Setter
     private Player player;
     private int pointsGained;
+    @Getter @Setter
+    private int gameID = -1;
 
     /**
      * method for showing the waiting room
      */
     public void showWaitingRoom() {
         primaryStage.getScene().setRoot(waitingRoomParent);
-        startListening();
+        startListening(gameID);
         MultiplayerStarted = false;
         multiPlayerGame = null;
         packet = new GameUpdatesPacket();
@@ -512,8 +520,8 @@ public class MainCtrl {
      * if questionnumber is wrong it updates it
      * if current screen is wrong is forces the player to the correct screen
      */
-    public void startListening() {
-        server.registerUpdates(c -> {
+    public void startListening(int id) {
+        server.registerUpdates(id, c -> {
             Platform.runLater(() -> {
                 if(packet != null) {
                     System.out.println("packet: " + c);
@@ -529,7 +537,7 @@ public class MainCtrl {
                         MultiplayerStarted = true;
                         changeScreenMultiplayer(c);
                         try {
-                            multiPlayerGame = server.getMultiplayerGame();
+                            multiPlayerGame = server.getMultiplayerGame(gameID);
                             System.out.println(multiPlayerGame);
                         } catch (Exception e) {
                             showPopup("Connection failed");
@@ -547,7 +555,7 @@ public class MainCtrl {
             if(!MultiplayerStarted){
                 waitingRoomCtrl.refresh();
             } else {
-                List<Player> playas = server.getPlayersMultiplayer();
+                List<Player> playas = server.getPlayersMultiplayer(gameID);
                 System.out.println(playas);
                 multiPlayerGame.setPlayers(playas);
             }
@@ -577,6 +585,8 @@ public class MainCtrl {
         MultiplayerStarted = false;
         multiPlayerGame = null;
         packet = null;
+        player = null;
+        gameID = -1;
     }
 
     /**
@@ -615,8 +625,10 @@ public class MainCtrl {
             showLeaderBoard();
             System.out.println("Leaderboard screen");
         } else if (packet.getCurrentScreen().equals("ENDSCREEN")) {
-            endScreenCtrl.setScoreLabel(player.getScore());
-            showEndScreen();
+            endMultiplayerScreenCtrl.setTableLeaderboard(multiPlayerGame.getPlayers());
+            endMultiplayerScreenCtrl.setScoreLabel(player.getScore());
+            endMultiplayerScreenCtrl.setPlayerName(player.getName());
+            showEndMultiplayerScreen();
         } else if (packet.getCurrentScreen().equals("LOADING SCREEN")){
             showLoadingScreen(true);
         }
@@ -651,7 +663,7 @@ public class MainCtrl {
         pointsGained = multiPlayerGame.addPointsForPlayer(timeWhenAnswered, guessQuestionRate, player);
         if(pointsGained > 0){
             try {
-                server.postScore(player);
+                server.postScore(player, gameID);
             } catch (Exception e) {
                 showPopup("Connection failed");
                 showHomeScreen();
@@ -665,6 +677,15 @@ public class MainCtrl {
     public void showLeaderBoard() {
         primaryStage.getScene().setRoot(scoreChangeMultiplayerParent);
         checkDarkMode();
+    }
+
+    /**
+     * method for showing the multiplayer end screen
+     */
+    public void showEndMultiplayerScreen() {
+        primaryStage.getScene().setRoot(endMultiplayerScreenParent);
+        checkDarkMode();
+        stopListening();
     }
 }
 
