@@ -12,23 +12,6 @@
 
 <StackPane maxHeight="Infinity" maxWidth="Infinity" prefHeight="838.0" prefWidth="1180.0" stylesheets="@../css/main.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.UsernameScreenCtrl">
    <children>
-      <StackPane stylesheets="@../css/main.css">
-         <children>
-            <Button fx:id="back" alignment="TOP_LEFT" onAction="#back" stylesheets="@../css/main.css" text="Back" StackPane.alignment="TOP_LEFT">
-               <styleClass>
-                  <String fx:value="exit" />
-                  <String fx:value="rounded" />
-               </styleClass>
-               <StackPane.margin>
-                  <Insets />
-               </StackPane.margin>
-            </Button>
-         </children>
-         <styleClass>
-            <String fx:value="padding" />
-            <String fx:value="margin" />
-         </styleClass>
-      </StackPane>
       <VBox alignment="CENTER" maxWidth="747.0" prefHeight="893.0" prefWidth="747.0" stylesheets="@../css/main.css">
          <children>
             <Label fx:id="usernameField" alignment="CENTER" prefHeight="134.0" prefWidth="769.0" style="-fx-font-size: 54; -fx-font-family: Futura PT Medium;" text="Please input your username!" textAlignment="JUSTIFY" wrapText="true">
@@ -59,5 +42,22 @@
                </styleClass></Button>
          </children>
       </VBox>
+      <StackPane maxHeight="110.0" maxWidth="212.0" minHeight="88.0" minWidth="203.0" prefHeight="110.0" prefWidth="212.0" stylesheets="@../css/main.css" StackPane.alignment="TOP_LEFT">
+         <children>
+            <Button fx:id="back" alignment="TOP_LEFT" onAction="#back" stylesheets="@../css/main.css" text="Back" StackPane.alignment="TOP_LEFT">
+               <styleClass>
+                  <String fx:value="exit" />
+                  <String fx:value="rounded" />
+               </styleClass>
+               <StackPane.margin>
+                  <Insets />
+               </StackPane.margin>
+            </Button>
+         </children>
+         <styleClass>
+            <String fx:value="padding" />
+            <String fx:value="margin" />
+         </styleClass>
+      </StackPane>
    </children>
 </StackPane>

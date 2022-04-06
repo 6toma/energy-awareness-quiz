@@ -11,17 +11,9 @@
 <?import javafx.scene.text.Text?>
 
 <StackPane fx:id="parentContainer" prefHeight="893.0" prefWidth="1036.0" stylesheets="@../css/SettingsScreen.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.SettingsScreenCtrl">
-    <StackPane styleClass="padding, margin" stylesheets="@../css/main.css">
-        <Button fx:id="back" onAction="#exit" stylesheets="@../css/main.css" text="Back" StackPane.alignment="TOP_LEFT">
-            <styleClass>
-                <String fx:value="rounded" />
-                <String fx:value="exit" />
-            </styleClass>
-        </Button>
-    </StackPane>
 
-
-    <VBox alignment="CENTER" maxWidth="747.0" prefHeight="893.0" prefWidth="747.0" stylesheets="@../css/main.css" StackPane.alignment="CENTER">
+   
+       <VBox alignment="CENTER" maxWidth="747.0" prefHeight="893.0" prefWidth="747.0" stylesheets="@../css/main.css" StackPane.alignment="CENTER">
         <Text fx:id="titleText" strokeType="OUTSIDE" strokeWidth="0.0" text="Settings" textAlignment="CENTER" wrappingWidth="526.13671875">
             <font>
                 <Font size="80.0" />
@@ -62,5 +54,13 @@
          </styleClass>
       </Button>
     </VBox>
+    <StackPane alignment="TOP_LEFT" maxHeight="103.0" maxWidth="219.0" minHeight="103.0" minWidth="197.0" prefHeight="103.0" prefWidth="219.0" styleClass="padding, margin" stylesheets="@../css/main.css" StackPane.alignment="TOP_LEFT">
+        <Button fx:id="back" onAction="#exit" stylesheets="@../css/main.css" text="Back" StackPane.alignment="TOP_LEFT">
+            <styleClass>
+                <String fx:value="rounded" />
+                <String fx:value="exit" />
+            </styleClass>
+        </Button>
+    </StackPane>
 
 </StackPane>

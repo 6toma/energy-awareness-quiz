@@ -5,6 +5,7 @@ import com.google.inject.Inject;
 import commons.Player;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -56,14 +57,17 @@ public class UsernameScreenCtrl {
         String newUser = inputUsernameField.getText();
 
         // checking whether username is already in waiting room
-        boolean isValidUsername = mainCtrl.getServer().checkValidityOfUsername(newUser);
-        if (isValidUsername || mainCtrl.getUsernameOriginScreen() == 1) {
-            continueButton.setDisable(false);
-            usernameField.setText("Hello, " + newUser + "!");
-        }
-        else {
-            continueButton.setDisable(true);
-            usernameField.setText("Username taken!");
+        try {
+            boolean isValidUsername = mainCtrl.getServer().checkValidityOfUsername(newUser);
+            if (isValidUsername || mainCtrl.getUsernameOriginScreen() == 1) {
+                continueButton.setDisable(false);
+                usernameField.setText("Hello, " + newUser + "!");
+            } else {
+                continueButton.setDisable(true);
+                usernameField.setText("Username taken!");
+            }
+        } catch (Exception e){
+            mainCtrl.showPopup(Alert.AlertType.ERROR, "Connection failed");
         }
     }
 
@@ -95,14 +99,18 @@ public class UsernameScreenCtrl {
 
             //send player to multiplayer game object
             Player player = new Player(inputUsernameField.getText());
-            Integer gameId = mainCtrl.getServer().addPlayerWaitingRoom(player);
-            mainCtrl.setPlayer(player);
+            Integer gameId = null;
+            try {
+                gameId = mainCtrl.getServer().addPlayerWaitingRoom(player);
+                mainCtrl.setPlayer(player);
+            } catch (Exception e){
+                mainCtrl.showPopup(Alert.AlertType.ERROR, "Connection failed");
+            }
 
             if(gameId == null){
                 usernameField.setText("Username taken!");
             }
             else {
-                System.out.println(player + ", " + gameId);
                 mainCtrl.setGameID(gameId);
                 mainCtrl.showWaitingRoom();
             }

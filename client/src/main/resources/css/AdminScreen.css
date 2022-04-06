@@ -1,9 +1,8 @@
 @import 'main.css';
 
 .table-view .column-header-background .label {
-    -fx-font-weight: bold;
-    -fx-font-size: 24px;
-}
+    -fx-font-size: 15px;
+ }
 
 .table-view {
     -fx-background-color: transparent;

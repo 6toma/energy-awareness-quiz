@@ -8,13 +8,13 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<StackPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.EndScreenCtrl">
+<StackPane prefHeight="753.0" prefWidth="1060.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.EndScreenCtrl">
 
     <StackPane styleClass="padding">
         <VBox alignment="CENTER" maxWidth="1920.0" prefHeight="1500.0" prefWidth="1920.0" StackPane.alignment="CENTER">
             <Region maxHeight="20" minHeight="20" VBox.vgrow="ALWAYS" />
-            <Label alignment="CENTER" prefHeight="80.0" prefWidth="1200.0" styleClass="wait" text="Congratulations! You finished the quiz!" />
-            <Label fx:id="scoreLabel" alignment="CENTER" prefHeight="80.0" prefWidth="1200.0" styleClass="wait" text="Your score is !ENTER SCORE!" />
+            <Label alignment="CENTER" prefWidth="1200.0" style="-fx-text-alignment: &quot;center&quot;;" styleClass="wait" text="Congratulations! You finished the quiz!" wrapText="true" />
+            <Label fx:id="scoreLabel" alignment="CENTER" prefWidth="1200.0" style="-fx-text-alignment: &quot;center&quot;;" styleClass="wait" text="Your score is !ENTER SCORE!" wrapText="true" />
             <Region maxHeight="20" minHeight="20" VBox.vgrow="ALWAYS" />
             <StackPane>
                 <Region maxHeight="70" minHeight="70" VBox.vgrow="ALWAYS" />

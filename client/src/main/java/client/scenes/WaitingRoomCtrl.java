@@ -8,6 +8,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -105,7 +106,8 @@ public class WaitingRoomCtrl implements Initializable {
             players = FXCollections.observableList(playerList);
             playerTable.setItems(players);
         } catch (Exception e) {
-            e.printStackTrace();
+            mainCtrl.showPopup(Alert.AlertType.ERROR, "Lost connection to the server");
+            mainCtrl.showHomeScreen();
         }
     }
 

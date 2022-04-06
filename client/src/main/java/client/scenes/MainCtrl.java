@@ -79,7 +79,7 @@ public class MainCtrl {
     @Getter
     private SinglePlayerGame singlePlayerGame;
     @Getter
-    private int singlePlayerGameQuestions = 5;
+    private int singlePlayerGameQuestions = 20;
 
     /**
      * Creates a new MainCtrl with server
@@ -165,10 +165,10 @@ public class MainCtrl {
         this.endMultiplayerScreenParent = endMultiplayerScreen.getValue();
 
 
-        // TODO: uncomment to disable the fullscreen popup
+        // uncomment to disable the fullscreen popup
         //primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
 
-        primaryStage.setTitle("Hello World!");
+        primaryStage.setTitle("Quizzzz!");
         primaryStage.setScene(new Scene(homeScreenParent));
         primaryStage.show();
         primaryStage.setFullScreen(true);
@@ -345,7 +345,7 @@ public class MainCtrl {
             showUsernameScreen();
         } catch (Exception e) {
             e.printStackTrace();
-            showPopup("Connection failed");
+            showPopup(Alert.AlertType.ERROR, "Connection failed");
         }
     }
 
@@ -364,7 +364,7 @@ public class MainCtrl {
             showLoadingScreen(false);
         } catch (Exception e) {
             e.printStackTrace();
-            showPopup("Connection failed");
+            showPopup(Alert.AlertType.ERROR, "Connection failed");
         }
 
     }
@@ -402,7 +402,7 @@ public class MainCtrl {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                showPopup("Connection failed");
+                showPopup(Alert.AlertType.ERROR, "Connection failed");
                 showHomeScreen();
             }
 
@@ -430,7 +430,7 @@ public class MainCtrl {
             server.postPlayer(singlePlayerGame.getPlayer());
         } catch (Exception e) {
             e.printStackTrace();
-            showPopup("Connection failed");
+            showPopup(Alert.AlertType.ERROR, "Connection failed");
         }
     }
 
@@ -469,9 +469,10 @@ public class MainCtrl {
      *
      * @param message to be shown on the popup
      */
-    public void showPopup(String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setContentText(message);
+    public void showPopup(Alert.AlertType type, String message) {
+        Alert alert = new Alert(type);
+        alert.initOwner(primaryStage);
+        alert.setHeaderText(message);
         alert.show();
     }
 
@@ -483,8 +484,9 @@ public class MainCtrl {
         server.setServerURL(URL);
         try {
             server.getRandomActivity();
+            showPopup(Alert.AlertType.INFORMATION, "Connected to " + server.getServerURL());
         } catch (Exception e) {
-            showPopup("Connection failed");
+            showPopup(Alert.AlertType.ERROR, "Failed to connect to " + server.getServerURL());
         }
     }
 
@@ -588,7 +590,12 @@ public class MainCtrl {
      */
     public void showWaitingRoom() {
         primaryStage.getScene().setRoot(waitingRoomParent);
-        startListening(gameID);
+        try {
+            startListening(gameID);
+        } catch (Exception e){
+            showPopup(Alert.AlertType.ERROR, "Connection failed");
+            showHomeScreen();
+        }
         MultiplayerStarted = false;
         multiPlayerGame = null;
         packet = new GameUpdatesPacket();
@@ -604,8 +611,7 @@ public class MainCtrl {
     public void startListening(int id) {
         server.registerUpdates(id, c -> {
             Platform.runLater(() -> {
-                if(packet != null) {
-                    System.out.println("packet: " + c);
+                if (packet != null) {
                     if (packet.getHashListPlayers() != c.getHashListPlayers()) {
                         updatePlayerList();
                     }
@@ -620,9 +626,8 @@ public class MainCtrl {
                         changeScreenMultiplayer(c);
                         try {
                             multiPlayerGame = server.getMultiplayerGame(gameID);
-                            System.out.println(multiPlayerGame);
                         } catch (Exception e) {
-                            showPopup("Connection failed");
+                            showPopup(Alert.AlertType.ERROR, "Connection failed");
                             showHomeScreen();
                         }
                     }
@@ -638,11 +643,10 @@ public class MainCtrl {
                 waitingRoomCtrl.refresh();
             } else {
                 List<Player> playas = server.getPlayersMultiplayer(gameID);
-                System.out.println(playas);
                 multiPlayerGame.setPlayers(playas);
             }
         } catch (Exception e) {
-            showPopup("Connection failed");
+            showPopup(Alert.AlertType.ERROR, "Connection failed");
             showHomeScreen();
         }
     }
@@ -680,10 +684,10 @@ public class MainCtrl {
         try {
             boolean started = server.startMultiplayer();
             if(!started){
-                showPopup("Error starting the game");
+                showPopup(Alert.AlertType.ERROR, "Server is still generating questions, try again in a moment");
             }
         } catch(Exception e){
-            showPopup("Connection failed");
+            showPopup(Alert.AlertType.ERROR, "Connection failed");
             showHomeScreen();
         }
     }
@@ -707,7 +711,6 @@ public class MainCtrl {
             scoreChangeMultiplayerCtrl.setTableLeaderboard(multiPlayerGame.getPlayers());
             scoreChangeMultiplayerCtrl.setScoreLabels(pointsGained, player.getScore(), player.getStreak());
             showLeaderBoard();
-            System.out.println("Leaderboard screen");
         } else if (packet.getCurrentScreen().equals("ENDSCREEN")) {
             endMultiplayerScreenCtrl.setTableLeaderboard(multiPlayerGame.getPlayers());
             endMultiplayerScreenCtrl.setScoreLabel(player.getScore());
@@ -723,7 +726,6 @@ public class MainCtrl {
      */
     public void showQuestionMultiplayer(GameUpdatesPacket packet) {
         Question question = multiPlayerGame.getQuestions().get(packet.getQuestionNumber());
-        System.out.println(question);
         // check the question type
         if (question instanceof ComparativeQuestion
                 || question instanceof MCQuestion
@@ -749,7 +751,7 @@ public class MainCtrl {
             try {
                 server.postScore(player, gameID);
             } catch (Exception e) {
-                showPopup("Connection failed");
+                showPopup(Alert.AlertType.ERROR, "Connection failed");
                 showHomeScreen();
             }
         }

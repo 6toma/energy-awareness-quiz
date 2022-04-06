@@ -8,6 +8,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
@@ -65,8 +66,13 @@ public class EndMultiplayerScreenCtrl implements Initializable {
     @FXML
     void playAgain(ActionEvent event) {
         Player player = new Player(playerName);
-        Integer gameId = mainCtrl.getServer().addPlayerWaitingRoom(player);
-        mainCtrl.setPlayer(player);
+        Integer gameId = null;
+        try {
+            gameId = mainCtrl.getServer().addPlayerWaitingRoom(player);
+            mainCtrl.setPlayer(player);
+        } catch (Exception e){
+            mainCtrl.showPopup(Alert.AlertType.ERROR, "Connection failed");
+        }
 
         if(gameId == null){
             mainCtrl.setUsernameOriginScreen(2);
@@ -75,7 +81,6 @@ public class EndMultiplayerScreenCtrl implements Initializable {
             mainCtrl.getUsernameScreenCtrl().setUsernameButtonClicked();
         }
         else {
-            System.out.println(player + ", " + gameId);
             mainCtrl.setGameID(gameId);
             mainCtrl.showWaitingRoom();
         }
