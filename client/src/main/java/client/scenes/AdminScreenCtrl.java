@@ -228,29 +228,20 @@ public class AdminScreenCtrl implements Initializable {
         fileChooser.setTitle("Open Resource File");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON files (*.json)", "*.json"));
         File selectedJson = fileChooser.showOpenDialog(new Stage());
+        System.out.println(selectedJson.getPath());
 
-        System.out.println();
         ObjectMapper mapper = new ObjectMapper();
-        TypeReference<List<Activity>> mapType = new TypeReference<>() {};
-        InputStream inputStream = TypeReference
-                .class
-                .getClassLoader()
-                .getResourceAsStream(
-                        selectedJson.getPath()
-                );
-        System.out.println("fdjsakolfjaklsdf");
-
         try {
-            System.out.println("fdrigg");
-            List<Activity> activityList = mapper.readValue(inputStream, mapType);
-            System.out.println("asdfsadf");
+            List<Activity> activityList = mapper.readValue(selectedJson, new TypeReference<List<Activity>>() {
+            });
             for(var a : activityList){
                 server.addActivity(a);
             }
             System.out.println("Activity list saved successfully");
+            refresh();
         }
         catch(IOException e) {
-            System.out.println("fuuuuuck");
+            System.out.println("You fucked up big time");
         }
     }
 }
