@@ -19,6 +19,7 @@
         <ProgressBar fx:id="progressBar" maxHeight="60.0" maxWidth="2000.0" prefHeight="60.0" prefWidth="829.0" progress="0.0" StackPane.alignment="TOP_CENTER" />
     </StackPane>
     <VBox alignment="CENTER" StackPane.alignment="CENTER">
+        <Label fx:id="QuestionNumber" alignment="CENTER" style="-fx-font-family: Futura PT Medium; -fx-font-size: 54;" text="!Question Number!" />
 
         <Region layoutX="10.0" layoutY="120.0" maxHeight="20" minHeight="20" styleClass="margin" />
         <Label fx:id="questionLabel" alignment="CENTER" prefWidth="1191.0" style="-fx-font-size: 54; -fx-font-family: Futura PT Medium;" text="Question" wrapText="true" />

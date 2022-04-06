@@ -75,6 +75,7 @@ public class MainCtrl {
     // single player variables
     @Getter
     private SinglePlayerGame singlePlayerGame;
+    @Getter
     private int singlePlayerGameQuestions = 5;
 
     /**
@@ -530,6 +531,7 @@ public class MainCtrl {
                     }
                     // check if multiplayer has started and the screen or question number has changed
                     if (MultiplayerStarted && (c.getCurrentScreen() != packet.getCurrentScreen() || c.getQuestionNumber() != packet.getQuestionNumber())) {
+                        multiPlayerGame.setQuestionNumber(c.getQuestionNumber());
                         changeScreenMultiplayer(c);
                     }
                     // Check if you are in waiting room and game has been started
