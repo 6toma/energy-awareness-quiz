@@ -1,10 +1,19 @@
-# Starting template
+# Quizzzz!
 
-This README will need to contain a description of your project, how to run it, how to set up the development environment, and who worked on it.
-This information can be added throughout the course, except for the names of the group members.
-Add your own name (do not add the names for others!) to the section below.
+You are witnessing one of the greatest innovations of quiz-type games.
+
+We here at quizzzz.ly believe in sustainability. Our mission is to promote smart and conservative
+usage of resources so humankind can prosper for many centuries to come.
 
 ## Description of project
+
+Quizzzz! is a quiz-type game which rewards good knowledge of the energy consumptions of everyday activities.
+
+The game supports
+- Playing alone for the highest score
+- Competing against other people in real-time
+- Private servers with custom activity-sets
+- Easy to use admin tools to add more activities
 
 ## Group members
 
@@ -26,6 +35,26 @@ Add your own name (do not add the names for others!) to the section below.
 
 ## How to run it
 
+Running the client:
+- Download the client from Deployments -> Releases
+- Launch the game
+- Connect to a server (by default connected to localhost)
+- Play!
+
+Running a server:
+- Download the server from Deployments -> Releases
+- Start the server
+- Add activities via the client
+  - Optional: Add images to the paths you specified when adding activities to "./server/src/main/resources/activity-bank-pictures/" starting from the root of the server
+- Play!
+
 ## How to contribute to it
+
+- Fork to a private branch
+- Add things, there's loads to improve!
+  - Improve jokers in multiplayer
+  - Improve question generation
+  - And much more!
+- Submit a merge request, our team will give you feed back in no time!
 
 ## Copyright / License (opt.)
