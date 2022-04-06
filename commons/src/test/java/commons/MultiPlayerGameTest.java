@@ -42,10 +42,11 @@ public class MultiPlayerGameTest {
     }
 
     /**
-     * Tests a constructor with parameters
+     * Tests a constructor with player list
+     * and a question list
      */
     @Test
-    public void normalConstructorTest() {
+    public void playersQuestionsConstructor() {
         assertNotNull(multiPlayerGame);
 
         MultiPlayerGame m = new MultiPlayerGame(14, new ArrayList<>(), new ArrayList<>());
