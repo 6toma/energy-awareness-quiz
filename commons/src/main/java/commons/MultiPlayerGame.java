@@ -1,5 +1,6 @@
 package commons;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import commons.questions.Question;
 import lombok.Data;
 
@@ -17,10 +18,10 @@ public class MultiPlayerGame {
     private int gameID;
     private List<Player> players;
     private List<Question> questions;
-    private int questionNumber = 1;
+    private int questionNumber = -1;
 
     // for synchronization of client with server
-    // can be "LOADING SCREEN", "QUESTION", "LEADERBOARD", "ENDSCREEN"
+    // can be "WAITINGROOM",  "LOADING SCREEN", "QUESTION", "LEADERBOARD", "ENDSCREEN"
     private String currentScreen;
 
     /**
@@ -89,7 +90,6 @@ public class MultiPlayerGame {
     public int addPointsForPlayer(int timeWhenAnswered, double guessQuestionRate, Player player){
         if(timeWhenAnswered == -1){
             player.resetStreak();
-            nextQuestion();
             return 0;
         }
         player.incrementStreak();
@@ -160,6 +160,7 @@ public class MultiPlayerGame {
      * Gets the hashcode of the list of players, the name of the current screen and the number of the current question
      * @return A GameUpdatesPacket object, which contains compact information about the game
      */
+    @JsonIgnore
     public GameUpdatesPacket getGameStatus() {
         return new GameUpdatesPacket(Objects.hash(players), currentScreen, questionNumber);
     }

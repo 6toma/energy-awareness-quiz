@@ -13,6 +13,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
@@ -57,6 +58,9 @@ public class ComparativeQuestionScreenCtrl {
 
     @FXML
     private Label questionLabel;
+
+    @FXML
+    private Label QuestionNumber;
 
     @FXML
     private Button answer1;
@@ -155,6 +159,15 @@ public class ComparativeQuestionScreenCtrl {
         if(!answer3.isDisabled()) answer3.setStyle("-fx-background-color: #fccf03;");
     }
 
+    private void setQuestionNumber(){
+        if (!multiplayer){
+            QuestionNumber.setText("Question:  " + (mainCtrl.getSinglePlayerGame().getQuestionNumber() - mainCtrl.additionalQuestion()) +"/"+mainCtrl.getSinglePlayerGameQuestions());
+        } else {
+            QuestionNumber.setText("Question:  " + (mainCtrl.getMultiPlayerGame().getQuestionNumber()+1)+"/"+mainCtrl.getMultiPlayerGame().getQuestions().size());
+        }
+    }
+
+
     private void checkAnswer(int answer){
         int correctAnswer = -1;
         if(questionMode == 0){
@@ -198,6 +211,12 @@ public class ComparativeQuestionScreenCtrl {
             setEqualityImages();
         }
         setJokers();
+        setQuestionNumber();
+        if(multiplayer) {
+            joker1.setVisible(false);
+        } else {
+            joker1.setVisible(true);
+        }
     }
 
     private void setQuestionText(){
@@ -269,7 +288,7 @@ public class ComparativeQuestionScreenCtrl {
     }
 
     private void setEqualityText(){
-        String questionText = "Instead of " + equalityQuestion.getChosen().getTitle() + " you could ...";
+        String questionText = "Instead of '" + equalityQuestion.getChosen().getTitle() + "' you could be...";
         this.questionLabel.setText(questionText);
     }
 
@@ -341,7 +360,7 @@ public class ComparativeQuestionScreenCtrl {
         KeyFrame start = new KeyFrame(Duration.ZERO, new KeyValue(progressBar.progressProperty(), 0));
         KeyFrame aEnd = new KeyFrame(Duration.seconds(answerTime), e -> {
             if(multiplayer){
-                reset();
+                resetComparativeQuestionScreen();
             } else {
                 endQuestion(); // end the question when the animation is done
             }
@@ -372,11 +391,11 @@ public class ComparativeQuestionScreenCtrl {
         }
 
         if (multiplayer) {
-            sendScoreMultiplayer(timeWhenAnswered);
-        }else {
-            pointsGainedForQuestion = mainCtrl.getSinglePlayerGame().addPoints(timeWhenAnswered, additionalPoints * 1.0);
-            additionalPoints = 1.0;
+            mainCtrl.addScoreMultiplayer(timeWhenAnswered, additionalPoints);
+        } else {
+            pointsGainedForQuestion = mainCtrl.getSinglePlayerGame().addPoints(timeWhenAnswered, additionalPoints);
         }
+        additionalPoints = 1.0;
 
         // highlight correct answer
         if(correctAnswer == 0){
@@ -418,27 +437,13 @@ public class ComparativeQuestionScreenCtrl {
     }
 
     /**
-     * updates the score of the player in the server
-     * @param time time of answer
+     * Resets attributes to default after each question
+     *
+     * To be used only during game!
+     * After the end of the game, finalResetComparativeQuestionScreen() should be used
+     * The difference is that this method leaves the jokers disabled (if they have been clicked previously)
      */
-    public void sendScoreMultiplayer(int time){
-        double guessQuestionRate=1.0;
-        if(time == -1){
-            mainCtrl.getPlayer().resetStreak();
-            mainCtrl.getPlayer().setScoreGained(0);
-        } else {
-            mainCtrl.getPlayer().incrementStreak();
-            int currentScore = mainCtrl.getPlayer().getScore();
-            long points = Math.round(((100.0 +mainCtrl.getPlayer().getStreak()) / 100.0) * (1050 - 5 * time));
-            int pointsToBeAdded = (int) Math.round(guessQuestionRate * points);
-            mainCtrl.getPlayer().setScoreGained(pointsToBeAdded);
-            mainCtrl.getPlayer().setScore(currentScore + pointsToBeAdded);
-        }
-        server.postScore(mainCtrl.getPlayer());
-    }
-
-    // reset attributes to default after each question
-    private void reset(){
+    public void resetComparativeQuestionScreen(){
         timeWhenAnswered = -1;
         answer1.setStyle("");
         answer2.setStyle("");
@@ -457,10 +462,12 @@ public class ComparativeQuestionScreenCtrl {
         image2.setImage(null);
         image3.setImage(null);
         this.questionMode = 0;
+
+        stopTimers();
     }
 
     private void endQuestion(){
-        reset();
+        resetComparativeQuestionScreen();
         mainCtrl.showScoreChangeScreen(pointsGainedForQuestion);
     }
 
@@ -469,16 +476,18 @@ public class ComparativeQuestionScreenCtrl {
      */
     @FXML
     private void joker1() {
-        joker1.setDisable(true);
-        mainCtrl.getSinglePlayerGame().useJokerAdditionalQuestion();
+        if(!multiplayer) {
+            joker1.setDisable(true);
+            mainCtrl.useJokerAdditionalQuestion();
 
-        stopTimers();
-        /* even if the correct answer was selected before the question was changed, 0 points will be added
-        * the method addPoints() is used just to increment the number of the current question in the list
-        * streak is reset to 0
-        */
-        pointsGainedForQuestion = mainCtrl.getSinglePlayerGame().addPoints(-1, 0.0);
-        endQuestion();
+            stopTimers();
+            /* even if the correct answer was selected before the question was changed, 0 points will be added
+             * the method addPoints() is used just to increment the number of the current question in the list
+             * streak is reset to 0
+             */
+            pointsGainedForQuestion = mainCtrl.getSinglePlayerGame().addPoints(-1, 0.0);
+            endQuestion();
+        }
     }
 
     /**
@@ -487,27 +496,27 @@ public class ComparativeQuestionScreenCtrl {
     @FXML
     private void joker2() {
         joker2.setDisable(true); // disable button
-        mainCtrl.getSinglePlayerGame().useJokerRemoveOneAnswer();
+        mainCtrl.useJokerRemoveOneAnswer();
 
         int correctAnswer = -1;
-        if(questionMode == 0){
+        if (questionMode == 0) {
             correctAnswer = question.getCorrect_answer();
-        } else if(questionMode == 1){
+        } else if (questionMode == 1) {
             correctAnswer = mcQuestion.getCorrect_answer();
-        } else if(questionMode == 2){
+        } else if (questionMode == 2) {
             correctAnswer = equalityQuestion.getCorrect_answer();
         }
 
         Random random = new Random();
         int x = Math.abs(random.nextInt() % 2); // get a 0 or 1 randomly
         int disableOption = (correctAnswer + x + 1) % 3; // get one of the incorrect answers
-        if(disableOption == 0) {
+        if (disableOption == 0) {
             answer1.setDisable(true);
             answer1.setStyle("-fx-background-color: #fc1c45;");
-        } else if(disableOption == 1) {
+        } else if (disableOption == 1) {
             answer2.setDisable(true);
             answer2.setStyle("-fx-background-color: #fc1c45;");
-        } else if(disableOption == 2) {
+        } else if (disableOption == 2) {
             answer3.setDisable(true);
             answer3.setStyle("-fx-background-color: #fc1c45;");
         }
@@ -519,7 +528,7 @@ public class ComparativeQuestionScreenCtrl {
     @FXML
     private void joker3() {
         joker3.setDisable(true); // disable button
-        mainCtrl.getSinglePlayerGame().useJokerDoublePoints();
+        mainCtrl.useJokerDoublePoints();
 
         additionalPoints = 2.0; // points will be double only for the current question
     }
@@ -527,7 +536,7 @@ public class ComparativeQuestionScreenCtrl {
     /**
      * Enables the use of the jokers again for the next game
      *
-     * Intentionally a separate method and not included in reset(),
+     * Intentionally a separate method and not included in resetComparativeQuestionScreen(),
      * because it is used to reset the 3 answer options after every question, but
      * jokers should remain disabled until the end of the game
      */
@@ -538,15 +547,16 @@ public class ComparativeQuestionScreenCtrl {
         joker1.setMouseTransparent(false);
         joker2.setMouseTransparent(false);
         joker3.setMouseTransparent(false);
+        mainCtrl.resetJokers();
     }
 
     /**
      * Resets the comparative question screen
      */
-    public void resetComparativeQuestionScreen() {
-        reset();
+    public void finalResetComparativeQuestionScreen() {
+        stopTimers();
+        resetComparativeQuestionScreen();
         resetJokers();
-        //chat/emoji will possibly have to be included as well
     }
 
     /**
@@ -571,22 +581,42 @@ public class ComparativeQuestionScreenCtrl {
      * Resets the mouse-transparency, used when answers are being shown
      */
     private void setJokers() {
-        if(mainCtrl.getSinglePlayerGame().jokerAdditionalQuestionIsUsed()) {
+        if(mainCtrl.jokerAdditionalQuestionIsUsed()) {
             joker1.setDisable(true);
         } else {
             joker1.setMouseTransparent(false);
         }
-        
-        if(mainCtrl.getSinglePlayerGame().jokerRemoveOneAnswerIsUsed()) {
+
+        if(mainCtrl.jokerRemoveOneAnswerIsUsed()) {
             joker2.setDisable(true);
         } else {
             joker2.setMouseTransparent(false);
         }
-        
-        if(mainCtrl.getSinglePlayerGame().jokerDoublePointsIsUsed()) {
+
+        if(mainCtrl.jokerDoublePointsIsUsed()) {
             joker3.setDisable(true);
         } else {
             joker3.setMouseTransparent(false);
         }
+    }
+
+    /**
+     * Add tooltips for the jokers
+     */
+    public void addTooltips() {
+        Tooltip skipQuestion = new Tooltip();
+        skipQuestion.setText("Skip this question!");
+        skipQuestion.setShowDelay(Duration.ZERO);
+        joker1.setTooltip(skipQuestion);
+
+        Tooltip cutAnswer = new Tooltip();
+        cutAnswer.setText("Reveal a wrong answer!");
+        cutAnswer.setShowDelay(Duration.ZERO);
+        joker2.setTooltip(cutAnswer);
+
+        Tooltip doublePoints = new Tooltip();
+        doublePoints.setText("Double score intake for this question!");
+        doublePoints.setShowDelay(Duration.ZERO);
+        joker3.setTooltip(doublePoints);
     }
 }

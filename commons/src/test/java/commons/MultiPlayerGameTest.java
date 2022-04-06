@@ -42,10 +42,11 @@ public class MultiPlayerGameTest {
     }
 
     /**
-     * Tests a constructor with parameters
+     * Tests a constructor with player list
+     * and a question list
      */
     @Test
-    public void normalConstructorTest() {
+    public void playersQuestionsConstructor() {
         assertNotNull(multiPlayerGame);
 
         MultiPlayerGame m = new MultiPlayerGame(14, new ArrayList<>(), new ArrayList<>());
@@ -313,13 +314,13 @@ public class MultiPlayerGameTest {
      */
     @Test
     public void TestNextQuestion() {
-        assertEquals(1, multiPlayerGame.getQuestionNumber());
+        assertEquals(-1, multiPlayerGame.getQuestionNumber());
 
         for(int i = 0; i < 5; i++){
             multiPlayerGame.nextQuestion();
         }
 
-        assertEquals(6, multiPlayerGame.getQuestionNumber());
+        assertEquals(4, multiPlayerGame.getQuestionNumber());
     }
 
     /**
@@ -381,9 +382,9 @@ public class MultiPlayerGameTest {
      */
     @Test
     public void TestQuestionNumberGetter() {
-        assertEquals(1, multiPlayerGame.getQuestionNumber());
+        assertEquals(-1, multiPlayerGame.getQuestionNumber());
         multiPlayerGame.nextQuestion();
-        assertEquals(2, multiPlayerGame.getQuestionNumber());
+        assertEquals(0, multiPlayerGame.getQuestionNumber());
     }
 
     /**
@@ -481,7 +482,7 @@ public class MultiPlayerGameTest {
         multiPlayerGame.setPlayers(players);
         multiPlayerGame.setCurrentScreen("QUESTION");
 
-        GameUpdatesPacket updates = new GameUpdatesPacket(Objects.hash(players), "QUESTION", 1);
+        GameUpdatesPacket updates = new GameUpdatesPacket(Objects.hash(players), "QUESTION", -1);
         assertEquals(multiPlayerGame.getGameStatus(), updates);
 
         multiPlayerGame.removePlayer(a);

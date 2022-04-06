@@ -20,6 +20,8 @@ import javafx.util.Pair;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 public class MainCtrl {
 
     @Getter
@@ -41,6 +43,7 @@ public class MainCtrl {
     private ComparativeQuestionScreenCtrl comparativeQuestionScreenCtrl;
     private Parent comparativeQuestionScreenParent;
 
+    @Getter
     private UsernameScreenCtrl usernameScreenCtrl;
     private Parent usernameScreenParent;
 
@@ -65,11 +68,18 @@ public class MainCtrl {
     private AdminScreenCtrl adminScreenCtrl;
     private Parent adminScreenParent;
 
+    private EndMultiplayerScreenCtrl endMultiplayerScreenCtrl;
+    private Parent endMultiplayerScreenParent;
+
+    private boolean jokerAdditionalQuestion = false;
+    private boolean jokerRemoveOneAnswer = false;
+    private boolean jokerDoublePoints = false;
 
     // single player variables
     @Getter
     private SinglePlayerGame singlePlayerGame;
-    private int singlePlayerGameQuestions = 5;
+    @Getter
+    private int singlePlayerGameQuestions = 20;
 
     /**
      * Creates a new MainCtrl with server
@@ -109,7 +119,8 @@ public class MainCtrl {
             Pair<SettingsScreenCtrl, Parent> settingsScreen,
             Pair<EstimationQuestionCtrl, Parent> estimationQuestion,
             Pair<ScoreChangeMultiplayerCtrl, Parent> scoreChangeMultiplayer,
-            Pair<AdminScreenCtrl, Parent> adminScreen
+            Pair<AdminScreenCtrl, Parent> adminScreen,
+            Pair<EndMultiplayerScreenCtrl, Parent> endMultiplayerScreen
     ) {
         this.primaryStage = primaryStage;
 
@@ -150,11 +161,14 @@ public class MainCtrl {
         this.adminScreenCtrl = adminScreen.getKey();
         this.adminScreenParent = adminScreen.getValue();
 
+        this.endMultiplayerScreenCtrl = endMultiplayerScreen.getKey();
+        this.endMultiplayerScreenParent = endMultiplayerScreen.getValue();
 
-        // TODO: uncomment to disable the fullscreen popup
+
+        // uncomment to disable the fullscreen popup
         //primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
 
-        primaryStage.setTitle("Hello World!");
+        primaryStage.setTitle("Quizzzz!");
         primaryStage.setScene(new Scene(homeScreenParent));
         primaryStage.show();
         primaryStage.setFullScreen(true);
@@ -165,7 +179,7 @@ public class MainCtrl {
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent t) {
-                waitingRoomCtrl.stop();
+                stopListening();
                 Platform.exit();
                 System.exit(0);
             }
@@ -176,18 +190,9 @@ public class MainCtrl {
      * method for showing the home screen
      */
     public void showHomeScreen() {
+        stopListening();
         primaryStage.getScene().setRoot(homeScreenParent);
         homeScreenCtrl.refresh();
-        checkDarkMode();
-    }
-
-    /**
-     * method for showing the waiting room
-     */
-    public void showWaitingRoom() {
-        primaryStage.getScene().setRoot(waitingRoomParent);
-        waitingRoomCtrl.startListening();
-        waitingRoomCtrl.refresh();
         checkDarkMode();
     }
 
@@ -202,9 +207,11 @@ public class MainCtrl {
     /**
      * method for showing the laoding screen
      */
-    public void showLoadingScreen() {
+    public void showLoadingScreen(boolean multiPlayer) {
         primaryStage.getScene().setRoot(loadingScreenParent);
         checkDarkMode();
+        loadingScreenCtrl.setMultiplayer(multiPlayer);
+        loadingScreenCtrl.getCounter().setText("3");
         loadingScreenCtrl.countdown();
     }
 
@@ -221,20 +228,24 @@ public class MainCtrl {
      * method for showing the comparative question
      */
     public void showComparativeQuestionScreen(boolean multiplayer) {
+        comparativeQuestionScreenCtrl.addTooltips();
+        comparativeQuestionScreenCtrl.setMultiplayer(multiplayer);
+        comparativeQuestionScreenCtrl.resetComparativeQuestionScreen();
+        comparativeQuestionScreenCtrl.countdown();
         primaryStage.getScene().setRoot(comparativeQuestionScreenParent);
         checkDarkMode();
-        comparativeQuestionScreenCtrl.setMultiplayer(multiplayer);
-        comparativeQuestionScreenCtrl.countdown();
     }
 
     /**
      * method for showing an Estimation question
      */
     public void showEstimationQuestionScreen(boolean multiplayer) {
+        estimationScreenCtrl.addTooltips();
+        estimationScreenCtrl.setMultiplayer(multiplayer);
+        estimationScreenCtrl.resetEstimationQuestion();
+        estimationScreenCtrl.countdown();
         primaryStage.getScene().setRoot(estimationQuestionParent);
         checkDarkMode();
-        estimationScreenCtrl.setMultiplayer(multiplayer);
-        estimationScreenCtrl.countdown();
     }
 
 
@@ -326,15 +337,15 @@ public class MainCtrl {
      */
     public void newSinglePlayerGame() {
         try {
-            Question question = server.getRandomQuestion();
+            server.getRandomActivity();
             singlePlayerGame = new SinglePlayerGame(singlePlayerGameQuestions);
-            singlePlayerGame.addQuestion(question);
+            //singlePlayerGame.addQuestion(question);
 
             setUsernameOriginScreen(1);
             showUsernameScreen();
         } catch (Exception e) {
             e.printStackTrace();
-            showPopup("Connection failed");
+            showPopup(Alert.AlertType.ERROR, "Connection failed");
         }
     }
 
@@ -345,16 +356,15 @@ public class MainCtrl {
      */
     public void consecutiveSinglePlayerGame(String username) {
         try {
-            Question question = server.getRandomQuestion();
+            server.getRandomActivity();
 
             singlePlayerGame = new SinglePlayerGame(singlePlayerGameQuestions, username);
-            singlePlayerGame.addQuestion(question);
 
             //skipping over the part where we ask for username
-            showLoadingScreen();
+            showLoadingScreen(false);
         } catch (Exception e) {
             e.printStackTrace();
-            showPopup("Connection failed");
+            showPopup(Alert.AlertType.ERROR, "Connection failed");
         }
 
     }
@@ -367,9 +377,8 @@ public class MainCtrl {
     public void nextQuestionScreen() {
         // check if there's a next question to show
         if (singlePlayerGame != null
-                && singlePlayerGame.getQuestions().size() > 0
                 && singlePlayerGame.getQuestionNumber() <= singlePlayerGame.getMaxQuestions()
-                + singlePlayerGame.additionalQuestion()) {
+                + additionalQuestion()) {
 
             try {
                 // get next question from the server
@@ -393,7 +402,7 @@ public class MainCtrl {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                showPopup("Connection failed");
+                showPopup(Alert.AlertType.ERROR, "Connection failed");
                 showHomeScreen();
             }
 
@@ -413,15 +422,15 @@ public class MainCtrl {
         showEndScreen();
 
         //reset Question screen to prepare it for a new game
-        comparativeQuestionScreenCtrl.resetComparativeQuestionScreen();
-        estimationScreenCtrl.resetEstimationQuestion();
+        comparativeQuestionScreenCtrl.finalResetComparativeQuestionScreen();
+        estimationScreenCtrl.finalResetEstimationQuestion();
 
         //store player's end score
         try {
             server.postPlayer(singlePlayerGame.getPlayer());
         } catch (Exception e) {
             e.printStackTrace();
-            showPopup("Connection failed");
+            showPopup(Alert.AlertType.ERROR, "Connection failed");
         }
     }
 
@@ -456,51 +465,267 @@ public class MainCtrl {
     }
 
     /**
-     * Resets all attributes on the question screens
-     * Used when the game is left unfinished
-     */
-    public void resetQuestionScreens() {
-        comparativeQuestionScreenCtrl.resetComparativeQuestionScreen();
-        estimationScreenCtrl.resetEstimationQuestion();
-    }
-
-    /**
      * Shows an error popup message
      *
      * @param message to be shown on the popup
      */
-    public void showPopup(String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setContentText(message);
-        alert.showAndWait();
+    public void showPopup(Alert.AlertType type, String message) {
+        Alert alert = new Alert(type);
+        alert.initOwner(primaryStage);
+        alert.setHeaderText(message);
+        alert.show();
     }
 
+    /**
+     * Sets the server url and tests connection
+     * @param URL Server URL
+     */
+    public void setServerURL(String URL){
+        server.setServerURL(URL);
+        try {
+            server.getRandomActivity();
+            showPopup(Alert.AlertType.INFORMATION, "Connected to " + server.getServerURL());
+        } catch (Exception e) {
+            showPopup(Alert.AlertType.ERROR, "Failed to connect to " + server.getServerURL());
+        }
+    }
 
+    /**
+     * Resets all attributes on the question screens
+     *
+     * Used when the game is left unfinished, because leave button on one screen
+     * cannot use the method, which resets the other one
+     */
+    public void resetQuestionScreens() {
+        estimationScreenCtrl.finalResetEstimationQuestion();
+        comparativeQuestionScreenCtrl.finalResetComparativeQuestionScreen();
+    }
+
+    /**
+     * @return true if jokerAdditionalQuestion has been used, false otherwise
+     */
+    public boolean jokerAdditionalQuestionIsUsed() {
+        return jokerAdditionalQuestion;
+    }
+
+    /**
+     * @return true if jokerRemoveOneAnswer has been used, false otherwise
+     */
+    public boolean jokerRemoveOneAnswerIsUsed() {
+        return jokerRemoveOneAnswer;
+    }
+
+    /**
+     * @return true if jokerDoublePoints has been used, false otherwise
+     */
+    public boolean jokerDoublePointsIsUsed() {
+        return jokerDoublePoints;
+    }
+
+    /**
+     * Sets the status of the AdditionalQuestion joker to "used"
+     */
+    public void useJokerAdditionalQuestion() {
+        jokerAdditionalQuestion = true;
+    }
+
+    /**
+     * Sets the status of the RemoveOneAnswer joker to "used"
+     */
+    public void useJokerRemoveOneAnswer() {
+        jokerRemoveOneAnswer= true;
+    }
+
+    /**
+     * Sets the status of the DoublePoints joker to "used"
+     */
+    public void useJokerDoublePoints() {
+        jokerDoublePoints = true;
+    }
+
+    /**
+     * Sets the status of all jokers to "unused"
+     * To be used only when a game ends (or is left before the end)
+     */
+    public void resetJokers() {
+        jokerAdditionalQuestion = false;
+        jokerRemoveOneAnswer= false;
+        jokerDoublePoints = false;
+    }
+
+    /**
+     * Adds question to game maxquestions (because joker skips a question)
+     * @return 1 - If the joker "Change current question" is used,
+     *         in order to add a question to the maximum number of questions in the game;
+     *         0 - Otherwise.
+     */
+    public int additionalQuestion() {
+        if(jokerAdditionalQuestionIsUsed()) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    /**
+     * ----------------------------------------- MULTIPLAYER CODE AHEAD ------------------------------------------------
+     */
+
+    /**
+     * multiplayer variables
+     */
+    @Getter @Setter
     private MultiPlayerGame multiPlayerGame;
-    private int currentQuestionNum;
-    private String currentScreen;
-    @Getter
-    @Setter
+    private boolean MultiplayerStarted;
+    @Getter @Setter
+    private GameUpdatesPacket packet;
+    @Getter @Setter
     private Player player;
+    private int pointsGained;
+    @Getter @Setter
+    private int gameID = -1;
 
+    /**
+     * method for showing the waiting room
+     */
+    public void showWaitingRoom() {
+        primaryStage.getScene().setRoot(waitingRoomParent);
+        try {
+            startListening(gameID);
+        } catch (Exception e){
+            showPopup(Alert.AlertType.ERROR, "Connection failed");
+            showHomeScreen();
+        }
+        MultiplayerStarted = false;
+        multiPlayerGame = null;
+        packet = new GameUpdatesPacket();
+        waitingRoomCtrl.refresh();
+        checkDarkMode();
+    }
+
+    /**
+     * start listening for updates
+     * if questionnumber is wrong it updates it
+     * if current screen is wrong is forces the player to the correct screen
+     */
+    public void startListening(int id) {
+        server.registerUpdates(id, c -> {
+            Platform.runLater(() -> {
+                if (packet != null) {
+                    if (packet.getHashListPlayers() != c.getHashListPlayers()) {
+                        updatePlayerList();
+                    }
+                    // check if multiplayer has started and the screen or question number has changed
+                    if (MultiplayerStarted && (c.getCurrentScreen() != packet.getCurrentScreen() || c.getQuestionNumber() != packet.getQuestionNumber())) {
+                        multiPlayerGame.setQuestionNumber(c.getQuestionNumber());
+                        changeScreenMultiplayer(c);
+                    }
+                    // Check if you are in waiting room and game has been started
+                    if (primaryStage.getScene().getRoot().equals(waitingRoomParent) && !MultiplayerStarted && !"WAITINGROOM".equals(c.getCurrentScreen())) {
+                        MultiplayerStarted = true;
+                        changeScreenMultiplayer(c);
+                        try {
+                            multiPlayerGame = server.getMultiplayerGame(gameID);
+                        } catch (Exception e) {
+                            showPopup(Alert.AlertType.ERROR, "Connection failed");
+                            showHomeScreen();
+                        }
+                    }
+                    packet = c;
+                }
+            });
+        });
+    }
+
+    private void updatePlayerList(){
+        try {
+            if(!MultiplayerStarted){
+                waitingRoomCtrl.refresh();
+            } else {
+                List<Player> playas = server.getPlayersMultiplayer(gameID);
+                multiPlayerGame.setPlayers(playas);
+            }
+        } catch (Exception e) {
+            showPopup(Alert.AlertType.ERROR, "Connection failed");
+            showHomeScreen();
+        }
+    }
+
+    /**
+     * stops the thread used for long polling
+     */
+    public void stopListening(){
+        try {
+            if(!MultiplayerStarted){
+                server.removePlayerWaitingRoom(player);
+            }
+        } catch (Exception e){
+            // do nothing if can't remove player, means there's nothing to remove
+        }
+        try {
+            server.stop();
+        } catch (Exception e){
+            // do nothing if can't stop process, means there's nothing to stop
+        }
+
+        MultiplayerStarted = false;
+        multiPlayerGame = null;
+        packet = null;
+        player = null;
+        gameID = -1;
+
+        resetQuestionScreens();
+    }
 
     /**
      * starts the multiplayer game
      */
     public void startMultiplayer() {
-        multiPlayerGame = server.getMultiplayerGame();
-        player = new Player("name");
-        currentQuestionNum = 0;
-        currentScreen = "";
-        startListening();
+        try {
+            boolean started = server.startMultiplayer();
+            if(!started){
+                showPopup(Alert.AlertType.ERROR, "Server is still generating questions, try again in a moment");
+            }
+        } catch(Exception e){
+            showPopup(Alert.AlertType.ERROR, "Connection failed");
+            showHomeScreen();
+        }
+    }
 
+    /**
+     * updates the screens
+     * needs to be its own function because of cyclomatic complectity
+     *
+     * @param packet the packet with the updates
+     */
+    public void changeScreenMultiplayer(GameUpdatesPacket packet) {
+
+        comparativeQuestionScreenCtrl.setMultiplayer(true);
+        comparativeQuestionScreenCtrl.resetComparativeQuestionScreen();
+        estimationScreenCtrl.setMultiplayer(true);
+        estimationScreenCtrl.resetEstimationQuestion();
+
+        if (packet.getCurrentScreen().equals("QUESTION")) {
+            showQuestionMultiplayer(packet);
+        } else if (packet.getCurrentScreen().equals("LEADERBOARD")) {
+            scoreChangeMultiplayerCtrl.setTableLeaderboard(multiPlayerGame.getPlayers());
+            scoreChangeMultiplayerCtrl.setScoreLabels(pointsGained, player.getScore(), player.getStreak());
+            showLeaderBoard();
+        } else if (packet.getCurrentScreen().equals("ENDSCREEN")) {
+            endMultiplayerScreenCtrl.setTableLeaderboard(multiPlayerGame.getPlayers());
+            endMultiplayerScreenCtrl.setScoreLabel(player.getScore());
+            endMultiplayerScreenCtrl.setPlayerName(player.getName());
+            showEndMultiplayerScreen();
+        } else if (packet.getCurrentScreen().equals("LOADING SCREEN")){
+            showLoadingScreen(true);
+        }
     }
 
     /**
      *
      */
-    public void showQuestionMultiplayer() {
-        Question question = multiPlayerGame.getQuestions().get(currentQuestionNum);
+    public void showQuestionMultiplayer(GameUpdatesPacket packet) {
+        Question question = multiPlayerGame.getQuestions().get(packet.getQuestionNumber());
         // check the question type
         if (question instanceof ComparativeQuestion
                 || question instanceof MCQuestion
@@ -516,51 +741,37 @@ public class MainCtrl {
     }
 
     /**
+     * Adds score to the multiplayer player
+     * @param timeWhenAnswered
+     * @param guessQuestionRate
+     */
+    public void addScoreMultiplayer(int timeWhenAnswered, double guessQuestionRate){
+        pointsGained = multiPlayerGame.addPointsForPlayer(timeWhenAnswered, guessQuestionRate, player);
+        if(pointsGained > 0){
+            try {
+                server.postScore(player, gameID);
+            } catch (Exception e) {
+                showPopup(Alert.AlertType.ERROR, "Connection failed");
+                showHomeScreen();
+            }
+        }
+    }
+
+    /**
      * Shows the leaderboard after each question
      */
     public void showLeaderBoard() {
         primaryStage.getScene().setRoot(scoreChangeMultiplayerParent);
         checkDarkMode();
-        scoreChangeMultiplayerCtrl.countdown();
     }
 
     /**
-     * start listening for updates
-     * if questionnumber is wrong it updates it
-     * if current screen is wrong is forces the player to the correct screen
+     * method for showing the multiplayer end screen
      */
-    public void startListening() {
-        server.registerUpdates(c -> {
-            if (c.getQuestionNumber() != currentQuestionNum && c.getCurrentScreen() != currentScreen) {
-                currentQuestionNum = c.getQuestionNumber();
-                changeScreenMultiplayer(c);
-
-            } else if (c.getQuestionNumber() != currentQuestionNum && c.getCurrentScreen() == currentScreen) {
-                currentQuestionNum = c.getQuestionNumber();
-                showQuestionMultiplayer();
-
-            } else if (c.getQuestionNumber() == currentQuestionNum && c.getCurrentScreen() != currentScreen) {
-                changeScreenMultiplayer(c);
-            }
-        });
-    }
-
-    /**
-     * updates the screens
-     * needs to be its own function because of cyclomatic complectity
-     *
-     * @param packet the packet with the updates
-     */
-    public void changeScreenMultiplayer(GameUpdatesPacket packet) {
-        if (packet.getCurrentScreen().equals("QUESTION")) {
-            showQuestionMultiplayer();
-        } else if (packet.getCurrentScreen().equals("LEADERBOARD")) {
-            scoreChangeMultiplayerCtrl.setTableLeaderboard();
-            scoreChangeMultiplayerCtrl.setScoreLabels(player.getScoreGained(), player.getScore(), player.getStreak());
-            showLeaderBoard();
-        } else if (packet.getCurrentScreen().equals("ENDSCREEN")) {
-            showEndScreen();
-        }
+    public void showEndMultiplayerScreen() {
+        primaryStage.getScene().setRoot(endMultiplayerScreenParent);
+        checkDarkMode();
+        stopListening();
     }
 }
 

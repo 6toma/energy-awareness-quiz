@@ -1,6 +1,8 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
 import commons.Activity;
 import javafx.beans.property.SimpleStringProperty;
@@ -9,7 +11,11 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.Optional;
@@ -92,15 +98,12 @@ public class AdminScreenCtrl implements Initializable {
     @FXML
     public void refresh() {
         try {
-            List<Activity> activityList = server.getAllActivities();
+            List<Activity> activityList = mainCtrl.getServer().getAllActivities();
             ObservableList<Activity> observableArrayList =
                     FXCollections.observableArrayList(activityList);
             activityTable.setItems(observableArrayList);
-            for (Activity a : activityTable.getItems()) {
-                System.out.println(a);
-            }
         } catch (Exception e) {
-            e.printStackTrace();
+            mainCtrl.showPopup(Alert.AlertType.ERROR, "Connection failed");
         }
     }
 
@@ -110,11 +113,16 @@ public class AdminScreenCtrl implements Initializable {
     public void addActivity() {
         Activity activity = checkTextFields();
         if (activity != null) {
-            server.addActivity(activity);
-            refresh();
-            Alert successfulAdd = new Alert(Alert.AlertType.INFORMATION);
-            successfulAdd.setHeaderText("The activity has been added successfully!");
-            successfulAdd.showAndWait();
+            try {
+                mainCtrl.getServer().addActivity(activity);
+                refresh();
+                Alert successfulAdd = new Alert(Alert.AlertType.INFORMATION);
+                successfulAdd.initOwner(mainCtrl.getPrimaryStage());
+                successfulAdd.setHeaderText("The activity has been added successfully!");
+                successfulAdd.showAndWait();
+            } catch (Exception e){
+                mainCtrl.showPopup(Alert.AlertType.ERROR, "Failed to add the activity");
+            }
         }
     }
 
@@ -125,18 +133,24 @@ public class AdminScreenCtrl implements Initializable {
         Activity toBeDeleted = activityTable.getSelectionModel().getSelectedItem();
         if (toBeDeleted == null) {
             Alert noSelection = new Alert(Alert.AlertType.ERROR);
+            noSelection.initOwner(mainCtrl.getPrimaryStage());
             noSelection.setHeaderText("Please select an activity from the table first");
             noSelection.showAndWait();
             return;
         }
         Alert confirmDeletion = new Alert(Alert.AlertType.CONFIRMATION);
         confirmDeletion.setHeaderText("The activity is about to be deleted (no undo)!");
+        confirmDeletion.initOwner(mainCtrl.getPrimaryStage());
         ((Button) confirmDeletion.getDialogPane().lookupButton(ButtonType.OK)).setText("Yes");
         ((Button) confirmDeletion.getDialogPane().lookupButton(ButtonType.CANCEL)).setText("No");
 
         Optional<ButtonType> res = confirmDeletion.showAndWait();
         if (res.get() == ButtonType.OK) {
-            server.deleteActivity(toBeDeleted);
+            try {
+                mainCtrl.getServer().deleteActivity(toBeDeleted);
+            } catch (Exception e){
+                mainCtrl.showPopup(Alert.AlertType.ERROR, "Failed to delete the activity");
+            }
         }
         refresh();
     }
@@ -149,14 +163,19 @@ public class AdminScreenCtrl implements Initializable {
         if (toBeEdited == null) {
             Alert noSelection = new Alert(Alert.AlertType.ERROR);
             noSelection.setHeaderText("Please select an activity to edit from the table first");
+            noSelection.initOwner(mainCtrl.getPrimaryStage());
             noSelection.showAndWait();
         }
-        inputActivityID.setText(toBeEdited.getId());
-        inputActivityImagePath.setText(toBeEdited.getImage_path());
-        inputActivityTitle.setText(toBeEdited.getTitle());
-        inputActivityConsumption.setText(Long.toString(toBeEdited.getConsumption_in_wh()));
-        inputActivitySource.setText(toBeEdited.getSource());
-        server.deleteActivity(toBeEdited);
+        try {
+            inputActivityID.setText(toBeEdited.getId());
+            inputActivityImagePath.setText(toBeEdited.getImage_path());
+            inputActivityTitle.setText(toBeEdited.getTitle());
+            inputActivityConsumption.setText(Long.toString(toBeEdited.getConsumption_in_wh()));
+            inputActivitySource.setText(toBeEdited.getSource());
+            mainCtrl.getServer().deleteActivity(toBeEdited);
+        } catch (Exception e){
+            mainCtrl.showPopup(Alert.AlertType.ERROR, "Failed to get the activity");
+        }
     }
 
     /**
@@ -165,8 +184,12 @@ public class AdminScreenCtrl implements Initializable {
     public void commitEdit() {
         Activity toBeAdded = checkTextFields();
         if (toBeAdded != null) {
-            server.addActivity(toBeAdded);
-            refresh();
+            try {
+                mainCtrl.getServer().addActivity(toBeAdded);
+                refresh();
+            } catch (Exception e){
+                mainCtrl.showPopup(Alert.AlertType.ERROR, "Failed to edit the activity");
+            }
         }
     }
 
@@ -184,6 +207,7 @@ public class AdminScreenCtrl implements Initializable {
         if (id.length() == 0 || path.length() == 0 || title.length() == 0
                 || inputActivityConsumption.getText().length() == 0 || source.length() == 0) {
             Alert emptyFields = new Alert(Alert.AlertType.ERROR);
+            emptyFields.initOwner(mainCtrl.getPrimaryStage());
             emptyFields.setHeaderText("Please fill all the text fields with corresponding data.");
             emptyFields.showAndWait();
             return null;
@@ -195,6 +219,7 @@ public class AdminScreenCtrl implements Initializable {
             return a;
         } catch (NumberFormatException e) {
             Alert wrongType = new Alert(Alert.AlertType.ERROR);
+            wrongType.initOwner(mainCtrl.getPrimaryStage());
             wrongType.setHeaderText("Consumption must be an integer number!");
             wrongType.showAndWait();
             return null;
@@ -212,5 +237,32 @@ public class AdminScreenCtrl implements Initializable {
         inputActivitySource.clear();
     }
 
+    /**
+     * method for importing activities from a json file
+     */
+    public void importActivities() throws IOException {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Select a JSON file to import from");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON files (*.json)", "*.json"));
+        File selectedJson = fileChooser.showOpenDialog(new Stage());
 
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            List<Activity> activityList = mapper.readValue(selectedJson, new TypeReference<List<Activity>>() {});
+            for(var a : activityList){
+                server.addActivity(a);
+            }
+            Alert successfulAdd = new Alert(Alert.AlertType.INFORMATION);
+            successfulAdd.setHeaderText("Activities have been added successfully!");
+            successfulAdd.initOwner(mainCtrl.getPrimaryStage());
+            successfulAdd.showAndWait();
+            refresh();
+        }
+        catch(IOException e) {
+            Alert wrongImport = new Alert(Alert.AlertType.ERROR);
+            wrongImport.setHeaderText("Something when wrong, please make sure the activities are in correct format!");
+            wrongImport.initOwner(mainCtrl.getPrimaryStage());
+            wrongImport.showAndWait();
+        }
+    }
 }

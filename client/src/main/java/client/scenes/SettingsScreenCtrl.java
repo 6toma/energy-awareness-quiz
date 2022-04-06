@@ -41,6 +41,11 @@ public class SettingsScreenCtrl {
         mainCtrl.checkDarkMode();
     }
 
+    @FXML
+    void connectToServer() {
+        mainCtrl.setServerURL(getServerURL());
+    }
+
     /**
      * Shows the help screen
      */

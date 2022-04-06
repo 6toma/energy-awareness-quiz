@@ -8,6 +8,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -50,24 +51,6 @@ public class WaitingRoomCtrl implements Initializable {
     public void back() {
         mainCtrl.resetUserText();
         mainCtrl.showHomeScreen();
-        stop();
-    }
-
-    /**
-     * start listening for updates
-     */
-    public void startListening(){
-        server.registerUpdates(c -> {
-            System.out.println("object identity: " + c + " has changed");
-            System.out.println(server.getPlayersMultiplayer());
-        });
-    }
-
-    /**
-     * stops the thread used for long polling
-     */
-    public void stop(){
-        server.stop();
     }
 
     private ObservableList<Player> players;
@@ -119,11 +102,12 @@ public class WaitingRoomCtrl implements Initializable {
             // because of the getLeaderPlayers(10) method, the
             // leaderboard needs no sorting, as the list of players
             // is returned already sorted through the query
-            List<Player> playerList = server.getPlayersMultiplayer();
+            List<Player> playerList = mainCtrl.getServer().getPlayersInWaitingRoom();
             players = FXCollections.observableList(playerList);
             playerTable.setItems(players);
         } catch (Exception e) {
-            e.printStackTrace();
+            mainCtrl.showPopup(Alert.AlertType.ERROR, "Lost connection to the server");
+            mainCtrl.showHomeScreen();
         }
     }
 

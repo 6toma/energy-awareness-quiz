@@ -35,7 +35,7 @@ public class WaitingRoom {
         this.players = players;
         this.questions = questions;
         this.multiplayerGameID = 0;
-        this.maxNumberOfQuestions = Math.min(Math.max(maxNumberOfQuestions, 5), 25); // make min number of questions 5, max number 25
+        this.maxNumberOfQuestions = maxNumberOfQuestions; // make min number of questions 5, max number 25
     }
 
     /**
@@ -46,7 +46,7 @@ public class WaitingRoom {
         this.players = new ArrayList<>();
         this.questions = questions;
         this.multiplayerGameID = 0;
-        this.maxNumberOfQuestions = Math.min(Math.max(maxNumberOfQuestions, 5), 25); // make min number of questions 5, max number 25
+        this.maxNumberOfQuestions = maxNumberOfQuestions; // make min number of questions 5, max number 25
     }
 
     /**
@@ -56,17 +56,6 @@ public class WaitingRoom {
      */
     public void setMultiplayerGameID(int multiplayerGameID) {
         this.multiplayerGameID = Math.max(multiplayerGameID, 0);
-    }
-
-    /**
-     * Set the maximum number of questions for the
-     * next multiplayer game
-     * @param maxNumberOfQuestions the maximum
-     *                             number of questions
-     *                             to be set for next game
-     */
-    public void setMaxNumberOfQuestions(int maxNumberOfQuestions) {
-        this.maxNumberOfQuestions = Math.min(Math.max(maxNumberOfQuestions, 5), 25); // make min number of questions 5, max number 25
     }
 
     /**

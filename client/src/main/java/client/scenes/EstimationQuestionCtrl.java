@@ -7,11 +7,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TextFormatter;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
@@ -77,8 +73,13 @@ public class EstimationQuestionCtrl {
     @FXML
     private Label jokerMessage;
 
+    @FXML
+    private Label QuestionNumber;
+
+
     /**
      * Constructor for the Estimation Question Controller
+     *
      * @param server
      * @param mainCtrl
      */
@@ -90,9 +91,10 @@ public class EstimationQuestionCtrl {
 
     /**
      * sets multiplayer flag
+     *
      * @param v multiplayer bool
      */
-    public void setMultiplayer(boolean v){
+    public void setMultiplayer(boolean v) {
         this.multiplayer = v;
     }
 
@@ -104,6 +106,15 @@ public class EstimationQuestionCtrl {
         stopTimers();
         mainCtrl.resetQuestionScreens();
     }
+
+    private void setQuestionNumber(){
+        if (!multiplayer){
+            QuestionNumber.setText("Question:  " + mainCtrl.getSinglePlayerGame().getQuestionNumber() +"/"+mainCtrl.getSinglePlayerGameQuestions());
+        } else {
+            QuestionNumber.setText("Question:  " + (mainCtrl.getMultiPlayerGame().getQuestionNumber()+1)+"/"+mainCtrl.getMultiPlayerGame().getQuestions().size());
+        }
+    }
+
 
     /**
      * Function for creating a countdown and a progress bar
@@ -130,6 +141,7 @@ public class EstimationQuestionCtrl {
     /**
      * Sets the question object for this screen
      * Also sets the question label and answer text field
+     *
      * @param question
      */
     public void setQuestion(EstimationQuestion question) {
@@ -139,6 +151,12 @@ public class EstimationQuestionCtrl {
         answerField.setTextFormatter(new TextFormatter<>(change -> change.getControlNewText().matches("[0-9]*") ? change : null));
         setImage();
         setJokers();
+        setQuestionNumber();
+        if(multiplayer) {
+            joker1.setVisible(false);
+        } else {
+            joker1.setVisible(true);
+        }
     }
 
     /**
@@ -151,21 +169,24 @@ public class EstimationQuestionCtrl {
 
     /**
      * Checking the correctness of the answer
+     *
      * @param answer
      */
     public void checkAnswer(Long answer) {
-        guessAccuracy = (double) answer / question.getActivity().getConsumption_in_wh();
-        // convert to accuracy value of < 1. for example 1.04 -> 0.96
-        if(guessAccuracy > 1.0){
-            guessAccuracy = 1 - 2 * (guessAccuracy - 1);
-        }
-        // set a lower limit to the guess accuracy
-        if(guessAccuracy < 0.2){
+        Long correctAnswer = question.getActivity().getConsumption_in_wh();
+        double upperBound = correctAnswer * 1.8;
+        double lowerBound = correctAnswer * 0.4;
+
+        if (answer > upperBound || answer < lowerBound) {
             guessAccuracy = 0;
             timeWhenAnswered = -1;
-        } else {
-            timeWhenAnswered = (int) (progressBar.getProgress() * questionTime);
+            return;
         }
+
+        guessAccuracy = (double) answer / correctAnswer;
+        if (guessAccuracy > 1)
+            guessAccuracy = 2 - guessAccuracy;
+        timeWhenAnswered = (int) (progressBar.getProgress() * questionTime);
     }
 
     private void showAnswers() {
@@ -174,7 +195,7 @@ public class EstimationQuestionCtrl {
         KeyFrame start = new KeyFrame(Duration.ZERO, new KeyValue(progressBar.progressProperty(), 0));
         KeyFrame aEnd = new KeyFrame(Duration.seconds(answerTime), e -> {
             if (multiplayer) {
-                reset();
+                resetEstimationQuestion();
             } else {
                 endQuestion(); // end the question when the animation is done
             }
@@ -193,36 +214,21 @@ public class EstimationQuestionCtrl {
         questionLabel.setText(questionLabel.getText() + " - " + question.getActivity().getConsumption_in_wh() + " Wh");
 
         if (multiplayer) {
-            sendScoreMultiplayer(timeWhenAnswered);
+            mainCtrl.addScoreMultiplayer(timeWhenAnswered, additionalPoints * guessAccuracy);
         } else {
             pointsGainedForQuestion = mainCtrl.getSinglePlayerGame().addPoints(timeWhenAnswered, additionalPoints * guessAccuracy);
-            additionalPoints = 1.0;
         }
+        additionalPoints = 1.0;
     }
 
     /**
-     * updates the score of the player in the server
-     * @param time time of answer
+     * Resets attributes to default after each question
+     *
+     * To be used only during game!
+     * After the end of the game, finalResetEstimationQuestion() should be used.
+     * The difference is that this method leaves the jokers disabled (if they have been clicked previously)
      */
-    public void sendScoreMultiplayer(int time){
-        double guessQuestionRate=1.0;
-        if(time == -1){
-            mainCtrl.getPlayer().resetStreak();
-            mainCtrl.getPlayer().setScoreGained(0);
-        } else {
-            mainCtrl.getPlayer().incrementStreak();
-            int currentScore = mainCtrl.getPlayer().getScore();
-            long points = Math.round(((100.0 +mainCtrl.getPlayer().getStreak()) / 100.0) * (1050 - 5 * time));
-            int pointsToBeAdded = (int) Math.round(guessQuestionRate * points);
-            mainCtrl.getPlayer().setScoreGained(pointsToBeAdded);
-            mainCtrl.getPlayer().setScore(currentScore + pointsToBeAdded);
-        }
-        server.postScore(mainCtrl.getPlayer());
-    }
-
-
-
-    private void reset() {
+    public void resetEstimationQuestion() {
         timeWhenAnswered = -1;
 
         // re-enable jokers
@@ -233,10 +239,12 @@ public class EstimationQuestionCtrl {
         answerField.setDisable(false);
 
         jokerMessage.setText("");
+
+        stopTimers();
     }
 
     private void endQuestion() {
-        reset();
+        resetEstimationQuestion();
         mainCtrl.showScoreChangeScreen(pointsGainedForQuestion);
     }
 
@@ -246,51 +254,58 @@ public class EstimationQuestionCtrl {
         try {
             Long answer = Long.parseLong(answerField.getText());
             checkAnswer(answer);
-        } catch(NumberFormatException e){
+        } catch (NumberFormatException e) {
         }
     }
 
     @FXML
     private void joker1() {
-        joker1.setDisable(true);
-        mainCtrl.getSinglePlayerGame().useJokerAdditionalQuestion();
+        if (!multiplayer) {
+            joker1.setDisable(true);
+            mainCtrl.useJokerAdditionalQuestion();
 
-        stopTimers();
-        /* even if the correct answer was selected before the question was changed, 0 points will be added
-         * the method addPoints() is used just to increment the number of the current question in the list
-         * streak is reset to 0
-         */
-        pointsGainedForQuestion = mainCtrl.getSinglePlayerGame().addPoints(-1, 0.0);
-        endQuestion();
+            stopTimers();
+            /* even if the correct answer was selected before the question was changed, 0 points will be added
+             * the method addPoints() is used just to increment the number of the current question in the list
+             * streak is reset to 0
+             */
+            pointsGainedForQuestion = mainCtrl.getSinglePlayerGame().addPoints(-1, 0.0);
+            endQuestion();
+        }
     }
 
     @FXML
     private void joker2() {
         // if there is no answer input, don't use joker
-        if(answerField.getText().equals("")) {
+        if (answerField.getText().equals("")) {
             jokerMessage.setText("Input an answer to use this joker!");
             return;
         }
 
         joker2.setDisable(true); // disable button
-        mainCtrl.getSinglePlayerGame().useJokerRemoveOneAnswer();
+        mainCtrl.useJokerRemoveOneAnswer();
 
         /* calculate the points the player would win for this question
-        * the same way they are calculated in addPoints(), but without actually adding them
-        */
-        int pointsToBeAdded = (int)Math.round(guessAccuracy * additionalPoints * mainCtrl.getSinglePlayerGame().getPointsToBeAdded(timeWhenAnswered));
+         * the same way they are calculated in addPoints(), but without actually adding them
+         */
+        Long answer = Long.parseLong(answerField.getText());
+        checkAnswer(answer);
+        int pointsToBeAdded = (int) Math.round(guessAccuracy * additionalPoints * mainCtrl.getSinglePlayerGame().getPointsToBeAdded(timeWhenAnswered));
 
-        if(pointsToBeAdded > 0 ) {
+        if (pointsToBeAdded > 0) {
             jokerMessage.setText("Close enough! You will get some points for this answer.");
         } else {
-            jokerMessage.setText("You guess is too far from the actual answer! Try changing it so you can get some points for this question.");
+            Long correctAnswer = question.getActivity().getConsumption_in_wh();
+            if (answer > correctAnswer)
+                jokerMessage.setText("You guess is too far from the actual answer! Try a lower value.");
+            else jokerMessage.setText("You guess is too far from the actual answer! Try a higher value.");
         }
     }
 
     @FXML
-    private void joker3() {
+    private void joker3 () {
         joker3.setDisable(true); // disable button
-        mainCtrl.getSinglePlayerGame().useJokerDoublePoints();
+        mainCtrl.useJokerDoublePoints();
 
         additionalPoints = 2.0; // points will be double only for the current question
     }
@@ -298,24 +313,26 @@ public class EstimationQuestionCtrl {
     /**
      * Reset the states of the jokers. Enable all jokers and set their usage to false.
      */
-    private void resetJokers() {
+    private void resetJokers () {
         joker1.setDisable(false);
         joker2.setDisable(false);
         joker3.setDisable(false);
         joker1.setMouseTransparent(false);
         joker2.setMouseTransparent(false);
         joker3.setMouseTransparent(false);
+        mainCtrl.resetJokers();
     }
 
     /**
      * Reset an estimation question
      */
-    public void resetEstimationQuestion() {
-        reset();
+    public void finalResetEstimationQuestion () {
+        stopTimers();
+        resetEstimationQuestion();
         resetJokers();
     }
 
-    private void stopTimers() {
+    private void stopTimers () {
         if (questionTimer != null) {
             questionTimer.stop();
             questionTimer = null;
@@ -330,10 +347,10 @@ public class EstimationQuestionCtrl {
      * Sets the images to the ones stored in the activities.
      * Also sets the images to be the same width as the question
      */
-    private void setImage(){
-        if(question.getActivity().getImage() != null){
+    private void setImage () {
+        if (question.getActivity().getImage() != null) {
             InputStream inputStream = new ByteArrayInputStream(question.getActivity().getImage());
-            if(inputStream != null){
+            if (inputStream != null) {
                 image.setImage(new Image(inputStream));
             }
         }
@@ -345,24 +362,44 @@ public class EstimationQuestionCtrl {
      * a joker has been used on another screen.
      * Resets the mouse-transparency, used when answers are being shown
      */
-    private void setJokers() {
-        if(mainCtrl.getSinglePlayerGame().jokerAdditionalQuestionIsUsed()) {
+    private void setJokers () {
+        if (mainCtrl.jokerAdditionalQuestionIsUsed()) {
             joker1.setDisable(true);
         } else {
             joker1.setMouseTransparent(false);
         }
 
-        if(mainCtrl.getSinglePlayerGame().jokerRemoveOneAnswerIsUsed()) {
+        if (mainCtrl.jokerRemoveOneAnswerIsUsed()) {
             joker2.setDisable(true);
         } else {
             joker2.setMouseTransparent(false);
         }
 
-        if(mainCtrl.getSinglePlayerGame().jokerDoublePointsIsUsed()) {
+        if (mainCtrl.jokerDoublePointsIsUsed()) {
             joker3.setDisable(true);
         } else {
             joker3.setMouseTransparent(false);
         }
+    }
+
+    /**
+     * Add tooltips for the jokers
+     */
+    public void addTooltips () {
+        Tooltip skipQuestion = new Tooltip();
+        skipQuestion.setText("Skip this question!");
+        skipQuestion.setShowDelay(Duration.ZERO);
+        joker1.setTooltip(skipQuestion);
+
+        Tooltip cutAnswer = new Tooltip();
+        cutAnswer.setText("Reveal a wrong answer!");
+        cutAnswer.setShowDelay(Duration.ZERO);
+        joker2.setTooltip(cutAnswer);
+
+        Tooltip doublePoints = new Tooltip();
+        doublePoints.setText("Double score intake for this question!");
+        doublePoints.setShowDelay(Duration.ZERO);
+        joker3.setTooltip(doublePoints);
     }
 
 }

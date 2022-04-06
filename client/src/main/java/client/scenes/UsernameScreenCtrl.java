@@ -5,15 +5,18 @@ import com.google.inject.Inject;
 import commons.Player;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import lombok.Getter;
 
 public class UsernameScreenCtrl {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
+    @Getter
     @FXML
     private TextField inputUsernameField;
 
@@ -50,24 +53,27 @@ public class UsernameScreenCtrl {
      * of the new username, which may be invalid
      */
     @FXML
-    void setUsernameButtonClicked(ActionEvent event) {
+    public void setUsernameButtonClicked() {
         String newUser = inputUsernameField.getText();
 
         // checking whether username is already in waiting room
-        boolean isValidUsername = (Boolean) server.checkValidityOfUsername(newUser);
-        if (isValidUsername) {
-            continueButton.setDisable(false);
-            usernameField.setText("Hello, " + newUser + "!");
-        }
-        else {
-            continueButton.setDisable(true);
-            usernameField.setText("Please select a different username!");
+        try {
+            boolean isValidUsername = mainCtrl.getServer().checkValidityOfUsername(newUser);
+            if (isValidUsername || mainCtrl.getUsernameOriginScreen() == 1) {
+                continueButton.setDisable(false);
+                usernameField.setText("Hello, " + newUser + "!");
+            } else {
+                continueButton.setDisable(true);
+                usernameField.setText("Username taken!");
+            }
+        } catch (Exception e){
+            mainCtrl.showPopup(Alert.AlertType.ERROR, "Connection failed");
         }
     }
 
     @FXML
-    void userInputOnEnter(ActionEvent event) {
-        setUsernameButtonClicked(event);
+    void userInputOnEnter() {
+        setUsernameButtonClicked();
     }
 
     @FXML
@@ -88,20 +94,24 @@ public class UsernameScreenCtrl {
     void showNextScreen(ActionEvent event) {
         if(mainCtrl.getUsernameOriginScreen() == 1) {
             mainCtrl.getSinglePlayerGame().setPlayer(new Player(inputUsernameField.getText()));
-            mainCtrl.showLoadingScreen();
+            mainCtrl.showLoadingScreen(false);
         } else {
 
             //send player to multiplayer game object
-            Player newPlayer = server.addPlayerWaitingRoom(new Player(inputUsernameField.getText()));
-            if(newPlayer == null){
-                usernameField.setText("Please select a different username!");
+            Player player = new Player(inputUsernameField.getText());
+            Integer gameId = null;
+            try {
+                gameId = mainCtrl.getServer().addPlayerWaitingRoom(player);
+                mainCtrl.setPlayer(player);
+            } catch (Exception e){
+                mainCtrl.showPopup(Alert.AlertType.ERROR, "Connection failed");
+            }
+
+            if(gameId == null){
+                usernameField.setText("Username taken!");
             }
             else {
-                if(!server.areQuestionsGenerated()){
-                    System.out.println("questions are not generated I will generate them");;
-                }
-                else System.out.println("questions are generated");
-                System.out.println(newPlayer);
+                mainCtrl.setGameID(gameId);
                 mainCtrl.showWaitingRoom();
             }
 
@@ -119,6 +129,8 @@ public class UsernameScreenCtrl {
             usernameField.setText("Please input your username!");
             inputUsernameField.clear();
             continueButton.setDisable(true);
+        } else {
+            continueButton.setDisable(false);
         }
     }
 

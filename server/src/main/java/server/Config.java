@@ -15,6 +15,7 @@
  */
 package server;
 
+import commons.GameUpdatesPacket;
 import commons.MultiPlayerGame;
 
 import org.springframework.context.annotation.Bean;
@@ -33,7 +34,16 @@ import java.util.Random;
 public class Config {
 
     public static String defaultImagePath = "./server/src/main/resources/activity-bank-pictures/";
-    public static int numberOfQuestions = 5;
+    public static int numberOfQuestions = 20;
+
+    /**
+     * packet that will be used
+     * @return
+     */
+    @Bean
+    public GameUpdatesPacket getGameUpdatesPacket(){
+        return new GameUpdatesPacket( 0 ,"WAITINGROOM", -1);
+    }
 
     /**
      * Returns a new random object

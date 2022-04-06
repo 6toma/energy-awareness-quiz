@@ -29,9 +29,6 @@ public class Player implements Comparable{
     @Getter
     @Transient
     private int streak = 0; // streak field for getting more points when you answer questions correctly in a row
-    @Transient
-    @Getter @Setter
-    private int scoreGained = 0;
 
 
     /**
@@ -130,14 +127,14 @@ public class Player implements Comparable{
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Player)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         Player player = (Player) o;
-        return Objects.equals(id, player.id) && Objects.equals(name, player.name);
+        return Objects.equals(id, player.id) && Objects.equals(name, player.name) && Objects.equals(score, player.score);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, score, streak);
+        return Objects.hash(id, name, score);
     }
 }
 

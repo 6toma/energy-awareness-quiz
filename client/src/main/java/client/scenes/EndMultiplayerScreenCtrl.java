@@ -1,75 +1,98 @@
 package client.scenes;
 
-import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Player;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import lombok.Setter;
 
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class ScoreChangeMultiplayerCtrl implements Initializable {
+public class EndMultiplayerScreenCtrl implements Initializable {
 
-    private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
-    @FXML
-    private Label scoreGained;
-    @FXML
-    private Label scoreTotal;
-    @FXML
-    private Label scoreStreak;
-    @FXML
-    private Button leave;
-
-    /**
-     * Creates a new screen with injections
-     *
-     * @param server   ServerUtils class
-     * @param mainCtrl Main Controller
-     */
-    @Inject
-    public ScoreChangeMultiplayerCtrl(ServerUtils server, MainCtrl mainCtrl) {
-        this.mainCtrl = mainCtrl;
-        this.server = server;
-    }
-
-    /**
-     * Sets score change labels
-     *
-     * @param gained Number of points gained
-     * @param total  Number of total points
-     * @param streak How many questions in a row were correct
-     */
-    public void setScoreLabels(int gained, int total, int streak) {
-        scoreGained.setText("+" + gained);
-        scoreTotal.setText("Score: " + total);
-        scoreStreak.setText("Streak: " + streak);
-    }
-
-    /**
-     * Goes back to the home screen
-     */
-    public void exit() {
-        mainCtrl.showHomeScreen();
-    }
-
     private ObservableList<Player> players;
+    @Setter
+    private String playerName;
+
+    @FXML
+    private Button goToHomeScreen;
+
+    @FXML
+    private Button playAgain;
 
     @FXML
     private TableView<Player> leaderboard;
+
     @FXML
     private TableColumn<Player, String> playerPosition;
-    @FXML
-    private TableColumn<Player, String> playerUsername;
+
     @FXML
     private TableColumn<Player, String> playerScore;
+
+    @FXML
+    private TableColumn<Player, String> playerUsername;
+
+    @FXML
+    private Label score;
+
+    /**
+     * Creates a new screen with injections
+     * @param mainCtrl Main Controller
+     */
+    @Inject
+    public EndMultiplayerScreenCtrl(MainCtrl mainCtrl) {
+        this.mainCtrl = mainCtrl;
+    }
+
+    @FXML
+    void goToHomeScreen(ActionEvent event) {
+        mainCtrl.showHomeScreen();
+    }
+
+    @FXML
+    void playAgain(ActionEvent event) {
+        Player player = new Player(playerName);
+        Integer gameId = null;
+        try {
+            gameId = mainCtrl.getServer().addPlayerWaitingRoom(player);
+            mainCtrl.setPlayer(player);
+        } catch (Exception e){
+            mainCtrl.showPopup(Alert.AlertType.ERROR, "Connection failed");
+        }
+
+        if(gameId == null){
+            mainCtrl.setUsernameOriginScreen(2);
+            mainCtrl.showUsernameScreen();
+            mainCtrl.getUsernameScreenCtrl().getInputUsernameField().setText(player.getName());
+            mainCtrl.getUsernameScreenCtrl().setUsernameButtonClicked();
+        }
+        else {
+            mainCtrl.setGameID(gameId);
+            mainCtrl.showWaitingRoom();
+        }
+    }
+
+    /**
+     * Sets the score label text
+     * @param score int value
+     */
+    public void setScoreLabel(int score){
+        this.score.setText(String.valueOf(score));
+    }
 
     /**
      * Used to refresh the leaderboard entries
@@ -78,6 +101,7 @@ public class ScoreChangeMultiplayerCtrl implements Initializable {
         players = FXCollections.observableList(playerList);
         leaderboard.setItems(players);
     }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         playerUsername.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getName()));
