@@ -104,7 +104,7 @@ public class EstimationQuestionCtrl {
     public void exit() {
         mainCtrl.showHomeScreen();
         stopTimers();
-        resetEstimationQuestion();
+        mainCtrl.resetQuestionScreens();
     }
 
     private void setQuestionNumber(){
@@ -190,7 +190,7 @@ public class EstimationQuestionCtrl {
         KeyFrame start = new KeyFrame(Duration.ZERO, new KeyValue(progressBar.progressProperty(), 0));
         KeyFrame aEnd = new KeyFrame(Duration.seconds(answerTime), e -> {
             if (multiplayer) {
-                reset();
+                resetEstimationQuestion();
             } else {
                 endQuestion(); // end the question when the animation is done
             }
@@ -217,7 +217,14 @@ public class EstimationQuestionCtrl {
         }
     }
 
-    private void reset() {
+    /**
+     * Resets attributes to default after each question
+     *
+     * To be used only during game!
+     * After the end of the game, finalResetEstimationQuestion() should be used.
+     * The difference is that this method leaves the jokers disabled (if they have been clicked previously)
+     */
+    public void resetEstimationQuestion() {
         timeWhenAnswered = -1;
 
         // re-enable jokers
@@ -228,10 +235,12 @@ public class EstimationQuestionCtrl {
         answerField.setDisable(false);
 
         jokerMessage.setText("");
+
+        stopTimers();
     }
 
     private void endQuestion() {
-        reset();
+        resetEstimationQuestion();
         mainCtrl.showScoreChangeScreen(pointsGainedForQuestion);
     }
 
@@ -249,7 +258,7 @@ public class EstimationQuestionCtrl {
     private void joker1() {
         if (!multiplayer) {
             joker1.setDisable(true);
-            mainCtrl.getSinglePlayerGame().useJokerAdditionalQuestion();
+            mainCtrl.useJokerAdditionalQuestion();
 
             stopTimers();
             /* even if the correct answer was selected before the question was changed, 0 points will be added
@@ -271,7 +280,7 @@ public class EstimationQuestionCtrl {
             }
 
             joker2.setDisable(true); // disable button
-            mainCtrl.getSinglePlayerGame().useJokerRemoveOneAnswer();
+            mainCtrl.useJokerRemoveOneAnswer();
 
             /* calculate the points the player would win for this question
              * the same way they are calculated in addPoints(), but without actually adding them
@@ -295,7 +304,7 @@ public class EstimationQuestionCtrl {
     private void joker3 () {
         if (!multiplayer) {
             joker3.setDisable(true); // disable button
-            mainCtrl.getSinglePlayerGame().useJokerDoublePoints();
+            mainCtrl.useJokerDoublePoints();
 
             additionalPoints = 2.0; // points will be double only for the current question
         }
@@ -311,14 +320,15 @@ public class EstimationQuestionCtrl {
         joker1.setMouseTransparent(false);
         joker2.setMouseTransparent(false);
         joker3.setMouseTransparent(false);
+        mainCtrl.resetJokers();
     }
 
     /**
      * Reset an estimation question
      */
-    public void resetEstimationQuestion () {
+    public void finalResetEstimationQuestion () {
         stopTimers();
-        reset();
+        resetEstimationQuestion();
         resetJokers();
     }
 
@@ -354,19 +364,19 @@ public class EstimationQuestionCtrl {
      */
     private void setJokers () {
         if (!multiplayer) {
-            if (mainCtrl.getSinglePlayerGame().jokerAdditionalQuestionIsUsed()) {
+            if (mainCtrl.jokerAdditionalQuestionIsUsed()) {
                 joker1.setDisable(true);
             } else {
                 joker1.setMouseTransparent(false);
             }
 
-            if (mainCtrl.getSinglePlayerGame().jokerRemoveOneAnswerIsUsed()) {
+            if (mainCtrl.jokerRemoveOneAnswerIsUsed()) {
                 joker2.setDisable(true);
             } else {
                 joker2.setMouseTransparent(false);
             }
 
-            if (mainCtrl.getSinglePlayerGame().jokerDoublePointsIsUsed()) {
+            if (mainCtrl.jokerDoublePointsIsUsed()) {
                 joker3.setDisable(true);
             } else {
                 joker3.setMouseTransparent(false);

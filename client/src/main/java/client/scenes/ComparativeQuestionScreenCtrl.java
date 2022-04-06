@@ -161,7 +161,7 @@ public class ComparativeQuestionScreenCtrl {
 
     private void setQuestionNumber(){
         if (!multiplayer){
-            QuestionNumber.setText("Question:  " + (mainCtrl.getSinglePlayerGame().getQuestionNumber() - mainCtrl.getSinglePlayerGame().additionalQuestion()) +"/"+mainCtrl.getSinglePlayerGameQuestions());
+            QuestionNumber.setText("Question:  " + (mainCtrl.getSinglePlayerGame().getQuestionNumber() - mainCtrl.additionalQuestion()) +"/"+mainCtrl.getSinglePlayerGameQuestions());
         } else {
             QuestionNumber.setText("Question:  " + (mainCtrl.getMultiPlayerGame().getQuestionNumber()+1)+"/"+mainCtrl.getMultiPlayerGame().getQuestions().size());
         }
@@ -322,7 +322,7 @@ public class ComparativeQuestionScreenCtrl {
     public void exit() {
         mainCtrl.showHomeScreen();
         stopTimers();
-        resetComparativeQuestionScreen();
+        mainCtrl.resetQuestionScreens();
     }
 
     /**
@@ -355,7 +355,7 @@ public class ComparativeQuestionScreenCtrl {
         KeyFrame start = new KeyFrame(Duration.ZERO, new KeyValue(progressBar.progressProperty(), 0));
         KeyFrame aEnd = new KeyFrame(Duration.seconds(answerTime), e -> {
             if(multiplayer){
-                reset();
+                resetComparativeQuestionScreen();
             } else {
                 endQuestion(); // end the question when the animation is done
             }
@@ -431,8 +431,14 @@ public class ComparativeQuestionScreenCtrl {
         }
     }
 
-    // reset attributes to default after each question
-    private void reset(){
+    /**
+     * Resets attributes to default after each question
+     *
+     * To be used only during game!
+     * After the end of the game, finalResetComparativeQuestionScreen() should be used
+     * The difference is that this method leaves the jokers disabled (if they have been clicked previously)
+     */
+    public void resetComparativeQuestionScreen(){
         timeWhenAnswered = -1;
         answer1.setStyle("");
         answer2.setStyle("");
@@ -451,10 +457,12 @@ public class ComparativeQuestionScreenCtrl {
         image2.setImage(null);
         image3.setImage(null);
         this.questionMode = 0;
+
+        stopTimers();
     }
 
     private void endQuestion(){
-        reset();
+        resetComparativeQuestionScreen();
         mainCtrl.showScoreChangeScreen(pointsGainedForQuestion);
     }
 
@@ -465,7 +473,7 @@ public class ComparativeQuestionScreenCtrl {
     private void joker1() {
         if(!multiplayer) {
             joker1.setDisable(true);
-            mainCtrl.getSinglePlayerGame().useJokerAdditionalQuestion();
+            mainCtrl.useJokerAdditionalQuestion();
 
             stopTimers();
             /* even if the correct answer was selected before the question was changed, 0 points will be added
@@ -484,7 +492,7 @@ public class ComparativeQuestionScreenCtrl {
     private void joker2() {
         if(!multiplayer) {
             joker2.setDisable(true); // disable button
-            mainCtrl.getSinglePlayerGame().useJokerRemoveOneAnswer();
+            mainCtrl.useJokerRemoveOneAnswer();
 
             int correctAnswer = -1;
             if (questionMode == 0) {
@@ -518,7 +526,7 @@ public class ComparativeQuestionScreenCtrl {
     private void joker3() {
         if(!multiplayer) {
             joker3.setDisable(true); // disable button
-            mainCtrl.getSinglePlayerGame().useJokerDoublePoints();
+            mainCtrl.useJokerDoublePoints();
 
             additionalPoints = 2.0; // points will be double only for the current question
         }
@@ -527,7 +535,7 @@ public class ComparativeQuestionScreenCtrl {
     /**
      * Enables the use of the jokers again for the next game
      *
-     * Intentionally a separate method and not included in reset(),
+     * Intentionally a separate method and not included in resetComparativeQuestionScreen(),
      * because it is used to reset the 3 answer options after every question, but
      * jokers should remain disabled until the end of the game
      */
@@ -538,16 +546,16 @@ public class ComparativeQuestionScreenCtrl {
         joker1.setMouseTransparent(false);
         joker2.setMouseTransparent(false);
         joker3.setMouseTransparent(false);
+        mainCtrl.resetJokers();
     }
 
     /**
      * Resets the comparative question screen
      */
-    public void resetComparativeQuestionScreen() {
+    public void finalResetComparativeQuestionScreen() {
         stopTimers();
-        reset();
+        resetComparativeQuestionScreen();
         resetJokers();
-        //chat/emoji will possibly have to be included as well
     }
 
     /**
@@ -573,19 +581,19 @@ public class ComparativeQuestionScreenCtrl {
      */
     private void setJokers() {
         if(!multiplayer){
-            if(mainCtrl.getSinglePlayerGame().jokerAdditionalQuestionIsUsed()) {
+            if(mainCtrl.jokerAdditionalQuestionIsUsed()) {
                 joker1.setDisable(true);
             } else {
                 joker1.setMouseTransparent(false);
             }
 
-            if(mainCtrl.getSinglePlayerGame().jokerRemoveOneAnswerIsUsed()) {
+            if(mainCtrl.jokerRemoveOneAnswerIsUsed()) {
                 joker2.setDisable(true);
             } else {
                 joker2.setMouseTransparent(false);
             }
 
-            if(mainCtrl.getSinglePlayerGame().jokerDoublePointsIsUsed()) {
+            if(mainCtrl.jokerDoublePointsIsUsed()) {
                 joker3.setDisable(true);
             } else {
                 joker3.setMouseTransparent(false);
