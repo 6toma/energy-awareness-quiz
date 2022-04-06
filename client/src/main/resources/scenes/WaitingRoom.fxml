@@ -10,13 +10,6 @@
 <?import javafx.scene.layout.VBox?>
 
 <StackPane maxHeight="Infinity" maxWidth="Infinity" prefHeight="802.0" prefWidth="1290.0" stylesheets="@../css/WaitingRoom.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.WaitingRoomCtrl">
-    <StackPane styleClass="padding">
-        <Button fx:id="back" onAction="#back" stylesheets="@../css/main.css" text="Back" StackPane.alignment="TOP_LEFT">
-         <styleClass>
-            <String fx:value="exit" />
-            <String fx:value="rounded" />
-         </styleClass></Button>
-    </StackPane>
 
     <VBox alignment="CENTER" maxWidth="900.0" prefHeight="1080.0" prefWidth="1000.0" StackPane.alignment="CENTER">
         <Region maxHeight="20" minHeight="20" VBox.vgrow="ALWAYS" />
@@ -37,4 +30,11 @@
         </Button>
         <Region maxHeight="20" minHeight="20" styleClass="margin" VBox.vgrow="ALWAYS" />
     </VBox>
+    <StackPane maxHeight="107.0" maxWidth="228.0" minHeight="84.0" minWidth="184.0" prefHeight="107.0" prefWidth="228.0" styleClass="padding" StackPane.alignment="TOP_LEFT">
+        <Button fx:id="back" onAction="#back" stylesheets="@../css/main.css" text="Back" StackPane.alignment="TOP_LEFT">
+         <styleClass>
+            <String fx:value="exit" />
+            <String fx:value="rounded" />
+         </styleClass></Button>
+    </StackPane>
 </StackPane>
