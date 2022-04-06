@@ -19,6 +19,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 
+import java.util.Scanner;
+
 /**
  * Main for server application
  */
@@ -31,6 +33,22 @@ public class Main {
      * @param args
      */
     public static void main(String[] args) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Scanner userInput = new Scanner(System.in);
+                while(true) {
+                    String input = userInput.nextLine();
+
+                    switch(input){
+                        case "q":
+                        case "quit":
+                            System.exit(0);
+                            break;
+                    }
+                }
+            }
+        }).start();
         SpringApplication.run(Main.class, args);
     }
 

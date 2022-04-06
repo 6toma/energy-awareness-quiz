@@ -33,6 +33,7 @@ public class MultiplayerController {
     private Map<Integer, MultiPlayerGame> multiplayerGames;
     private final WaitingRoom waitingRoom;
     private final QuestionController questionController;
+    private final ActivityRepository repo;
 
     private Map<Integer, Map<Object, Consumer<GameUpdatesPacket>>> listeners = new HashMap<>();
     //private Map<Object, Consumer<GameUpdatesPacket>> listeners = new HashMap<>();
@@ -48,6 +49,7 @@ public class MultiplayerController {
         this.multiplayerGames = new HashMap<>();
         this.waitingRoom = waitingRoom;
         this.questionController = new QuestionController(random, repo);
+        this.repo = repo;
         generateQuestions();
     }
 
@@ -285,24 +287,28 @@ public class MultiplayerController {
     /**
      * Generates a list of questions in a separate thread
      */
-    private void generateQuestions(){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                if(waitingRoom.getQuestions().size() != waitingRoom.getMaxNumberOfQuestions()){
-                    System.out.println("Question size before: " + waitingRoom.getQuestions().size());
-                    System.out.println("NOT GENERATED");
-                    int count = waitingRoom.getMaxNumberOfQuestions();
-                    while (count > 0) {
-                        boolean isAdded = waitingRoom.addQuestion(questionController.getRandomQuestion().getBody());
-                        if(isAdded) count--;
-                        System.out.println(waitingRoom.getMaxNumberOfQuestions() - count);
+    private void generateQuestions() {
+        if (repo.findAll().size() >= 4) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    if (waitingRoom.getQuestions().size() != waitingRoom.getMaxNumberOfQuestions()) {
+                        System.out.println("Question size before: " + waitingRoom.getQuestions().size());
+                        System.out.println("NOT GENERATED");
+                        int count = waitingRoom.getMaxNumberOfQuestions();
+                        while (count > 0) {
+                            boolean isAdded = waitingRoom.addQuestion(questionController.getRandomQuestion().getBody());
+                            if (isAdded) count--;
+                            System.out.println(waitingRoom.getMaxNumberOfQuestions() - count);
+                        }
+                    } else {
+                        System.out.println("ALREADY GENERATED");
                     }
-                } else {
-                    System.out.println("ALREADY GENERATED");
+                    System.out.println("Question size after: " + waitingRoom.getQuestions().size());
                 }
-                System.out.println("Question size after: " + waitingRoom.getQuestions().size());
-            }
-        }).start();
+            }).start();
+        } else {
+            System.out.println("Not enough activities in the database to generate questions");
+        }
     }
 }
