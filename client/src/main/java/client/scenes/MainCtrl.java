@@ -669,6 +669,8 @@ public class MainCtrl {
         packet = null;
         player = null;
         gameID = -1;
+
+        resetQuestionScreens();
     }
 
     /**

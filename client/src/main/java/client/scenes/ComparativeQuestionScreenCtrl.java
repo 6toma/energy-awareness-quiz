@@ -386,11 +386,11 @@ public class ComparativeQuestionScreenCtrl {
         }
 
         if (multiplayer) {
-            mainCtrl.addScoreMultiplayer(timeWhenAnswered, 1.0);
-        }else {
+            mainCtrl.addScoreMultiplayer(timeWhenAnswered, additionalPoints);
+        } else {
             pointsGainedForQuestion = mainCtrl.getSinglePlayerGame().addPoints(timeWhenAnswered, additionalPoints);
-            additionalPoints = 1.0;
         }
+        additionalPoints = 1.0;
 
         // highlight correct answer
         if(correctAnswer == 0){
@@ -524,12 +524,10 @@ public class ComparativeQuestionScreenCtrl {
      */
     @FXML
     private void joker3() {
-        if(!multiplayer) {
-            joker3.setDisable(true); // disable button
-            mainCtrl.useJokerDoublePoints();
+        joker3.setDisable(true); // disable button
+        mainCtrl.useJokerDoublePoints();
 
-            additionalPoints = 2.0; // points will be double only for the current question
-        }
+        additionalPoints = 2.0; // points will be double only for the current question
     }
 
     /**
@@ -580,24 +578,22 @@ public class ComparativeQuestionScreenCtrl {
      * Resets the mouse-transparency, used when answers are being shown
      */
     private void setJokers() {
-        if(!multiplayer){
-            if(mainCtrl.jokerAdditionalQuestionIsUsed()) {
-                joker1.setDisable(true);
-            } else {
-                joker1.setMouseTransparent(false);
-            }
+        if(mainCtrl.jokerAdditionalQuestionIsUsed()) {
+            joker1.setDisable(true);
+        } else {
+            joker1.setMouseTransparent(false);
+        }
 
-            if(mainCtrl.jokerRemoveOneAnswerIsUsed()) {
-                joker2.setDisable(true);
-            } else {
-                joker2.setMouseTransparent(false);
-            }
+        if(mainCtrl.jokerRemoveOneAnswerIsUsed()) {
+            joker2.setDisable(true);
+        } else {
+            joker2.setMouseTransparent(false);
+        }
 
-            if(mainCtrl.jokerDoublePointsIsUsed()) {
-                joker3.setDisable(true);
-            } else {
-                joker3.setMouseTransparent(false);
-            }
+        if(mainCtrl.jokerDoublePointsIsUsed()) {
+            joker3.setDisable(true);
+        } else {
+            joker3.setMouseTransparent(false);
         }
     }
 
