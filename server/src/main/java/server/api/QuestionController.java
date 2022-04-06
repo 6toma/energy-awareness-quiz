@@ -26,6 +26,7 @@ public class QuestionController {
 
     private final Random random; // Random function from Config file
     private final ActivityRepository repo;
+    private int count = 0;
 
     /**
      * Creates new QuestionController object
@@ -52,7 +53,7 @@ public class QuestionController {
     @GetMapping(path = {"/random", "/random/"})
     public ResponseEntity<Question> getRandomQuestion() {
 
-        int randomInt = random.nextInt();
+        int randomInt = count++;//random.nextInt();
         int numberOfQuestions = 4;
 
         // To add more question types increment numberOfQuestions and add another if statement
