@@ -41,7 +41,7 @@
                       <Region maxHeight="178.0" minHeight="0.0" prefHeight="40.0" styleClass="margin" />
       
                             <Region maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" prefHeight="55.0" styleClass="margin" VBox.vgrow="ALWAYS" />
-                      <Button fx:id="singleplayerButton" mnemonicParsing="false" onAction="#showUsernameScreenSingle" prefHeight="84.0" prefWidth="290.0" style="-fx-border-radius: 1000px;" text="Singleplayer">
+                      <Button fx:id="singleplayerButton" mnemonicParsing="false" onAction="#showUsernameScreenSingle" prefHeight="84.0" prefWidth="290.0" style="-fx-border-radius: 1000px;" text="Play">
       
                                 <font>
                               <Font size="40.0" />
@@ -52,7 +52,7 @@
                           </styleClass>
                       </Button>
                       <Region maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="33.0" styleClass="margin" VBox.vgrow="ALWAYS" />
-                      <Button fx:id="multiplayerButton" mnemonicParsing="false" onAction="#showUsernameScreenMulti" prefHeight="84.0" prefWidth="290.0" style="-fx-border-radius: 1000px;" text="Multiplayer">
+                      <Button fx:id="multiplayerButton" mnemonicParsing="false" onAction="#showUsernameScreenMulti" prefHeight="84.0" prefWidth="290.0" style="-fx-border-radius: 1000px;" text="Play together">
                           <font>
                               <Font size="40.0" />
                           </font>

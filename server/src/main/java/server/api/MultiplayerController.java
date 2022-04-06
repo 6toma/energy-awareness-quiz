@@ -29,7 +29,7 @@ public class MultiplayerController {
     private final QuestionController questionController;
     private final ActivityRepository repo;
 
-    private Map<Integer, Map<Object, Consumer<GameUpdatesPacket>>> listeners = new HashMap<>();
+    private Map<Integer, Map<Object, Consumer<GameUpdatesPacket>>> listeners = Collections.synchronizedMap(new HashMap<>());
     //private Map<Object, Consumer<GameUpdatesPacket>> listeners = new HashMap<>();
 
     /**
@@ -40,7 +40,7 @@ public class MultiplayerController {
      */
     @Autowired
     public MultiplayerController(WaitingRoom waitingRoom, Random random, ActivityRepository repo){
-        this.multiplayerGames = new HashMap<>();
+        this.multiplayerGames = Collections.synchronizedMap(new HashMap<>());
         this.waitingRoom = waitingRoom;
         this.questionController = new QuestionController(random, repo);
         this.repo = repo;
@@ -67,10 +67,11 @@ public class MultiplayerController {
     }
 
     private void sendToListeners(Map<Object, Consumer<GameUpdatesPacket>> listenerMap, GameUpdatesPacket gameStatus){
-        Iterator<Map.Entry<Object, Consumer<GameUpdatesPacket>>> it = listenerMap.entrySet().iterator();
-        while(it.hasNext()){
-            it.next().getValue().accept(gameStatus);
-        }
+        listenerMap.forEach((k, l) -> {
+            synchronized (l) {
+                l.accept(gameStatus);
+            }
+        });
     }
 
 
@@ -86,7 +87,11 @@ public class MultiplayerController {
                     GameUpdatesPacket packet = multiplayerGames.get(id).getGameStatus();
                     System.out.println("Sent " + packet + " to game " + id);
                     sendToListeners(listeners.get(id), packet);
-                    //listeners.get(id).forEach((k,l) -> l.accept(packet));
+                    /*listeners.get(id).forEach((k, l) -> {
+                        synchronized (l) {
+                            l.accept(packet);
+                        }
+                    });*/
                     sendLeaderboardToClients(19000, id);
                 } else {
                     endMultiplayerGame(id);
@@ -121,7 +126,9 @@ public class MultiplayerController {
         System.out.println("Sent " + packet + " to game " + id);
         sendToListeners(listeners.get(id), packet);
         //listeners.get(id).forEach((k,l) -> l.accept(packet));
-        multiplayerGames.remove(id);
+        if(id >= 5){
+            multiplayerGames.remove(id - 5);
+        }
         listeners.remove(id);
     }
 
@@ -167,7 +174,7 @@ public class MultiplayerController {
         waitingRoom.addPlayerToWaitingRoom(player);
         System.out.println("Player added to the waitingroom");
 
-        listeners.computeIfAbsent(waitingRoom.getMultiplayerGameID(), k -> new HashMap<>());
+        listeners.computeIfAbsent(waitingRoom.getMultiplayerGameID(), k -> Collections.synchronizedMap(new HashMap<>()));
         sendToListeners(listeners.get(waitingRoom.getMultiplayerGameID()),
                 new GameUpdatesPacket(waitingRoom.getPlayers().hashCode(), "WAITINGROOM", -1)
         );
@@ -242,7 +249,7 @@ public class MultiplayerController {
     public DeferredResult<ResponseEntity<GameUpdatesPacket>> getUpdate(@PathVariable("id") int id){
 
         if(!listeners.containsKey(id)){
-            listeners.put(id, new HashMap<>());
+            listeners.put(id, Collections.synchronizedMap(new HashMap<>()));
         }
 
         var noContent = ResponseEntity.status(HttpStatus.NO_CONTENT).build();
