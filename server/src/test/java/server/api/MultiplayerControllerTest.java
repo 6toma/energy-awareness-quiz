@@ -36,13 +36,13 @@ public class MultiplayerControllerTest {
         ));
         tar = new TestActivityRepository();
         tar.activities.addAll(List.of(
-            new Activity("1", "image_a","a", 1L, "a"),
-            new Activity("2", "image_b","b", 2L, "b"),
-            new Activity("3", "image_c","c", 3L, "c"),
-            new Activity("4", "image_d","d", 4L, "d"),
-            new Activity("5", "image_e","e", 5L, "e"),
-            new Activity("6", "image_f","f", 6L, "f"),
-            new Activity("7", "image_g","g", 7L, "g")
+                new Activity("1", "image_a","a", 1L, "a"),
+                new Activity("2", "image_b","b", 2L, "b"),
+                new Activity("3", "image_c","c", 3L, "c"),
+                new Activity("4", "image_d","d", 4L, "d"),
+                new Activity("5", "image_e","e", 5L, "e"),
+                new Activity("6", "image_f","f", 6L, "f"),
+                new Activity("7", "image_g","g", 7L, "g")
         ));
         lpc = new MultiplayerController(new WaitingRoom(new ArrayList<>(), new ArrayList<>(), 0), new TestRandom(), tar);
         lpc.postPlayerToWaitingRoom(players.get(0));
@@ -140,6 +140,50 @@ public class MultiplayerControllerTest {
     void someControllerTest() {
         SomeController someController = new SomeController();
         assertEquals("Hello there General Kenobi!", someController.index());
+    }
+
+
+    /**
+     * Test for getting list of all players in waiting room which is empty
+     * Should return empty list
+     */
+    @Test
+    void getWaitingRoomPlayersEmptyTest() {
+        assertEquals(List.of(), lpc.getWaitingRoomPlayers().getBody());
+    }
+
+    /**
+     * Test for getting list of all players in waiting room
+     */
+    @Test
+    void removePlayerFromWaitingRoomTest() {
+        lpc.postPlayerToWaitingRoom(players.get(0));
+        assertEquals(List.of(players.get(0)), lpc.getWaitingRoomPlayers().getBody());
+        assertEquals(true, lpc.removePlayerFromWaitingRoom(players.get(0)).getBody());
+        assertEquals(List.of(), lpc.getWaitingRoomPlayers().getBody());
+        assertEquals(false, lpc.removePlayerFromWaitingRoom(players.get(0)).getBody());
+        assertEquals(List.of(), lpc.getWaitingRoomPlayers().getBody());
+    }
+
+
+    /**
+     * Tests adding players to waiting room but player is empty
+     */
+    @Test
+    void postPlayerToWaitingRoomNullTest() {
+        assertNull(lpc.postPlayerToWaitingRoom(null).getBody());
+        lpc.postPlayerToWaitingRoom(players.get(0));
+        assertNull(lpc.postPlayerToWaitingRoom(players.get(0)).getBody());
+    }
+    
+
+    /**
+     * Tests getting game
+     * should be null before game starts
+     */
+    @Test
+    void getGamesTest() {
+        assertNull(lpc.getGame(1).getBody());
     }
 
 }
