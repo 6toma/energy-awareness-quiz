@@ -40,7 +40,7 @@ Running a server:
 - Download the server from Deployments -> Releases
 - Read the readme.txt file
 - Start the server
-- Add activities via the client
+- Add activities via the client with a .json file of activities
   - Optional: Add images to the paths you specified when adding activities to "./server/src/main/resources/activity-bank-pictures/" starting from the root of the server
 - Play!
 
