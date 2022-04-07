@@ -27,26 +27,34 @@ The game supports
 | ![](https://gitlab.ewi.tudelft.nl/uploads/-/system/user/avatar/4669/avatar.png?width=400) | Robert Kurvits | R.Kurvits@student.tudelft.nl |
 
 
-<!-- Instructions (remove once assignment has been completed -->
-<!-- - Add (only!) your own name to the table above (use Markdown formatting) -->
-<!-- - Mention your *student* email address -->
-<!-- - Preferably add a recognizable photo, otherwise add your GitLab photo -->
-<!-- - (please make sure the photos have the same size) --> 
-
 ## How to run it
 
 Running the client:
 - Download the client from Deployments -> Releases
+- Read the readme.txt file
 - Launch the game
-- Connect to a server (by default connected to localhost)
+- Connect to a server (by default connected to http://localhost:8080)
 - Play!
 
 Running a server:
 - Download the server from Deployments -> Releases
+- Read the readme.txt file
 - Start the server
 - Add activities via the client
   - Optional: Add images to the paths you specified when adding activities to "./server/src/main/resources/activity-bank-pictures/" starting from the root of the server
 - Play!
+
+Alternatively:
+- Clone the branch
+- Do ./gradlew run to launch the client
+- Do ./gradlew bootRun to launch the server
+- Add the activities via Postman by posting a list to "/api/activities/add"
+
+We recommend using the activity bank for activities and images for the smoothest experience!
+
+Note: "Connection failed" is the default error message when the server fails to provide the requested information.
+This can be caused by the server not having or finding enough activities in the database.
+The minimum requirement is 5 activities with distinct consumptions and 2 activities with equal activities
 
 ## How to contribute to it
 
@@ -55,6 +63,6 @@ Running a server:
   - Improve jokers in multiplayer
   - Improve question generation
   - And much more!
-- Submit a merge request, our team will give you feed back in no time!
+- Submit a merge request, our team will give you feedback in no time!
 
 ## Copyright / License (opt.)
